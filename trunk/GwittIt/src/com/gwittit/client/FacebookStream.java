@@ -36,7 +36,6 @@ public class FacebookStream extends Composite {
 	private Anchor ask = new Anchor ( "Click to enable facebook stream in Gwittee");
 
 	private Image ajaxLoader = new Image ( "/ajaxloader.gif" );
-
 	
 	/**
 	 * Create new object.
