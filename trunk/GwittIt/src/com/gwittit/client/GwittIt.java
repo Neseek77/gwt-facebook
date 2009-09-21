@@ -27,18 +27,22 @@ public class GwittIt implements EntryPoint {
 	
 		final HandlerManager eventBus = new HandlerManager ( null );
 
+		// Get a new instance
 		FacebookConnectInit fbInit = FacebookConnectInit.newInstance();
+		
+		// Setup xd_receiever and create a callback for login.
 		fbInit.init( Config.API_KEY, "/xd_receiver.htm", new FacebookCallback () {
 			public void onError(JSONObject o) {
-				Window.alert ( "Error login");
+				// Handle error
 			}
 			public void onSuccess(JSONObject o) {
 				GWT.log( "User logged in sesskey = " + UserInfo.getSessionKey(), null);
-				 AppEvents loginEvent = new AppEvents ( Event.LOGIN );
-                 eventBus.fireEvent( loginEvent );
+				AppEvents loginEvent = new AppEvents ( Event.LOGIN );
+                eventBus.fireEvent( loginEvent );
 			} 
 		});
 		
+		// Add the app.
 		frontpage = new Frontpage ( eventBus );
 		RootPanel.get().add(frontpage);
 	}
