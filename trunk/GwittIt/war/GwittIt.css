@@ -1,0 +1,146 @@
+/** Add css rules here for your application. */
+
+
+* {Êmargin: 0px; padding: 0px; }
+
+body {
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	width: 100%;
+}
+
+.FbName {
+	white-space: nowrap;
+	font-weight: bold;
+}
+img { border: 0px; }
+a {Êvertical-align: middle; }
+
+h2 {
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+#PimpMyStatus,
+#TopMenuGwittee {
+	width: 100%;
+}
+
+
+.whatIsGwittit {
+	margin-top: 20px;	
+	font-weight: bold;
+	margin-left: 50px;
+}
+
+#TopMenuGwittee {
+	height: 80px;
+	
+	background-image: url(gwittit-bg.png);
+	background-repeat: no-repeat;
+}
+
+#TopMenuGwittee .loginInfo {
+	color: white;
+	float: right;
+}
+
+
+#PimpMyStatus .leftSide {
+	margin-right: 40px;
+	padding-left: 20px;
+}
+
+#PimpMyStatus .rightSide input,
+#PimpMyStatus .rightSide .gwt-Label {
+	margin: 5px;
+}
+
+#PimpMyStatus .statusTextBox {
+	font-size: 14px;
+	padding: 10px;	
+}
+
+#NeedLoginWidget, .content {
+	background: #DDEEF6;
+	border: 1px solid #5599BB;
+	padding: 20px;
+	margin: 50px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.xxstatus {
+	margin: 5px;
+	color: #cccccc;
+}
+
+.xxdesc { margin: 20px; }
+
+
+/* FacebookStream */
+
+.streamListing {
+	width: 600px;	
+}
+
+.stream {
+	padding: 2px;
+	margin: 4px;
+	border-bottom: 1px solid #f7f7f7;
+}
+
+.text {
+	margin-left: 5px;
+}
+
+
+.gwt-TabPanel {
+	margin-left: 10px;
+	width: 99%;
+}
+
+.gwt-TabBar .gwt-Label {
+        font-size: 12px;
+}
+
+.gwt-TabBar .gwt-TabBarFirst {
+        width: 10px;
+}
+
+.gwt-TabBar .gwt-TabBarItem {
+        margin-top: 5px;
+        padding: 5px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 10px;
+        font-weight: bold;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected  {
+        position: relative;
+        top: 1px;
+        border-top: 1px solid #D8DFEA;
+        border-right: 1px solid #D8DFEA;
+        border-left: 1px solid #D8DFEA;
+        border-bottom:3px solid white;
+        background: white;
+}
+
+.gwt-TabBarItem-selected .gwt-Label {
+        color: #3B5998;
+}
+
+.gwt-TabPanel {
+        /* See Common */
+}
+.gwt-TabPanelBottom {
+	
+        background: white;
+        border: 1px solid black;
+        border-top: 1px solid #cccccc;
+        /*
+        border: 0px;
+        border-top: 0px solid #f7f7f7;
+        */
+}
