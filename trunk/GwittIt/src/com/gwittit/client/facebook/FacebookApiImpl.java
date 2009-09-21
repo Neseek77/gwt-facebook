@@ -29,71 +29,7 @@ public class FacebookApiImpl implements FacebookApi {
 		this.apiKey = apiKey;
 	}
 
-	private void put(JSONObject obj, Map<String, String> params, String key) {
 
-		if (params.get(key) != null) {
-			obj.put(key, new JSONString(params.get(key)));
-		}
-	}
-
-	/*
-	 * Run facebook method, parse result and call callback function.
-	 */
-	private native void callMethod(String method, JavaScriptObject params, FacebookCallback callback)/*-{
-		var app=this;
-		app.@com.gwittit.client.facebook.FacebookApiImpl::callback=callback;
-		$wnd.FB_RequireFeatures(["Api"], function(){			
-			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
-
-				function(result, exception){
-						// this is the result when we run in hosted mode for some reason
-					if(!isNaN(result)) {
-						app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccessNumber(Ljava/lang/String;)(result+"");
-					} else {
-						if ( result != undefined ) {
-							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccess(Lcom/google/gwt/core/client/JavaScriptObject;)(result);
-						} else {
-							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackError(Lcom/google/gwt/core/client/JavaScriptObject;)(exception);
-						}
-					}
-				}
-			);
-		});
-	}-*/;
-
-	/**
-	 * Callbacks
-	 */
-	public void callbackError(JavaScriptObject value) {
-		callback.onError(new JSONObject(value));
-	}
-
-	/**
-	 * Called when result is a number
-	 */
-	public void callbackSuccessNumber(String i) {
-		JSONObject o = new JSONObject();
-		JSONString s = new JSONString(i);
-		o.put("result", s);
-		callback.onSuccess(o);
-
-	}
-
-	/**
-	 * Called when method succeeded.
-	 */
-	public void callbackSuccess(JavaScriptObject obj) {
-		callback.onSuccess(new JSONObject(obj));
-	}
-
-	/**
-	 * Get default params, minimum is the api key
-	 */
-	private JSONObject getDefaultParams() {
-		JSONObject obj = new JSONObject();
-		obj.put("api_key", new JSONString(apiKey));
-		return obj;
-	}
 
 	// =============================== FACEBOOK METHODS ===================================
 
@@ -661,6 +597,74 @@ public class FacebookApiImpl implements FacebookApi {
 	public void video_upload(Map<String, String> params, FacebookCallback callback) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private void put(JSONObject obj, Map<String, String> params, String key) {
+
+		if (params.get(key) != null) {
+			obj.put(key, new JSONString(params.get(key)));
+		}
+	}
+
+	
+	// ======================== PRIVATE METHODS =================================== 
+	/*
+	 * Run facebook method, parse result and call callback function.
+	 */
+	private native void callMethod(String method, JavaScriptObject params, FacebookCallback callback)/*-{
+		var app=this;
+		app.@com.gwittit.client.facebook.FacebookApiImpl::callback=callback;
+		$wnd.FB_RequireFeatures(["Api"], function(){			
+			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
+
+				function(result, exception){
+						// this is the result when we run in hosted mode for some reason
+					if(!isNaN(result)) {
+						app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccessNumber(Ljava/lang/String;)(result+"");
+					} else {
+						if ( result != undefined ) {
+							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccess(Lcom/google/gwt/core/client/JavaScriptObject;)(result);
+						} else {
+							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackError(Lcom/google/gwt/core/client/JavaScriptObject;)(exception);
+						}
+					}
+				}
+			);
+		});
+	}-*/;
+
+	/**
+	 * Callbacks
+	 */
+	public void callbackError(JavaScriptObject value) {
+		callback.onError(new JSONObject(value));
+	}
+
+	/**
+	 * Called when result is a number
+	 */
+	public void callbackSuccessNumber(String i) {
+		JSONObject o = new JSONObject();
+		JSONString s = new JSONString(i);
+		o.put("result", s);
+		callback.onSuccess(o);
+
+	}
+
+	/**
+	 * Called when method succeeded.
+	 */
+	public void callbackSuccess(JavaScriptObject obj) {
+		callback.onSuccess(new JSONObject(obj));
+	}
+
+	/**
+	 * Get default params, minimum is the api key
+	 */
+	private JSONObject getDefaultParams() {
+		JSONObject obj = new JSONObject();
+		obj.put("api_key", new JSONString(apiKey));
+		return obj;
 	}
 
 }
