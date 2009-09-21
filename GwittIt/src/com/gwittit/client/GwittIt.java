@@ -31,6 +31,7 @@ public class GwittIt implements EntryPoint {
 		FacebookConnectInit fbInit = FacebookConnectInit.newInstance();
 		
 		// Setup xd_receiever and create a callback for login.
+		// See http://wiki.developers.facebook.com/index.php/Cross-domain_communication_channel for documentation
 		fbInit.init( Config.API_KEY, "/xd_receiver.htm", new FacebookCallback () {
 			public void onError(JSONObject o) {
 				// Handle error
