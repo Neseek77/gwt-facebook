@@ -4,29 +4,28 @@ package com.gwittit.client.facebook;
 /**
  * Convenient class for setting up facebook connect. Add this in your main class:
  * 
- * You xd_receiver.htm file must resi
- * 
- * <code>
- * 
- * 	public void onModuleLoad() {
- *        new FacebookConnectInit() {
- *             public void onLogin() {
- *                   Window.alert ( "You logged in" );
- *             }
- *         } );
- *  }
- *  
- *  </code>
  * @author ola
  *
  */
-public abstract class FacebookConnectInit {
+public class FacebookConnectInit {
 	
+	private  FacebookCallback callback;
 	
-	
-	public FacebookConnectInit ( String apiKey, String xdReceiver ) {
+	public static FacebookConnectInit newInstance () {
+		return new FacebookConnectInit ();
+	}
+
+
+	/**
+	 * Setup facebook connect, let facebook know where we put xd receiver etc.
+	 * @param apiKey
+	 * @param xdReceiver
+	 * @param callback
+	 */
+	public  void init ( String apiKey, String xdReceiver, FacebookCallback callback ) {
+		
 		setupXdReceiver(apiKey, xdReceiver);
-		defineFacebookConnectLogin ();
+		defineFacebookConnectLogin ( callback );
 	}
 	
 	public native void setupXdReceiver( String apiKey, String xdReceiver ) /*-{
@@ -35,13 +34,21 @@ public abstract class FacebookConnectInit {
 	    });
 	}-*/;
 
-	private native void defineFacebookConnectLogin() /*-{
+	
+	private native void defineFacebookConnectLogin( FacebookCallback callback ) /*-{
+	    this.@com.gwittit.client.facebook.FacebookConnectInit::callback=callback;
 		var fbConn = this;
 		$wnd.facebookConnectLogin = function() {
-		    fbConn.@com.gwittit.client.facebook.FacebookConnectInit::onLogin()();
+		    fbConn.@com.gwittit.client.facebook.FacebookConnectInit::onSuccess()();
 		};
 	}-*/;
 	
-	public abstract void onLogin ();
 
+	public void onSuccess () {
+		callback.onSuccess(null);
+	}
+	
+	public void onError () {
+		callback.onError(null);
+	}
 }
