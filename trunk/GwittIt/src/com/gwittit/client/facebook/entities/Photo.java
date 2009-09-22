@@ -30,15 +30,15 @@ public class Photo {
 	public static Photo convert ( JSONObject o ) {
 		
 		Photo p = new Photo ();
-		p.pid = EntityUtil.getString (o, "pid");
-		p.aid = EntityUtil.getString (o, "aid");
-		p.owner = EntityUtil.getLong (o, "owner");
+		p.pid = JsonUtil.getString (o, "pid");
+		p.aid = JsonUtil.getString (o, "aid");
+		p.owner = JsonUtil.getLong (o, "owner");
 		
-		p.src = EntityUtil.getString ( o, "src");
-		p.srcBig = EntityUtil.getString(o, "src_big" );
-		p.srcSmall = EntityUtil.getString(o, "src_small" ); 
-		p.link = EntityUtil.getString( o, "link" );
-		p.caption = EntityUtil.getString ( o, "caption" );
+		p.src = JsonUtil.getString ( o, "src");
+		p.srcBig = JsonUtil.getString(o, "src_big" );
+		p.srcSmall = JsonUtil.getString(o, "src_small" ); 
+		p.link = JsonUtil.getString( o, "link" );
+		p.caption = JsonUtil.getString ( o, "caption" );
 		return p;
 	}
 	

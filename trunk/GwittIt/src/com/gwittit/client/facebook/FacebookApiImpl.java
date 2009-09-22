@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.Window;
 
 /**
  * GWT wrappers for facebook api.
@@ -34,6 +35,14 @@ public class FacebookApiImpl implements FacebookApi {
 
 	// =============================== FACEBOOK METHODS ===================================
 
+	/**
+	 * This method returns an object (in JSON-encoded or XML format) that
+	 * contains the stream from the perspective of a specific viewer -- a user
+	 * or a Facebook Page.
+	 * 
+	 * @see http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
+	 * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29 Stream Table
+	 */
 	public void stream_get(Map<String, String> params, FacebookCallback c) {
 		JSONObject p = getDefaultParams();
 		p.put("session_key", new JSONString(UserInfo.getSessionKey()));
@@ -663,6 +672,9 @@ public class FacebookApiImpl implements FacebookApi {
 	 * Get default params, minimum is the api key
 	 */
 	private JSONObject getDefaultParams() {
+		if( apiKey == null ) {
+			Window.alert("api_key==null");
+		}
 		JSONObject obj = new JSONObject();
 		obj.put("api_key", new JSONString(apiKey));
 		return obj;

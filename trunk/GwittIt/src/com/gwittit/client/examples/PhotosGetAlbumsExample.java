@@ -60,7 +60,7 @@ public class PhotosGetAlbumsExample extends Example {
 				}
 				
 				outer.add ( albumsPanel );
-				Xfbml.parse();
+				Xfbml.parse( outer.getElement() );
 
 			}
 		};

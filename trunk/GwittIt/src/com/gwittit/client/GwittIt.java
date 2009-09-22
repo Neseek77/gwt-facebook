@@ -4,6 +4,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -18,6 +20,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.events.AppEvents;
+import com.gwittit.client.events.DefaultEventHandler;
 import com.gwittit.client.events.AppEvents.Event;
 import com.gwittit.client.examples.PhotosGetAlbumsExample;
 import com.gwittit.client.facebook.ApiFactory;
@@ -29,7 +32,7 @@ import com.gwittit.client.facebook.UserInfo;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<String> {
+public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<String>, ResizeHandler {
 	
 	
 	private VerticalPanel outer = new VerticalPanel ();
@@ -59,10 +62,12 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	public void onModuleLoad() {
 	
 		History.addValueChangeHandler(this);
-		
-		
+
+		Window.addResizeHandler(this);
+
 		this.eventBus = new HandlerManager ( null );
 
+		listenToLogin();
 		topMenu = new TopMenuGwittee ( eventBus );
 		outer.getElement().setId("GwittIt");
 		this.loginWidget = new NeedLoginWidget ( eventBus );
@@ -88,6 +93,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 
 		
 		render ( Window.Location.getHash() );
+		setLeftMargin();
 		
 		RootPanel.get().add ( outer );
 	}
@@ -132,7 +138,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			return ;
 		}
 	
-		if ( hash == null || "#".equals ( hash ) || "".equals( hash ) )  {
+		if ( "#stream.get".equals ( hash ) || hash == null || "#".equals ( hash ) || "".equals( hash ) )  {
 			example.setWidget( frontpage );
 		} else if ( "#photos.getAlbums".equals ( hash ) ) {
 			example.setWidget( new PhotosGetAlbumsExample ( apiClient ) ) ;
@@ -150,18 +156,42 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	}
 	
 	public void onClick(ClickEvent event) {
-		
-		example.clear();
-		
 		if ( event.getSource() == streamGet ) {
-			History.newItem("");
+			History.newItem("stream.get");
 		} else if ( event.getSource() == photosGet ) {
 			History.newItem( "photos.getAlbums");
+		} else {
+			Window.alert ( "Unknown link clicked");
 		}
 	}
 
 
 	public void onValueChange(ValueChangeEvent<String> event) {
 		renderPage ("#" + event.getValue() );
+	}
+
+	private void listenToLogin () {
+        eventBus.addHandler(AppEvents.TYPE, new DefaultEventHandler () {
+                public void login() {
+                	outer.clear();
+                	render ( Window.Location.getHash() );
+                }
+        });
+	}
+
+	public void setLeftMargin () {
+		
+		if ( Window.getClientWidth() > 930 ) {
+			
+			int lm = (Window.getClientWidth()-930)/2;
+			outer.getElement().setAttribute("style", "margin-left:"  + lm + "px" );
+		}
+		else {
+			outer.getElement().setAttribute("style", "margin-left: 10px" );
+		}
+	}
+	public void onResize(ResizeEvent event) {
+		
+		setLeftMargin();
 	}
 }

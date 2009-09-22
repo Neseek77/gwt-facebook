@@ -52,8 +52,8 @@ public class NeedLoginWidget extends Composite {
 		inner.addStyleName("inner");
 		
 		outer.add ( new HTML ( "<h1>Please login with your facebook id</h1>" ) );
-		outer.add ( new HTML ( "These showcases usses facebook data heavily to demonstrate API calls etc so you might as well login right away" ) );
-		
+		outer.add ( new HTML ( "This demo uses facebook data heavily to demonstrate API calls etc so you might as well login right away" ) );
+		outer.add ( new HTML  ( "<b>gwittit</b> demonstrates the use of gwt+facebook, a GWT library for developing facebook apps " ) );
 		inner.setSpacing( 10 );
 		inner.add ( new HTML ( "Click the button to allow this application to access your facebook account" ) );
 		inner.add ( loginButton );

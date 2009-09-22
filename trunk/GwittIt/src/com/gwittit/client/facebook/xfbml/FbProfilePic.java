@@ -13,8 +13,10 @@ public class FbProfilePic extends Widget {
 	
 	
 	public FbProfilePic ( Long uid ) {
-		setElement ( DOM.createElement("fb:profile-pic" ) ) ;
+		super.setElement ( DOM.createElement("fb:profile-pic" ) ) ;
 		getElement().setAttribute("uid", "" + uid );
+		getElement().setAttribute("size", "square");
+		setFacebookLogo(true);
 	}
 	
 	public FbProfilePic ( Long uid, String size ) {
@@ -22,4 +24,8 @@ public class FbProfilePic extends Widget {
 		getElement().setAttribute( "size", size);
 	}
 
+	
+	public void setFacebookLogo( boolean value ) {
+		getElement().setAttribute("facebook-logo", ""+value);
+	}
 }

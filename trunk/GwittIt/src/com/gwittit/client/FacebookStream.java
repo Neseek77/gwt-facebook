@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.commands.StreamGet;
 import com.gwittit.client.facebook.commands.UsersHasAppPermission;
 import com.gwittit.client.facebook.commands.UsersHasAppPermission.Permission;
@@ -14,6 +15,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
@@ -49,14 +51,15 @@ public class FacebookStream extends Composite {
 		outer.getElement().setId( "FacebookStream" );
 		streamListing.addStyleName( "streamListing" );
 		
-		ask.setHTML( "<img src=/fb_permission.png> Click to enable facebook stream in Gwittee" );
+		//ask.setHTML( "<img src=/fb_permission.png> Click to enable facebook stream in Gwittee" );
 		
 		ask.addClickHandler( new ClickHandler () {
 			public void onClick(ClickEvent event) {
 				askForPermission();
 			}
 		});
-	
+
+		
 		GWT.log( "FacebookStream: Checking app permission", null );
 		
 		new UsersHasAppPermission ( Permission.read_stream ) {
@@ -70,13 +73,14 @@ public class FacebookStream extends Composite {
 			}
 		};
 		outer.add ( streamListing );
+	
 		initWidget ( outer );
 	}
 	
 	
 
 	public void addFirst(Stream stream) {
-		streamListing.insert(createStreamListing ( stream ), 1);
+		streamListing.insert( stream.createWidget(), 1);
 	}
 	
 	
@@ -108,36 +112,14 @@ public class FacebookStream extends Composite {
 			public void onSuccess(List<Stream> streamResult) {
 				GWT.log( "FacebookStream: stream get size " + streamResult, null );
 				streamListing.remove( ajaxLoader );
-				for ( Stream s : streamResult ) {
-					streamListing.add( createStreamListing ( s ) );
-				}
 				
-				Xfbml.parse();
+				for ( Stream s : streamResult ) {
+					streamListing.add( s.createWidget() );
+				}
+				Xfbml.parse( streamListing.getElement() );
 			}
 		};
 	}
 	
-	private Panel createStreamListing ( Stream s  ) {
-		
-		HorizontalPanel outer = new HorizontalPanel ();
-		outer.addStyleName ( "stream" );
-		
-		FbProfilePic profilePic = new FbProfilePic ( s.getSourceId() );
-
-		FbName fbName = new FbName ( s.getSourceId() );
-
-		
-		HorizontalPanel text = new HorizontalPanel ();
-		text.addStyleName ( "text" );
-		
-		text.add( new HTML ( fbName.toString() + " " + s.getMessage() ) );
-		
-		outer.add ( profilePic );
-		outer.add ( text );
-		
-		return outer;
-		
-	}
-
 
 }
