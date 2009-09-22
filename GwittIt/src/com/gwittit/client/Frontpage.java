@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
 import com.gwittit.client.events.AppEvents.Event;
+import com.gwittit.client.examples.Example;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookCallback;
@@ -34,7 +35,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 /**
  * This page let the user write a status and publish it to multiple sources. Facebook Profile, Facebook Pages and Twitter.
  */
-public class Frontpage extends Composite implements ClickHandler {
+public class Frontpage extends Example implements ClickHandler {
 	
 	private static String LOGPREFIX = "Frontpage: ";
 	
@@ -60,15 +61,17 @@ public class Frontpage extends Composite implements ClickHandler {
 	private CheckBox facebookPermissionCheckbox = new CheckBox ();
 	
 	// Text add new accounts
-	private HTML accountsHtml = new HTML ( "<h1>+ Select Accounts</h1>");
+	private HTML accountsHtml = new HTML ( "<h3>+ Select Accounts</h3>");
 	
 	// Text add status
 	
 	private HorizontalPanel inputBar = new HorizontalPanel ();
-	private HTML statusHtml = new HTML ( "<h1>Whats on your mind?</h1>");
+	private HTML statusHtml = new HTML ( "<h3>Whats on your mind?</h3>");
 	
 	// Facebook Connect
 	private FacebookApi api = ApiFactory.newApiClient(Config.API_KEY);
+	
+	private FacebookApiDemo apiDemo = new FacebookApiDemo ( api );
 		
 	// EventBus
 	private HandlerManager eventBus ;
@@ -84,7 +87,6 @@ public class Frontpage extends Composite implements ClickHandler {
 	private FacebookStream  facebookStream;
 	
 	// App Topmenu
-	private TopMenuGwittee topMenu;
 	
 
 	private HTML whatIsGwittit = new HTML ("This application is a showcase for gwt-facebook, an open source library for writing facebook applications using GWT (gwitt)" );
@@ -102,7 +104,6 @@ public class Frontpage extends Composite implements ClickHandler {
 		log ( "new instance");
 		this.eventBus = eventBus;
 
-		topMenu = new TopMenuGwittee ( eventBus );
 
 		
 		listenToLogin();
@@ -130,7 +131,6 @@ public class Frontpage extends Composite implements ClickHandler {
 		
 		if ( !UserInfo.isLoggedIn() ) {
 			outer.clear();
-			outer.add ( topMenu );
 			outer.add ( whatIsGwittit) ;
 
 			outer.add ( new NeedLoginWidget ( eventBus ) );
@@ -146,7 +146,6 @@ public class Frontpage extends Composite implements ClickHandler {
 		
 		facebookStream = new FacebookStream (  );
 		
-		outer.add ( topMenu );
 
 		content.add ( leftSide );
 		content.add( rightSide );
@@ -167,12 +166,12 @@ public class Frontpage extends Composite implements ClickHandler {
 	
 	private void initTabs () {
 		tabs.add( facebookStream , "Facebook Stream" );
-		tabs.add ( new TwitterStream (), "Twitter Stream" );
+		//tabs.add ( apiDemo, "API Demo" );
 		tabs.selectTab(0);
 	}
 	
 	public void renderInput () {
-		statusTextBox.setWidth( "500px" );
+		statusTextBox.setWidth( "400px" );
 		
 		inputBar.add ( statusHtml );
 
@@ -250,6 +249,7 @@ public class Frontpage extends Composite implements ClickHandler {
 		inputBar.add ( updateStatusLoader );
 		submit.setEnabled(false);
 		// WHen user submit new stauts
+		
 		api.status_set(statusTextBox.getValue(), new FacebookCallback () {
 			public void onError(JSONObject jo) {
 				Window.alert ( "Failed " );
@@ -280,5 +280,13 @@ public class Frontpage extends Composite implements ClickHandler {
         });
 	}
 
+
+	@Override
+	public String getInfo() {
+		// TODO Auto-generated method stub
+		return "Demonstrates the call stream.get , status.set and more ";
+	}
+
+	
 
 }

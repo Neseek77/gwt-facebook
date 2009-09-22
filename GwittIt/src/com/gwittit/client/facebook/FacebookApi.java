@@ -335,7 +335,7 @@ public interface FacebookApi {
 
 	// Updates a user's Facebook status through your application. This is a
 	// streamlined version of users.setStatus.
-	void status_set(Map<String, String> params, FacebookCallback callback); /* BETA */
+	void status_set(String status, FacebookCallback callback); /* BETA */
 
 	// This method adds a comment to a post that was already published to a
 	// user's Wall.
