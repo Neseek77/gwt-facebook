@@ -57,7 +57,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	private NeedLoginWidget loginWidget;
 	
 	/**
-	 * This is the entry point method.
+	 * Demonstrates how to use the facebook api. 
 	 */
 	public void onModuleLoad() {
 	
@@ -69,7 +69,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		this.topMenu = new TopMenuGwittee ( eventBus );
 		this.loginWidget = new NeedLoginWidget ( eventBus );
 
-		// Get login events and rerender application wherever its necessary
+		// Get login events and rerender  whatever its necessary
 		listenToLogin();
 
 		outer.getElement().setId("GwittIt");
@@ -91,7 +91,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 				// Handle error
 			}
 			
-			// This method is fired when the user logs in, to stuff here. Fire events etc.
+			// This method is fired when the user logs in, do basic app stuff here. Fire events etc.
 			public void onSuccess(JSONObject o) {
 				GWT.log( "User logged in sesskey = " + UserInfo.getSessionKey(), null);
 				AppEvents loginEvent = new AppEvents ( Event.LOGIN );
