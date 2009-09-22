@@ -159,13 +159,13 @@ public class Frontpage extends Example implements ClickHandler {
 		renderAccounts ();
 		checkPublishStream ();
 		
-		Xfbml.parse();
+	//	Xfbml.parse();
 		initWidget ( outer );
 		
 	}
 	
 	private void initTabs () {
-		tabs.add( facebookStream , "Facebook Stream" );
+		tabs.add( facebookStream , "News Feed" );
 		//tabs.add ( apiDemo, "API Demo" );
 		tabs.selectTab(0);
 	}
@@ -258,13 +258,13 @@ public class Frontpage extends Example implements ClickHandler {
 				
 				Stream stream = new Stream ();
 				stream.setMessage( statusTextBox.getValue() );
-				stream.setSourceId( new Long ( UserInfo.getUid() ) );
+				stream.setSourceId( UserInfo.getUidLong() );
 				
 				facebookStream.addFirst ( stream );
 				inputBar.remove( updateStatusLoader );
 				submit.setEnabled(true);
 				statusTextBox.setValue(null);
-				Xfbml.parse();
+				Xfbml.parse( facebookStream.getElement());
 			}
 			
 		});

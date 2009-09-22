@@ -22,7 +22,7 @@ public abstract class Example extends Composite {
 		
 		HTML info = new HTML ( "(" + getInfo () + ")");
 		info.addStyleName ( "info" );
-		outer.add ( info );
+		//outer.add ( info );
 
 		outer.add ( widget );
 

@@ -27,15 +27,15 @@ public class Album {
 
 	public static Album newInstance ( JSONObject o ) {
 		Album a = new Album ();
-		a.aid = EntityUtil.getString(o, "aid");
-		a.coverPid =EntityUtil.getString(o, "cover_pid");
-		a.owner = EntityUtil.getLong(o, "owner");
-		a.name = EntityUtil.getString(o, "name");
-		a.description =EntityUtil.getString(o, "description");
-		a.location = EntityUtil.getString(o, "location");
-		a.size =EntityUtil.getInt(o, "size");
-		a.visible =EntityUtil.getString(o, "visible");
-		a.link =EntityUtil.getString(o, "link");
+		a.aid = JsonUtil.getString(o, "aid");
+		a.coverPid =JsonUtil.getString(o, "cover_pid");
+		a.owner = JsonUtil.getLong(o, "owner");
+		a.name = JsonUtil.getString(o, "name");
+		a.description =JsonUtil.getString(o, "description");
+		a.location = JsonUtil.getString(o, "location");
+		a.size =JsonUtil.getInt(o, "size");
+		a.visible =JsonUtil.getString(o, "visible");
+		a.link =JsonUtil.getString(o, "link");
 		return a;
 	}
 	

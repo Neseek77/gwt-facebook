@@ -9,7 +9,7 @@ import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookCallback;
-import com.gwittit.client.facebook.entities.EntityUtil;
+import com.gwittit.client.facebook.entities.JsonUtil;
 import com.gwittit.client.facebook.entities.Stream;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
@@ -61,12 +61,22 @@ public abstract class StreamGet {
 			
 					GWT.log ( "StreamGet: adding new Stream() to result ", null);
 					
-					Stream stream = new Stream ();
+					Stream stream = Stream.newInstance(o);
+
+					/*
+					stream.setWrappedObject ( o );
 					
-					String message = EntityUtil.getString( o, "message" );
+					String message = JsonUtil.getString( o, "message" );
 					stream.setMessage ( message );
-					Long sourceId = EntityUtil.getLong(o, "source_id");
-					stream.setSourceId( sourceId );
+					Long sourceId = JsonUtil.getLong(o, "source_id");
+					
+					if ( sourceId != null ) {
+						stream.setSourceId( sourceId );
+					} else {
+						String sourceIdString = JsonUtil.getString(o, "source_id");
+						stream.setSourceId(new Long ( sourceIdString ) );
+					}
+					*/
 					result.add( stream );
 					
 					
