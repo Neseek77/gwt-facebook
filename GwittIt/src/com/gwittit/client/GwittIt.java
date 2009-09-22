@@ -62,27 +62,36 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	public void onModuleLoad() {
 	
 		History.addValueChangeHandler(this);
-
 		Window.addResizeHandler(this);
-
-		this.eventBus = new HandlerManager ( null );
-
-		listenToLogin();
-		topMenu = new TopMenuGwittee ( eventBus );
-		outer.getElement().setId("GwittIt");
-		this.loginWidget = new NeedLoginWidget ( eventBus );
 		
-		// Start Facebook Connect
-		// Get a new instance
+		// Create new instances
+		this.eventBus = new HandlerManager ( null );
+		this.topMenu = new TopMenuGwittee ( eventBus );
+		this.loginWidget = new NeedLoginWidget ( eventBus );
+
+		// Get login events and rerender application wherever its necessary
+		listenToLogin();
+
+		outer.getElement().setId("GwittIt");
+		outer.ensureDebugId("GwittIt");
+		
+		// -------------------------------------------------------------------------
+		// This is all you need to connect to facebook:
+		//   Start Facebook Connect
+		//    Get a new instance
+		// --------------------------------------------------------------------------
 		FacebookConnectInit fbInit = FacebookConnectInit.newInstance();
 		
 		// Setup xd_receiever and create a callback for login.
 		// See http://wiki.developers.facebook.com/index.php/Cross-domain_communication_channel for documentation
 		fbInit.init( Config.API_KEY, "/xd_receiver.htm", new FacebookCallback () {
+
+			// Handle any login error here.
 			public void onError(JSONObject o) {
 				// Handle error
 			}
-			// User has logged in
+			
+			// This method is fired when the user logs in, to stuff here. Fire events etc.
 			public void onSuccess(JSONObject o) {
 				GWT.log( "User logged in sesskey = " + UserInfo.getSessionKey(), null);
 				AppEvents loginEvent = new AppEvents ( Event.LOGIN );
@@ -91,29 +100,28 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			} 
 		});
 
-		
+		// Render page
 		render ( Window.Location.getHash() );
 		setLeftMargin();
-		
 		RootPanel.get().add ( outer );
 	}
 
 	
+	/**
+	 * Render based on hash 
+	 */
 	public void render( String hash ) {
 		
 		outer.clear();
 		outer.add ( topMenu );
 
 		if ( UserInfo.isLoggedIn() ) {
-		
 			menu.addStyleName("menu");
 			menu.add ( wrapMenuItem ( streamGet ) );
 			menu.add ( wrapMenuItem ( photosGet ) );
 			
 			streamGet.addClickHandler(this);
 			photosGet.addClickHandler(this);
-			
-			
 			
 			// Add the app.
 			frontpage = new Frontpage ( eventBus );
@@ -131,6 +139,10 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		
 	}
 
+	
+	/**
+	 * Route to correct page 
+	 */
 	public void renderPage ( String hash ) {
 		
 		if ( !UserInfo.isLoggedIn() ) {
@@ -148,13 +160,20 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 
 	}
 
+	/**
+	 * Wrap menu item in a div tag.
+	 */
 	private Widget wrapMenuItem  ( Anchor anchor ) {
 		SimplePanel menuItem = new SimplePanel ();
 		menuItem.addStyleName("menuItem");
 		menuItem.setWidget( anchor );
 		return menuItem;
 	}
+
 	
+	/**
+	 * Get whatever user clicks.
+	 */
 	public void onClick(ClickEvent event) {
 		if ( event.getSource() == streamGet ) {
 			History.newItem("stream.get");
@@ -165,11 +184,16 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		}
 	}
 
-
+	/**
+	 * History support
+	 */
 	public void onValueChange(ValueChangeEvent<String> event) {
 		renderPage ("#" + event.getValue() );
 	}
 
+	/**
+	 * Listen to events in the application, most likely login
+	 */
 	private void listenToLogin () {
         eventBus.addHandler(AppEvents.TYPE, new DefaultEventHandler () {
                 public void login() {
@@ -179,6 +203,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
         });
 	}
 
+	/**
+	 * Set a suitable leftmargin. Can be done with css ?
+	 */
 	public void setLeftMargin () {
 		
 		if ( Window.getClientWidth() > 930 ) {
@@ -190,6 +217,10 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			outer.getElement().setAttribute("style", "margin-left: 10px" );
 		}
 	}
+	
+	/**
+	 * Handle resize , set som basic styles.
+	 */
 	public void onResize(ResizeEvent event) {
 		
 		setLeftMargin();
