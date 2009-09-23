@@ -7,11 +7,19 @@ import com.google.gwt.user.client.ui.Widget;
 
 /*
  * Renders a <fb:login> tag.
+ * 
+ * Style gwittit-FbLoginButton
  */
 public class FbLoginButton extends Widget {
 
 	public FbLoginButton () {
-		super.setElement( DOM.createElement ("fb:login-button") ); 
+		
+		super.setElement( DOM.createElement ("fb:login-button") );
+		
+		addStyleName("gwittit-FbLoginButton");
+		// default function to fire when user log in.
+		setOnLogin("facebookConnectLogin()");
+		
 	}
 	
 	public FbLoginButton ( String onLoginMethod ) {
