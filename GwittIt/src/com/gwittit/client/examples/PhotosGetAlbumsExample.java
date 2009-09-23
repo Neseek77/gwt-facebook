@@ -39,7 +39,7 @@ public class PhotosGetAlbumsExample extends Example {
 		
 				outer.remove( loader );
 				
-				outer.add ( new HTML ("<h3> Albums </h3>" ) );
+				outer.add ( new HTML ("<h3>Your Albums </h3>" ) );
 				FlowPanel albumsPanel = new FlowPanel ();
 				albumsPanel.addStyleName ( "albumsPanel");
 				

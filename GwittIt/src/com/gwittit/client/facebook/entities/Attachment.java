@@ -8,6 +8,13 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
 
 /**
  * Wrapp attachment
@@ -62,12 +69,49 @@ public class Attachment {
 	 */
 	private String commentsXid;
 	
-
+	
+	/**
+	 * Attachment icon, undocumentend from facebook
+	 */
+	private String icon;
+	
+	
 	public Attachment () {
 		
 	}
 	
 	
+	public Widget createWidget () {
+		
+		HorizontalPanel outer = new HorizontalPanel ();
+		outer.addStyleName("gwittit-Attachment");
+		
+		VerticalPanel ap = new VerticalPanel ();
+	
+		
+		Anchor a = new Anchor ( getName() );
+		a.setTarget("_blank");
+		a.setHref( getHref() );
+		ap.add( a ) ;
+
+		if ( getDescription() != null ) {
+			ap.add( new HTML ( getDescription() ) );
+		}
+
+
+		HorizontalPanel mediasPanel = new HorizontalPanel ();
+		for ( Media m : getMedias() ) {
+			mediasPanel.add ( m.createWidget () );
+		}
+		
+		
+		outer.add ( mediasPanel );
+		outer.add ( ap );
+		
+	
+		return outer;
+		
+	}
 	public Attachment ( JSONValue j ) {
 		
 		JSONObject o = j.isObject();
@@ -80,7 +124,7 @@ public class Attachment {
 		href = JsonUtil.getString(o, "href" );
 		caption = JsonUtil.getString ( o, "caption" );
 		description = JsonUtil.getString (o, "description" );
-		
+		icon = JsonUtil.getString(o, "icon");
 
 		// Parse media, this is a pretty complex structure. See facebook doc for info 
 		JSONValue v = o.get ( "media" );
@@ -174,6 +218,18 @@ public class Attachment {
 	public void setLng(String lng) {
 		this.lng = lng;
 	}
+
+
+	public String getIcon() {
+		return icon;
+	}
+
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	
+	
 	
 	
 }

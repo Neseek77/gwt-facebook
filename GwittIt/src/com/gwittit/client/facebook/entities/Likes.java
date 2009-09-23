@@ -48,6 +48,9 @@ public class Likes {
 	 */
 	private boolean canLike;
 
+	public Likes () {
+		
+	}
 
 	/**
 	 * Create a default widget. This should of course be customized.

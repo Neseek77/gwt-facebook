@@ -26,6 +26,7 @@ import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookCallback;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.entities.Stream;
+import com.gwittit.client.facebook.xfbml.FbLiveStream;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 
@@ -166,7 +167,7 @@ public class Frontpage extends Example implements ClickHandler {
 	
 	private void initTabs () {
 		tabs.add( facebookStream , "News Feed" );
-		//tabs.add ( apiDemo, "API Demo" );
+		tabs.add ( new FbLiveStream ( Config.API_KEY ), "Live Stream" );
 		tabs.selectTab(0);
 	}
 	

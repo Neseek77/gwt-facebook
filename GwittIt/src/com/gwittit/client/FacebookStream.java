@@ -81,7 +81,7 @@ public class FacebookStream extends Composite {
 	
 
 	public void addFirst(Stream stream) {
-		streamListing.insert( stream.createWidget(), 1);
+		streamListing.insert( stream.createWidget(), 0);
 	}
 	
 	
