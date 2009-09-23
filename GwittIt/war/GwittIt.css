@@ -28,6 +28,9 @@ h2 {
 	margin-bottom: 5px;
 }
 
+.debugLink {
+	color: #f7f7f7;
+}
 
 
 #PimpMyStatus,
@@ -113,7 +116,7 @@ h2 {
 }
 
 
-/* -------------------------------- FacebookStream ------------------------- */
+/* -------------------------------- .gwittit-Stream ------------------------- */
 
 .streamListing, .stream {
 }
@@ -122,11 +125,22 @@ h2 {
 	padding: 30px;
 }
 
-.stream {
+.gwittit-Stream {
 	padding-bottom: 5px;
 	margin: 4px;
 	margin-bottom: 15px;
 	border-bottom: 1px solid #eeeeee;
+}
+
+.gwittit-Stream .gwittit-FbProfilePic {
+	margin-right: 5px;
+	border: 1px solid #f7f7f7;
+}
+
+.gwittit-Media img {
+	border: 1px solid #f7f7f7;
+	padding: 5px;
+	margin: 5px;
 }
 
 .actions {
