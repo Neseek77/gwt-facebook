@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Stream;
 
 /**
@@ -295,7 +296,7 @@ public interface FacebookApi {
 
 	// Returns metadata about all of the photo albums uploaded by the specified
 	// user.
-	void photos_getAlbums(Map<String, String> params, FacebookCallback callback);
+	void photos_getAlbums(Map<String, String> params, AsyncCallback<List<Album>> albums );
 
 	// Returns the set of user tags on all photos specified.
 	void photos_getTags(Map<String, String> params, FacebookCallback callback);

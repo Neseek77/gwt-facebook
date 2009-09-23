@@ -13,78 +13,120 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Stream;
 
 /**
- * GWT wrappers for facebook api.
+ * The class contains function defining the Facebook API. With the
+ * API, you can add social context to your application by utilizing profile,
+ * friend, Page, group, photo, and event data.
  * 
  * 
  * @see http://wiki.developers.facebook.com/index.php/API Facebook API
  * 
- * @author ola marius sagli facebook: http://facebook.com/olams twitter:
- *         http://twitter.com/bananaskis
- * 
+ * @author ola 
  */
 public class FacebookApiImpl implements FacebookApi {
 
-	// Callback used
 	private FacebookCallback callback;
 
-	// Api key used in every method call
 	private String apiKey;
 
 	protected FacebookApiImpl(String apiKey) {
 		this.apiKey = apiKey;
 	}
 
-	
-
-
-	// =============================== FACEBOOK METHODS ===================================
+	// ================== FACEBOOK METHODS ===================
 
 	/**
-	 * This method returns an object (in JSON-encoded or XML format) that
+	 * This method returns a list of Stream objects that
 	 * contains the stream from the perspective of a specific viewer -- a user
 	 * or a Facebook Page.
 	 * 
+	 * The hashmap takes the following arguments:
+	 * 
+	 * @param viewer_id
+	 *            int The user ID for whom you are fetching stream data. You can
+	 *            pass 0 for this parameter to retrieve publicly viewable
+	 *            information. However, desktop applications must always specify
+	 *            a viewer as well as a session key. (Default value is the
+	 *            current session user.)
+	 * @param source_ids
+	 *            array An array containing all the stream data for the user
+	 *            profiles and Pages connected to the viewer_id. You can filter
+	 *            the stream to include posts by the IDs you specify here.
+	 *            (Default value is all connections of the viewer.)
+	 * @param start_time
+	 *            time The earliest time (in Unix time) for which to retrieve
+	 *            posts from the stream. The start_time uses the updated_time
+	 *            field in the stream (FQL) table as the baseline for
+	 *            determining the earliest time for which to get the stream.
+	 *            (Default value is 1 day ago.)
+	 * @param end_time
+	 *            time The latest time (in Unix time) for which to retrieve
+	 *            posts from the stream. The end_time uses the updated_time
+	 *            field in the stream (FQL) table as the baseline for
+	 *            determining the latest time for which to get the stream.
+	 *            (Default value is now.)
+	 * @param limit
+	 *            int A 32-bit int representing the total number of posts to
+	 *            return. (Default value is 30 posts.)
+	 * @param filter_key
+	 *            string A filter associated with the user. Filters get returned
+	 *            by stream.getFilters or the stream_filter FQL table. To filter
+	 *            for stream posts from your application, look for a filter with
+	 *            a filter_key set to app_YOUR_APPLICATION_ID.
+	 * @param metadata
+	 *            array A JSON-encoded array in which you can specify one or
+	 *            more of 'albums', 'profiles', and 'photo_tags' to request the
+	 *            user's aid, id (user ID or Page ID), and pid (respectively)
+	 *            when you call stream.get. All three parameters are optional.
+	 *            (Default value is false for all three keys.)
+	 * 
+	 * @see com.gwittit.client.facebook.entities.Stream Stream
 	 * @see http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
-	 * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29 Stream Table
+	 * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
+	 *      Stream Table
 	 */
 	public void stream_get(Map<String, String> params, final AsyncCallback<List<Stream>> callback) {
 
-		// Create intern callback 
-		final FacebookCallback c = new FacebookCallback () {
+		JSONObject p = getDefaultParams();
+		p.put("session_key", new JSONString(UserInfo.getSessionKey()));
+	
+		copyParams(p, params, "viewer_id");
+		copyParams(p, params, "source_ids");
+		copyParams(p, params, "start_time");
+		copyParams(p, params, "end_time");
+		copyParams(p, params, "limit");
+		copyParams(p, params, "filter_key");
+		copyParams(p, params, "metadata");
+
+		// Create intern callback
+		final FacebookCallback c = new FacebookCallback() {
 
 			public void onError(JSONObject o) {
-				callback.onFailure( null );
+				callback.onFailure(null);
 			}
 
 			public void onSuccess(JSONObject jo) {
-				List<Stream> result = new ArrayList<Stream> ();
-				
+				List<Stream> result = new ArrayList<Stream>();
+
 				JSONValue value = jo.get("posts");
 				JSONArray array = value.isArray();
-				
-				GWT.log( "StreamGet: Got Array?" + (array!=null), null );
-				
-				for ( int i = 0; i < array.size(); i ++ ) {
-					
-					JSONValue v = array.get ( i );
-					JSONObject o = v.isObject();
-			
-					GWT.log ( "StreamGet: adding new Stream() to result ", null);
-					
-					Stream stream = new Stream (o);
-					result.add( stream );
-				}
 
-				callback.onSuccess( result );
+				GWT.log("StreamGet: Got Array?" + (array != null), null);
+
+				for (int i = 0; i < array.size(); i++) {
+					JSONValue v = array.get(i);
+					JSONObject o = v.isObject();
+					Stream stream = new Stream(o);
+					result.add(stream);
+				}
+				callback.onSuccess(result);
 			}
-			
+
 		};
 
-		JSONObject p = getDefaultParams();
-		p.put("session_key", new JSONString(UserInfo.getSessionKey()));
 		callMethod("stream.get", p.getJavaScriptObject(), c);
 	}
 
@@ -119,32 +161,74 @@ public class FacebookApiImpl implements FacebookApi {
 		fql_query("SELECT message FROM status WHERE uid=" + uid + " LIMIT 1", callback);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gwittit.client.facebook.FacebookApi#fql_query(java.lang.String,
+	 * com.gwittit.client.facebook.FacebookCallback)
+	 */
 	public void fql_query(String fql, FacebookCallback callback) {
 
 		Map<String, String> params = new HashMap();
 		params.put("query", fql);
 		JSONObject p = getDefaultParams();
-		put(p, params, "query");
+		copyParams(p, params, "query");
 		callMethod("fql.query", p.getJavaScriptObject(), callback);
 	}
 
-	public void friends_get(FacebookCallback callback) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gwittit.client.facebook.FacebookApi#photos_getAlbums(java.util.Map,
+	 * com.google.gwt.user.client.rpc.AsyncCallback)
+	 */
+	public void photos_getAlbums(Map<String, String> params,
+			final AsyncCallback<List<Album>> callback) {
 		JSONObject p = getDefaultParams();
-		callMethod("friends.get", p.getJavaScriptObject(), callback);
+		copyParams(p, params, "uid");
+		copyParams(p, params, "aids");
+
+		// Create javascript native callback and parse response
+		FacebookCallback nativeCallback = new FacebookCallback() {
+
+			public void onError(JSONObject o) {
+				callback.onFailure(new Exception(o + ""));
+			}
+
+			public void onSuccess(JSONObject jo) {
+				List<Album> albums = new ArrayList();
+
+				int key = 0;
+
+				JSONObject o = jo.isObject();
+				JSONValue value;
+
+				while ((value = o.get(key + "")) != null) {
+					final Album album = Album.newInstance(value.isObject());
+					albums.add(album);
+					key++;
+				}
+
+				callback.onSuccess(albums);
+			}
+
+		};
+
+		callMethod("photos.getAlbums", p.getJavaScriptObject(), nativeCallback);
 	}
 
-	public void photos_getAlbums(Map<String, String> params, FacebookCallback callback) {
-		JSONObject p = getDefaultParams();
-		put(p, params, "uid");
-		put(p, params, "aids");
-		callMethod("photos.getAlbums", p.getJavaScriptObject(), callback);
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gwittit.client.facebook.FacebookApi#photos_get(java.util.Map,
+	 * com.gwittit.client.facebook.FacebookCallback)
+	 */
 	public void photos_get(final Map<String, String> params, final FacebookCallback callback) {
 		JSONObject obj = getDefaultParams();
-		put(obj, params, "subj_id");
-		put(obj, params, "aid");
-		put(obj, params, "pids");
+		copyParams(obj, params, "subj_id");
+		copyParams(obj, params, "aid");
+		copyParams(obj, params, "pids");
 		callMethod("photos.get", obj.getJavaScriptObject(), callback);
 	}
 
@@ -248,7 +332,8 @@ public class FacebookApiImpl implements FacebookApi {
 
 	}
 
-	public void connect_getUnconnectedFriendsCount(Map<String, String> params, FacebookCallback callback) {
+	public void connect_getUnconnectedFriendsCount(Map<String, String> params,
+			FacebookCallback callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -333,17 +418,20 @@ public class FacebookApiImpl implements FacebookApi {
 
 	}
 
-	public void feed_deactivateTemplateBundleByID(Map<String, String> params, FacebookCallback callback) {
+	public void feed_deactivateTemplateBundleByID(Map<String, String> params,
+			FacebookCallback callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void feed_getRegisteredTemplateBundleByID(Map<String, String> params, FacebookCallback callback) {
+	public void feed_getRegisteredTemplateBundleByID(Map<String, String> params,
+			FacebookCallback callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void feed_getRegisteredTemplateBundles(Map<String, String> params, FacebookCallback callback) {
+	public void feed_getRegisteredTemplateBundles(Map<String, String> params,
+			FacebookCallback callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -373,9 +461,12 @@ public class FacebookApiImpl implements FacebookApi {
 
 	}
 
+	/*
+	 * 
+	 */
 	public void friends_get(Map<String, String> params, FacebookCallback callback) {
-		// TODO Auto-generated method stub
-
+		JSONObject p = getDefaultParams();
+		callMethod("friends.get", p.getJavaScriptObject(), callback);
 	}
 
 	public void friends_getAppUsers(Map<String, String> params, FacebookCallback callback) {
@@ -647,16 +738,16 @@ public class FacebookApiImpl implements FacebookApi {
 		// TODO Auto-generated method stub
 
 	}
-	
-	private void put(JSONObject obj, Map<String, String> params, String key) {
+
+	private void copyParams(JSONObject obj, Map<String, String> params, String key) {
 
 		if (params.get(key) != null) {
 			obj.put(key, new JSONString(params.get(key)));
 		}
 	}
 
-	
-	// ======================== PRIVATE METHODS =================================== 
+	// ======================== PRIVATE METHODS
+	// ===================================
 	/*
 	 * Run facebook method, parse result and call callback function.
 	 */
@@ -711,7 +802,7 @@ public class FacebookApiImpl implements FacebookApi {
 	 * Get default params, minimum is the api key
 	 */
 	private JSONObject getDefaultParams() {
-		if( apiKey == null ) {
+		if (apiKey == null) {
 			Window.alert("api_key==null");
 		}
 		JSONObject obj = new JSONObject();

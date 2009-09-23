@@ -136,7 +136,7 @@ public class Frontpage extends Example implements ClickHandler {
 			outer.clear();
 			outer.add ( whatIsGwittit) ;
 
-			outer.add ( new NeedLoginWidget ( eventBus ) );
+			outer.add ( new LoginDialogWidget ( eventBus ) );
 			initWidget ( outer );	
 			return ;
 		} else {

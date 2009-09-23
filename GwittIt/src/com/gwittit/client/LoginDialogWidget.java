@@ -18,7 +18,7 @@ import com.gwittit.client.facebook.FacebookCallback;
 import com.gwittit.client.facebook.xfbml.FbLoginButton;
 
 
-public class NeedLoginWidget extends Composite {
+public class LoginDialogWidget extends Composite {
 	
 	private VerticalPanel outer = new VerticalPanel ();
 	
@@ -28,7 +28,7 @@ public class NeedLoginWidget extends Composite {
 	
 	private Anchor loginLink = new Anchor ( "don't see a button? Click here to login");
 	
-	public NeedLoginWidget ( final HandlerManager eventBus ) {
+	public LoginDialogWidget ( final HandlerManager eventBus ) {
 		
 		// Login with the javascript api. GWT client doesnt render the fb:login-button
 		loginLink.addClickHandler( new ClickHandler () {
@@ -39,8 +39,8 @@ public class NeedLoginWidget extends Composite {
 					}
 
 					public void onSuccess(JSONObject o) {
-						AppEvents loginEvent = new AppEvents ( Event.LOGIN );
-						eventBus.fireEvent( loginEvent );
+						//AppEvents loginEvent = new AppEvents ( Event.LOGIN );
+						//eventBus.fireEvent( loginEvent );
 					}
 					
 				});
