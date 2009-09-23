@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.commands.PhotosGetAlbums;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -36,10 +34,7 @@ public class PhotosGetAlbumsExample extends Example {
 		
 		Map<String,String> params = new HashMap<String,String> ();
 		
-		
-		new PhotosGetAlbums (params, apiClient) {
-			
-			@Override
+		apiClient.photos_getAlbums(params, new AsyncCallback<List<Album>> () {
 			public void onSuccess(List<Album> albums) {
 		
 				outer.remove( loader );
@@ -63,7 +58,11 @@ public class PhotosGetAlbumsExample extends Example {
 				Xfbml.parse( outer.getElement() );
 
 			}
-		};
+
+			public void onFailure(Throwable caught) {
+				Window.alert ( "Failed to fetch albums " + caught );
+			}
+		});
 		
 		initWidget( outer );
 		
