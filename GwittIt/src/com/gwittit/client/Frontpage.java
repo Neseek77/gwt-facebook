@@ -76,6 +76,9 @@ public class Frontpage extends Example implements ClickHandler {
 	// EventBus
 	private HandlerManager eventBus ;
 	
+	// Api Client
+	private FacebookApi apiClient;
+	
 	// Remove clickhandler when user has allowed us
 	private HandlerRegistration facebookPermissionHr ;
 	
@@ -83,6 +86,7 @@ public class Frontpage extends Example implements ClickHandler {
 	private TabPanel tabs = new TabPanel ();
 	
 	private Image updateStatusLoader = new Image ( "/ajaxloader.gif" );
+
 	// Display Facebook Stream
 	private FacebookStream  facebookStream;
 	
@@ -95,16 +99,15 @@ public class Frontpage extends Example implements ClickHandler {
 		GWT.log(LOGPREFIX + ":" + msg , null );
 	}
 	
-	
 	/**
 	 * Create a new page, do all the server calls etc.
 	 */
-	public Frontpage ( HandlerManager eventBus ) {
+	public Frontpage ( FacebookApi apiClient, HandlerManager eventBus ) {
 
 		log ( "new instance");
 		this.eventBus = eventBus;
-
-
+		this.apiClient = apiClient;
+		
 		
 		listenToLogin();
 
@@ -144,7 +147,7 @@ public class Frontpage extends Example implements ClickHandler {
 
 	private void renderUi () {
 		
-		facebookStream = new FacebookStream (  );
+		facebookStream = new FacebookStream ( apiClient );
 		
 
 		content.add ( leftSide );

@@ -54,6 +54,7 @@ public class Likes {
 	 */
 	public Widget createWidget () {
 		SimplePanel pnl = new SimplePanel ();
+		pnl.addStyleName("gwittit-Likes");
 		
 		if ( getCount() == 0  ) {
 			
@@ -70,17 +71,14 @@ public class Likes {
 	/**
 	 * Create a new instance, parse the json value
 	 */
-	public static Likes newInstance ( JSONValue v ) {
-		Likes i = new Likes ();
-		
+	public  Likes ( JSONValue v ) {
 		JSONObject o = v.isObject();
-		
-		i.href = JsonUtil.getString(o, "href");
-		i.count = JsonUtil.getInt(o, "count" );
-		i.userLikes = JsonUtil.getBoolean(o,"user_likes");
-		i.canLike = JsonUtil.getBoolean(o, "can_like");
-		return i;
+		href = JsonUtil.getString(o, "href");
+		count = JsonUtil.getInt(o, "count" );
+		userLikes = JsonUtil.getBoolean(o,"user_likes");
+		canLike = JsonUtil.getBoolean(o, "can_like");
 	}
+
 	
 	public String getHref() {
 		return href;
