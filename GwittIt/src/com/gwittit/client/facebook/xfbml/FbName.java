@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Wrapper class for the fb:name tag.
  * 
+ * Style gwittit-FbName
  * @see http://wiki.developers.facebook.com/index.php/Fb:name
  *
  */
@@ -50,6 +51,7 @@ public class FbName extends Widget {
 		super.setElement( DOM.createElement ("fb:name") ); 
 		super.addStyleName("FbName" );
 		set( "uid", uid);
+		addStyleName ( "gwittit-FbName");
 	}
 
 	public FbName ( Long uid, boolean linked ) {

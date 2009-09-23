@@ -5,6 +5,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Renders a fb:photo tag.
+ * 
+ * Customizable with style "gwittit-FbPhoto"
  */
 public class FbPhoto extends Widget  {
 	
@@ -13,6 +15,7 @@ public class FbPhoto extends Widget  {
 	}
 	public FbPhoto ( String pid ) {
 		super.setElement( DOM.createElement ("fb:photo") ); 
+		addStyleName ( "gwittit-FbPhoto");
 		getElement().setAttribute("pid", pid );
 	}
 	

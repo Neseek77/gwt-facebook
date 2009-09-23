@@ -6,6 +6,8 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 
 /**
  * Generates a fb:comment tag
+ * 
+ * Style gwittit-FbComments
  *
  */
 public class FbComments extends ComplexPanel {
@@ -15,6 +17,7 @@ public class FbComments extends ComplexPanel {
 	
 	public FbComments () {
 		super.setElement( DOM.createElement ( "fb:comments" ) ) ;
+		addStyleName ( "gwittit-FbComments");
 	}
 	
 	public FbComments ( String xid ) {

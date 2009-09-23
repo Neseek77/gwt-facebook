@@ -6,6 +6,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Renders a fb:profile-pic tag
+ * 
+ * Style gwittit-FbProfilePic 
+ * 
  * @author ola
  *
  */
