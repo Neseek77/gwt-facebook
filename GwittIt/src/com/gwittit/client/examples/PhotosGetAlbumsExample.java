@@ -40,6 +40,10 @@ public class PhotosGetAlbumsExample extends Example {
 				outer.remove( loader );
 				
 				outer.add ( new HTML ("<h3>Your Albums </h3>" ) );
+				
+				if ( albums.size() == 0 ) {
+					outer.add( new HTML ( "You have no albums" ) );
+				}
 				FlowPanel albumsPanel = new FlowPanel ();
 				albumsPanel.addStyleName ( "albumsPanel");
 				
