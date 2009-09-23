@@ -19,8 +19,8 @@ public class DebugLink extends Composite {
 	    final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
 	    
 	    simplePopup.setWidth("400px");
-		Anchor link = new Anchor ( "DebugInfo" );
-		
+		Anchor link = new Anchor ( "." );
+		link.addStyleName("debugLink");
 		
 		link.addClickHandler( new ClickHandler () {
 
@@ -32,7 +32,7 @@ public class DebugLink extends Composite {
 				
 				simplePopup.setPopupPosition(left, top);
 				
-				simplePopup.setWidget( new HTML ( debugWhat ) ) ;
+				simplePopup.setWidget( new HTML ( "Facebookk Raw Json Response: <br/> " + debugWhat ) ) ;
 				simplePopup.show();
 			}
 			

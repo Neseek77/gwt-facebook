@@ -14,6 +14,8 @@ public class FbProfilePic extends Widget {
 	
 	public FbProfilePic ( Long uid ) {
 		super.setElement ( DOM.createElement("fb:profile-pic" ) ) ;
+		addStyleName("gwittit-FbProfilePic");
+
 		getElement().setAttribute("uid", "" + uid );
 		getElement().setAttribute("size", "square");
 		setFacebookLogo(true);

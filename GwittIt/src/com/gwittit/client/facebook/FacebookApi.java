@@ -394,7 +394,8 @@ public interface FacebookApi {
 
 	// Checks whether the user has opted in to an extended application
 	// permission.
-	void users_hasAppPermission(String extPerm, FacebookCallback callback);
+	public enum Permission { read_stream, publish_stream };
+	void users_hasAppPermission(Permission permission, AsyncCallback<Boolean> callback);
 
 	// Returns whether the user (either the session user or user specified by
 	// UID) has authorized the calling application.
