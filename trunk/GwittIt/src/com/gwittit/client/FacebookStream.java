@@ -4,27 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.gwittit.client.facebook.UserInfo;
-import com.gwittit.client.facebook.commands.StreamGet;
-import com.gwittit.client.facebook.commands.UsersHasAppPermission;
-import com.gwittit.client.facebook.commands.UsersHasAppPermission.Permission;
-import com.gwittit.client.facebook.entities.Stream;
-import com.gwittit.client.facebook.xfbml.FbName;
-import com.gwittit.client.facebook.xfbml.FbProfilePic;
-import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ImageBundle;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.commands.UsersHasAppPermission;
+import com.gwittit.client.facebook.commands.UsersHasAppPermission.Permission;
+import com.gwittit.client.facebook.entities.Stream;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Display facebook stream 
@@ -39,11 +32,15 @@ public class FacebookStream extends Composite {
 
 	private Image ajaxLoader = new Image ( "/loader.gif" );
 	
+	private FacebookApi apiClient;
+	
 	/**
 	 * Create new object.
 	 */
-	public FacebookStream ( ) {
+	public FacebookStream ( final FacebookApi apiClient ) {
 
+		this.apiClient = apiClient;
+		
 		GWT.log( "FacebookStream()", null);
 		Map<String,String> params = new HashMap<String,String> ();
 		
@@ -103,22 +100,25 @@ public class FacebookStream extends Composite {
 		}
 	}
 	
+	
 	private void renderStream ( ) {
 		GWT.log( "FacebookStream: render Stream", null );
 		streamListing.add( ajaxLoader );
 
-		new StreamGet () {
-			@Override
-			public void onSuccess(List<Stream> streamResult) {
-				GWT.log( "FacebookStream: stream get size " + streamResult, null );
-				streamListing.remove( ajaxLoader );
-				
-				for ( Stream s : streamResult ) {
+		apiClient.stream_get(null, new AsyncCallback<List<Stream>> () {
+
+			public void onFailure(Throwable caught) {
+				Window.alert ( "Stream Get Failed : " + caught );
+			}
+
+			public void onSuccess(List<Stream> result) {
+				for ( Stream s : result ) {
 					streamListing.add( s.createWidget() );
 				}
-				Xfbml.parse( streamListing.getElement() );
+				Xfbml.parse(streamListing.getElement() );
 			}
-		};
+			
+		});
 	}
 	
 

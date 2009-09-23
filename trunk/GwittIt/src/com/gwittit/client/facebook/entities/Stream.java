@@ -149,30 +149,33 @@ public class Stream {
 		return stream;
 
 	}
+	
+	public Stream () {
+		
+	}
 	/**
 	 * Create a new Stream object from json object
 	 */
-	public static Stream newInstance ( JSONObject o ) {
-		Stream i = new Stream ();
+	public Stream ( JSONObject o ) {
 
-		i.wrappedObject = o;
-		i.postId = JsonUtil.getString(o, "post_id" );
-		i.viewerId = JsonUtil.getLong(o, "viewer_id" );
-		i.appId = JsonUtil.getLong(o, "app_id");
-		i.sourceId = JsonUtil.getLong(o, "source_id");
-		i.updatedTime = JsonUtil.getDate(o, "updated_time");
-		i.createdTime = JsonUtil.getDate(o, "created_time");
-		i.filterKey = JsonUtil.getString(o, "filter_key");
-		i.attribution = JsonUtil.getString (o, "attribution" );
-		i.actorId = JsonUtil.getString(o,"actor_id");
-		i.targetId = JsonUtil.getString(o, "target_id");
-		i.message = JsonUtil.getString(o, "message");
+
+		wrappedObject = o;
+		postId = JsonUtil.getString(o, "post_id" );
+		viewerId = JsonUtil.getLong(o, "viewer_id" );
+		appId = JsonUtil.getLong(o, "app_id");
+		sourceId = JsonUtil.getLong(o, "source_id");
+		updatedTime = JsonUtil.getDate(o, "updated_time");
+		createdTime = JsonUtil.getDate(o, "created_time");
+		filterKey = JsonUtil.getString(o, "filter_key");
+		attribution = JsonUtil.getString (o, "attribution" );
+		actorId = JsonUtil.getString(o,"actor_id");
+		targetId = JsonUtil.getString(o, "target_id");
+		message = JsonUtil.getString(o, "message");
 		
 		//JsonUtil.debug( o.get("attachment" ).isObject() );
 		
 		//attachment = Attachment.newInstance ( o.get("attachment").isObject() );
-		i.likes = Likes.newInstance ( o.get("likes" ) );
-		return i;
+		likes = new Likes ( o.get("likes" ) );
 		
 	}
 	

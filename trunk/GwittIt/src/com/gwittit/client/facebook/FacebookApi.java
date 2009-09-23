@@ -1,8 +1,11 @@
 package com.gwittit.client.facebook;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwittit.client.facebook.entities.Stream;
 
 /**
  * GWT wrapper for facebook api
@@ -348,7 +351,8 @@ public interface FacebookApi {
 	// This method returns an object (in JSON-encoded or XML format) that
 	// contains the stream from the perspective of a specific viewer -- a user
 	// or a Facebook Page.
-	void stream_get(Map<String, String> params, FacebookCallback callback); /* BETA */
+	
+	void stream_get(Map<String, String> params, AsyncCallback<List<Stream>> callback); /* BETA */
 
 	// This method returns all comments associated with a post in a user's
 	// stream. This method returns comments only if the user who owns the post

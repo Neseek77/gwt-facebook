@@ -1,12 +1,19 @@
 package com.gwittit.client.facebook;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwittit.client.facebook.entities.Stream;
 
 /**
  * GWT wrappers for facebook api.
@@ -43,7 +50,39 @@ public class FacebookApiImpl implements FacebookApi {
 	 * @see http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
 	 * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29 Stream Table
 	 */
-	public void stream_get(Map<String, String> params, FacebookCallback c) {
+	public void stream_get(Map<String, String> params, final AsyncCallback<List<Stream>> callback) {
+
+		// Create intern callback 
+		final FacebookCallback c = new FacebookCallback () {
+
+			public void onError(JSONObject o) {
+				callback.onFailure( null );
+			}
+
+			public void onSuccess(JSONObject jo) {
+				List<Stream> result = new ArrayList<Stream> ();
+				
+				JSONValue value = jo.get("posts");
+				JSONArray array = value.isArray();
+				
+				GWT.log( "StreamGet: Got Array?" + (array!=null), null );
+				
+				for ( int i = 0; i < array.size(); i ++ ) {
+					
+					JSONValue v = array.get ( i );
+					JSONObject o = v.isObject();
+			
+					GWT.log ( "StreamGet: adding new Stream() to result ", null);
+					
+					Stream stream = new Stream (o);
+					result.add( stream );
+				}
+
+				callback.onSuccess( result );
+			}
+			
+		};
+
 		JSONObject p = getDefaultParams();
 		p.put("session_key", new JSONString(UserInfo.getSessionKey()));
 		callMethod("stream.get", p.getJavaScriptObject(), c);

@@ -124,7 +124,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			photosGet.addClickHandler(this);
 			
 			// Add the app.
-			frontpage = new Frontpage ( eventBus );
+			frontpage = new Frontpage ( apiClient, eventBus );
 			
 			inner.add ( menu );
 			inner.add ( example );
