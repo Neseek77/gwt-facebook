@@ -15,6 +15,7 @@ import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.AppEvents.Event;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookCallback;
+import com.gwittit.client.facebook.events.EventHelper;
 import com.gwittit.client.facebook.xfbml.FbLoginButton;
 
 
@@ -39,8 +40,7 @@ public class LoginDialogWidget extends Composite {
 					}
 
 					public void onSuccess(JSONObject o) {
-						//AppEvents loginEvent = new AppEvents ( Event.LOGIN );
-						//eventBus.fireEvent( loginEvent );
+						EventHelper.fireLoginEvent(eventBus);
 					}
 					
 				});

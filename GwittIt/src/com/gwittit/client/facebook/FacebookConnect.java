@@ -80,9 +80,8 @@ public class FacebookConnect {
 	 * @param callback
 	 */
 	private static native void defineFacebookConnectLogin( FacebookCallback callback ) /*-{
-		var fbConn = this;
 		$wnd.facebookConnectLogin = function() {
-		    fbConn.@com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/gwittit/client/facebook/FacebookCallback;)();
+		    @com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/gwittit/client/facebook/FacebookCallback;)(callback);
 		};
 	}-*/;
 	
@@ -90,7 +89,7 @@ public class FacebookConnect {
 	/**
 	 * Called when a user successfully logs in.
 	 */
-	public void onSuccess ( FacebookCallback callback ) {
+	public static void onSuccess ( FacebookCallback callback ) {
 		if ( callback == null ) {
 			throw new IllegalArgumentException ( "callback null");
 		}
