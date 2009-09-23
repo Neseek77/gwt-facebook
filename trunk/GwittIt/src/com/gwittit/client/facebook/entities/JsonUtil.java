@@ -84,11 +84,12 @@ public class JsonUtil {
 	}
 	
 	public static Date getDate ( JSONObject o, String key ) {
+		
 		Long t = getLong ( o, key );
 		if ( t == null ) {
 			return null;
 		}
-		
+		GWT.log( "Times is " + t , null );
 		Date date = new Date ();
 		date.setTime(t);
 		return date;

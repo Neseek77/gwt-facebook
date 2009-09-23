@@ -7,6 +7,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.DebugLink;
@@ -90,7 +91,7 @@ public class Stream {
 	/**
 	 * An array of information about the attachment to the post. This is the attachment that Facebook returns. 
 	 */
-	private Attachment attachment;
+	private Attachment attachment = new Attachment ();
 	
 	/**
 	 * Todo
@@ -100,7 +101,7 @@ public class Stream {
 	/**
 	 * An array of likes associated with the post. The array contains the following fields: 
 	 */
-	private Likes likes;
+	private Likes likes = new Likes ();
 	
 	
 	/**
@@ -114,74 +115,78 @@ public class Stream {
 	 */
 	public Widget createWidget () {
 
-		final VerticalPanel stream = new VerticalPanel ();
-		stream.addStyleName ("stream");
-		stream.addStyleName ( "gwittit-Stream");
+		final HorizontalPanel outer = new HorizontalPanel ();
+		outer.addStyleName ("stream");
+		outer.addStyleName ( "gwittit-Stream");
 		
-		final HorizontalPanel message= new HorizontalPanel ();
-		
-		final FbProfilePic profilePic = new FbProfilePic ( getSourceId()  );
-		message.add ( profilePic );
+		final HorizontalPanel horizontalPnl= new HorizontalPanel ();
+		horizontalPnl.add ( new FbProfilePic ( getSourceId () ) );
 
-		final FbName fbName = new FbName ( getSourceId() );
+		/*
+		 * Posted by
+		 */
+		final VerticalPanel inner = new VerticalPanel ();
+		inner.addStyleName ( "text" );
+		inner.add( new HTML ( new FbName ( getSourceId () ).toString() + " " + ( getMessage() != null ? getMessage() : "" ) ) );
 		
-		
+		/*
+		 * Attachment
+		 */
 		if ( getAttachment().getName() != null ) {
+			 inner.add ( getAttachment().createWidget () );
+		} 
+		
+		/*
+		 * Stream Info 
+		 */
+		HorizontalPanel streamInfo = new HorizontalPanel ();
+		streamInfo.addStyleName("gwittit-StreamInfo");
+		
+			// Add small icon
+		if ( getAttachment().getIcon() != null ) {
+			Image ic = new Image ( getAttachment().getIcon () );
+			streamInfo.add ( ic );
 			
-			VerticalPanel ap = new VerticalPanel ();
-			ap.addStyleName("gwittit-Attachment");
-			
-			if ( getMessage() != null ) {
-				ap.add ( new HTML ( fbName.toString() + " " +getMessage() ) );
-			}
-			
-			Anchor a = new Anchor ( getAttachment().getName() );
-			a.setTarget("_blank");
-			a.setHref( getAttachment().getHref() );
-			ap.add( a ) ;
-
-			HorizontalPanel mediasPanel = new HorizontalPanel ();
-			for ( Media m : getAttachment().getMedias() ) {
-				
-				if ( "photo".equals ( m.getType() ) ) {
-					mediasPanel.add ( m.createWidget () );
-				}
-				ap.add(  mediasPanel );
-			}
-			//Anchor a = new Anchor ( )
-			message.add ( ap );
-			
-		} else {
-			
-			// Regular post
-			final HorizontalPanel text = new HorizontalPanel ();
-			text.addStyleName ( "text" );
-			text.add( new HTML ( fbName.toString() + " " +getMessage() ) );
-			message.add ( text );
 		}
+			// Add timestamp
+		streamInfo.add ( new HTML ( "" + getCreatedTime()  ) );
+		inner.add ( streamInfo );
+
 		
-		stream.add ( message );
+		/*
+		 * Actions, comment, like etc
+		 */
+		HorizontalPanel actionsPnl = new HorizontalPanel ();
+		actionsPnl.addStyleName ( "actions" );
+		actionsPnl.add  ( new DebugLink ( getWrappedObject()+""));
+		inner.add ( actionsPnl );
 		
-		// Actions , like etc.
-		HorizontalPanel actions = new HorizontalPanel ();
-		actions.addStyleName ( "actions" );
-		actions.add  ( new DebugLink ( getWrappedObject()+""));
-		stream.add ( actions );
 		
-		// Likes
-		HorizontalPanel feedBack = new HorizontalPanel ();
+		/**
+		 * Likes
+		 */
+		HorizontalPanel likesPnl = new HorizontalPanel ();
 		
 		if ( likes.getCount() > 0 ) {
-			feedBack.addStyleName ( "feedBack" );
-			feedBack.add ( likes.createWidget() );
-			stream.add ( feedBack );
+			likesPnl.addStyleName ( "feedBack" );
+			likesPnl.add ( likes.createWidget() );
+			inner.add ( likesPnl );
 		}
 		
-		return stream;
+		
+		/*
+		 * Compile outer
+		 */
+		outer.add ( new FbProfilePic ( getSourceId () ) );
+		outer.add ( inner );
+		
+		return outer;
 
 	}
 	
 	public Stream () {
+		
+		attachment = new Attachment ();
 		
 	}
 	/**
