@@ -3,11 +3,14 @@
 
 * {margin: 0px; padding: 0px; text-decoration: none }
 
-
 body {
 	width: 100%;
 	background-image:url(bg.png);
 	background-repeat:repeat-x;
+}
+
+.clickable {
+	cursor: pointer;
 }
 
 #GwittIt {
@@ -33,7 +36,7 @@ h2 {
 }
 
 
-#PimpMyStatus,
+#Frontpage,
 #TopMenuGwittee {
 	width: 100%;
 }
@@ -63,28 +66,29 @@ h2 {
 	border: 3px solid white;
 }
 
-#PimpMyStatus .leftSide {
-	margin-right: 40px;
-	padding-left: 20px;
-}
 
-#PimpMyStatus .rightSide input,
-#PimpMyStatus .rightSide .gwt-Label {
-	margin: 5px;
-}
+/* -------------------- Frontpage / set status ------------------ */
 
-#PimpMyStatus .statusTextBox {
+#Frontpage .inputTextArea {
 	font-size: 14px;
 	padding: 10px;	
 }
 
+.waitingForInput {
+	color: #808080;
+}
+
 
 /* -------------------------- Login ----------------------- */
-#NeedLoginWidget, .content {
+
+#NeedLoginWidget {
+	margin: 50px;
+}
+
+#NeedLoginWidget, .statusBoxPnl {
 	background: #DDEEF6;
 	border: 1px solid #5599BB;
 	padding: 20px;
-	margin: 50px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 }
@@ -122,7 +126,7 @@ h2 {
 }
 
 .streamListing {
-	padding: 30px;
+	padding: 10px;
 }
 
 .gwittit-Stream {
@@ -137,10 +141,45 @@ h2 {
 	border: 1px solid #f7f7f7;
 }
 
+.gwittit-StreamInfo {
+	margin: 5px;
+	padding: 4px;
+	color: #cccccc;
+}
+
+.gwittit-StreamInfo img {
+	margin-right: 5px;
+}
+
+.gwittit-Attachment {
+	color: #808080;
+	padding: 3px;
+}
+
+.gwittit-Attachment .gwt-HTML {
+	color: #808080;
+}	
+
 .gwittit-Media img {
 	border: 1px solid #f7f7f7;
 	padding: 5px;
 	margin: 5px;
+}
+
+.gwittit-FbLiveSteam {
+	width: 650px;
+}
+
+
+
+.unlockStream {
+	width: 550px;
+	padding: 30px;
+	border: 1px solid #F7F7F7;
+}
+
+.unlockStream img {
+	margin: 10px;
 }
 
 .actions {
