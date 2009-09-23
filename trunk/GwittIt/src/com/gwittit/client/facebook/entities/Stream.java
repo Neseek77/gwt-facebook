@@ -2,8 +2,9 @@ package com.gwittit.client.facebook.entities;
 
 import java.util.Date;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -115,20 +116,50 @@ public class Stream {
 
 		final VerticalPanel stream = new VerticalPanel ();
 		stream.addStyleName ("stream");
-		
+		stream.addStyleName ( "gwittit-Stream");
 		
 		final HorizontalPanel message= new HorizontalPanel ();
 		
 		final FbProfilePic profilePic = new FbProfilePic ( getSourceId()  );
+		message.add ( profilePic );
+
 		final FbName fbName = new FbName ( getSourceId() );
 		
-		final HorizontalPanel text = new HorizontalPanel ();
-		text.addStyleName ( "text" );
-		text.add( new HTML ( fbName.toString() + " " +getMessage() ) );
-	
-		message.add ( profilePic );
-		message.add ( text );
+		
+		if ( getAttachment().getName() != null ) {
+			
+			VerticalPanel ap = new VerticalPanel ();
+			ap.addStyleName("gwittit-Attachment");
+			
+			if ( getMessage() != null ) {
+				ap.add ( new HTML ( fbName.toString() + " " +getMessage() ) );
+			}
+			
+			Anchor a = new Anchor ( getAttachment().getName() );
+			a.setTarget("_blank");
+			a.setHref( getAttachment().getHref() );
+			ap.add( a ) ;
 
+			HorizontalPanel mediasPanel = new HorizontalPanel ();
+			for ( Media m : getAttachment().getMedias() ) {
+				
+				if ( "photo".equals ( m.getType() ) ) {
+					mediasPanel.add ( m.createWidget () );
+				}
+				ap.add(  mediasPanel );
+			}
+			//Anchor a = new Anchor ( )
+			message.add ( ap );
+			
+		} else {
+			
+			// Regular post
+			final HorizontalPanel text = new HorizontalPanel ();
+			text.addStyleName ( "text" );
+			text.add( new HTML ( fbName.toString() + " " +getMessage() ) );
+			message.add ( text );
+		}
+		
 		stream.add ( message );
 		
 		// Actions , like etc.
@@ -172,10 +203,13 @@ public class Stream {
 		targetId = JsonUtil.getString(o, "target_id");
 		message = JsonUtil.getString(o, "message");
 		
-		//JsonUtil.debug( o.get("attachment" ).isObject() );
+		GWT.log ( "Create attachment " + o.get("attachment"), null );
+		attachment = new Attachment ( o.get("attachment") );
 		
-		//attachment = Attachment.newInstance ( o.get("attachment").isObject() );
+		GWT.log( "Create Likes ", null );
 		likes = new Likes ( o.get("likes" ) );
+		
+		GWT.log ( "Created new Stream Object, null ", null );
 		
 	}
 	

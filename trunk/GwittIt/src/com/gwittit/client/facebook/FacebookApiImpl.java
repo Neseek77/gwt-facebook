@@ -17,31 +17,32 @@ import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Stream;
 
 /**
- * The class contains function defining the Facebook API. With the
- * API, you can add social context to your application by utilizing profile,
- * friend, Page, group, photo, and event data.
+ * The class contains function defining the Facebook API. With the API, you can
+ * add social context to your application by utilizing profile, friend, Page,
+ * group, photo, and event data.
  * 
  * 
  * @see http://wiki.developers.facebook.com/index.php/API Facebook API
  * 
- * @author ola 
+ * @author ola
  */
 public class FacebookApiImpl implements FacebookApi {
 
-	private FacebookCallback callback;
 
 	private String apiKey;
 
+	/**
+	 * Creates a new api
+	 * @param apiKey
+	 */
 	protected FacebookApiImpl(String apiKey) {
 		this.apiKey = apiKey;
 	}
 
-	// ================== FACEBOOK METHODS ===================
 
 	/**
-	 * This method returns a list of Stream objects that
-	 * contains the stream from the perspective of a specific viewer -- a user
-	 * or a Facebook Page.
+	 * This method returns a list of Stream objects that contains the stream
+	 * from the perspective of a specific viewer -- a user or a Facebook Page.
 	 * 
 	 * The hashmap takes the following arguments:
 	 * 
@@ -88,24 +89,29 @@ public class FacebookApiImpl implements FacebookApi {
 	 * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
 	 *      Stream Table
 	 */
-	public void stream_get(Map<String, String> params, final AsyncCallback<List<Stream>> callback) {
+	public void stream_get(Map<String, String> params, final AsyncCallback<List<Stream>> ac) {
+
+		final String lp = "FacebookApiImpl#stream_get:";
+		GWT.log(lp + " called", null);
 
 		JSONObject p = getDefaultParams();
 		p.put("session_key", new JSONString(UserInfo.getSessionKey()));
-	
-		copyParams(p, params, "viewer_id");
-		copyParams(p, params, "source_ids");
-		copyParams(p, params, "start_time");
-		copyParams(p, params, "end_time");
-		copyParams(p, params, "limit");
-		copyParams(p, params, "filter_key");
-		copyParams(p, params, "metadata");
 
-		// Create intern callback
+		if (params != null) {
+			copyParams(p, params, "viewer_id");
+			copyParams(p, params, "source_ids");
+			copyParams(p, params, "start_time");
+			copyParams(p, params, "end_time");
+			copyParams(p, params, "limit");
+			copyParams(p, params, "filter_key");
+			copyParams(p, params, "metadata");
+		}
+
+		// Create native callback and parse response.
 		final FacebookCallback c = new FacebookCallback() {
 
 			public void onError(JSONObject o) {
-				callback.onFailure(null);
+				ac.onFailure(null);
 			}
 
 			public void onSuccess(JSONObject jo) {
@@ -114,15 +120,13 @@ public class FacebookApiImpl implements FacebookApi {
 				JSONValue value = jo.get("posts");
 				JSONArray array = value.isArray();
 
-				GWT.log("StreamGet: Got Array?" + (array != null), null);
-
-				for (int i = 0; i < array.size(); i++) {
+				for (int i = 0; array != null && i < array.size(); i++) {
 					JSONValue v = array.get(i);
 					JSONObject o = v.isObject();
 					Stream stream = new Stream(o);
 					result.add(stream);
 				}
-				callback.onSuccess(result);
+				ac.onSuccess(result);
 			}
 
 		};
@@ -131,12 +135,87 @@ public class FacebookApiImpl implements FacebookApi {
 	}
 
 	/**
-	 * See facebook api
+	 * Checks whether the user has opted in to an extended application
+	 * permission.
+	 * 
+	 * For non-desktop applications, you may pass the ID of the user on whose
+	 * behalf you're making this call. If you don't specify a user with the uid
+	 * parameter but you do specify a session_key, then that user whose session
+	 * it is will be the target of the call.
+	 * 
+	 * However, if your application is a desktop application, you must pass a
+	 * valid session key for security reasons. Passing a uid parameter will
+	 * result in an error.
+	 * The params map takes the following argument:
+	 * <p>
+	 *  required api_key
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 *  call_id
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 *  sig
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 *  v
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call.
+	 *  ext_perm
+	 *            string String identifier for the extended permission that is
+	 *            being checked for. Must be one of email, read_stream,
+	 *            publish_stream, offline_access, status_update, photo_upload,
+	 *            create_event, rsvp_event, sms, video_upload, create_note,
+	 *            share_item.
+	 *  optional session_key
+	 *            string The session key of the user whose
+	 *            permissions you are checking.
+	 *  Note
+	 *            : A session key is always required for desktop applications.
+	 *            It is required for Web applications only when the uid is not
+	 *            specified.
+	 *  format
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 *  callback
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 *  uid
+	 *            int The user ID of the user whose permissions you are
+	 *            checking. If this parameter is not specified, then it defaults
+	 *            to the session user. Note: This parameter applies only to Web
+	 *            applications and is required by them only if the session_key
+	 *            is not specified. Facebook ignores this parameter if it is
+	 *            passed by a desktop application.
+	 *  </p>
 	 */
-	public void users_hasAppPermission(String extPerm, FacebookCallback c) {
+	public void users_hasAppPermission(Permission permission, final AsyncCallback<Boolean> callback) {
+		
+		GWT.log( "users_hasAppPermission: " + permission.toString(), null );
+		
 		JSONObject p = getDefaultParams();
-		p.put("ext_perm", new JSONString(extPerm));
-		callMethod("users.hasAppPermission", p.getJavaScriptObject(), c);
+		p.put("ext_perm", new JSONString(permission.toString()));
+
+		final FacebookCallback fc = new FacebookCallback() {
+			public void onError(JSONObject jo) {
+				callback.onFailure(new Exception(jo + ""));
+			}
+
+			public void onSuccess(JSONObject jo) {
+				JSONString result = jo.get("result").isString();
+				callback.onSuccess("1".equals(result.isString().stringValue()));
+			}
+		};
+		callMethod("users.hasAppPermission", p.getJavaScriptObject(), fc);
 	}
 
 	/**
@@ -753,19 +832,18 @@ public class FacebookApiImpl implements FacebookApi {
 	 */
 	private native void callMethod(String method, JavaScriptObject params, FacebookCallback callback)/*-{
 		var app=this;
-		app.@com.gwittit.client.facebook.FacebookApiImpl::callback=callback;
 		$wnd.FB_RequireFeatures(["Api"], function(){			
 			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
 
 				function(result, exception){
 						// this is the result when we run in hosted mode for some reason
 					if(!isNaN(result)) {
-						app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccessNumber(Ljava/lang/String;)(result+"");
+						app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccessNumber(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;)(callback,result+"");
 					} else {
 						if ( result != undefined ) {
-							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccess(Lcom/google/gwt/core/client/JavaScriptObject;)(result);
+							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackSuccess(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
 						} else {
-							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackError(Lcom/google/gwt/core/client/JavaScriptObject;)(exception);
+							app.@com.gwittit.client.facebook.FacebookApiImpl::callbackError(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
 						}
 					}
 				}
@@ -776,14 +854,14 @@ public class FacebookApiImpl implements FacebookApi {
 	/**
 	 * Callbacks
 	 */
-	public void callbackError(JavaScriptObject value) {
+	public void callbackError(FacebookCallback callback, JavaScriptObject value) {
 		callback.onError(new JSONObject(value));
 	}
 
 	/**
 	 * Called when result is a number
 	 */
-	public void callbackSuccessNumber(String i) {
+	public void callbackSuccessNumber( FacebookCallback callback, String i) {
 		JSONObject o = new JSONObject();
 		JSONString s = new JSONString(i);
 		o.put("result", s);
@@ -794,7 +872,7 @@ public class FacebookApiImpl implements FacebookApi {
 	/**
 	 * Called when method succeeded.
 	 */
-	public void callbackSuccess(JavaScriptObject obj) {
+	public void callbackSuccess(FacebookCallback callback, JavaScriptObject obj) {
 		callback.onSuccess(new JSONObject(obj));
 	}
 

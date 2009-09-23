@@ -14,8 +14,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.commands.UsersHasAppPermission;
-import com.gwittit.client.facebook.commands.UsersHasAppPermission.Permission;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
@@ -59,16 +57,22 @@ public class FacebookStream extends Composite {
 		
 		GWT.log( "FacebookStream: Checking app permission", null );
 		
-		new UsersHasAppPermission ( Permission.read_stream ) {
-			@Override
-			public void hasPermission(boolean canReadStream) {
-				if ( canReadStream ) {
+		apiClient.users_hasAppPermission( com.gwittit.client.facebook.FacebookApi.Permission.read_stream , 
+				new AsyncCallback<Boolean>()  {
+			
+			public void onFailure(Throwable caught) {
+				Window.alert ( "Failed to check permissino " + caught );
+			}
+
+			public void onSuccess(Boolean result) {
+				if ( result ) {
 					renderStream();
 				} else {
 					outer.add ( ask );
-				}
+				}				
 			}
-		};
+		} );
+
 		outer.add ( streamListing );
 	
 		initWidget ( outer );
@@ -105,13 +109,16 @@ public class FacebookStream extends Composite {
 		GWT.log( "FacebookStream: render Stream", null );
 		streamListing.add( ajaxLoader );
 
-		apiClient.stream_get(null, new AsyncCallback<List<Stream>> () {
+		Map<String,String> params = new HashMap<String,String> ();
+		
+		apiClient.stream_get(params, new AsyncCallback<List<Stream>> () {
 
 			public void onFailure(Throwable caught) {
 				Window.alert ( "Stream Get Failed : " + caught );
 			}
 
 			public void onSuccess(List<Stream> result) {
+				streamListing.clear ();
 				for ( Stream s : result ) {
 					streamListing.add( s.createWidget() );
 				}

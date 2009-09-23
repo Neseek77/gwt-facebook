@@ -1,6 +1,13 @@
 package com.gwittit.client.facebook.entities;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Window;
 
 /**
  * Wrapp attachment
@@ -45,7 +52,7 @@ public class Attachment {
 	/**
 	 * Rich media that provides visual content for the post. media is an array that contains one of the following types: image, flash, mp3, or video, which are described below. Make sure you specify only one of these types in your post. 
 	 */
-	private List<Media> medias;
+	private List<Media> medias = new ArrayList<Media> ();
 
 	/**
 	 * An application-specific xid associated with the stream post. The xid
@@ -55,8 +62,44 @@ public class Attachment {
 	 */
 	private String commentsXid;
 	
+
+	public Attachment () {
+		
+	}
 	
-	private Likes likes;
+	
+	public Attachment ( JSONValue j ) {
+		
+		JSONObject o = j.isObject();
+		
+		if ( o == null ) {
+			return ;
+		}
+		
+		name = JsonUtil.getString(o, "name" );
+		href = JsonUtil.getString(o, "href" );
+		caption = JsonUtil.getString ( o, "caption" );
+		description = JsonUtil.getString (o, "description" );
+		
+
+		// Parse media, this is a pretty complex structure. See facebook doc for info 
+		JSONValue v = o.get ( "media" );
+		if ( v !=  null ) {
+			JSONArray mediasJson = v.isArray();
+			if ( mediasJson != null ) {
+				for ( int i = 0 ; i  < mediasJson.size() ; i++ ) {
+					JSONValue mv = mediasJson.get(i);
+					if ( mv.isObject() != null ) {
+						GWT.log( "Attachment: create new Media file", null);
+						Media media = new Media ( mv.isObject() );
+						medias.add ( media );
+					}
+				}
+			}
+		}
+		
+		GWT.log( "attachment.name = " + name , null );
+	}
 	
 	/**
 	 * For own use

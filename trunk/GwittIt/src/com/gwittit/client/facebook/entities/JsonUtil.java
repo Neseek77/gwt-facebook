@@ -2,6 +2,7 @@ package com.gwittit.client.facebook.entities;
 
 import java.util.Date;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
@@ -33,9 +34,10 @@ public class JsonUtil {
 	
 	
 	public static String getString ( JSONObject o , String key ) {
-		
-		if ( o.get(key).isString() != null ) {
-			return o.get(key).isString().stringValue();
+		if ( o.get(key) != null ) {
+			if ( o.get(key).isString() != null )  {
+				return o.get(key).isString().stringValue();
+			}
 		} 
 		return null;
 		

@@ -8,9 +8,9 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -20,14 +20,11 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
-import com.gwittit.client.events.AppEvents.Event;
 import com.gwittit.client.examples.Example;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookCallback;
 import com.gwittit.client.facebook.UserInfo;
-import com.gwittit.client.facebook.commands.UsersHasAppPermission;
-import com.gwittit.client.facebook.commands.UsersHasAppPermission.Permission;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
@@ -202,11 +199,14 @@ public class Frontpage extends Example implements ClickHandler {
 	 * Check if the user can publish to facebook.
 	 */
 	private void checkPublishStream () {
-	
-		new UsersHasAppPermission ( Permission.publish_stream ) {
+		
+		apiClient.users_hasAppPermission( com.gwittit.client.facebook.FacebookApi.Permission.publish_stream , new AsyncCallback<Boolean>()  {
 
-			@Override
-			public void hasPermission(boolean canPublishStream) {
+			public void onFailure(Throwable caught) {
+			}
+
+			public void onSuccess ( Boolean canPublishStream ) {
+				GWT.log( "checkPublishStream result = " + canPublishStream, null );
 				if ( canPublishStream ) {
 					facebookPermissionCheckbox.setValue(true);
 				} else {
@@ -217,9 +217,9 @@ public class Frontpage extends Example implements ClickHandler {
 							}
 						}
 					});
-				}
+				}				
 			}
-		};
+		});
 	}
 
 	private native void askForPermission ( String extPerm )/*-{
