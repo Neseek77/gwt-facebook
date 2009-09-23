@@ -107,6 +107,8 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		outer.add ( topMenu );
 
 		if ( UserInfo.isLoggedIn() ) {
+			
+			
 			menu.addStyleName("menu");
 			menu.add ( wrapMenuItem ( streamGetLink ) );
 			menu.add ( wrapMenuItem ( photosGetLink ) );

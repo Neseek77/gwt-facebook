@@ -187,6 +187,9 @@ public class Stream {
 	public Stream () {
 		
 		attachment = new Attachment ();
+		likes = new Likes ();
+		createdTime = new Date ();
+		updatedTime = new Date ();
 		
 	}
 	/**

@@ -11,8 +11,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -25,9 +29,10 @@ public class FacebookStream extends Composite {
 	private VerticalPanel outer = new VerticalPanel ();
 
 	private VerticalPanel streamListing = new VerticalPanel ();
-	
-	private Anchor ask = new Anchor ( "Click to enable facebook stream in Gwittee");
 
+
+	private Panel unlockPnl = createUnlockPanel();
+	
 	private Image ajaxLoader = new Image ( "/loader.gif" );
 	
 	private FacebookApi apiClient;
@@ -39,6 +44,8 @@ public class FacebookStream extends Composite {
 
 		this.apiClient = apiClient;
 		
+
+		
 		GWT.log( "FacebookStream()", null);
 		Map<String,String> params = new HashMap<String,String> ();
 		
@@ -47,13 +54,6 @@ public class FacebookStream extends Composite {
 		streamListing.addStyleName( "streamListing" );
 		
 		//ask.setHTML( "<img src=/fb_permission.png> Click to enable facebook stream in Gwittee" );
-		
-		ask.addClickHandler( new ClickHandler () {
-			public void onClick(ClickEvent event) {
-				askForPermission();
-			}
-		});
-
 		
 		GWT.log( "FacebookStream: Checking app permission", null );
 		
@@ -68,7 +68,8 @@ public class FacebookStream extends Composite {
 				if ( result ) {
 					renderStream();
 				} else {
-					outer.add ( ask );
+					
+					outer.add ( unlockPnl );
 				}				
 			}
 		} );
@@ -77,7 +78,35 @@ public class FacebookStream extends Composite {
 	
 		initWidget ( outer );
 	}
+
 	
+	private Panel createUnlockPanel () {
+		final VerticalPanel inner = new VerticalPanel ();
+		
+		
+		inner.add( new HTML ( "Oups, gwittit need some extra permissions to work properly..." ) );
+		
+		final Anchor permissionLnk = new Anchor ( );
+		permissionLnk.setHTML("Click here to enable facebook news feed ");
+		permissionLnk.addStyleName("clickable" );
+		
+		permissionLnk.addClickHandler( new ClickHandler () {
+			public void onClick(ClickEvent event) {
+				askForPermission();
+			}
+		});
+		inner.add( permissionLnk );
+
+		
+		Image image = new Image ( "/locked.png");
+		
+		HorizontalPanel outer = new HorizontalPanel ();
+		outer.addStyleName ( "unlockStream" );
+		outer.add ( image );
+		outer.add ( inner );
+		
+		return outer;
+	}
 	
 
 	public void addFirst(Stream stream) {
@@ -99,7 +128,7 @@ public class FacebookStream extends Composite {
 
 	public void handlePermission ( String s ) {
 		if ( "read_stream".equals( s ) ) {
-			outer.remove ( ask );
+			outer.remove ( unlockPnl );
 			renderStream();
 		}
 	}
