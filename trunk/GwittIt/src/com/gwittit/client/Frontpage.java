@@ -1,6 +1,9 @@
 package com.gwittit.client;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -200,7 +203,11 @@ public class Frontpage extends Example implements ClickHandler {
 	 *Set status 
 	 */
 	private void statusSet  () {
-		api.status_set(inputTextArea.getValue(), new FacebookCallback () {
+		
+		Map<String,String> params = new HashMap<String,String> ();
+		params.put("uid", inputTextArea.getValue() );
+		
+		api.status_set( params, new FacebookCallback () {
 			public void onError(JSONValue jo) {
 				Window.alert ( "Failed " );
 			}

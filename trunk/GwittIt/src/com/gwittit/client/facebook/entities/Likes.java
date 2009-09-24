@@ -62,7 +62,7 @@ public class Likes {
 		if ( getCount() == 0  ) {
 			
 			if ( userLikes ) {
-				return new HTML ( "You like this" );
+				pnl.setWidget (new HTML ( "You like this" ) );
 			}
 			return pnl;
 		}

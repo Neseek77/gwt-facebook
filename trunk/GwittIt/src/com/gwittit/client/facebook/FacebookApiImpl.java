@@ -14,6 +14,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
+import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Stream;
 
 /**
@@ -144,38 +145,56 @@ public class FacebookApiImpl implements FacebookApi {
 	 * 
 	 * However, if your application is a desktop application, you must pass a
 	 * valid session key for security reasons. Passing a uid parameter will
-	 * result in an error. The params map takes the following argument:
-	 * <p>
-	 * required api_key string The application key associated with the calling
-	 * application. If you specify the API key in your client, you don't need to
-	 * pass it with every call. call_id float The request's sequence number.
-	 * Each successive call for any session must use a sequence number greater
-	 * than the last. We suggest using the current time in milliseconds, such as
-	 * PHP's microtime(true) function. If you specify the call ID in your
-	 * client, you don't need to pass it with every call. sig string An MD5 hash
-	 * of the current request and your secret key, as described in the How
-	 * Facebook Authenticates Your Application. Facebook computes the signature
-	 * for you automatically. v string This must be set to 1.0 to use this
-	 * version of the API. If you specify the version in your client, you don't
-	 * need to pass it with every call. ext_perm string String identifier for
-	 * the extended permission that is being checked for. Must be one of email,
-	 * read_stream, publish_stream, offline_access, status_update, photo_upload,
-	 * create_event, rsvp_event, sms, video_upload, create_note, share_item.
-	 * optional session_key string The session key of the user whose permissions
-	 * you are checking. Note : A session key is always required for desktop
-	 * applications. It is required for Web applications only when the uid is
-	 * not specified. format string The desired response format, which can be
-	 * either XML or JSON. (Default value is XML.) callback string Name of a
-	 * function to call. This is primarily to enable cross-domain JavaScript
-	 * requests using the <script> tag, also known as JSONP, and works with both
-	 * the XML and JSON formats. The function will be called with the response
-	 * passed as the parameter. uid int The user ID of the user whose
-	 * permissions you are checking. If this parameter is not specified, then it
-	 * defaults to the session user. Note: This parameter applies only to Web
-	 * applications and is required by them only if the session_key is not
-	 * specified. Facebook ignores this parameter if it is passed by a desktop
-	 * application.
-	 * </p>
+	 * result in an error.
+	 * 
+	 * required
+	 * 
+	 * @param api_key
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call.
+	 * @param ext_perm
+	 *            string String identifier for the extended permission that is
+	 *            being checked for. Must be one of email, read_stream,
+	 *            publish_stream, offline_access, status_update, photo_upload,
+	 *            create_event, rsvp_event, sms, video_upload, create_note,
+	 *            share_item. optional
+	 * @param session_key
+	 *            string The session key of the user whose permissions you are
+	 *            checking. Note: A session key is always required for desktop
+	 *            applications. It is required for Web applications only when
+	 *            the uid is not specified.
+	 * @param format
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param uid
+	 *            int The user ID of the user whose permissions you are
+	 *            checking. If this parameter is not specified, then it defaults
+	 *            to the session user. Note: This parameter applies only to Web
+	 *            applications and is required by them only if the session_key
+	 *            is not specified. Facebook ignores this parameter if it is
+	 *            passed by a desktop application.
 	 */
 	public void users_hasAppPermission(Permission permission, final AsyncCallback<Boolean> callback) {
 
@@ -197,27 +216,7 @@ public class FacebookApiImpl implements FacebookApi {
 		callMethod("users.hasAppPermission", p.getJavaScriptObject(), fc);
 	}
 
-	/**
-	 * See facebook api
-	 */
-	public void status_set(String status, FacebookCallback c) {
 
-		JSONObject p = getDefaultParams();
-		p.put("status", new JSONString(status));
-		p.put("uid", new JSONString(UserInfo.getUid()));
-		callMethod("users.setStatus", p.getJavaScriptObject(), c);
-	}
-
-	public void status_get(String uid, FacebookCallback callback) {
-
-		/**
-		 * Cant get this to work, its in beta so wont use much time on it
-		 * JSONObject params = getDefaultParams (); params.put( "uid", new
-		 * JSONString ( uid ) ) ; callMethod ( "status.get",
-		 * params.getJavaScriptObject(), callback );
-		 */
-		fql_query("SELECT message FROM status WHERE uid=" + uid + " LIMIT 1", callback);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -707,48 +706,255 @@ public class FacebookApiImpl implements FacebookApi {
 
 	}
 
-	public void status_get(Map<String, String> params, FacebookCallback callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * Updates a user's Facebook status through your application. Before your
+	 * application can set a user's status, the user must grant it the
+	 * status_update extended permission. This call is a streamlined version of
+	 * users.setStatus, as it takes fewer arguments.
+	 * 
+	 * For Web applications, you must pass either the ID of the user on whose
+	 * behalf you're making this call or the session key for that user, but not
+	 * both. If you don't specify a user with the uid parameter, then that user
+	 * whose session it is will be the target of the call. To set the status of
+	 * a facebook Page, pass the uid of the Page.
+	 * 
+	 * However, if your application is a desktop application, you must pass a
+	 * valid session key for security reasons. Do not pass a uid parameter.
+	 * 
+	 * required
+	 * 
+	 * @param api_key 
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id NOT SUPPORTED
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig NOT SUPPORTED
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v   NOT SUPPORTED 
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call. optional
+	 * @param session_key NOT SUPPORTED
+	 *            string The session key of the user whose status you are
+	 *            setting. Note: A session key is always required for desktop
+	 *            applications. It is required for Web applications only when
+	 *            the uid is not specified.
+	 * @param format NOT SUPPORTED
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback NOT SUPPORTED
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param status
+	 *            string The status message to set. Note: The maximum message
+	 *            length is 255 characters; messages longer than that limit will
+	 *            be truncated and appended with "...".
+	 * @param uid
+	 *            int The user ID of the user whose status you are setting. If
+	 *            this parameter is not specified, then it defaults to the
+	 *            session user. Note: This parameter applies only to Web
+	 *            applications and is required by them only if the session_key
+	 *            is not specified. Facebook ignores this parameter if it is
+	 *            passed by a desktop application.
+	 */
+	public void status_set(Map<String, String> params, FacebookCallback c) {
 
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "status,uid");
+		callMethod("users.setStatus", p.getJavaScriptObject(), c);
 	}
 
-	public void status_set(Map<String, String> params, FacebookCallback callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * Returns the user's current and most recent statuses.
+	 * 
+	 * For desktop applications, this call works only for the logged-in user,
+	 * since that's the only session you have. If you want data for other users,
+	 * make an FQL query (fql.query) on the status (FQL) table.
+	 * 
+	 *required
+	 * 
+	 * @param api_key 
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id NOT SUPPORTED
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig NOT SUPPORTED
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v   NOT SUPPORTED
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call.
+	 * @param session_key NOT SUPPORTED
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. optional
+	 * @param format NOT SUPPORTED
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback NOT SUPPORTED
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param uid
+	 *            int The user ID of the user whose status messages you want to
+	 *            retrieve.
+	 * @param limit NOT SUPPORTED
+	 *            int The number of status messages you want to return. (Default
+	 *            value is 100.)
+	 */
+	public void status_get(Map<String,String> params, FacebookCallback callback) {
 
+		String uid = params.get("uid");
+		
+		if ( uid == null ) {
+			Window.alert( "Error: status_get called without uid");
+			throw new IllegalArgumentException ( "status_get called without uid" );
+		}
+
+		/**
+		 * Cant get this to work, its in beta so wont use much time on it
+		 * JSONObject params = getDefaultParams (); params.put( "uid", new
+		 * JSONString ( uid ) ) ; callMethod ( "status.get",
+		 * params.getJavaScriptObject(), callback );
+		 */
+		fql_query("SELECT message FROM status WHERE uid=" + uid + " LIMIT 1", callback);
 	}
 
+	/**
+	 * This method adds a comment to a post that was already published to a
+	 * user's Wall.
+	 * 
+	 * Privacy rules apply to the posts to which the user can add comments; the
+	 * user must be able to see the post in order for your application to allow
+	 * the user add a comment to it.
+	 * 
+	 * Desktop applications must pass a valid session key, and only the user
+	 * associated with that session key can add comments. Other applications can
+	 * allows users to add comments to any posts the user can see, provided you
+	 * have a valid post_id.
+	 * 
+	 * In order for your application to allow a user to add a comment, that user
+	 * must grant your application the publish_stream extended permission.
+	 * 
+	 * optional
+	 * 
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. Desktop
+	 *            applications must pass a valid session key (and have been
+	 *            granted the publish_stream extended permission); other
+	 *            applications need only the publish_stream extended permission.
+	 * @param uid
+	 *            string The user ID of the user adding the comment. If this
+	 *            parameter is not specified, then it defaults to the session
+	 *            user. Note: This parameter applies only to Web applications
+	 *            and is required by them only if the session_key is not
+	 *            specified. Facebook ignores this parameter if it is passed by
+	 *            a desktop application.
+	 * 
+	 * required
+	 * @param post_id
+	 *            string The ID for the post to which you're adding the comment.
+	 * @param comment
+	 *            string The text of the comment. This is a plain text parameter
+	 *            only; you cannot format the comment with HTML or FBML.
+	 */
 	public void stream_addComment(Map<String, String> params, FacebookCallback callback) {
-		// TODO Auto-generated method stub
-
+		JSONObject p = getDefaultParams();
+		
+		copyAllParams(p, params, "uid,*post_id,*comment" );
+		callMethod ("stream.addComment", p.getJavaScriptObject(), callback ); 
 	}
 
-	/*
-	 * Valid params are  
-	 * <pre>
-	 * optional <b>session_key</b> string The session key of the logged in user. The
+	/**
+	 * Valid params are
+	 * 
+	 * 
+	 * optional session_ke string The session key of the logged in user. The
 	 * session key is automatically included by our PHP client. Desktop
 	 * applications must pass a valid session key (and have been granted the
 	 * publish_stream extended permission); other applications need only the
 	 * publish_stream extended permission.
 	 * 
-	 * <b>uid</b> string The user ID of the user who likes the post. If this
-	 * parameter is not specified, then it defaults to the session user. Note:
-	 * This parameter applies only to Web applications and is required by them
-	 * only if the session_key is not specified. Facebook ignores this parameter
-	 * if it is passed by a desktop application.
+	 * @param uid
+	 *            string The user ID of the user who likes the post. If this
+	 *            parameter is not specified, then it defaults to the session
+	 *            user. Note: This parameter applies only to Web applications
+	 *            and is required by them only if the session_key is not
+	 *            specified. Facebook ignores this parameter if it is passed by
+	 *            a desktop application.
 	 * 
-	 * <b>post_id</b> string The ID of the post. </p> (non-Javadoc)
-	 * </pre>
+	 * @param post_id
+	 *            string The ID of the post. &lt;/p&gt; (non-Javadoc)
+	 * 
 	 */
 	public void stream_addLike(Map<String, String> params, FacebookCallback callback) {
-		stream_addOrRemoveLike(params, true, callback );
+		stream_addOrRemoveLike(params, true, callback);
 		// TODO Auto-generated method stub
 
 	}
 
-	public void stream_getComments(Map<String, String> params, FacebookCallback callback) {
-		JSONObject p = getDefaultParams ();
-		bulkCopyParams(p, params, "session_key,*post_id" );
+	/**
+	 * This method returns all comments associated with a post in a user's
+	 * stream. This method returns comments only if the user who owns the post
+	 * (that is, the user published the post to his or her profile) has
+	 * authorized your application.
+	 * 
+	 * This method is a wrapper for comment FQL table, indexed by post_id rather
+	 * than xid.
+	 */
+	public void stream_getComments(final Map<String, String> params,
+			final AsyncCallback<List<Comment>> callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "session_key,*post_id");
+
+		FacebookCallback nativeCallback = new FacebookCallback() {
+
+			public void onError(JSONValue v) {
+				callback.onFailure(new Exception(v + ""));
+			}
+
+			public void onSuccess(JSONValue v) {
+
+				final List<Comment> returnList = new ArrayList<Comment>();
+				JSONObject o = v.isObject();
+
+				if (o == null) {
+					callback.onSuccess(returnList);
+				} else {
+					JSONObject jo = v.isObject();
+					JSONValue value = null;
+
+					for (int i = 0; (value = jo.get("" + i)) != null; i++) {
+						Comment comment = new Comment(value.isObject());
+						returnList.add(comment);
+
+					}
+					callback.onSuccess(returnList);
+				}
+			}
+		};
+		callMethod("stream.getComments", p.getJavaScriptObject(), nativeCallback);
 	}
 
 	public void stream_getFilters(Map<String, String> params, FacebookCallback callback) {
@@ -771,14 +977,18 @@ public class FacebookApiImpl implements FacebookApi {
 
 	}
 
+	/**
+	 * Remove like
+	 */
 	public void stream_removeLike(Map<String, String> params, FacebookCallback callback) {
 		stream_addOrRemoveLike(params, false, callback);
 	}
-	
-	private void stream_addOrRemoveLike ( Map<String,String> params, boolean add, FacebookCallback callback ) {
+
+	private void stream_addOrRemoveLike(Map<String, String> params, boolean add,
+			FacebookCallback callback) {
 		JSONObject p = getDefaultParams();
-		bulkCopyParams(p, params, "session_key,*post_id");
-		callMethod( add?"stream.addLike":"stream.removeLike", p.getJavaScriptObject(), callback );
+		copyAllParams(p, params, "session_key,*post_id");
+		callMethod(add ? "stream.addLike" : "stream.removeLike", p.getJavaScriptObject(), callback);
 	}
 
 	public void users_getInfo(Map<String, String> params, FacebookCallback callback) {
@@ -820,55 +1030,56 @@ public class FacebookApiImpl implements FacebookApi {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	/**
-	 * Takes a list of params and converts them to json string. If the param starts
-	 * withh "*' its considered a required param. The use will get a warning if its
-	 * not passed.
-	 *
+	 * Takes a list of params and converts them to json string. If the param
+	 * starts withh "*' its considered a required param. The use will get a
+	 * warning if its not passed.
+	 * 
 	 * @param obj
 	 * @param params
 	 * @param list
 	 */
-	private void bulkCopyParams ( JSONObject obj, Map<String,String> params, String list ) {
-		
+	private void copyAllParams(JSONObject obj, Map<String, String> params, String list) {
+
 		String errorString = "";
-		
+
 		String[] keys = list.split(",");
-		
-		for ( String k : keys ) {
-			
+
+		for (String k : keys) {
+
 			String useKey = k;
-			
-			if ( useKey.startsWith("*") ) {
+
+			if (useKey.startsWith("*")) {
 				useKey = useKey.replace("*", "");
-				
-				if ( !params.containsKey(useKey ) ) {
+
+				if (!params.containsKey(useKey)) {
 					errorString += "The param " + useKey + " is required.\n";
 				}
 			}
-			copyParams ( obj, params, useKey );
+			copyParams(obj, params, useKey);
 		}
-		
-		if ( !params.isEmpty() ) {
+
+		if (!params.isEmpty()) {
 			errorString += "You passed invalid parameters: " + params.toString();
 		}
-		
-		if ( !"".equals ( errorString ) ) {
+
+		if (!"".equals(errorString)) {
 			errorString = "Oups, You passed invalid parameters to the method. \n\n" + errorString;
-			Window.alert ( errorString );
-			throw new RuntimeException ( errorString );
+			Window.alert(errorString);
+			throw new RuntimeException(errorString);
 		}
 	}
 
+	/*
+	 * @deprecated
+	 */
 	private void copyParams(JSONObject obj, Map<String, String> params, String key) {
-
 		if (params.get(key) != null) {
 			obj.put(key, new JSONString(params.get(key)));
 			params.remove(key);
 		}
 	}
-
 
 	/*
 	 * Run facebook method, parse result and call callback function.
