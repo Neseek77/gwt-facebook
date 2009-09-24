@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
+import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Stream;
 
 /**
@@ -339,7 +340,7 @@ public interface FacebookApi {
 
 	// Updates a user's Facebook status through your application. This is a
 	// streamlined version of users.setStatus.
-	void status_set(String status, FacebookCallback callback); /* BETA */
+	void status_set(Map<String, String> params, FacebookCallback callback); /* BETA */
 
 	// This method adds a comment to a post that was already published to a
 	// user's Wall.
@@ -359,7 +360,7 @@ public interface FacebookApi {
 	// stream. This method returns comments only if the user who owns the post
 	// (that is, the user published the post to his or her profile) has
 	// authorized your application.
-	void stream_getComments(Map<String, String> params, FacebookCallback callback); /* BETA */
+	void stream_getComments(Map<String, String> params, AsyncCallback<List<Comment>> callback ); /* BETA */
 
 	// This method returns any filters a user has specified for his or her home
 	// page stream.

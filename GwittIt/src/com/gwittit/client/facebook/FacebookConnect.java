@@ -101,6 +101,13 @@ public class FacebookConnect {
 	}-*/;
 
 	
+	/**
+	 * Callback method
+	 * @param callback
+	 * @param successString
+	 * @param success
+	 * @param error
+	 */
 	static void onSuccess ( FacebookCallback callback, String successString, JavaScriptObject  success, JavaScriptObject error ) {
 		if( error != null ) {
 			callback.onError(new JSONObject ( error ) );

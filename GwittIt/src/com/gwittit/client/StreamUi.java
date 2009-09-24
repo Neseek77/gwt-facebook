@@ -1,7 +1,9 @@
 package com.gwittit.client;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -19,13 +21,16 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookCallback;
 import com.gwittit.client.facebook.FacebookConnect;
+import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.FacebookApi.Permission;
 import com.gwittit.client.facebook.entities.Attachment;
+import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Comments;
 import com.gwittit.client.facebook.entities.Media;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 
 public class StreamUi {
 
@@ -212,10 +217,12 @@ public class StreamUi {
 
 		
 		/**
-		 * Comments
+		 * Comments Link
 		 */
 		
-		VerticalPanel commentsPnl = new VerticalPanel ();
+		final VerticalPanel commentsPnl = new VerticalPanel ();
+		commentsPnl.addStyleName("commentsPnl");
+
 		if ( stream.getComments().getCount() > 0 ) {
 		
 			Comments comments = stream.getComments();
@@ -224,14 +231,66 @@ public class StreamUi {
 			commentsPnl.add(  commentsLnk );
 			
 			commentsLnk.addClickHandler( new ClickHandler () {
-
+	        
 				public void onClick(ClickEvent event) {
-					Window.alert ( "Comments not implemented yet");
+					final Image load = new Image ( "loader.gif");
+					commentsPnl.add ( load );
+					Map<String,String> params = new HashMap<String,String> ();
+					params.put( "post_id", stream.getPostId());
+					apiClient.stream_getComments(params,  new AsyncCallback<List<Comment>> () {
+
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						public void onSuccess(List<Comment> result) {
+							
+							commentsPnl.remove( load );
+							for ( Comment c : result ) {
+								CommentUi ui = new CommentUi ( c );
+								commentsPnl.add( ui );
+							}			
+							Xfbml.parse( commentsPnl.getElement() );
+						}
+					});
 				}
 				
 			});
 		}
 		inner.add ( commentsPnl );
+
+		
+		/*
+		 * Comments Box 
+		 */
+		final CommentBoxUI commentBox = new CommentBoxUI ();
+		
+		commentBox.addClickHandler ( new ClickHandler () {
+
+			public void onClick(ClickEvent event) {
+				Map<String,String> params = new HashMap<String,String> ();
+				params.put("post_id", stream.getPostId());
+				params.put("comment", commentBox.getText() ); 
+				apiClient.stream_addComment(params, new FacebookCallback () {
+
+					public void onError(JSONValue v) {
+						Window.alert ( "Failed to set comment" );
+					}
+
+					public void onSuccess(JSONValue v) {
+						Comment c = new Comment ();
+						c.setFromId(UserInfo.getUidLong());
+						c.setText( commentBox.getText () );
+						commentsPnl.add( new CommentUi ( c ) );
+						commentBox.reset();
+					}
+					
+				});
+			}
+			
+		});
+		inner.add( commentBox );
 		
 		/*
 		 * Compile outer

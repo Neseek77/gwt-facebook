@@ -49,7 +49,7 @@ public class TopMenuGwittee extends Composite {
 		FbName fbName = new FbName ( UserInfo.getUidLong(), false );
 		fbName.setUseyou(false);
 
-		FbProfilePic pic = new FbProfilePic ( UserInfo.getUidLong(), "square");
+		FbProfilePic pic = new FbProfilePic ( UserInfo.getUidLong(), FbProfilePic.Size.square );
 		pic.setSize("15px", "15px");
 		
 		GWT.log ( "TopMenuGwittee: render " + fbName.toString(), null );
