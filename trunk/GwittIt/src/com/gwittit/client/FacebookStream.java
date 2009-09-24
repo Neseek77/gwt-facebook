@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
@@ -110,10 +111,28 @@ public class FacebookStream extends Composite {
 	
 
 	public void addFirst(Stream stream) {
-		streamListing.insert( stream.createWidget(), 0);
+		
+		StreamUi su = new StreamUi ( stream, apiClient );
+		streamListing.insert( su.createWidget(), 0);
 	}
 	
 	
+	public void askForPermission () {
+		FacebookConnect.showPermissionDialog(FacebookApi.Permission.read_stream, new AsyncCallback<Boolean> () {
+			public void onFailure(Throwable caught) {
+				Window.alert( "Error: " + caught );
+				
+			}
+			public void onSuccess(Boolean canRead ) {
+				if ( canRead ) {
+					outer.remove(unlockPnl );
+					renderStream ();
+				}
+			}
+		});
+	}
+	
+	/*
 	public native void askForPermission ()/*-{
 		var app=this;
 	
@@ -149,7 +168,7 @@ public class FacebookStream extends Composite {
 			public void onSuccess(List<Stream> result) {
 				streamListing.clear ();
 				for ( Stream s : result ) {
-					streamListing.add( s.createWidget() );
+					streamListing.add( new StreamUi (s, apiClient ).createWidget() );
 				}
 				Xfbml.parse(streamListing.getElement() );
 			}
