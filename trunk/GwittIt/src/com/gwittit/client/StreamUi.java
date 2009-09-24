@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,6 +21,7 @@ import com.gwittit.client.facebook.FacebookCallback;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookApi.Permission;
 import com.gwittit.client.facebook.entities.Attachment;
+import com.gwittit.client.facebook.entities.Comments;
 import com.gwittit.client.facebook.entities.Media;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.xfbml.FbName;
@@ -140,55 +140,53 @@ public class StreamUi {
 				likeIt.setText(UNLIKE_TEXT);
 			}
 		}
+		
+		// Monster add clickhandler to "like" link. We need to do a log of checking to find
+		// out if user has the right permission. Another solution would be to force the
+		// user to grant us the right permissions before using the application. Dont know
+		// what is the most user friendly : )
 		likeIt.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 
-				// If user clicks unlike, we assume everything is ok.
-				if (likeIt.getText().equals(UNLIKE_TEXT)) {
-					removeLike(stream, likeIt);
-				}
 
-				else {
-
-					// First check if user has permission.
-					// Second if user has not permission, show permission dialog and then check if the
-					// user let as add 'like' to stream.
-					apiClient.users_hasAppPermission(Permission.publish_stream,
-							new AsyncCallback<Boolean>() {
-
-								public void onFailure(Throwable caught) {
-									Window.alert("Error: StreamUi: users_hasAppPermission call failed");
-								}
-
-								public void onSuccess(final Boolean canPublish) {
-
-									// If user has allowed this application to
-									// publish story, then continue.
-									if (canPublish) {
-										addOrRemoveLike(likeIt, stream);
-									} else {
-										// Show permission dialog before like.
-	             							FacebookConnect.showPermissionDialog(
-											FacebookApi.Permission.publish_stream,
-											new AsyncCallback<Boolean>() {
-
-												public void onFailure(Throwable caught) {
-													Window.alert("Error: StreamUi: showPermissionDialog call failed");
-												}
-
-												public void onSuccess(final Boolean permission) {
-													if (permission) {
-														addOrRemoveLike(likeIt, stream);
-													} else {
-														Window.alert("Skipped Like");
-													}
-												}
-											});
-									}
-								}
-
-							});
-				}
+			// First check if user has permission.
+			// Second if user has not permission, show permission dialog and then check if the
+			// user let as add 'like' to stream.
+			apiClient.users_hasAppPermission(Permission.publish_stream,
+					new AsyncCallback<Boolean>() {
+	
+						public void onFailure(Throwable caught) {
+							Window.alert("Error: StreamUi: users_hasAppPermission call failed");
+						}
+	
+						public void onSuccess(final Boolean canPublish) {
+	
+							// If user has allowed this application to
+							// publish story, then continue.
+							if (canPublish) {
+								addOrRemoveLike(likeIt, stream);
+							} else {
+								// Show permission dialog before like.
+	     							FacebookConnect.showPermissionDialog(
+									FacebookApi.Permission.publish_stream,
+									new AsyncCallback<Boolean>() {
+	
+										public void onFailure(Throwable caught) {
+											Window.alert("Error: StreamUi: showPermissionDialog call failed");
+										}
+	
+										public void onSuccess(final Boolean permission) {
+											if (permission) {
+												addOrRemoveLike(likeIt, stream);
+											} else {
+												Window.alert("Skipped Like");
+											}
+										}
+									});
+							}
+						}
+	
+					});
 			}
 		});
 		streamInfo.add(likeIt);
@@ -198,7 +196,7 @@ public class StreamUi {
 		 */
 		HorizontalPanel actionsPnl = new HorizontalPanel();
 		actionsPnl.addStyleName("actions");
-		actionsPnl.add(new DebugLink(stream.getWrappedObject() + ""));
+		//actionsPnl.add(new DebugLink(stream.getWrappedObject() + ""));
 		inner.add(actionsPnl);
 
 		/**
@@ -212,6 +210,29 @@ public class StreamUi {
 			inner.add(likesPnl);
 		}
 
+		
+		/**
+		 * Comments
+		 */
+		
+		VerticalPanel commentsPnl = new VerticalPanel ();
+		if ( stream.getComments().getCount() > 0 ) {
+		
+			Comments comments = stream.getComments();
+			Anchor commentsLnk = new Anchor ( comments.getCount() + " Comments" );
+			commentsLnk.addStyleName("clickable");
+			commentsPnl.add(  commentsLnk );
+			
+			commentsLnk.addClickHandler( new ClickHandler () {
+
+				public void onClick(ClickEvent event) {
+					Window.alert ( "Comments not implemented yet");
+				}
+				
+			});
+		}
+		inner.add ( commentsPnl );
+		
 		/*
 		 * Compile outer
 		 */
@@ -232,7 +253,7 @@ public class StreamUi {
 
 	private void removeLike(final Stream stream, final Anchor clickedLink) {
 		Map<String, String> params = new HashMap<String, String>();
-
+		params.put("post_id", stream.getPostId());
 		apiClient.stream_removeLike(params, new FacebookCallback() {
 
 			public void onError(JSONValue o) {
