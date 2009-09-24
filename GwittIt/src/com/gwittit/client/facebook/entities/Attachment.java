@@ -81,37 +81,7 @@ public class Attachment {
 	}
 	
 	
-	public Widget createWidget () {
-		
-		HorizontalPanel outer = new HorizontalPanel ();
-		outer.addStyleName("gwittit-Attachment");
-		
-		VerticalPanel ap = new VerticalPanel ();
-	
-		
-		Anchor a = new Anchor ( getName() );
-		a.setTarget("_blank");
-		a.setHref( getHref() );
-		ap.add( a ) ;
 
-		if ( getDescription() != null ) {
-			ap.add( new HTML ( getDescription() ) );
-		}
-
-
-		HorizontalPanel mediasPanel = new HorizontalPanel ();
-		for ( Media m : getMedias() ) {
-			mediasPanel.add ( m.createWidget () );
-		}
-		
-		
-		outer.add ( mediasPanel );
-		outer.add ( ap );
-		
-	
-		return outer;
-		
-	}
 	public Attachment ( JSONValue j ) {
 		
 		JSONObject o = j.isObject();

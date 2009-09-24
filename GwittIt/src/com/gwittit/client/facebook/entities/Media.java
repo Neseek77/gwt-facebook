@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Media {
 	
-     enum Type {photo,link};
+     public enum Type {photo,link};
 
 	/**
 	 * You can include rich media in the attachment for a post into a user's
@@ -52,21 +52,7 @@ public class Media {
 		
 	}
 	
-	
-	public Widget createWidget () {
-		final SimplePanel w = new SimplePanel ();
-		w.addStyleName("gwittit-Media");
-		
-		if ( Type.photo.toString().equals ( type ) )  {
-			
-			Image image = new Image ( src );
-			w.add ( image );
-		} else if ( Type.link.toString().equals( type ) ) {
-			Image image = new Image ( src );
-			w.add ( image );
-		}
-		return w;
-	}
+
 	
 	public Media ( JSONObject o ) {
 		type = JsonUtil.getString(o, "type");
@@ -76,6 +62,9 @@ public class Media {
 		
 	}
 	
+	public Type getTypeEnum () {
+		return Type.valueOf( type );
+	}
 	public String getType() {
 		return type;
 	}

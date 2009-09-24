@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -200,10 +201,10 @@ public class Frontpage extends Example implements ClickHandler {
 	 */
 	private void statusSet  () {
 		api.status_set(inputTextArea.getValue(), new FacebookCallback () {
-			public void onError(JSONObject jo) {
+			public void onError(JSONValue jo) {
 				Window.alert ( "Failed " );
 			}
-			public void onSuccess(JSONObject jo) {
+			public void onSuccess(JSONValue v) {
 				
 				Stream stream = new Stream ();
 				stream.setMessage( inputTextArea.getValue() );

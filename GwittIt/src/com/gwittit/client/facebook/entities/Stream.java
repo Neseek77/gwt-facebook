@@ -3,14 +3,19 @@ package com.gwittit.client.facebook.entities;
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.DebugLink;
+import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 
@@ -110,79 +115,7 @@ public class Stream {
 	private JSONObject wrappedObject;
 
 
-	/**
-	 * Experimental , let the stream object create a default widget to use.
-	 */
-	public Widget createWidget () {
 
-		final HorizontalPanel outer = new HorizontalPanel ();
-		outer.addStyleName ("stream");
-		outer.addStyleName ( "gwittit-Stream");
-		
-		final HorizontalPanel horizontalPnl= new HorizontalPanel ();
-		horizontalPnl.add ( new FbProfilePic ( getSourceId () ) );
-
-		/*
-		 * Posted by
-		 */
-		final VerticalPanel inner = new VerticalPanel ();
-		inner.addStyleName ( "text" );
-		inner.add( new HTML ( new FbName ( getSourceId () ).toString() + " " + ( getMessage() != null ? getMessage() : "" ) ) );
-		
-		/*
-		 * Attachment
-		 */
-		if ( getAttachment().getName() != null ) {
-			 inner.add ( getAttachment().createWidget () );
-		} 
-		
-		/*
-		 * Stream Info 
-		 */
-		HorizontalPanel streamInfo = new HorizontalPanel ();
-		streamInfo.addStyleName("gwittit-StreamInfo");
-		
-			// Add small icon
-		if ( getAttachment().getIcon() != null ) {
-			Image ic = new Image ( getAttachment().getIcon () );
-			streamInfo.add ( ic );
-			
-		}
-			// Add timestamp
-		streamInfo.add ( new HTML ( "" + getCreatedTime()  ) );
-		inner.add ( streamInfo );
-
-		
-		/*
-		 * Actions, comment, like etc
-		 */
-		HorizontalPanel actionsPnl = new HorizontalPanel ();
-		actionsPnl.addStyleName ( "actions" );
-		actionsPnl.add  ( new DebugLink ( getWrappedObject()+""));
-		inner.add ( actionsPnl );
-		
-		
-		/**
-		 * Likes
-		 */
-		HorizontalPanel likesPnl = new HorizontalPanel ();
-		
-		if ( likes.getCount() > 0 ) {
-			likesPnl.addStyleName ( "feedBack" );
-			likesPnl.add ( likes.createWidget() );
-			inner.add ( likesPnl );
-		}
-		
-		
-		/*
-		 * Compile outer
-		 */
-		outer.add ( new FbProfilePic ( getSourceId () ) );
-		outer.add ( inner );
-		
-		return outer;
-
-	}
 	
 	public Stream () {
 		

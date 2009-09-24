@@ -93,7 +93,6 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 
 		// Render page
 		render ( Window.Location.getHash() );
-		setLeftMargin();
 		RootPanel.get().add ( outer );
 	}
 
@@ -108,6 +107,8 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 
 		if ( UserInfo.isLoggedIn() ) {
 			
+			setLeftMargin();
+
 			
 			menu.addStyleName("menu");
 			menu.add ( wrapMenuItem ( streamGetLink ) );
@@ -127,6 +128,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			renderPage ( hash );
 			
 		} else {
+		
 			outer.add ( loginWidget );
 		}
 		
