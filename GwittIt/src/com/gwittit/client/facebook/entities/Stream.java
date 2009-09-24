@@ -6,6 +6,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
@@ -19,11 +20,15 @@ import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 
+
+
 /**
  * Defines a facebook stream. See
  * http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29 Stream Table
  */
 public class Stream {
+	
+
 
 	/**
 	 * The ID of the post from the user's stream. This field, when used as an
@@ -110,6 +115,12 @@ public class Stream {
 	
 	
 	/**
+	 * Indicates if this stream item has comments	
+	 */
+	private Comments comments = new Comments ();
+
+	
+	/**
 	 * The original object. Used for debuging.
 	 */
 	private JSONObject wrappedObject;
@@ -151,7 +162,7 @@ public class Stream {
 		likes = new Likes ( o.get("likes" ) );
 		
 		GWT.log ( "Created new Stream Object, null ", null );
-		
+		comments = new Comments ( o.get("comments" ) );
 	}
 	
 	public String getPostId() {
@@ -292,4 +303,13 @@ public class Stream {
 	public void setWrappedObject(JSONObject wrappedObject) {
 		this.wrappedObject = wrappedObject;
 	}
+	
+	public Comments getComments() {
+		return comments;
+	}
+	
+	public void setComments(Comments comments) {
+		this.comments = comments;
+	}
+	
 }

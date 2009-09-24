@@ -741,16 +741,14 @@ public class FacebookApiImpl implements FacebookApi {
 	 * </pre>
 	 */
 	public void stream_addLike(Map<String, String> params, FacebookCallback callback) {
-		JSONObject p = getDefaultParams();
-		bulkCopyParams(p, params, "session_key,*post_id");
-		callMethod( "stream.addLike", p.getJavaScriptObject(), callback );
+		stream_addOrRemoveLike(params, true, callback );
 		// TODO Auto-generated method stub
 
 	}
 
 	public void stream_getComments(Map<String, String> params, FacebookCallback callback) {
-		// TODO Auto-generated method stub
-
+		JSONObject p = getDefaultParams ();
+		bulkCopyParams(p, params, "session_key,*post_id" );
 	}
 
 	public void stream_getFilters(Map<String, String> params, FacebookCallback callback) {
@@ -774,8 +772,13 @@ public class FacebookApiImpl implements FacebookApi {
 	}
 
 	public void stream_removeLike(Map<String, String> params, FacebookCallback callback) {
-		// TODO Auto-generated method stub
-
+		stream_addOrRemoveLike(params, false, callback);
+	}
+	
+	private void stream_addOrRemoveLike ( Map<String,String> params, boolean add, FacebookCallback callback ) {
+		JSONObject p = getDefaultParams();
+		bulkCopyParams(p, params, "session_key,*post_id");
+		callMethod( add?"stream.addLike":"stream.removeLike", p.getJavaScriptObject(), callback );
 	}
 
 	public void users_getInfo(Map<String, String> params, FacebookCallback callback) {
