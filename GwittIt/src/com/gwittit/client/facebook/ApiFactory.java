@@ -6,11 +6,18 @@ package com.gwittit.client.facebook;
  */
 public class ApiFactory {
 	
+	
+	private static FacebookApi apiClient;
+	
 	/**
 	 * Create facebook api client
 	 */
 	public static FacebookApi newApiClient ( String apiKey ) {
-		return new FacebookApiImpl ( apiKey );
+		
+		if ( apiClient == null ) {
+			apiClient = new FacebookApi ( apiKey );
+		}
+		return apiClient;
 	}
 }
 

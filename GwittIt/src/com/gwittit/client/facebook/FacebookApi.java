@@ -1,418 +1,1147 @@
 package com.gwittit.client.facebook;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Stream;
 
 /**
- * GWT wrapper for facebook api
- * http://wiki.developers.facebook.com/index.php/API
+ * The class contains function defining the Facebook API. With the API, you can
+ * add social context to your application by utilizing profile, friend, Page,
+ * group, photo, and event data.
  * 
- * @author olamar72 gmail com
  * 
+ * @see http://wiki.developers.facebook.com/index.php/API Facebook API
+ * 
+ * @author ola
  */
-public interface FacebookApi {
+public class FacebookApi {
 
-	/**
-	 * Returns the current allocation limit for your application for the
-	 * specified integration point.
-	 */
-	void admin_getAllocation(Map<String, String> params, FacebookCallback callback);
-
-	/**
-	 * Returns values of properties for your applications from the Facebook
-	 * Developer application.
-	 */
-	void admin_getAppProperties(Map<String, String> params, FacebookCallback callback);
-
-	/**
-	 * Returns specified metrics for your application, given a time period.
-	 */
-	void admin_getMetrics(Map<String, String> params, FacebookCallback callback);
-
-	/**
-	 * Returns the demographic restrictions for the application.
-	 */
-	void admin_getRestrictionInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Sets values for properties for your applications in the Facebook
-	// Developer application.
-	void admin_setAppProperties(Map<String, String> params, FacebookCallback callback);
-
-	// Sets the demographic restrictions for the application.
-	void admin_setRestrictionInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Prevents users from accessing an application's canvas page and its
-	// forums.
-	void admin_banUsers(Map<String, String> params, FacebookCallback callback);
-
-	// Unbans users previously banned with admin.banUsers.
-	void admin_unbanUsers(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the list of users who have been banned from the application.
-	void admin_getBannedUsers(Map<String, String> params, FacebookCallback callback);
-
-	// Returns public information about a given application (not necessarily
-	// your own).
-	void application_getPublicInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Creates an auth_token to be passed in as a parameter to login.php and
-	// then to auth.getSession after the user has logged in.
-	void auth_createToken(Map<String, String> params, FacebookCallback callback);
-
-	// Expires the session indicated in the API call, for your application.
-	void auth_expireSession(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the session key bound to an auth_token, as returned by
-	// auth.createToken or in the callback URL.
-	void auth_getSession(Map<String, String> params, FacebookCallback callback);
-
-	// Returns a temporary session secret associated to the current existing
-	// session, for use in a client-side component to an application.
-	void auth_promoteSession(Map<String, String> params, FacebookCallback callback);
-
-	// If this method is called for the logged in user, then no further API
-	// calls can be made on that user's behalf until the user decides to
-	// authorize the application again.
-	void auth_revokeAuthorization(Map<String, String> params, FacebookCallback callback);
-
-	// Removes a specific extended permission that a user explicitly granted to
-	// your application.
-	void auth_revokeExtendedPermission(Map<String, String> params, FacebookCallback callback);
-
-	// Execute a list of individual API calls in a single batch.
-	void batch_run(Map<String, String> params, FacebookCallback callback);
-
-	// Adds a comment for a given xid on behalf of a user. Calls with a session
-	// secret may only act on behalf of the session user.
-	void comments_add(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Returns all comments for a given xid posted through fb:comments. This
-	// method is a wrapper for the FQL query on the comment FQL table.
-	void comments_get(Map<String, String> params, FacebookCallback callback);
-
-	// Removes a comment for a given xid by comment_id. Calls with a session
-	// secret may only act on behalf of the session user.
-	void comments_remove(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Returns the number of friends of the current user who have accounts on
-	// your site, but have not yet connected their accounts. (for [{Facebook
-	// Connect]]).
-	void connect_getUnconnectedFriendsCount(Map<String, String> params, FacebookCallback callback);
-
-	// Creates an association between an existing user account on your site and
-	// that user's Facebook account, provided the user has not connected
-	// accounts before (for Facebook Connect).
-	void connect_registerUsers(Map<String, String> params, FacebookCallback callback);
-
-	// Unregisters a previously registered account (using
-	// connect.registerUsers). You should call this method if the user deletes
-	// his or her account on your site. (for Facebook Connect).
-	void connect_unregisterUsers(Map<String, String> params, FacebookCallback callback);
-
-	// Returns all cookies for a given user and application.
-	void data_getCookies(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Sets a cookie for a given user and application.
-	void data_setCookie(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Cancels an event. The application must be an admin of the event.
-	void events_cancel(Map<String, String> params, FacebookCallback callback);
-
-	// Creates an event on behalf of the user if the application has an active
-	// session; otherwise it creates an event on behalf of the application.
-	void events_create(Map<String, String> params, FacebookCallback callback);
-
-	// Edits an existing event. The application must be an admin of the event.
-	void events_edit(Map<String, String> params, FacebookCallback callback);
-
-	// Returns all visible events according to the filters specified.
-	void events_get(Map<String, String> params, FacebookCallback callback);
-
-	// Returns membership list data associated with an event.
-	void events_getMembers(Map<String, String> params, FacebookCallback callback);
-
-	// Sets the attendance option for the current user.
-	void events_rsvp(Map<String, String> params, FacebookCallback callback);
-
-	// Deletes one or more custom tags you previously registered for the calling
-	// application with fbml.registerCustomTags.
-	void fbml_deleteCustomTags(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the custom tag definitions for tags that were previously defined
-	// using fbml.registerCustomTags.
-	void fbml_getCustomTags(Map<String, String> params, FacebookCallback callback);
-
-	// Fetches and re-caches the image stored at the given URL.
-	void fbml_refreshImgSrc(Map<String, String> params, FacebookCallback callback);
-
-	// Fetches and re-caches the content stored at the given URL.
-	void fbml_refreshRefUrl(Map<String, String> params, FacebookCallback callback);
-
-	// Registers custom tags you can include in your that applications' FBML
-	// markup. Custom tags consist of FBML snippets that are rendered during
-	// parse time on the containing page that references the custom tag.
-	void fbml_registerCustomTags(Map<String, String> params, FacebookCallback callback);
-
-	// Associates a given "handle" with FBML markup so that the handle can be
-	// used within the fb:ref FBML tag.
-	void fbml_setRefHandle(Map<String, String> params, FacebookCallback callback);
-
-	// Deactivates a previously registered template bundle.
-	void feed_deactivateTemplateBundleByID(Map<String, String> params, FacebookCallback callback);
-
-	// Retrieves information about a specified template bundle previously
-	// registered by the requesting application.
-	void feed_getRegisteredTemplateBundleByID(Map<String, String> params, FacebookCallback callback);
-
-	// Retrieves the full list of all the template bundles registered by the
-	// requesting application.
-	void feed_getRegisteredTemplateBundles(Map<String, String> params, FacebookCallback callback);
-
-	// Publishes a Mini-Feed story to the Facebook Page corresponding to the
-	// page_actor_id parameter.
-	// Note: This method is deprecated for actions taken by users only; it still
-	// works for actions taken by Facebook Pages.
-	void feed_publishTemplatizedAction(Map<String, String> params, FacebookCallback callback);
-
-	// Publishes a story on behalf of the user owning the session, using the
-	// specified template bundle.
-	void feed_publishUserAction(Map<String, String> params, FacebookCallback callback);
-
-	// Builds a template bundle around the specified templates, registers them
-	// on Facebook, and responds with a template bundle ID that can be used to
-	// identify your template bundle to other Feed-related API calls.
-	void feed_registerTemplateBundle(Map<String, String> params, FacebookCallback callback);
-
-	// Evaluates an FQL (Facebook Query Language) query.
-	void fql_query(String fql, FacebookCallback callback);
-
-	// Evaluates a series of FQL (Facebook Query Language) queries in one call
-	// and returns the data at one time.
-	void fql_multiquery(Map<String, String> params, FacebookCallback callback);
-
-	// Returns whether or not each pair of specified users is friends with each
-	// other.
-	void friends_areFriends(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the identifiers for the current user's Facebook friends.
-	void friends_get(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the identifiers for the current user's Facebook friends who have
-	// authorized the specific calling application.
-	void friends_getAppUsers(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the identifiers for the current user's Facebook friend lists.
-	void friends_getLists(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the identifiers for the requested users' Mutual Facebook friends.
-	void friends_getMutualFriends(Map<String, String> params, FacebookCallback callback);
-
-	// Returns all visible groups according to the filters specified.
-	void groups_get(Map<String, String> params, FacebookCallback callback);
-
-	// Returns membership list data associated with a group.
-	void groups_getMembers(Map<String, String> params, FacebookCallback callback);
-
-	// Returns an array of strings from your application that you submitted for
-	// translation. This call returns the original native strings, the best (or
-	// all) translations of native strings into a given locale, whether the
-	// string has been approved, and by whom.
-
-	void intl_getTranslations(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Lets you insert text strings into the Facebook Translations database so
-	// they can be translated.
-	void intl_uploadNativeStrings(Map<String, String> params, FacebookCallback callback);
-
-	// Returns all links the user has posted on their profile through your
-	// application.
-	void links_get(Map<String, String> params, FacebookCallback callback);/* BETA */
-
-	// Lets a user post a link on their Wall through your application.
-	void links_post(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Sends a "message" directly to a user's browser, which can be handled in
-	// FBJS.
-	void liveMessage_send(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Returns all of a user's messages and threads from the Inbox.
-	void message_getThreadsInFolder(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Lets a user write a Facebook note through your application.
-	void notes_create(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Lets a user delete a Facebook note that was written through your
-	// application.
-	void notes_delete(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Lets a user edit a Facebook note through your application.
-	void notes_edit(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Returns a list of all of the visible notes written by the specified user.
-	void notes_get(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Returns information on outstanding Facebook notifications for current
-	// session user.
-	void notifications_get(Map<String, String> params, FacebookCallback callback);
-
-	// Returns all the current session user's notifications, as well as data for
-	// the applications that generated those notifications.
-	void notifications_getList(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Marks one or more notifications as read.
-	void notifications_markRead(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Sends a notification to a set of users.
-	void notifications_send(Map<String, String> params, FacebookCallback callback);
-
-	// Sends an email to the specified users who have the application.
-	void notifications_sendEmail(Map<String, String> params, FacebookCallback callback);
-
-	// Returns all visible pages to the filters specified.
-	void pages_getInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Checks whether the logged-in user is the admin for a given Page.
-	void pages_isAdmin(Map<String, String> params, FacebookCallback callback);
-
-	// Checks whether the Page has added the application.
-	void pages_isAppAdded(Map<String, String> params, FacebookCallback callback);
-
-	// Checks whether a user is a fan of a given Page.
-	void pages_isFan(Map<String, String> params, FacebookCallback callback);
-
-	// Adds a tag with the given information to a photo.
-	void photos_addTag(Map<String, String> params, FacebookCallback callback);
-
-	// Creates and returns a new album owned by the current session user.
-	void photos_createAlbum(Map<String, String> params, FacebookCallback callback);
-
-	// Returns all visible photos according to the filters specified.
-	void photos_get(Map<String, String> params, FacebookCallback callback);
-
-	// Returns metadata about all of the photo albums uploaded by the specified
-	// user.
-	void photos_getAlbums(Map<String, String> params, AsyncCallback<List<Album>> albums );
-
-	// Returns the set of user tags on all photos specified.
-	void photos_getTags(Map<String, String> params, FacebookCallback callback);
-
-	// Uploads a photo owned by the current session user and returns the new
-	// photo.
-	void photos_upload(Map<String, String> params, FacebookCallback callback);
-
-	// Gets the FBML that is currently set for a user's profile.
-	void profile_getFBML(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the specified user's application info section for the calling
-	// application.
-	void profile_getInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the options associated with the specified field for an
-	// application info section.
-	void profile_getInfoOptions(Map<String, String> params, FacebookCallback callback);
-
-	// Sets the FBML for a user's profile, including the content for both the
-	// profile box and the profile actions.
-	void profile_setFBML(Map<String, String> params, FacebookCallback callback);
-
-	// Configures an application info section that the specified user can
-	// install on the Info tab of her profile.
-	void profile_setInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Specifies the objects for a field for an application info section.
-	void profile_setInfoOptions(Map<String, String> params, FacebookCallback callback);
-
-	// Determines whether a user has enabled SMS for the application. (Mobile
-	// applications only)
-	void sms_canSend(Map<String, String> params, FacebookCallback callback);
-
-	// Sends a given text message (SMS) to the user. (Mobile applications only)
-	void sms_send(Map<String, String> params, FacebookCallback callback);
-
-	// Returns the user's current and most recent statuses.
-	void status_get(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Updates a user's Facebook status through your application. This is a
-	// streamlined version of users.setStatus.
-	void status_set(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// This method adds a comment to a post that was already published to a
-	// user's Wall.
-	void stream_addComment(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// This method lets a user add a like to any post the user can see. A user
-	// can like each post only once.
-	void stream_addLike(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// This method returns an object (in JSON-encoded or XML format) that
-	// contains the stream from the perspective of a specific viewer -- a user
-	// or a Facebook Page.
-	
-	void stream_get(Map<String, String> params, AsyncCallback<List<Stream>> callback); /* BETA */
-
-	// This method returns all comments associated with a post in a user's
-	// stream. This method returns comments only if the user who owns the post
-	// (that is, the user published the post to his or her profile) has
-	// authorized your application.
-	void stream_getComments(Map<String, String> params, AsyncCallback<List<Comment>> callback ); /* BETA */
-
-	// This method returns any filters a user has specified for his or her home
-	// page stream.
-	void stream_getFilters(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// This method publishes a post into the stream on the user's Wall and News
-	// Feed. This post also appears in the user's friends' streams (their News
-	// Feeds).
-	void stream_publish(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// This method removes a post from a user's Wall. The post also gets removed
-	// from the user's and the user's friends' News Feeds. Your application may
-	// only remove posts that were created through it.
-	void stream_remove(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// This method removes a comment from a post.
-	void stream_removeComment(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// This method removes a like a user added to a post.
-	void stream_removeLike(Map<String, String> params, FacebookCallback callback); /* BETA */
-
-	// Returns a wide array of user-specific information for each user
-	// identifier passed, limited by the view of the current user.
-	void users_getInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Gets the user ID (uid) associated with the current session.
-	void users_getLoggedInUser(Map<String, String> params, FacebookCallback callback);
-
-	// Returns an array of user-specific information for use by the application
-	// itself.
-	void users_getStandardInfo(Map<String, String> params, FacebookCallback callback);
-
-	// Checks whether the user has opted in to an extended application
-	// permission.
 	public enum Permission { read_stream, publish_stream };
-	void users_hasAppPermission(Permission permission, AsyncCallback<Boolean> callback);
 
-	// Returns whether the user (either the session user or user specified by
-	// UID) has authorized the calling application.
-	void users_isAppUser(Map<String, String> params, FacebookCallback callback);
+	private String apiKey;
 
-	// Returns whether the user is a verified Facebook user.
-	void users_isVerified(Map<String, String> params, FacebookCallback callback); /* BETA */
+	/**
+	 * Creates a new api
+	 * 
+	 * @param apiKey
+	 */
+	protected FacebookApi(String apiKey) {
+		this.apiKey = apiKey;
+	}
 
-	// Updates a user's Facebook status.
-	void users_setStatus(Map<String, String> params, FacebookCallback callback);
+	/**
+	 * This method returns a list of Stream objects that contains the stream
+	 * from the perspective of a specific viewer -- a user or a Facebook Page.
+	 * 
+	 * The hashmap takes the following arguments:
+	 * 
+	 * @param viewer_id
+	 *            int The user ID for whom you are fetching stream data. You can
+	 *            pass 0 for this parameter to retrieve publicly viewable
+	 *            information. However, desktop applications must always specify
+	 *            a viewer as well as a session key. (Default value is the
+	 *            current session user.)
+	 * @param source_ids
+	 *            array An array containing all the stream data for the user
+	 *            profiles and Pages connected to the viewer_id. You can filter
+	 *            the stream to include posts by the IDs you specify here.
+	 *            (Default value is all connections of the viewer.)
+	 * @param start_time
+	 *            time The earliest time (in Unix time) for which to retrieve
+	 *            posts from the stream. The start_time uses the updated_time
+	 *            field in the stream (FQL) table as the baseline for
+	 *            determining the earliest time for which to get the stream.
+	 *            (Default value is 1 day ago.)
+	 * @param end_time
+	 *            time The latest time (in Unix time) for which to retrieve
+	 *            posts from the stream. The end_time uses the updated_time
+	 *            field in the stream (FQL) table as the baseline for
+	 *            determining the latest time for which to get the stream.
+	 *            (Default value is now.)
+	 * @param limit
+	 *            int A 32-bit int representing the total number of posts to
+	 *            return. (Default value is 30 posts.)
+	 * @param filter_key
+	 *            string A filter associated with the user. Filters get returned
+	 *            by stream.getFilters or the stream_filter FQL table. To filter
+	 *            for stream posts from your application, look for a filter with
+	 *            a filter_key set to app_YOUR_APPLICATION_ID.
+	 * @param metadata
+	 *            array A JSON-encoded array in which you can specify one or
+	 *            more of 'albums', 'profiles', and 'photo_tags' to request the
+	 *            user's aid, id (user ID or Page ID), and pid (respectively)
+	 *            when you call stream.get. All three parameters are optional.
+	 *            (Default value is false for all three keys.)
+	 * 
+	 * @see com.gwittit.client.facebook.entities.Stream Stream
+	 * @see http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
+	 * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
+	 *      Stream Table
+	 */
+	public void stream_get(Map<String, String> params, final AsyncCallback<List<Stream>> ac) {
 
-	// Returns the file size and length limits for a video that the current user
-	// can upload through your application.
-	void video_getUploadLimits(Map<String, String> params, FacebookCallback callback); /* BETA */
+		final String lp = "FacebookApiImpl#stream_get:";
+		GWT.log(lp + " called", null);
 
-	// Uploads a video owned by the current session user and returns the video.
-	void video_upload(Map<String, String> params, FacebookCallback callback);
+		JSONObject p = getDefaultParams();
+		p.put("session_key", new JSONString(UserInfo.getSessionKey()));
+
+		if (params != null) {
+			copyParams(p, params, "viewer_id");
+			copyParams(p, params, "source_ids");
+			copyParams(p, params, "start_time");
+			copyParams(p, params, "end_time");
+			copyParams(p, params, "limit");
+			copyParams(p, params, "filter_key");
+			copyParams(p, params, "metadata");
+		}
+
+		// Create native callback and parse response.
+		final FacebookCallback c = new FacebookCallback() {
+
+			public void onError(JSONValue v) {
+				ac.onFailure(null);
+			}
+
+			public void onSuccess(JSONValue jv) {
+				List<Stream> result = new ArrayList<Stream>();
+
+				JSONValue value = jv.isObject().get("posts");
+				JSONArray array = value.isArray();
+
+				for (int i = 0; array != null && i < array.size(); i++) {
+					JSONValue v = array.get(i);
+					JSONObject o = v.isObject();
+					Stream stream = new Stream(o);
+					result.add(stream);
+				}
+				ac.onSuccess(result);
+			}
+
+		};
+
+		callMethod("stream.get", p.getJavaScriptObject(), c);
+	}
+
+	/**
+	 * Checks whether the user has opted in to an extended application
+	 * permission.
+	 * 
+	 * For non-desktop applications, you may pass the ID of the user on whose
+	 * behalf you're making this call. If you don't specify a user with the uid
+	 * parameter but you do specify a session_key, then that user whose session
+	 * it is will be the target of the call.
+	 * 
+	 * However, if your application is a desktop application, you must pass a
+	 * valid session key for security reasons. Passing a uid parameter will
+	 * result in an error.
+	 * 
+	 * required
+	 * 
+	 * @param api_key
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call.
+	 * @param ext_perm
+	 *            string String identifier for the extended permission that is
+	 *            being checked for. Must be one of email, read_stream,
+	 *            publish_stream, offline_access, status_update, photo_upload,
+	 *            create_event, rsvp_event, sms, video_upload, create_note,
+	 *            share_item. optional
+	 * @param session_key
+	 *            string The session key of the user whose permissions you are
+	 *            checking. Note: A session key is always required for desktop
+	 *            applications. It is required for Web applications only when
+	 *            the uid is not specified.
+	 * @param format
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param uid
+	 *            int The user ID of the user whose permissions you are
+	 *            checking. If this parameter is not specified, then it defaults
+	 *            to the session user. Note: This parameter applies only to Web
+	 *            applications and is required by them only if the session_key
+	 *            is not specified. Facebook ignores this parameter if it is
+	 *            passed by a desktop application.
+	 */
+	public void users_hasAppPermission(Permission permission, final AsyncCallback<Boolean> callback) {
+
+		GWT.log("users_hasAppPermission: " + permission.toString(), null);
+
+		JSONObject p = getDefaultParams();
+		p.put("ext_perm", new JSONString(permission.toString()));
+
+		final FacebookCallback fc = new FacebookCallback() {
+			public void onError(JSONValue jv) {
+				callback.onFailure(new Exception(jv + ""));
+			}
+
+			public void onSuccess(JSONValue jv) {
+				JSONString result = jv.isObject().get("result").isString();
+				callback.onSuccess("1".equals(result.isString().stringValue()));
+			}
+		};
+		callMethod("users.hasAppPermission", p.getJavaScriptObject(), fc);
+	}
+
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gwittit.client.facebook.FacebookApi#fql_query(java.lang.String,
+	 * com.gwittit.client.facebook.FacebookCallback)
+	 */
+	public void fql_query(String fql, FacebookCallback callback) {
+
+		Map<String, String> params = new HashMap();
+		params.put("query", fql);
+		JSONObject p = getDefaultParams();
+		copyParams(p, params, "query");
+		callMethod("fql.query", p.getJavaScriptObject(), callback);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gwittit.client.facebook.FacebookApi#photos_getAlbums(java.util.Map,
+	 * com.google.gwt.user.client.rpc.AsyncCallback)
+	 */
+	public void photos_getAlbums(Map<String, String> params,
+			final AsyncCallback<List<Album>> callback) {
+		JSONObject p = getDefaultParams();
+		copyParams(p, params, "uid");
+		copyParams(p, params, "aids");
+
+		// Create javascript native callback and parse response
+		FacebookCallback nativeCallback = new FacebookCallback() {
+
+			public void onError(JSONValue jv) {
+				callback.onFailure(new Exception(jv + ""));
+			}
+
+			public void onSuccess(JSONValue jv) {
+				List<Album> albums = new ArrayList();
+
+				int key = 0;
+
+				JSONObject o = jv.isObject();
+				JSONValue value;
+
+				while ((value = o.get(key + "")) != null) {
+					final Album album = Album.newInstance(value.isObject());
+					albums.add(album);
+					key++;
+				}
+
+				callback.onSuccess(albums);
+			}
+
+		};
+
+		callMethod("photos.getAlbums", p.getJavaScriptObject(), nativeCallback);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gwittit.client.facebook.FacebookApi#photos_get(java.util.Map,
+	 * com.gwittit.client.facebook.FacebookCallback)
+	 */
+	public void photos_get(final Map<String, String> params, final FacebookCallback callback) {
+		JSONObject obj = getDefaultParams();
+		copyParams(obj, params, "subj_id");
+		copyParams(obj, params, "aid");
+		copyParams(obj, params, "pids");
+		callMethod("photos.get", obj.getJavaScriptObject(), callback);
+	}
+
+	public void admin_banUsers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_unbanUsers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_getAllocation(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_getAppProperties(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_getBannedUsers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_getMetrics(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_getRestrictionInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_setAppProperties(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void admin_setRestrictionInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void application_getPublicInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void auth_createToken(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void auth_expireSession(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void auth_getSession(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void auth_promoteSession(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void auth_revokeAuthorization(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void auth_revokeExtendedPermission(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void batch_run(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void comments_add(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void comments_get(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void comments_remove(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void connect_getUnconnectedFriendsCount(Map<String, String> params,
+			FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void connect_registerUsers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void connect_unregisterUsers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void data_getCookies(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void data_setCookie(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void events_cancel(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void events_create(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void events_edit(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void events_get(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void events_getMembers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void events_rsvp(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void fbml_deleteCustomTags(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void fbml_getCustomTags(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void fbml_refreshImgSrc(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void fbml_refreshRefUrl(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void fbml_registerCustomTags(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void fbml_setRefHandle(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void feed_deactivateTemplateBundleByID(Map<String, String> params,
+			FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void feed_getRegisteredTemplateBundleByID(Map<String, String> params,
+			FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void feed_getRegisteredTemplateBundles(Map<String, String> params,
+			FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void feed_publishTemplatizedAction(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void feed_publishUserAction(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void feed_registerTemplateBundle(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void fql_multiquery(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void friends_areFriends(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * 
+	 */
+	public void friends_get(Map<String, String> params, FacebookCallback callback) {
+		JSONObject p = getDefaultParams();
+		callMethod("friends.get", p.getJavaScriptObject(), callback);
+	}
+
+	public void friends_getAppUsers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void friends_getLists(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void friends_getMutualFriends(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void groups_get(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void groups_getMembers(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void intl_getTranslations(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void intl_uploadNativeStrings(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void links_get(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void links_post(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void liveMessage_send(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void message_getThreadsInFolder(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notes_create(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notes_delete(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notes_edit(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notes_get(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notifications_get(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notifications_getList(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notifications_markRead(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notifications_send(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void notifications_sendEmail(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void pages_getInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void pages_isAdmin(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void pages_isAppAdded(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void pages_isFan(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void photos_addTag(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void photos_createAlbum(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void photos_getTags(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void photos_upload(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void profile_getFBML(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void profile_getInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void profile_getInfoOptions(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void profile_setFBML(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void profile_setInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void profile_setInfoOptions(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void sms_canSend(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void sms_send(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Updates a user's Facebook status through your application. Before your
+	 * application can set a user's status, the user must grant it the
+	 * status_update extended permission. This call is a streamlined version of
+	 * users.setStatus, as it takes fewer arguments.
+	 * 
+	 * For Web applications, you must pass either the ID of the user on whose
+	 * behalf you're making this call or the session key for that user, but not
+	 * both. If you don't specify a user with the uid parameter, then that user
+	 * whose session it is will be the target of the call. To set the status of
+	 * a facebook Page, pass the uid of the Page.
+	 * 
+	 * However, if your application is a desktop application, you must pass a
+	 * valid session key for security reasons. Do not pass a uid parameter.
+	 * 
+	 * required
+	 * 
+	 * @param api_key 
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id NOT SUPPORTED
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig NOT SUPPORTED
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v   NOT SUPPORTED 
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call. optional
+	 * @param session_key NOT SUPPORTED
+	 *            string The session key of the user whose status you are
+	 *            setting. Note: A session key is always required for desktop
+	 *            applications. It is required for Web applications only when
+	 *            the uid is not specified.
+	 * @param format NOT SUPPORTED
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback NOT SUPPORTED
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param status
+	 *            string The status message to set. Note: The maximum message
+	 *            length is 255 characters; messages longer than that limit will
+	 *            be truncated and appended with "...".
+	 * @param uid
+	 *            int The user ID of the user whose status you are setting. If
+	 *            this parameter is not specified, then it defaults to the
+	 *            session user. Note: This parameter applies only to Web
+	 *            applications and is required by them only if the session_key
+	 *            is not specified. Facebook ignores this parameter if it is
+	 *            passed by a desktop application.
+	 */
+	public void status_set(Map<String, String> params, FacebookCallback c) {
+
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "status,uid");
+		callMethod("users.setStatus", p.getJavaScriptObject(), c);
+	}
+
+	/**
+	 * Returns the user's current and most recent statuses.
+	 * 
+	 * For desktop applications, this call works only for the logged-in user,
+	 * since that's the only session you have. If you want data for other users,
+	 * make an FQL query (fql.query) on the status (FQL) table.
+	 * 
+	 *required
+	 * 
+	 * @param api_key 
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id NOT SUPPORTED
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig NOT SUPPORTED
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v   NOT SUPPORTED
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call.
+	 * @param session_key NOT SUPPORTED
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. optional
+	 * @param format NOT SUPPORTED
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback NOT SUPPORTED
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param uid
+	 *            int The user ID of the user whose status messages you want to
+	 *            retrieve.
+	 * @param limit NOT SUPPORTED
+	 *            int The number of status messages you want to return. (Default
+	 *            value is 100.)
+	 */
+	public void status_get(Map<String,String> params, FacebookCallback callback) {
+
+		String uid = params.get("uid");
+		
+		if ( uid == null ) {
+			Window.alert( "Error: status_get called without uid");
+			throw new IllegalArgumentException ( "status_get called without uid" );
+		}
+
+		/**
+		 * Cant get this to work, its in beta so wont use much time on it
+		 * JSONObject params = getDefaultParams (); params.put( "uid", new
+		 * JSONString ( uid ) ) ; callMethod ( "status.get",
+		 * params.getJavaScriptObject(), callback );
+		 */
+		fql_query("SELECT message FROM status WHERE uid=" + uid + " LIMIT 1", callback);
+	}
+
+	/**
+	 * This method adds a comment to a post that was already published to a
+	 * user's Wall.
+	 * 
+	 * Privacy rules apply to the posts to which the user can add comments; the
+	 * user must be able to see the post in order for your application to allow
+	 * the user add a comment to it.
+	 * 
+	 * Desktop applications must pass a valid session key, and only the user
+	 * associated with that session key can add comments. Other applications can
+	 * allows users to add comments to any posts the user can see, provided you
+	 * have a valid post_id.
+	 * 
+	 * In order for your application to allow a user to add a comment, that user
+	 * must grant your application the publish_stream extended permission.
+	 * 
+	 * optional
+	 * 
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. Desktop
+	 *            applications must pass a valid session key (and have been
+	 *            granted the publish_stream extended permission); other
+	 *            applications need only the publish_stream extended permission.
+	 * @param uid
+	 *            string The user ID of the user adding the comment. If this
+	 *            parameter is not specified, then it defaults to the session
+	 *            user. Note: This parameter applies only to Web applications
+	 *            and is required by them only if the session_key is not
+	 *            specified. Facebook ignores this parameter if it is passed by
+	 *            a desktop application.
+	 * 
+	 * required
+	 * @param post_id
+	 *            string The ID for the post to which you're adding the comment.
+	 * @param comment
+	 *            string The text of the comment. This is a plain text parameter
+	 *            only; you cannot format the comment with HTML or FBML.
+	 */
+	public void stream_addComment(Map<String, String> params, FacebookCallback callback) {
+		JSONObject p = getDefaultParams();
+		
+		copyAllParams(p, params, "uid,*post_id,*comment" );
+		callMethod ("stream.addComment", p.getJavaScriptObject(), callback ); 
+	}
+
+	/**
+	 * Valid params are
+	 * 
+	 * 
+	 * optional session_ke string The session key of the logged in user. The
+	 * session key is automatically included by our PHP client. Desktop
+	 * applications must pass a valid session key (and have been granted the
+	 * publish_stream extended permission); other applications need only the
+	 * publish_stream extended permission.
+	 * 
+	 * @param uid
+	 *            string The user ID of the user who likes the post. If this
+	 *            parameter is not specified, then it defaults to the session
+	 *            user. Note: This parameter applies only to Web applications
+	 *            and is required by them only if the session_key is not
+	 *            specified. Facebook ignores this parameter if it is passed by
+	 *            a desktop application.
+	 * 
+	 * @param post_id
+	 *            string The ID of the post. &lt;/p&gt; (non-Javadoc)
+	 * 
+	 */
+	public void stream_addLike(Map<String, String> params, FacebookCallback callback) {
+		stream_addOrRemoveLike(params, true, callback);
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * This method returns all comments associated with a post in a user's
+	 * stream. This method returns comments only if the user who owns the post
+	 * (that is, the user published the post to his or her profile) has
+	 * authorized your application.
+	 * 
+	 * This method is a wrapper for comment FQL table, indexed by post_id rather
+	 * than xid.
+	 */
+	public void stream_getComments(final Map<String, String> params,
+			final AsyncCallback<List<Comment>> callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "session_key,*post_id");
+
+		FacebookCallback nativeCallback = new FacebookCallback() {
+
+			public void onError(JSONValue v) {
+				callback.onFailure(new Exception(v + ""));
+			}
+
+			public void onSuccess(JSONValue v) {
+
+				final List<Comment> returnList = new ArrayList<Comment>();
+				JSONObject o = v.isObject();
+
+				if (o == null) {
+					callback.onSuccess(returnList);
+				} else {
+					JSONObject jo = v.isObject();
+					JSONValue value = null;
+
+					for (int i = 0; (value = jo.get("" + i)) != null; i++) {
+						Comment comment = new Comment(value.isObject());
+						returnList.add(comment);
+
+					}
+					callback.onSuccess(returnList);
+				}
+			}
+		};
+		callMethod("stream.getComments", p.getJavaScriptObject(), nativeCallback);
+	}
+
+	public void stream_getFilters(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void stream_publish(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void stream_remove(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void stream_removeComment(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Remove like
+	 */
+	public void stream_removeLike(Map<String, String> params, FacebookCallback callback) {
+		stream_addOrRemoveLike(params, false, callback);
+	}
+
+	private void stream_addOrRemoveLike(Map<String, String> params, boolean add,
+			FacebookCallback callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "session_key,*post_id");
+		callMethod(add ? "stream.addLike" : "stream.removeLike", p.getJavaScriptObject(), callback);
+	}
+
+	public void users_getInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void users_getLoggedInUser(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void users_getStandardInfo(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void users_isAppUser(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void users_isVerified(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void users_setStatus(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void video_getUploadLimits(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void video_upload(Map<String, String> params, FacebookCallback callback) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Takes a list of params and converts them to json string. If the param
+	 * starts withh "*' its considered a required param. The use will get a
+	 * warning if its not passed.
+	 * 
+	 * @param obj
+	 * @param params
+	 * @param list
+	 */
+	private void copyAllParams(JSONObject obj, Map<String, String> params, String list) {
+
+		String errorString = "";
+
+		String[] keys = list.split(",");
+
+		for (String k : keys) {
+
+			String useKey = k;
+
+			if (useKey.startsWith("*")) {
+				useKey = useKey.replace("*", "");
+
+				if (!params.containsKey(useKey)) {
+					errorString += "The param " + useKey + " is required.\n";
+				}
+			}
+			copyParams(obj, params, useKey);
+		}
+
+		if (!params.isEmpty()) {
+			errorString += "You passed invalid parameters: " + params.toString();
+		}
+
+		if (!"".equals(errorString)) {
+			errorString = "Oups, You passed invalid parameters to the method. \n\n" + errorString;
+			Window.alert(errorString);
+			throw new RuntimeException(errorString);
+		}
+	}
+
+	/*
+	 * @deprecated
+	 */
+	private void copyParams(JSONObject obj, Map<String, String> params, String key) {
+		if (params.get(key) != null) {
+			obj.put(key, new JSONString(params.get(key)));
+			params.remove(key);
+		}
+	}
+
+	/*
+	 * Run facebook method, parse result and call callback function.
+	 */
+	private native void callMethod(String method, JavaScriptObject params, FacebookCallback callback)/*-{
+		var app=this;
+		$wnd.FB_RequireFeatures(["Api"], function(){			
+			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
+
+				function(result, exception){
+						// this is the result when we run in hosted mode for some reason
+					if(!isNaN(result)) {
+						app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessNumber(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;)(callback,result+"");
+					} else {
+						if ( result != undefined ) {
+							app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
+						} else {
+							app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
+						}
+					}
+				}
+			);
+		});
+	}-*/;
+
+	/**
+	 * Callbacks
+	 */
+	public void callbackError(FacebookCallback callback, JavaScriptObject value) {
+		callback.onError(new JSONObject(value));
+	}
+
+	/**
+	 * Called when result is a number
+	 */
+	public void callbackSuccessNumber(FacebookCallback callback, String i) {
+		JSONObject o = new JSONObject();
+		JSONString s = new JSONString(i);
+		o.put("result", s);
+		callback.onSuccess(o);
+
+	}
+
+	/**
+	 * Called when method succeeded.
+	 */
+	public void callbackSuccess(FacebookCallback callback, JavaScriptObject obj) {
+		callback.onSuccess(new JSONObject(obj));
+	}
+
+	/**
+	 * Get default params, minimum is the api key
+	 */
+	private JSONObject getDefaultParams() {
+		if (apiKey == null) {
+			Window.alert("api_key==null");
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("api_key", new JSONString(apiKey));
+		return obj;
+	}
 
 }
