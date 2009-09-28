@@ -1,6 +1,7 @@
 package com.gwittit.client.facebook.xfbml;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -44,13 +45,21 @@ public class FbProfilePic extends Widget {
 
 	public enum Size {thumb,small,normal,square}
 	
-	public FbProfilePic(Long uid) {
+	public FbProfilePic () {
 		super.setElement(DOM.createElement("fb:profile-pic"));
 		addStyleName("gwittit-FbProfilePic");
-
-		getElement().setAttribute("uid", "" + uid);
 		getElement().setAttribute("size", "square");
 		setFacebookLogo(true);
+		getElement().setAttribute("uid", "loggedinuser");
+	}
+	
+	public FbProfilePic(Long uid) {
+		this();
+		
+		if ( uid == null ) {
+			Window.alert( "Cannot create profile pic with null id ");
+		}
+		getElement().setAttribute("uid", "" + uid);
 	}
 
 	public FbProfilePic(Long uid, Size size) {

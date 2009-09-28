@@ -89,7 +89,6 @@ public class JsonUtil {
 		if ( t == null ) {
 			return null;
 		}
-		GWT.log( "Times is " + t , null );
 		Date date = new Date ();
 		date.setTime(t);
 		return date;

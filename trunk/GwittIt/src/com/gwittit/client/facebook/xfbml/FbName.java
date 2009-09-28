@@ -1,5 +1,6 @@
 package com.gwittit.client.facebook.xfbml;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -49,6 +50,9 @@ public class FbName extends Widget {
 	
 	public FbName ( String uid ) {
 		super.setElement( DOM.createElement ("fb:name") ); 
+		if ( uid == null || "".equals ( uid.trim() ) ) {
+			Window.alert( "FbName: uid null");
+		}
 		super.addStyleName("FbName" );
 		set( "uid", uid);
 		addStyleName ( "gwittit-FbName");
@@ -59,6 +63,11 @@ public class FbName extends Widget {
 		setLinked( linked );
 	}
 	public void setUid(String uid) {
+		
+		if ( uid == null || "".equals ( uid.trim() ) ) {
+			Window.alert( "Debug: FbName: uid null");
+		}
+		
 		set( "uid", uid );
 	}
 

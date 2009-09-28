@@ -30,6 +30,7 @@ import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -93,7 +94,10 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 
 		// Render page
 		render ( Window.Location.getHash() );
+		
 		RootPanel.get().add ( outer );
+		Xfbml.parse( outer.getElement() );
+
 	}
 
 	

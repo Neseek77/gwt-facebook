@@ -19,7 +19,7 @@ public class DebugLink extends Composite {
 	    final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
 	    
 	    simplePopup.setWidth("400px");
-		Anchor link = new Anchor ( "." );
+		Anchor link = new Anchor ( "JSON" );
 		link.addStyleName("debugLink");
 		
 		link.addClickHandler( new ClickHandler () {
