@@ -29,7 +29,9 @@ import com.gwittit.client.facebook.entities.Stream;
  */
 public class FacebookApi {
 
-	public enum Permission { read_stream, publish_stream };
+	public enum Permission {
+		read_stream, publish_stream
+	};
 
 	private String apiKey;
 
@@ -217,8 +219,6 @@ public class FacebookApi {
 		};
 		callMethod("users.hasAppPermission", p.getJavaScriptObject(), fc);
 	}
-
-
 
 	/*
 	 * (non-Javadoc)
@@ -725,39 +725,40 @@ public class FacebookApi {
 	 * 
 	 * required
 	 * 
-	 * @param api_key 
+	 * @param api_key
 	 *            string The application key associated with the calling
 	 *            application. If you specify the API key in your client, you
 	 *            don't need to pass it with every call.
-	 * @param call_id NOT SUPPORTED
-	 *            float The request's sequence number. Each successive call for
-	 *            any session must use a sequence number greater than the last.
-	 *            We suggest using the current time in milliseconds, such as
-	 *            PHP's microtime(true) function. If you specify the call ID in
-	 *            your client, you don't need to pass it with every call.
-	 * @param sig NOT SUPPORTED
-	 *            string An MD5 hash of the current request and your secret key,
-	 *            as described in the How Facebook Authenticates Your
-	 *            Application. Facebook computes the signature for you
-	 *            automatically.
-	 * @param v   NOT SUPPORTED 
-	 *            string This must be set to 1.0 to use this version of the API.
-	 *            If you specify the version in your client, you don't need to
-	 *            pass it with every call. optional
-	 * @param session_key NOT SUPPORTED
-	 *            string The session key of the user whose status you are
-	 *            setting. Note: A session key is always required for desktop
-	 *            applications. It is required for Web applications only when
-	 *            the uid is not specified.
-	 * @param format NOT SUPPORTED
-	 *            string The desired response format, which can be either XML or
-	 *            JSON. (Default value is XML.)
-	 * @param callback NOT SUPPORTED
-	 *            string Name of a function to call. This is primarily to enable
-	 *            cross-domain JavaScript requests using the <script> tag, also
-	 *            known as JSONP, and works with both the XML and JSON formats.
-	 *            The function will be called with the response passed as the
-	 *            parameter.
+	 * @param call_id
+	 *            NOT SUPPORTED float The request's sequence number. Each
+	 *            successive call for any session must use a sequence number
+	 *            greater than the last. We suggest using the current time in
+	 *            milliseconds, such as PHP's microtime(true) function. If you
+	 *            specify the call ID in your client, you don't need to pass it
+	 *            with every call.
+	 * @param sig
+	 *            NOT SUPPORTED string An MD5 hash of the current request and
+	 *            your secret key, as described in the How Facebook
+	 *            Authenticates Your Application. Facebook computes the
+	 *            signature for you automatically.
+	 * @param v
+	 *            NOT SUPPORTED string This must be set to 1.0 to use this
+	 *            version of the API. If you specify the version in your client,
+	 *            you don't need to pass it with every call. optional
+	 * @param session_key
+	 *            NOT SUPPORTED string The session key of the user whose status
+	 *            you are setting. Note: A session key is always required for
+	 *            desktop applications. It is required for Web applications only
+	 *            when the uid is not specified.
+	 * @param format
+	 *            NOT SUPPORTED string The desired response format, which can be
+	 *            either XML or JSON. (Default value is XML.)
+	 * @param callback
+	 *            NOT SUPPORTED string Name of a function to call. This is
+	 *            primarily to enable cross-domain JavaScript requests using the
+	 *            <script> tag, also known as JSONP, and works with both the XML
+	 *            and JSON formats. The function will be called with the
+	 *            response passed as the parameter.
 	 * @param status
 	 *            string The status message to set. Note: The maximum message
 	 *            length is 255 characters; messages longer than that limit will
@@ -786,51 +787,53 @@ public class FacebookApi {
 	 * 
 	 *required
 	 * 
-	 * @param api_key 
+	 * @param api_key
 	 *            string The application key associated with the calling
 	 *            application. If you specify the API key in your client, you
 	 *            don't need to pass it with every call.
-	 * @param call_id NOT SUPPORTED
-	 *            float The request's sequence number. Each successive call for
-	 *            any session must use a sequence number greater than the last.
-	 *            We suggest using the current time in milliseconds, such as
-	 *            PHP's microtime(true) function. If you specify the call ID in
-	 *            your client, you don't need to pass it with every call.
-	 * @param sig NOT SUPPORTED
-	 *            string An MD5 hash of the current request and your secret key,
-	 *            as described in the How Facebook Authenticates Your
-	 *            Application. Facebook computes the signature for you
-	 *            automatically.
-	 * @param v   NOT SUPPORTED
-	 *            string This must be set to 1.0 to use this version of the API.
-	 *            If you specify the version in your client, you don't need to
-	 *            pass it with every call.
-	 * @param session_key NOT SUPPORTED
-	 *            string The session key of the logged in user. The session key
-	 *            is automatically included by our PHP client. optional
-	 * @param format NOT SUPPORTED
-	 *            string The desired response format, which can be either XML or
-	 *            JSON. (Default value is XML.)
-	 * @param callback NOT SUPPORTED
-	 *            string Name of a function to call. This is primarily to enable
-	 *            cross-domain JavaScript requests using the <script> tag, also
-	 *            known as JSONP, and works with both the XML and JSON formats.
-	 *            The function will be called with the response passed as the
-	 *            parameter.
+	 * @param call_id
+	 *            NOT SUPPORTED float The request's sequence number. Each
+	 *            successive call for any session must use a sequence number
+	 *            greater than the last. We suggest using the current time in
+	 *            milliseconds, such as PHP's microtime(true) function. If you
+	 *            specify the call ID in your client, you don't need to pass it
+	 *            with every call.
+	 * @param sig
+	 *            NOT SUPPORTED string An MD5 hash of the current request and
+	 *            your secret key, as described in the How Facebook
+	 *            Authenticates Your Application. Facebook computes the
+	 *            signature for you automatically.
+	 * @param v
+	 *            NOT SUPPORTED string This must be set to 1.0 to use this
+	 *            version of the API. If you specify the version in your client,
+	 *            you don't need to pass it with every call.
+	 * @param session_key
+	 *            NOT SUPPORTED string The session key of the logged in user.
+	 *            The session key is automatically included by our PHP client.
+	 *            optional
+	 * @param format
+	 *            NOT SUPPORTED string The desired response format, which can be
+	 *            either XML or JSON. (Default value is XML.)
+	 * @param callback
+	 *            NOT SUPPORTED string Name of a function to call. This is
+	 *            primarily to enable cross-domain JavaScript requests using the
+	 *            <script> tag, also known as JSONP, and works with both the XML
+	 *            and JSON formats. The function will be called with the
+	 *            response passed as the parameter.
 	 * @param uid
 	 *            int The user ID of the user whose status messages you want to
 	 *            retrieve.
-	 * @param limit NOT SUPPORTED
-	 *            int The number of status messages you want to return. (Default
-	 *            value is 100.)
+	 * @param limit
+	 *            NOT SUPPORTED int The number of status messages you want to
+	 *            return. (Default value is 100.)
 	 */
-	public void status_get(Map<String,String> params, FacebookCallback callback) {
+	public void status_get(Map<String, String> params, FacebookCallback callback) {
 
 		String uid = params.get("uid");
-		
-		if ( uid == null ) {
-			Window.alert( "Error: status_get called without uid");
-			throw new IllegalArgumentException ( "status_get called without uid" );
+
+		if (uid == null) {
+			Window.alert("Error: status_get called without uid");
+			throw new IllegalArgumentException("status_get called without uid");
 		}
 
 		/**
@@ -874,7 +877,7 @@ public class FacebookApi {
 	 *            specified. Facebook ignores this parameter if it is passed by
 	 *            a desktop application.
 	 * 
-	 * required
+	 *            required
 	 * @param post_id
 	 *            string The ID for the post to which you're adding the comment.
 	 * @param comment
@@ -882,13 +885,13 @@ public class FacebookApi {
 	 *            only; you cannot format the comment with HTML or FBML.
 	 */
 	public void stream_addComment(Map<String, String> params, FacebookCallback callback) {
-		GWT.log ( "FacbookApi: call method stream.addComment", null );
+		GWT.log("FacbookApi: call method stream.addComment", null);
 		JSONObject p = getDefaultParams();
-		
-		copyAllParams(p, params, "uid,*post_id,*comment" );
-		callMethod ("stream.addComment", p.getJavaScriptObject(), callback, "string" ); 
-		
-		GWT.log ( "FacebookApi: call method stream.addComment DONE" , null );
+
+		copyAllParams(p, params, "uid,*post_id,*comment");
+		callMethod("stream.addComment", p.getJavaScriptObject(), callback, "string");
+
+		GWT.log("FacebookApi: call method stream.addComment DONE", null);
 	}
 
 	/**
@@ -972,7 +975,48 @@ public class FacebookApi {
 
 	}
 
+	/**
+	 * This method removes a post from a user's Wall. The post also gets removed
+	 * from the user's and the user's friends' News Feeds.
+	 * 
+	 * Your application may only remove posts that were created through it.
+	 * 
+	 * Desktop applications must pass a valid session key, and can remove posts
+	 * only from the user associated with that session key. Other applications
+	 * can delete any post that they published, provided you have a valid
+	 * post_id. Web applications must pass either a valid session key or a user
+	 * ID.
+	 * 
+	 * In order to remove a post from a user's Wall, the user must grant your
+	 * application the publish_stream extended permission.
+	 * 
+	 * Parameters 
+	 * Required Name Type Description optional
+	 * 
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. Desktop
+	 *            applications must pass a valid session key (and have been
+	 *            granted the publish_stream extended permission); other
+	 *            applications need only the publish_stream extended permission.
+	 *            required
+	 * @param post_id
+	 *            string The ID for the post you want to remove.
+	 * 
+	 *            optional
+	 * @param uid
+	 *            string The user ID of the user publishing the post. If this
+	 *            parameter is not specified, then it defaults to the session
+	 *            user. Note: This parameter applies only to Web applications
+	 *            and is required by them only if the session_key is not
+	 *            specified. Facebook ignores this parameter if it is passed by
+	 *            a desktop application.
+	 */
 	public void stream_remove(Map<String, String> params, FacebookCallback callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams (p,params,"session_key,uid,*post_id" );
+		callMethod ( "stream.remove",p.getJavaScriptObject(),callback);
+		
 		// TODO Auto-generated method stub
 
 	}
@@ -1070,7 +1114,7 @@ public class FacebookApi {
 		}
 
 		if (!"".equals(errorString)) {
-			errorString = "Oups, You passed invalid parameters to the method. \n\n" + errorString;
+			errorString = "Oups, You passed invalid parameters to a method. \n\n" + errorString;
 			Window.alert(errorString);
 			throw new RuntimeException(errorString);
 		}
@@ -1089,12 +1133,13 @@ public class FacebookApi {
 	/*
 	 * Run facebook method, parse result and call callback function.
 	 */
-	
-	private void callMethod ( String method, JavaScriptObject params , FacebookCallback callback ) {
-		callMethod ( method, params, callback, "json" );
+
+	private void callMethod(String method, JavaScriptObject params, FacebookCallback callback) {
+		callMethod(method, params, callback, "json");
 	}
-	
-	private native void callMethod(String method, JavaScriptObject params, FacebookCallback callback, String returnType )/*-{
+
+	private native void callMethod(String method, JavaScriptObject params,
+			FacebookCallback callback, String returnType)/*-{
 		var app=this;
 		$wnd.FB_RequireFeatures(["Api"], function(){			
 			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
@@ -1135,15 +1180,16 @@ public class FacebookApi {
 		callback.onSuccess(o);
 	}
 
-	public void callbackSuccessString (FacebookCallback callback, String s ) {
-		JSONString js = new JSONString ( s );
+	public void callbackSuccessString(FacebookCallback callback, String s) {
+		JSONString js = new JSONString(s);
 		callback.onSuccess(js);
 	}
+
 	/**
 	 * Called when method succeeded.
 	 */
 	public void callbackSuccess(FacebookCallback callback, JavaScriptObject obj) {
-		GWT.log ( "FacebookApi: callbackSuccess " + obj , null );
+		GWT.log("FacebookApi: callbackSuccess " + obj, null);
 		callback.onSuccess(new JSONObject(obj));
 	}
 

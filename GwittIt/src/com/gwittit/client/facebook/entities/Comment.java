@@ -29,6 +29,9 @@ public class Comment {
 		if ( o == null ) {
 			GWT.log( "Comment: Null argument ", null );
 		}
+		
+		GWT.log( Comment.class + ": create new comment object " + o , null );
+		
 		postId = JsonUtil.getString(o, "post_id");
 		fromId = JsonUtil.getLong(o, "fromid");
 		time = JsonUtil.getDate(o, "time");
