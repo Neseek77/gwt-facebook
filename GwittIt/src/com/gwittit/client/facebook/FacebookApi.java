@@ -882,10 +882,13 @@ public class FacebookApi {
 	 *            only; you cannot format the comment with HTML or FBML.
 	 */
 	public void stream_addComment(Map<String, String> params, FacebookCallback callback) {
+		GWT.log ( "FacbookApi: call method stream.addComment", null );
 		JSONObject p = getDefaultParams();
 		
 		copyAllParams(p, params, "uid,*post_id,*comment" );
-		callMethod ("stream.addComment", p.getJavaScriptObject(), callback ); 
+		callMethod ("stream.addComment", p.getJavaScriptObject(), callback, "string" ); 
+		
+		GWT.log ( "FacebookApi: call method stream.addComment DONE" , null );
 	}
 
 	/**
@@ -1086,18 +1089,26 @@ public class FacebookApi {
 	/*
 	 * Run facebook method, parse result and call callback function.
 	 */
-	private native void callMethod(String method, JavaScriptObject params, FacebookCallback callback)/*-{
+	
+	private void callMethod ( String method, JavaScriptObject params , FacebookCallback callback ) {
+		callMethod ( method, params, callback, "json" );
+	}
+	
+	private native void callMethod(String method, JavaScriptObject params, FacebookCallback callback, String returnType )/*-{
 		var app=this;
 		$wnd.FB_RequireFeatures(["Api"], function(){			
 			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
-
 				function(result, exception){
 						// this is the result when we run in hosted mode for some reason
 					if(!isNaN(result)) {
 						app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessNumber(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;)(callback,result+"");
 					} else {
 						if ( result != undefined ) {
-							app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
+						   if ( returnType == "string" ) {
+								app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessString(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;)(callback,result);
+						   } else {
+								app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
+						   }
 						} else {
 							app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
 						}
@@ -1122,13 +1133,17 @@ public class FacebookApi {
 		JSONString s = new JSONString(i);
 		o.put("result", s);
 		callback.onSuccess(o);
-
 	}
 
+	public void callbackSuccessString (FacebookCallback callback, String s ) {
+		JSONString js = new JSONString ( s );
+		callback.onSuccess(js);
+	}
 	/**
 	 * Called when method succeeded.
 	 */
 	public void callbackSuccess(FacebookCallback callback, JavaScriptObject obj) {
+		GWT.log ( "FacebookApi: callbackSuccess " + obj , null );
 		callback.onSuccess(new JSONObject(obj));
 	}
 

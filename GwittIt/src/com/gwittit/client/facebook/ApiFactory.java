@@ -1,5 +1,7 @@
 package com.gwittit.client.facebook;
 
+import com.google.gwt.user.client.Window;
+
 
 /**
  * Creates javascript api.
@@ -16,7 +18,7 @@ public class ApiFactory {
 		
 		if ( apiClient == null ) {
 			apiClient = new FacebookApi ( apiKey );
-		}
+		} 
 		return apiClient;
 	}
 }

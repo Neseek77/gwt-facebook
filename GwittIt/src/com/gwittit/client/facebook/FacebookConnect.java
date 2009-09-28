@@ -138,18 +138,20 @@ public class FacebookConnect {
 	public static void init ( String apiKey, String xdReceiver, final HandlerManager eventBus ) {
 		
 		if ( eventBus == null ) {
+			Window.alert ( "eventbus null");
 			throw new IllegalArgumentException ( "eventBus null");
 		}
 
 		if ( apiKey == null ) {
+			Window.alert("api key null");
 			throw new IllegalArgumentException ( "apiKey null");
 		}
 		
 		if ( xdReceiver == null ) {
+			Window.alert ( "xd receiver null");
 			throw new IllegalArgumentException ( "eventBus null" );
 		}
 		
-		setupXdReceiver(apiKey, xdReceiver);
 		
 		// Create a local callback to deal with login.
 		FacebookCallback cb = new FacebookCallback () {
@@ -163,6 +165,8 @@ public class FacebookConnect {
 			}
 			
 		};
+		setupXdReceiver(apiKey, xdReceiver);
+
 		defineFacebookConnectLogin ( cb );
 	}
 	
@@ -171,9 +175,8 @@ public class FacebookConnect {
 	 * @param apiKey
 	 * @param xdReceiver
 	 */
-	public static native void setupXdReceiver( String apiKey, String xdReceiver ) /*-{
-		$wnd.FB_RequireFeatures(["XFBML"], function(){
-		   $wnd.FB.Facebook.init(apiKey, xdReceiver );
+	public static native void setupXdReceiver( String apiKey, String xdReceiver )/*-{
+			$wnd.FB_RequireFeatures(["XFBML"], function(){$wnd.FB.Facebook.init(apiKey, xdReceiver );
 	    });
 	}-*/;
 

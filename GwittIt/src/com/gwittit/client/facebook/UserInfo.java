@@ -31,6 +31,10 @@ public class UserInfo implements Serializable {
 	}
 	
 	public static Long getUidLong () {
+		
+		if ( getUid () == null ) {
+			return null;
+		}
 		return new Long ( getUid () );
 	}
 	

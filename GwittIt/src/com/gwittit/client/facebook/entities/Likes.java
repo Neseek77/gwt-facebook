@@ -58,17 +58,26 @@ public class Likes {
 	public Widget createWidget () {
 		SimplePanel pnl = new SimplePanel ();
 		pnl.addStyleName("gwittit-Likes");
-		
-		if ( getCount() == 0  ) {
-			
-			if ( userLikes ) {
-				pnl.setWidget (new HTML ( "You like this" ) );
-			}
+
+		String txt = null;
+		if ( isUserLikes() && getCountExcludeUser() == 0 ) {
+			txt = "You like this";
+		}
+
+		else if ( isUserLikes() && getCountExcludeUser() > 0 ) {
+			txt = "You and " + getCountExcludeUser() + " people likes this ";
+		}
+		else if ( getCount() > 0 ) {
+			txt = getCount() + " people likes this";
+		}
+
+		if ( txt != null ) {
+			HTML h = new HTML ( txt );
+			pnl.setWidget(h);
 			return pnl;
 		}
 		
-		HTML h = new HTML ( (userLikes ? "You and " : "")  + "<a href=" + getHref() + "> " + getCount () + " people </a> like this" );
-		return h;
+		return null;
 	}
 	
 	/**
@@ -95,6 +104,10 @@ public class Likes {
 		return count;
 	}
 
+	public int getCountExcludeUser () {
+		return isUserLikes() ? getCount()-1 : getCount();
+		
+	}
 	public void setCount(int count) {
 		this.count = count;
 	}

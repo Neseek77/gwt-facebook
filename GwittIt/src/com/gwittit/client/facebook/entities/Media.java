@@ -1,6 +1,8 @@
 package com.gwittit.client.facebook.entities;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -20,7 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Media {
 	
-     public enum Type {photo,link};
+     public enum Type {photo,link,video,flash,mp3};
 
 	/**
 	 * You can include rich media in the attachment for a post into a user's
@@ -38,6 +40,10 @@ public class Media {
 	 */
 	private String src;
 
+	/**
+	 * Image alt/ preview link
+	 */
+	private String alt;
 	
 	private String href;
 
@@ -48,6 +54,8 @@ public class Media {
 
 	private String imgsrc;
 
+	private Video video;
+	
 	public Media () {
 		
 	}
@@ -56,9 +64,13 @@ public class Media {
 	
 	public Media ( JSONObject o ) {
 		type = JsonUtil.getString(o, "type");
-		
-			src = JsonUtil.getString(o, "src");
-			href = JsonUtil.getString(o, "href");
+		src = JsonUtil.getString(o, "src");
+		href = JsonUtil.getString(o, "href");
+		alt = JsonUtil.getString(o, "alt");
+		if ( Type.valueOf(type) == Type.video ) {
+			video = new Video ( o.get("video") );
+		}
+		GWT.log( Media.class + ": Parse media of type " + type , null);
 		
 	}
 	
@@ -103,6 +115,30 @@ public class Media {
 
 	public void setImgsrc(String imgsrc) {
 		this.imgsrc = imgsrc;
+	}
+
+
+
+	public Video getVideo() {
+		return video;
+	}
+
+
+
+	public void setVideo(Video video) {
+		this.video = video;
+	}
+
+
+
+	public String getAlt() {
+		return alt;
+	}
+
+
+
+	public void setAlt(String alt) {
+		this.alt = alt;
 	}
 	
 	

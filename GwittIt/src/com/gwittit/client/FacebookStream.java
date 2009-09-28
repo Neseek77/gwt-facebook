@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.entities.Stream;
+import com.gwittit.client.facebook.ui.StreamUi;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
@@ -52,6 +53,7 @@ public class FacebookStream extends Composite {
 		
 		// StyleNames...
 		outer.getElement().setId( "FacebookStream" );
+		streamListing.getElement().setId("StreamListing");
 		streamListing.addStyleName( "streamListing" );
 		
 		//ask.setHTML( "<img src=/fb_permission.png> Click to enable facebook stream in Gwittee" );
@@ -102,7 +104,7 @@ public class FacebookStream extends Composite {
 		Image image = new Image ( "/locked.png");
 		
 		HorizontalPanel outer = new HorizontalPanel ();
-		outer.addStyleName ( "unlockStream" );
+		outer.addStyleName ( "needStreamPermission" );
 		outer.add ( image );
 		outer.add ( inner );
 		
@@ -112,8 +114,8 @@ public class FacebookStream extends Composite {
 
 	public void addFirst(Stream stream) {
 		
-		StreamUi su = new StreamUi ( stream, apiClient );
-		streamListing.insert( su.createWidget(), 0);
+		StreamUi su = new StreamUi ( stream );
+		streamListing.insert( su, 0);
 	}
 	
 	
@@ -167,9 +169,11 @@ public class FacebookStream extends Composite {
 
 			public void onSuccess(List<Stream> result) {
 				streamListing.clear ();
+				try {
 				for ( Stream s : result ) {
-					streamListing.add( new StreamUi (s, apiClient ).createWidget() );
+					streamListing.add( new StreamUi (s) );
 				}
+				}catch (Exception e ) {  Window.alert ( "Exception " + e ); }
 				Xfbml.parse(streamListing.getElement() );
 			}
 			
