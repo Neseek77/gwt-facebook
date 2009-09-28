@@ -104,8 +104,8 @@
 ||users_getInfo||  ||
 ||users_getLoggedInUser||  ||
 ||users_getStandardInfo||  ||
-||users_hasAppPermission||  |||
-|users_isAppUser||  ||
+||users_hasAppPermission||  ||
+||users_isAppUser||  ||
 ||users_isVerified||  ||
 ||users_setStatus||  ||
 ||video_getUploadLimits||  ||
