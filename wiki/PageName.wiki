@@ -2,10 +2,114 @@
 
 = This list displays implemented methods =
 
-  * Test bullet en
-  * Test bullet two
 
 
+
+||admin_banUsers||  ||
+||admin_unbanUsers||  ||
+||admin_getAllocation||  ||
+||admin_getAppProperties||  ||
+||admin_getBannedUsers||  ||
+||admin_getMetrics||  ||
+||admin_getRestrictionInfo||  ||
+||admin_setAppProperties||  ||
+||admin_setRestrictionInfo||  ||
+||application_getPublicInfo||  ||
+||auth_createToken||  ||
+||auth_expireSession||  ||
+||auth_getSession||  ||
+||auth_promoteSession||  ||
+||auth_revokeAuthorization||  ||
+||auth_revokeExtendedPermission||  ||
+||batch_run||  ||
+||comments_add||  ||
+||comments_get||  ||
+||comments_remove||  ||
+||connect_getUnconnectedFriendsCount||  ||
+||connect_registerUsers||  ||
+||connect_unregisterUsers||  ||
+||data_getCookies||  ||
+||data_setCookie||  ||
+||events_cancel||  ||
+||events_create||  ||
+||events_edit||  ||
+||events_get||  ||
+||events_getMembers||  ||
+||events_rsvp||  ||
+||fbml_deleteCustomTags||  ||
+||fbml_getCustomTags||  ||
+||fbml_refreshImgSrc||  ||
+||fbml_refreshRefUrl||  ||
+||fbml_registerCustomTags||  ||
+||fbml_setRefHandle||  ||
+||feed_deactivateTemplateBundleByID||  ||
+||feed_getRegisteredTemplateBundleByID||  ||
+||feed_getRegisteredTemplateBundles||  ||
+||feed_publishTemplatizedAction||  ||
+||feed_publishUserAction||  ||
+||feed_registerTemplateBundle||  ||
+||fql_multiquery||  ||
+||fql_query||  ||
+||friends_areFriends||  ||
+||friends_get||  ||
+||friends_getAppUsers||  ||
+||friends_getLists||  ||
+||friends_getMutualFriends||  ||
+||groups_get||  ||
+||groups_getMembers||  ||
+||intl_getTranslations||  ||
+||intl_uploadNativeStrings||  ||
+||links_get||  ||
+||links_post||  ||
+||liveMessage_send||  ||
+||message_getThreadsInFolder||  ||
+||notes_create||  ||
+||notes_delete||  ||
+||notes_edit||  ||
+||notes_get||  ||
+||notifications_get||  ||
+||notifications_getList||  ||
+||notifications_markRead||  ||
+||notifications_send||  ||
+||notifications_sendEmail||  ||
+||pages_getInfo||  ||
+||pages_isAdmin||  ||
+||pages_isAppAdded||  ||
+||pages_isFan||  ||
+||photos_addTag||  ||
+||photos_createAlbum||  ||
+||photos_getTags||  ||
+||photos_upload||  ||
+||photos_getAlbums||  ||
+||photos_get||  ||
+||profile_getFBML||  ||
+||profile_getInfo||  ||
+||profile_getInfoOptions||  ||
+||profile_setFBML||  ||
+||profile_setInfo||  ||
+||profile_setInfoOptions||  ||
+||sms_canSend||  ||
+||sms_send||  ||
+||status_set||  ||
+||status_get||  ||
+||stream_addComment||  ||
+||stream_addLike||  ||
+||stream_get||  ||
+||stream_getComments||  ||
+||stream_getFilters||  ||
+||stream_publish||  ||
+||stream_remove||  ||
+||stream_removeComment||  ||
+||stream_removeLike||  ||
+||users_getInfo||  ||
+||users_getLoggedInUser||  ||
+||users_getStandardInfo||  ||
+||users_hasAppPermission||  |||
+|users_isAppUser||  ||
+||users_isVerified||  ||
+||users_setStatus||  ||
+||video_getUploadLimits||  ||
+||video_upload||  ||
 = Details =
 
 Add your content here.  Format your content with:
