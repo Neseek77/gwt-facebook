@@ -93,10 +93,10 @@
 ||stream_addComment|| YES ||
 ||stream_addLike|| YES ||
 ||stream_get|| YES  ||
-||stream_getComments||  ||
+||stream_getComments|| YES ||
 ||stream_getFilters||  ||
 ||stream_publish||  ||
-||stream_remove||  ||
+||stream_remove|| YES ||
 ||stream_removeComment||  ||
 ||stream_removeLike|| YES ||
 ||users_getInfo||  ||
