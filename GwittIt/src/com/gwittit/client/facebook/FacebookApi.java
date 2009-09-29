@@ -99,14 +99,14 @@ public class FacebookApi {
 		GWT.log(lp + " called", null);
 
 		JSONObject p = getDefaultParams();
-		
-		copyAllParams( p, params, "viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata"); 
+
+		copyAllParams(p, params,"viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata");
 
 		// Create native callback and parse response.
 		final AsyncCallback<JSONValue> c = new AsyncCallback<JSONValue>() {
 
 			public void onSuccess(JSONValue jv) {
-				GWT.log ( FacebookApi.class + ": stream.get got response", null );
+				GWT.log(FacebookApi.class + ": stream.get got response", null);
 				List<Stream> result = new ArrayList<Stream>();
 
 				JSONValue value = jv.isObject().get("posts");
@@ -118,6 +118,7 @@ public class FacebookApi {
 					Stream stream = new Stream(o);
 					result.add(stream);
 				}
+				GWT.log( FacebookApi.class + ": result size = " + result.size(), null );
 				ac.onSuccess(result);
 			}
 
@@ -242,7 +243,7 @@ public class FacebookApi {
 		// Create javascript native callback and parse response
 		AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue>() {
 
-			public void onFailure(Throwable t ) {
+			public void onFailure(Throwable t) {
 				callback.onFailure(t);
 			}
 
@@ -310,7 +311,8 @@ public class FacebookApi {
 
 	}
 
-	public void admin_getRestrictionInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void admin_getRestrictionInfo(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -320,12 +322,14 @@ public class FacebookApi {
 
 	}
 
-	public void admin_setRestrictionInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void admin_setRestrictionInfo(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void application_getPublicInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void application_getPublicInfo(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -350,12 +354,14 @@ public class FacebookApi {
 
 	}
 
-	public void auth_revokeAuthorization(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void auth_revokeAuthorization(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void auth_revokeExtendedPermission(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void auth_revokeExtendedPermission(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -391,7 +397,8 @@ public class FacebookApi {
 
 	}
 
-	public void connect_unregisterUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void connect_unregisterUsers(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -456,7 +463,8 @@ public class FacebookApi {
 
 	}
 
-	public void fbml_registerCustomTags(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void fbml_registerCustomTags(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -484,7 +492,8 @@ public class FacebookApi {
 
 	}
 
-	public void feed_publishTemplatizedAction(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void feed_publishTemplatizedAction(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -494,7 +503,8 @@ public class FacebookApi {
 
 	}
 
-	public void feed_registerTemplateBundle(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void feed_registerTemplateBundle(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -527,7 +537,8 @@ public class FacebookApi {
 
 	}
 
-	public void friends_getMutualFriends(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void friends_getMutualFriends(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -547,7 +558,8 @@ public class FacebookApi {
 
 	}
 
-	public void intl_uploadNativeStrings(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void intl_uploadNativeStrings(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -567,7 +579,8 @@ public class FacebookApi {
 
 	}
 
-	public void message_getThreadsInFolder(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void message_getThreadsInFolder(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -612,7 +625,8 @@ public class FacebookApi {
 
 	}
 
-	public void notifications_sendEmail(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void notifications_sendEmail(Map<String, String> params,
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -763,7 +777,7 @@ public class FacebookApi {
 	public void status_set(Map<String, String> params, AsyncCallback<JSONValue> c) {
 
 		JSONObject p = getDefaultParams();
-		copyAllParams(p, params, "status,uid");
+		copyAllParams(p, params, "*status,uid");
 		callMethod("users.setStatus", p.getJavaScriptObject(), c);
 	}
 
@@ -979,8 +993,7 @@ public class FacebookApi {
 	 * In order to remove a post from a user's Wall, the user must grant your
 	 * application the publish_stream extended permission.
 	 * 
-	 * Parameters 
-	 * Required Name Type Description optional
+	 * Parameters Required Name Type Description optional
 	 * 
 	 * @param session_key
 	 *            string The session key of the logged in user. The session key
@@ -1003,16 +1016,52 @@ public class FacebookApi {
 	 */
 	public void stream_remove(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
-		copyAllParams (p,params,"session_key,uid,*post_id" );
-		callMethod ( "stream.remove",p.getJavaScriptObject(),callback);
-		
+		copyAllParams(p, params, "session_key,uid,*post_id");
+		callMethod("stream.remove", p.getJavaScriptObject(), callback);
+
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * This method removes a comment from a post.
+	 * 
+	 * Privacy rules apply to the posts from which the user can delete comments;
+	 * if the post is on the user's Wall, any comment can be deleted. If the
+	 * post is on a friend's Wall, only comments made by the user can be
+	 * deleted.
+	 * 
+	 * Desktop applications must pass a valid session key, and can remove
+	 * comments made by the user associated with that session key only. Other
+	 * applications can delete any comments, provided you have a valid post_id.
+	 * 
+	 * In order to remove a comment, the user must grant your application the
+	 * publish_stream extended permission.
+	 * 
+	 * optional
+	 * 
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. Desktop
+	 *            applications must pass a valid session key (and have been
+	 *            granted the publish_stream extended permission); other
+	 *            applications need only the publish_stream extended permission.
+	 * @param uid
+	 *            string The user ID of the user who made the comment. If this
+	 *            parameter is not specified, then it defaults to the session
+	 *            user. Note: This parameter applies only to Web applications
+	 *            and is required by them only if the session_key is not
+	 *            specified. Facebook ignores this parameter if it is passed by
+	 *            a desktop application. 
+	 * required
+	 * 
+	 * @param comment_id
+	 *            string The ID for the comment you want to remove.
+	 */
 	public void stream_removeComment(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
-
+		JSONObject obj = getDefaultParams();
+		copyAllParams(obj, params, "session_key,uid,*comment_id" );
+		callMethod ( "stream.removeComment", obj.getJavaScriptObject(), callback );
 	}
 
 	/**
@@ -1022,7 +1071,8 @@ public class FacebookApi {
 		stream_addOrRemoveLike(params, false, callback);
 	}
 
-	private void stream_addOrRemoveLike(Map<String, String> params, boolean add, AsyncCallback<JSONValue> callback) {
+	private void stream_addOrRemoveLike(Map<String, String> params, boolean add,
+			AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,*post_id");
 		callMethod(add ? "stream.addLike" : "stream.removeLike", p.getJavaScriptObject(), callback);
@@ -1125,10 +1175,9 @@ public class FacebookApi {
 	private void callMethod(String method, JavaScriptObject params, AsyncCallback callback) {
 		callMethod(method, params, callback, "json");
 	}
-	
 
-
-	private native void callMethod(String method, JavaScriptObject params, AsyncCallback callback, String returnType)/*-{
+	private native void callMethod(String method, JavaScriptObject params, AsyncCallback callback,
+			String returnType)/*-{
 		var app=this;
 		$wnd.FB_RequireFeatures(["Api"], function(){			
 			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
@@ -1156,7 +1205,7 @@ public class FacebookApi {
 	 * Callbacks
 	 */
 	public void callbackError(AsyncCallback<JSONValue> callback, JavaScriptObject value) {
-		callback.onFailure( new Exception ( "" + new JSONObject(value) ) );
+		callback.onFailure(new Exception("" + new JSONObject(value)));
 	}
 
 	/**
