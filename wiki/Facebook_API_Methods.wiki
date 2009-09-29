@@ -2,6 +2,7 @@
 
 = This list of api methods that should be implemented =
 
+
 || *Method* || *Implemented* || *Version ||
 ||admin.banUsers||  ||
 ||admin.unbanUsers||  ||
@@ -47,12 +48,12 @@
 ||feed.publishUserAction||  ||
 ||feed.registerTemplateBundle||  ||
 ||fql.multiquery||  ||
-||fql.query|| YES ||
-||friends.areFriends||  ||
-||friends.get||  ||
-||friends.getAppUsers||  ||
-||friends.getLists||  ||
-||friends.getMutualFriends||  ||
+||fql.query|| YES || 1.0 ||
+||friends.areFriends|| || 1.0 ||
+||friends.get||  || 1.0 ||
+||friends.getAppUsers||  || 1.0 ||
+||friends.getLists||  || 1.0 ||
+||friends.getMutualFriends||  || 1.0 ||
 ||groups.get||  ||
 ||groups.getMembers||  ||
 ||intl.getTranslations||  ||
@@ -89,22 +90,22 @@
 ||sms.canSend||  ||
 ||sms.send||  ||
 ||status.set|| YES || 1.0 ||
-||status.get|| YES ||
-||stream.addComment|| YES ||
-||stream.addLike|| YES ||
-||stream.get|| YES  ||
-||stream.getComments|| YES ||
-||stream.getFilters|| YES ||
+||status.get|| YES || 1.0 ||
+||stream.addComment|| YES || 1.0 ||
+||stream.addLike|| YES || 1.0 ||
+||stream.get|| YES  || 1.0 ||
+||stream.getComments|| YES || 1.0 ||
+||stream.getFilters|| YES || 1.0 ||
 ||stream.publish||  ||
-||stream.remove|| YES ||
-||stream.removeComment|| YES ||
-||stream.removeLike|| YES ||
+||stream.remove|| YES || 1.0 ||
+||stream.removeComment|| YES || 1.0 ||
+||stream.removeLike|| YES || 1.0 ||
 ||users.getInfo||  ||
 ||users.getLoggedInUser||  ||
 ||users.getStandardInfo||  ||
 ||users.hasAppPermission||  ||
 ||users.isAppUser||  ||
 ||users.isVerified||  ||
-||users.setStatus|| YES  ||
+||users.setStatus|| YES  || 1.0 ||
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
