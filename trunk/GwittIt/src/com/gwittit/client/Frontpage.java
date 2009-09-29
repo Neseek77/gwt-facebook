@@ -8,8 +8,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -17,7 +15,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -26,10 +23,8 @@ import com.gwittit.client.events.DefaultEventHandler;
 import com.gwittit.client.examples.Example;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.FacebookCallback;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.entities.Stream;
-import com.gwittit.client.facebook.xfbml.FbLiveStream;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 
@@ -207,12 +202,11 @@ public class Frontpage extends Example implements ClickHandler {
 		Map<String,String> params = new HashMap<String,String> ();
 		params.put("uid", inputTextArea.getValue() );
 		
-		api.status_set( params, new FacebookCallback () {
-			public void onError(JSONValue jo) {
+		api.status_set( params, new AsyncCallback<JSONValue> () {
+			public void onFailure ( Throwable t ) {
 				Window.alert ( "Failed " );
 			}
-			public void onSuccess(JSONValue v) {
-				
+			public void onSuccess ( JSONValue v ) {
 				Stream stream = new Stream ();
 				stream.setMessage( inputTextArea.getValue() );
 				stream.setSourceId( UserInfo.getUidLong() );
