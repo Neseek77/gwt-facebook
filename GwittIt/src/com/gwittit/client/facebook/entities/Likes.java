@@ -3,6 +3,7 @@ package com.gwittit.client.facebook.entities;
 
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
@@ -25,7 +26,7 @@ public class Likes {
 	/**
 	 * The total number of times users like the post. 
 	 */
-	private int count; 
+	private Integer count; 
 	
 	/**
 	 * A sample of users who like the post. 
@@ -84,11 +85,28 @@ public class Likes {
 	 * Create a new instance, parse the json value
 	 */
 	public  Likes ( JSONValue v ) {
+		GWT.log( Likes.class + ": create " + v , null );
+
+		if ( v == null ) {
+			return ; 
+		}
+		
 		JSONObject o = v.isObject();
+		
+		if ( o == null ) {
+			return ; 
+		}
+		try {
+			
 		href = JsonUtil.getString(o, "href");
+		
 		count = JsonUtil.getInt(o, "count" );
 		userLikes = JsonUtil.getBoolean(o,"user_likes");
 		canLike = JsonUtil.getBoolean(o, "can_like");
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			GWT.log ( Likes.class + ": failed to create Likes ", e );
+		}
 	}
 
 	
@@ -100,7 +118,10 @@ public class Likes {
 		this.href = href;
 	}
 
-	public int getCount() {
+	public Integer getCount() {
+		if ( count == null ) {
+			return 0;
+		}
 		return count;
 	}
 
@@ -108,7 +129,7 @@ public class Likes {
 		return isUserLikes() ? getCount()-1 : getCount();
 		
 	}
-	public void setCount(int count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
 

@@ -11,7 +11,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -20,7 +19,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.entities.Stream;
-import com.gwittit.client.facebook.entities.StreamFilter;
 import com.gwittit.client.facebook.ui.StreamUi;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
@@ -30,8 +28,6 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 public class FacebookStream extends Composite {
 
 	private VerticalPanel outer = new VerticalPanel();
-
-	private FlowPanel streamFilterPnl = new FlowPanel();
 
 	private VerticalPanel streamListing = new VerticalPanel();
 
@@ -60,15 +56,12 @@ public class FacebookStream extends Composite {
 		streamListing.getElement().setId("StreamListing");
 		streamListing.addStyleName("streamListing");
 
-		streamFilterPnl.addStyleName("streamFilter");
-
-		outer.add(streamFilterPnl);
-		// ask.setHTML(
-		// "<img src=/fb_permission.png> Click to enable facebook stream in Gwittee"
-		// );
 
 		GWT.log("FacebookStream: Checking app permission", null);
 
+		/**
+		 * Check if user has read_stream permission before calling stream.get
+		 */
 		apiClient.users_hasAppPermission(
 				com.gwittit.client.facebook.FacebookApi.Permission.read_stream,
 				new AsyncCallback<Boolean>() {
@@ -79,7 +72,6 @@ public class FacebookStream extends Composite {
 
 					public void onSuccess(Boolean result) {
 						if (result) {
-							renderStreamFilter();
 							renderStream();
 						} else {
 
@@ -93,18 +85,32 @@ public class FacebookStream extends Composite {
 		initWidget(outer);
 	}
 
+	/**
+	 * Get filter key
+	 * @return
+	 */
 	public String getFilterKey() {
 		return filterKey;
 	}
 
+	/**
+	 * Set filter key
+	 * @param filterKey
+	 */
 	public void setFilterKey(String filterKey) {
 		this.filterKey = filterKey;
 	}
 
+	/**
+	 * Refresh stream
+	 */
 	public void refresh() {
 		renderStream();
 	}
 
+	/**
+	 * Create a panel that displays permission link to user for read_stream
+	 */
 	private Panel createUnlockPanel() {
 		final VerticalPanel inner = new VerticalPanel();
 
@@ -131,12 +137,9 @@ public class FacebookStream extends Composite {
 		return outer;
 	}
 
-	public void addFirst(Stream stream) {
-
-		StreamUi su = new StreamUi(stream);
-		streamListing.insert(su, 0);
-	}
-
+	/**
+	 * Ask user for publish permission
+	 */
 	public void askForPermission() {
 		FacebookConnect.showPermissionDialog(FacebookApi.Permission.read_stream,
 				new AsyncCallback<Boolean>() {
@@ -154,17 +157,10 @@ public class FacebookStream extends Composite {
 				});
 	}
 
-	/*
-	 * public native void askForPermission ()/*-{ var app=this;
-	 * 
-	 * $wnd.FB.Connect.showPermissionDialog("read_stream", function(x) {
-	 * app.@com
-	 * .gwittit.client.FacebookStream::handlePermission(Ljava/lang/String;)(x);
-	 * }, true, null);
-	 * 
-	 * }-
-	 */;
-
+	
+	/**
+	 * Render permission response
+	 */
 	public void handlePermission(String s) {
 		if ("read_stream".equals(s)) {
 			outer.remove(unlockPnl);
@@ -172,9 +168,13 @@ public class FacebookStream extends Composite {
 		}
 	}
 
-	private void renderStream() {
+	/**
+	 * Render stream based
+	 */
+	public void renderStream() {
 		GWT.log("FacebookStream: render Stream", null);
-		streamListing.add(ajaxLoader);
+		
+		streamListing.insert(ajaxLoader, 0);
 
 		Map<String, String> params = new HashMap<String, String>();
 
@@ -200,6 +200,7 @@ public class FacebookStream extends Composite {
 						streamListing.add(new StreamUi(s));
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					Window.alert("Exception " + e);
 				}
 				Xfbml.parse(streamListing.getElement());
@@ -208,45 +209,6 @@ public class FacebookStream extends Composite {
 		});
 	}
 
-	public void renderStreamFilter() {
-
-		streamFilterPnl.add(ajaxLoader);
-
-		Map<String, String> params = new HashMap<String, String>();
-		apiClient.stream_getFilters(params, new AsyncCallback<List<StreamFilter>>() {
-
-			public void onFailure(Throwable caught) {
-				Window.alert(FacebookStream.class + ": Failure" + caught);
-			}
-
-			public void onSuccess(List<StreamFilter> result) {
-
-				streamFilterPnl.remove(ajaxLoader);
-
-				for (final StreamFilter sf : result) {
-
-					Anchor a = new Anchor();
-					a.setHTML("<img src=\"" + sf.getIconUrl() + "\"/>");
-					a.setTitle(sf.getName());
-					a.addStyleName("clickable");
-					a.addClickHandler(new ClickHandler() {
-
-						public void onClick(ClickEvent event) {
-							setFilterKey(sf.getFilterKey());
-							renderStream();
-							// Window.alert ( "Name:" + sf.getName() +
-							// ", FilterKey: " + sf.getFilterKey() + " , Rank:"
-							// + sf.getRank() );
-						}
-
-					});
-
-					streamFilterPnl.add(a);
-				}
-
-			}
-
-		});
-	}
+	
 
 }

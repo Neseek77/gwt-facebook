@@ -12,6 +12,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -38,8 +39,6 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	// TopMenu displayed on every page
 	private TopMenuGwittee topMenu;
 
-	// Menubar on the left
-	private VerticalPanel menu = new VerticalPanel ();
 	
 	private Frontpage frontpage;
 
@@ -107,15 +106,13 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			setLeftMargin();
 
 			
-			menu.addStyleName("menu");
-			menu.add ( wrapMenuItem ( streamGetLink ) );
-			menu.add ( wrapMenuItem ( photosGetLink ) );
 			
-			streamGetLink.addClickHandler(this);
-			photosGetLink.addClickHandler(this);
 			
 			// Add the app.
 			frontpage = new Frontpage ( apiClient, eventBus );
+			
+			Panel menu = frontpage.getMenu ();
+			
 			
 			inner.add ( menu );
 			inner.add ( example );
@@ -150,16 +147,6 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			Window.alert ( "unkown path " + hash );
 		}
 
-	}
-
-	/**
-	 * Wrap menu item in a div tag.
-	 */
-	private Widget wrapMenuItem  ( Anchor anchor ) {
-		SimplePanel menuItem = new SimplePanel ();
-		menuItem.addStyleName("menuItem");
-		menuItem.setWidget( anchor );
-		return menuItem;
 	}
 
 	
