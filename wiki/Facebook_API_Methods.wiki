@@ -50,7 +50,7 @@
 ||fql.multiquery||  ||
 ||fql.query|| YES || 1.0 ||
 ||friends.areFriends|| || 1.0 ||
-||friends.get||  || 1.0 ||
+||friends.get|| YES || 1.0 ||
 ||friends.getAppUsers||  || 1.0 ||
 ||friends.getLists||  || 1.0 ||
 ||friends.getMutualFriends||  || 1.0 ||
