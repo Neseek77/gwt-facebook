@@ -90,11 +90,12 @@
 ||sms.send||  ||
 ||status.set|| YES ||
 ||status.get|| YES ||
+=Stream=
 ||stream.addComment|| YES ||
 ||stream.addLike|| YES ||
 ||stream.get|| YES  ||
 ||stream.getComments|| YES ||
-||stream.getFilters||  ||
+||stream.getFilters|| YES ||
 ||stream.publish||  ||
 ||stream.remove|| YES ||
 ||stream.removeComment|| YES ||
