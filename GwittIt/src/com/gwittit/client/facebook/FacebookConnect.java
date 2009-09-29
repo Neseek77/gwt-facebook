@@ -8,7 +8,6 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.events.EventHelper;
-import com.gwittit.client.facebook.events.LoginEvent;
 
 
 /**
@@ -27,9 +26,9 @@ public class FacebookConnect {
 	 */
 	public static void showPermissionDialog ( final FacebookApi.Permission permission, final AsyncCallback<Boolean> callback ) {
 		
-		FacebookCallback nativeCallback = new FacebookCallback () {
-			public void onError(JSONValue jv) {
-				Window.alert( "Error");
+		AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue> () {
+			public void onFailure(Throwable t ) {
+				Window.alert(FacebookConnect.class + ": showPermissionDialog failed " + t );
 			}
 			public void onSuccess(JSONValue o) {
 				
@@ -58,12 +57,12 @@ public class FacebookConnect {
 	/**
 	 * Native show permission
 	 */
-	static native void showPermissionDialogNative  ( String permission, FacebookCallback callback )/*-{
+	static native void showPermissionDialogNative  ( String permission, AsyncCallback<JSONValue> callback )/*-{
 	
 		$wnd.FB.Connect.showPermissionDialog( permission, 
 			function(x)
 			{ 
-				@com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,x,null,null);
+				@com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,x,null,null);
 			}, 
 			true,  null);	
 	
@@ -77,10 +76,10 @@ public class FacebookConnect {
 	 */
 	public static void requireSession( final AsyncCallback<Boolean> callback ){
 	
-		FacebookCallback nativeCallback = new FacebookCallback () {
+		AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue> () {
 
-			public void onError(JSONValue jv) {
-				Window.alert ( "Call failed");
+			public void onFailure(Throwable t ) {
+				Window.alert ( FacebookConnect.class + ": requireSession failed " + t );
 			}
 
 			//It shou
@@ -92,10 +91,10 @@ public class FacebookConnect {
 	}
 	
 	
-	static native void requireSessionNative ( final FacebookCallback callback )/*-{
+	static native void requireSessionNative ( final AsyncCallback<JSONValue> callback )/*-{
 		
 		$wnd.FB.Connect.requireSession(function(x,y){
-			@com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,null,x,y);
+			@com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,null,x,y);
 		});
 		
 	}-*/;
@@ -108,9 +107,9 @@ public class FacebookConnect {
 	 * @param success
 	 * @param error
 	 */
-	static void onSuccess ( FacebookCallback callback, String successString, JavaScriptObject  success, JavaScriptObject error ) {
+	static void onSuccess ( AsyncCallback<JSONValue> callback, String successString, JavaScriptObject  success, JavaScriptObject error ) {
 		if( error != null ) {
-			callback.onError(new JSONObject ( error ) );
+			callback.onFailure ( new Exception ( ""+new JSONObject ( error ) ) );
 		} else if ( successString != null ) {
 			JSONString s = new JSONString ( successString );
 			callback.onSuccess(s);
@@ -154,10 +153,10 @@ public class FacebookConnect {
 		
 		
 		// Create a local callback to deal with login.
-		FacebookCallback cb = new FacebookCallback () {
+		AsyncCallback<JSONValue> cb = new AsyncCallback<JSONValue> () {
 
-			public void onError(JSONValue o) {
-				Window.alert ( "Error occured on login : " + o );
+			public void onFailure(Throwable t ) {
+				Window.alert ( "Error occured on login : " + t );
 			}
 
 			public void onSuccess(JSONValue o) {
@@ -185,9 +184,9 @@ public class FacebookConnect {
 	 * Define a javascript function wich is called by facebook when a user logs in.
 	 * @param callback
 	 */
-	private static native void defineFacebookConnectLogin( FacebookCallback callback ) /*-{
+	private static native void defineFacebookConnectLogin( AsyncCallback<JSONValue> callback ) /*-{
 		$wnd.facebookConnectLogin = function() {
-		    @com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/gwittit/client/facebook/FacebookCallback;)(callback);
+		    @com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;)(callback);
 		};
 	}-*/;
 	
@@ -195,7 +194,7 @@ public class FacebookConnect {
 	/**
 	 * Called when a user successfully logs in.
 	 */
-	public static void onSuccess ( FacebookCallback callback ) {
+	public static void onSuccess ( AsyncCallback<JSONValue> callback ) {
 		if ( callback == null ) {
 			throw new IllegalArgumentException ( "callback null");
 		}

@@ -99,26 +99,14 @@ public class FacebookApi {
 		GWT.log(lp + " called", null);
 
 		JSONObject p = getDefaultParams();
-		p.put("session_key", new JSONString(UserInfo.getSessionKey()));
-
-		if (params != null) {
-			copyParams(p, params, "viewer_id");
-			copyParams(p, params, "source_ids");
-			copyParams(p, params, "start_time");
-			copyParams(p, params, "end_time");
-			copyParams(p, params, "limit");
-			copyParams(p, params, "filter_key");
-			copyParams(p, params, "metadata");
-		}
+		
+		copyAllParams( p, params, "viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata"); 
 
 		// Create native callback and parse response.
-		final FacebookCallback c = new FacebookCallback() {
-
-			public void onError(JSONValue v) {
-				ac.onFailure(null);
-			}
+		final AsyncCallback<JSONValue> c = new AsyncCallback<JSONValue>() {
 
 			public void onSuccess(JSONValue jv) {
+				GWT.log ( FacebookApi.class + ": stream.get got response", null );
 				List<Stream> result = new ArrayList<Stream>();
 
 				JSONValue value = jv.isObject().get("posts");
@@ -131,6 +119,10 @@ public class FacebookApi {
 					result.add(stream);
 				}
 				ac.onSuccess(result);
+			}
+
+			public void onFailure(Throwable caught) {
+				ac.onFailure(null);
 			}
 
 		};
@@ -207,9 +199,9 @@ public class FacebookApi {
 		JSONObject p = getDefaultParams();
 		p.put("ext_perm", new JSONString(permission.toString()));
 
-		final FacebookCallback fc = new FacebookCallback() {
-			public void onError(JSONValue jv) {
-				callback.onFailure(new Exception(jv + ""));
+		AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue>() {
+			public void onFailure(Throwable t) {
+				callback.onFailure(t);
 			}
 
 			public void onSuccess(JSONValue jv) {
@@ -217,7 +209,7 @@ public class FacebookApi {
 				callback.onSuccess("1".equals(result.isString().stringValue()));
 			}
 		};
-		callMethod("users.hasAppPermission", p.getJavaScriptObject(), fc);
+		callMethod("users.hasAppPermission", p.getJavaScriptObject(), nativeCallback);
 	}
 
 	/*
@@ -226,7 +218,7 @@ public class FacebookApi {
 	 * @see com.gwittit.client.facebook.FacebookApi#fql_query(java.lang.String,
 	 * com.gwittit.client.facebook.FacebookCallback)
 	 */
-	public void fql_query(String fql, FacebookCallback callback) {
+	public void fql_query(String fql, AsyncCallback<JSONValue> callback) {
 
 		Map<String, String> params = new HashMap();
 		params.put("query", fql);
@@ -245,14 +237,13 @@ public class FacebookApi {
 	public void photos_getAlbums(Map<String, String> params,
 			final AsyncCallback<List<Album>> callback) {
 		JSONObject p = getDefaultParams();
-		copyParams(p, params, "uid");
-		copyParams(p, params, "aids");
+		copyAllParams(p, params, "uid,aids");
 
 		// Create javascript native callback and parse response
-		FacebookCallback nativeCallback = new FacebookCallback() {
+		AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue>() {
 
-			public void onError(JSONValue jv) {
-				callback.onFailure(new Exception(jv + ""));
+			public void onFailure(Throwable t ) {
+				callback.onFailure(t);
 			}
 
 			public void onSuccess(JSONValue jv) {
@@ -283,239 +274,237 @@ public class FacebookApi {
 	 * @see com.gwittit.client.facebook.FacebookApi#photos_get(java.util.Map,
 	 * com.gwittit.client.facebook.FacebookCallback)
 	 */
-	public void photos_get(final Map<String, String> params, final FacebookCallback callback) {
+	public void photos_get(final Map<String, String> params, final AsyncCallback<JSONValue> callback) {
 		JSONObject obj = getDefaultParams();
-		copyParams(obj, params, "subj_id");
-		copyParams(obj, params, "aid");
-		copyParams(obj, params, "pids");
+		copyAllParams(obj, params, "subj_id,aid,pids");
 		callMethod("photos.get", obj.getJavaScriptObject(), callback);
 	}
 
-	public void admin_banUsers(Map<String, String> params, FacebookCallback callback) {
+	public void admin_banUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_unbanUsers(Map<String, String> params, FacebookCallback callback) {
+	public void admin_unbanUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_getAllocation(Map<String, String> params, FacebookCallback callback) {
+	public void admin_getAllocation(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_getAppProperties(Map<String, String> params, FacebookCallback callback) {
+	public void admin_getAppProperties(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_getBannedUsers(Map<String, String> params, FacebookCallback callback) {
+	public void admin_getBannedUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_getMetrics(Map<String, String> params, FacebookCallback callback) {
+	public void admin_getMetrics(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_getRestrictionInfo(Map<String, String> params, FacebookCallback callback) {
+	public void admin_getRestrictionInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_setAppProperties(Map<String, String> params, FacebookCallback callback) {
+	public void admin_setAppProperties(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void admin_setRestrictionInfo(Map<String, String> params, FacebookCallback callback) {
+	public void admin_setRestrictionInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void application_getPublicInfo(Map<String, String> params, FacebookCallback callback) {
+	public void application_getPublicInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void auth_createToken(Map<String, String> params, FacebookCallback callback) {
+	public void auth_createToken(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void auth_expireSession(Map<String, String> params, FacebookCallback callback) {
+	public void auth_expireSession(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void auth_getSession(Map<String, String> params, FacebookCallback callback) {
+	public void auth_getSession(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void auth_promoteSession(Map<String, String> params, FacebookCallback callback) {
+	public void auth_promoteSession(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void auth_revokeAuthorization(Map<String, String> params, FacebookCallback callback) {
+	public void auth_revokeAuthorization(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void auth_revokeExtendedPermission(Map<String, String> params, FacebookCallback callback) {
+	public void auth_revokeExtendedPermission(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void batch_run(Map<String, String> params, FacebookCallback callback) {
+	public void batch_run(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void comments_add(Map<String, String> params, FacebookCallback callback) {
+	public void comments_add(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void comments_get(Map<String, String> params, FacebookCallback callback) {
+	public void comments_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void comments_remove(Map<String, String> params, FacebookCallback callback) {
+	public void comments_remove(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void connect_getUnconnectedFriendsCount(Map<String, String> params,
-			FacebookCallback callback) {
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void connect_registerUsers(Map<String, String> params, FacebookCallback callback) {
+	public void connect_registerUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void connect_unregisterUsers(Map<String, String> params, FacebookCallback callback) {
+	public void connect_unregisterUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void data_getCookies(Map<String, String> params, FacebookCallback callback) {
+	public void data_getCookies(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void data_setCookie(Map<String, String> params, FacebookCallback callback) {
+	public void data_setCookie(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void events_cancel(Map<String, String> params, FacebookCallback callback) {
+	public void events_cancel(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void events_create(Map<String, String> params, FacebookCallback callback) {
+	public void events_create(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void events_edit(Map<String, String> params, FacebookCallback callback) {
+	public void events_edit(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void events_get(Map<String, String> params, FacebookCallback callback) {
+	public void events_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void events_getMembers(Map<String, String> params, FacebookCallback callback) {
+	public void events_getMembers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void events_rsvp(Map<String, String> params, FacebookCallback callback) {
+	public void events_rsvp(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void fbml_deleteCustomTags(Map<String, String> params, FacebookCallback callback) {
+	public void fbml_deleteCustomTags(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void fbml_getCustomTags(Map<String, String> params, FacebookCallback callback) {
+	public void fbml_getCustomTags(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void fbml_refreshImgSrc(Map<String, String> params, FacebookCallback callback) {
+	public void fbml_refreshImgSrc(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void fbml_refreshRefUrl(Map<String, String> params, FacebookCallback callback) {
+	public void fbml_refreshRefUrl(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void fbml_registerCustomTags(Map<String, String> params, FacebookCallback callback) {
+	public void fbml_registerCustomTags(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void fbml_setRefHandle(Map<String, String> params, FacebookCallback callback) {
+	public void fbml_setRefHandle(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void feed_deactivateTemplateBundleByID(Map<String, String> params,
-			FacebookCallback callback) {
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void feed_getRegisteredTemplateBundleByID(Map<String, String> params,
-			FacebookCallback callback) {
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void feed_getRegisteredTemplateBundles(Map<String, String> params,
-			FacebookCallback callback) {
+			AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void feed_publishTemplatizedAction(Map<String, String> params, FacebookCallback callback) {
+	public void feed_publishTemplatizedAction(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void feed_publishUserAction(Map<String, String> params, FacebookCallback callback) {
+	public void feed_publishUserAction(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void feed_registerTemplateBundle(Map<String, String> params, FacebookCallback callback) {
+	public void feed_registerTemplateBundle(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void fql_multiquery(Map<String, String> params, FacebookCallback callback) {
+	public void fql_multiquery(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void friends_areFriends(Map<String, String> params, FacebookCallback callback) {
+	public void friends_areFriends(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -523,187 +512,187 @@ public class FacebookApi {
 	/*
 	 * 
 	 */
-	public void friends_get(Map<String, String> params, FacebookCallback callback) {
+	public void friends_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
 		callMethod("friends.get", p.getJavaScriptObject(), callback);
 	}
 
-	public void friends_getAppUsers(Map<String, String> params, FacebookCallback callback) {
+	public void friends_getAppUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void friends_getLists(Map<String, String> params, FacebookCallback callback) {
+	public void friends_getLists(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void friends_getMutualFriends(Map<String, String> params, FacebookCallback callback) {
+	public void friends_getMutualFriends(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void groups_get(Map<String, String> params, FacebookCallback callback) {
+	public void groups_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void groups_getMembers(Map<String, String> params, FacebookCallback callback) {
+	public void groups_getMembers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void intl_getTranslations(Map<String, String> params, FacebookCallback callback) {
+	public void intl_getTranslations(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void intl_uploadNativeStrings(Map<String, String> params, FacebookCallback callback) {
+	public void intl_uploadNativeStrings(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void links_get(Map<String, String> params, FacebookCallback callback) {
+	public void links_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void links_post(Map<String, String> params, FacebookCallback callback) {
+	public void links_post(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void liveMessage_send(Map<String, String> params, FacebookCallback callback) {
+	public void liveMessage_send(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void message_getThreadsInFolder(Map<String, String> params, FacebookCallback callback) {
+	public void message_getThreadsInFolder(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notes_create(Map<String, String> params, FacebookCallback callback) {
+	public void notes_create(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notes_delete(Map<String, String> params, FacebookCallback callback) {
+	public void notes_delete(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notes_edit(Map<String, String> params, FacebookCallback callback) {
+	public void notes_edit(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notes_get(Map<String, String> params, FacebookCallback callback) {
+	public void notes_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notifications_get(Map<String, String> params, FacebookCallback callback) {
+	public void notifications_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notifications_getList(Map<String, String> params, FacebookCallback callback) {
+	public void notifications_getList(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notifications_markRead(Map<String, String> params, FacebookCallback callback) {
+	public void notifications_markRead(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notifications_send(Map<String, String> params, FacebookCallback callback) {
+	public void notifications_send(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void notifications_sendEmail(Map<String, String> params, FacebookCallback callback) {
+	public void notifications_sendEmail(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void pages_getInfo(Map<String, String> params, FacebookCallback callback) {
+	public void pages_getInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void pages_isAdmin(Map<String, String> params, FacebookCallback callback) {
+	public void pages_isAdmin(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void pages_isAppAdded(Map<String, String> params, FacebookCallback callback) {
+	public void pages_isAppAdded(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void pages_isFan(Map<String, String> params, FacebookCallback callback) {
+	public void pages_isFan(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void photos_addTag(Map<String, String> params, FacebookCallback callback) {
+	public void photos_addTag(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void photos_createAlbum(Map<String, String> params, FacebookCallback callback) {
+	public void photos_createAlbum(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void photos_getTags(Map<String, String> params, FacebookCallback callback) {
+	public void photos_getTags(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void photos_upload(Map<String, String> params, FacebookCallback callback) {
+	public void photos_upload(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void profile_getFBML(Map<String, String> params, FacebookCallback callback) {
+	public void profile_getFBML(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void profile_getInfo(Map<String, String> params, FacebookCallback callback) {
+	public void profile_getInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void profile_getInfoOptions(Map<String, String> params, FacebookCallback callback) {
+	public void profile_getInfoOptions(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void profile_setFBML(Map<String, String> params, FacebookCallback callback) {
+	public void profile_setFBML(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void profile_setInfo(Map<String, String> params, FacebookCallback callback) {
+	public void profile_setInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void profile_setInfoOptions(Map<String, String> params, FacebookCallback callback) {
+	public void profile_setInfoOptions(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void sms_canSend(Map<String, String> params, FacebookCallback callback) {
+	public void sms_canSend(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void sms_send(Map<String, String> params, FacebookCallback callback) {
+	public void sms_send(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -771,7 +760,7 @@ public class FacebookApi {
 	 *            is not specified. Facebook ignores this parameter if it is
 	 *            passed by a desktop application.
 	 */
-	public void status_set(Map<String, String> params, FacebookCallback c) {
+	public void status_set(Map<String, String> params, AsyncCallback<JSONValue> c) {
 
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "status,uid");
@@ -827,7 +816,7 @@ public class FacebookApi {
 	 *            NOT SUPPORTED int The number of status messages you want to
 	 *            return. (Default value is 100.)
 	 */
-	public void status_get(Map<String, String> params, FacebookCallback callback) {
+	public void status_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 
 		String uid = params.get("uid");
 
@@ -884,7 +873,7 @@ public class FacebookApi {
 	 *            string The text of the comment. This is a plain text parameter
 	 *            only; you cannot format the comment with HTML or FBML.
 	 */
-	public void stream_addComment(Map<String, String> params, FacebookCallback callback) {
+	public void stream_addComment(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		GWT.log("FacbookApi: call method stream.addComment", null);
 		JSONObject p = getDefaultParams();
 
@@ -916,7 +905,7 @@ public class FacebookApi {
 	 *            string The ID of the post. &lt;/p&gt; (non-Javadoc)
 	 * 
 	 */
-	public void stream_addLike(Map<String, String> params, FacebookCallback callback) {
+	public void stream_addLike(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		stream_addOrRemoveLike(params, true, callback);
 		// TODO Auto-generated method stub
 
@@ -936,10 +925,10 @@ public class FacebookApi {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,*post_id");
 
-		FacebookCallback nativeCallback = new FacebookCallback() {
+		AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue>() {
 
-			public void onError(JSONValue v) {
-				callback.onFailure(new Exception(v + ""));
+			public void onFailure(Throwable v) {
+				callback.onFailure(v);
 			}
 
 			public void onSuccess(JSONValue v) {
@@ -965,12 +954,12 @@ public class FacebookApi {
 		callMethod("stream.getComments", p.getJavaScriptObject(), nativeCallback);
 	}
 
-	public void stream_getFilters(Map<String, String> params, FacebookCallback callback) {
+	public void stream_getFilters(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void stream_publish(Map<String, String> params, FacebookCallback callback) {
+	public void stream_publish(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -1012,7 +1001,7 @@ public class FacebookApi {
 	 *            specified. Facebook ignores this parameter if it is passed by
 	 *            a desktop application.
 	 */
-	public void stream_remove(Map<String, String> params, FacebookCallback callback) {
+	public void stream_remove(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams (p,params,"session_key,uid,*post_id" );
 		callMethod ( "stream.remove",p.getJavaScriptObject(),callback);
@@ -1021,7 +1010,7 @@ public class FacebookApi {
 
 	}
 
-	public void stream_removeComment(Map<String, String> params, FacebookCallback callback) {
+	public void stream_removeComment(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -1029,53 +1018,52 @@ public class FacebookApi {
 	/**
 	 * Remove like
 	 */
-	public void stream_removeLike(Map<String, String> params, FacebookCallback callback) {
+	public void stream_removeLike(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		stream_addOrRemoveLike(params, false, callback);
 	}
 
-	private void stream_addOrRemoveLike(Map<String, String> params, boolean add,
-			FacebookCallback callback) {
+	private void stream_addOrRemoveLike(Map<String, String> params, boolean add, AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,*post_id");
 		callMethod(add ? "stream.addLike" : "stream.removeLike", p.getJavaScriptObject(), callback);
 	}
 
-	public void users_getInfo(Map<String, String> params, FacebookCallback callback) {
+	public void users_getInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void users_getLoggedInUser(Map<String, String> params, FacebookCallback callback) {
+	public void users_getLoggedInUser(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void users_getStandardInfo(Map<String, String> params, FacebookCallback callback) {
+	public void users_getStandardInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void users_isAppUser(Map<String, String> params, FacebookCallback callback) {
+	public void users_isAppUser(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void users_isVerified(Map<String, String> params, FacebookCallback callback) {
+	public void users_isVerified(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void users_setStatus(Map<String, String> params, FacebookCallback callback) {
+	public void users_setStatus(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void video_getUploadLimits(Map<String, String> params, FacebookCallback callback) {
+	public void video_getUploadLimits(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void video_upload(Map<String, String> params, FacebookCallback callback) {
+	public void video_upload(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		// TODO Auto-generated method stub
 
 	}
@@ -1134,28 +1122,29 @@ public class FacebookApi {
 	 * Run facebook method, parse result and call callback function.
 	 */
 
-	private void callMethod(String method, JavaScriptObject params, FacebookCallback callback) {
+	private void callMethod(String method, JavaScriptObject params, AsyncCallback callback) {
 		callMethod(method, params, callback, "json");
 	}
+	
 
-	private native void callMethod(String method, JavaScriptObject params,
-			FacebookCallback callback, String returnType)/*-{
+
+	private native void callMethod(String method, JavaScriptObject params, AsyncCallback callback, String returnType)/*-{
 		var app=this;
 		$wnd.FB_RequireFeatures(["Api"], function(){			
 			$wnd.FB.Facebook.apiClient.callMethod( method, params, 
 				function(result, exception){
 						// this is the result when we run in hosted mode for some reason
 					if(!isNaN(result)) {
-						app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessNumber(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;)(callback,result+"");
+						app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessNumber(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,result+"");
 					} else {
 						if ( result != undefined ) {
 						   if ( returnType == "string" ) {
-								app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessString(Lcom/gwittit/client/facebook/FacebookCallback;Ljava/lang/String;)(callback,result);
+								app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessString(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,result);
 						   } else {
-								app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
+								app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
 						   }
 						} else {
-							app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/gwittit/client/facebook/FacebookCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
+							app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
 						}
 					}
 				}
@@ -1166,21 +1155,21 @@ public class FacebookApi {
 	/**
 	 * Callbacks
 	 */
-	public void callbackError(FacebookCallback callback, JavaScriptObject value) {
-		callback.onError(new JSONObject(value));
+	public void callbackError(AsyncCallback<JSONValue> callback, JavaScriptObject value) {
+		callback.onFailure( new Exception ( "" + new JSONObject(value) ) );
 	}
 
 	/**
 	 * Called when result is a number
 	 */
-	public void callbackSuccessNumber(FacebookCallback callback, String i) {
+	public void callbackSuccessNumber(AsyncCallback<JSONValue> callback, String i) {
 		JSONObject o = new JSONObject();
 		JSONString s = new JSONString(i);
 		o.put("result", s);
 		callback.onSuccess(o);
 	}
 
-	public void callbackSuccessString(FacebookCallback callback, String s) {
+	public void callbackSuccessString(AsyncCallback<JSONValue> callback, String s) {
 		JSONString js = new JSONString(s);
 		callback.onSuccess(js);
 	}
@@ -1188,7 +1177,7 @@ public class FacebookApi {
 	/**
 	 * Called when method succeeded.
 	 */
-	public void callbackSuccess(FacebookCallback callback, JavaScriptObject obj) {
+	public void callbackSuccess(AsyncCallback<JSONValue> callback, JavaScriptObject obj) {
 		GWT.log("FacebookApi: callbackSuccess " + obj, null);
 		callback.onSuccess(new JSONObject(obj));
 	}

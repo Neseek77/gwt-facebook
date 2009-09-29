@@ -23,6 +23,7 @@ public class Xfbml {
 					} else {
 						GWT.log( "ParseDomElement: " + element.getId() , null);
 						parseDomElement ( element.getId() ); 
+						GWT.log( Xfbml.class + "Done ", null);
 					}
 				} else {
 					parseDomTree (  );
