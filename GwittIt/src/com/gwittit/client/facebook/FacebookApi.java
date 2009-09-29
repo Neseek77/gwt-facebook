@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Stream;
+import com.gwittit.client.facebook.entities.StreamFilter;
 
 /**
  * The class contains function defining the Facebook API. With the API, you can
@@ -968,9 +969,58 @@ public class FacebookApi {
 		callMethod("stream.getComments", p.getJavaScriptObject(), nativeCallback);
 	}
 
-	public void stream_getFilters(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * This method returns any filters associated with a user's home page
+	 * stream. You can use these filters to narrow down a stream you want to
+	 * return with stream.get or when you query the stream FQL table.
+	 * 
+	 * optional
+	 * 
+	 * @param uid
+	 *            int The user ID for the user whose stream filters you are
+	 *            returning. Note: This parameter applies only to Web
+	 *            applications and is required by them only if the session_key
+	 *            is not specified. Facebook ignores this parameter if it is
+	 *            passed by a desktop application.
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. Web applications
+	 *            don't need an active session to make this call as long as you
+	 *            pass a user ID and that user has an active session with your
+	 *            application. Desktop applications must always pass a session
+	 *            key.
+	 * @see com.gwittit.client.facebook.entities.StreamFilter StreamFilter
+	 */
+	public void stream_getFilters(final Map<String, String> params, final AsyncCallback<List<StreamFilter>> callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "uid,session_key");
+		
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue>() {
 
+			public void onFailure(Throwable caught) {
+				callback.onFailure(caught);
+			}
+
+			public void onSuccess(JSONValue jv) {
+
+				List<StreamFilter> result = new ArrayList<StreamFilter> ();
+				
+				int key = 0;
+				JSONObject o = jv.isObject();
+				JSONValue value;
+
+				while ((value = o.get(key + "")) != null) {
+					
+					StreamFilter sf = new StreamFilter ( value );
+					result.add ( sf );
+					
+					key++;
+				}
+				callback.onSuccess( result );
+			}
+		};
+		
+		callMethod ("stream.getFilters", p.getJavaScriptObject(), internCallback );
 	}
 
 	public void stream_publish(Map<String, String> params, AsyncCallback<JSONValue> callback) {
