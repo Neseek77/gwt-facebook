@@ -3,108 +3,108 @@
 = This list of api methods that should be implemented =
 
 
-||admin_banUsers||  ||
-||admin_unbanUsers||  ||
-||admin_getAllocation||  ||
-||admin_getAppProperties||  ||
-||admin_getBannedUsers||  ||
-||admin_getMetrics||  ||
-||admin_getRestrictionInfo||  ||
-||admin_setAppProperties||  ||
-||admin_setRestrictionInfo||  ||
-||application_getPublicInfo||  ||
-||auth_createToken||  ||
-||auth_expireSession||  ||
-||auth_getSession||  ||
-||auth_promoteSession||  ||
-||auth_revokeAuthorization||  ||
-||auth_revokeExtendedPermission||  ||
-||batch_run||  ||
-||comments_add||  ||
-||comments_get||  ||
-||comments_remove||  ||
-||connect_getUnconnectedFriendsCount||  ||
-||connect_registerUsers||  ||
-||connect_unregisterUsers||  ||
-||data_getCookies||  ||
-||data_setCookie||  ||
-||events_cancel||  ||
-||events_create||  ||
-||events_edit||  ||
-||events_get||  ||
-||events_getMembers||  ||
-||events_rsvp||  ||
-||fbml_deleteCustomTags||  ||
-||fbml_getCustomTags||  ||
-||fbml_refreshImgSrc||  ||
-||fbml_refreshRefUrl||  ||
-||fbml_registerCustomTags||  ||
-||fbml_setRefHandle||  ||
-||feed_deactivateTemplateBundleByID||  ||
-||feed_getRegisteredTemplateBundleByID||  ||
-||feed_getRegisteredTemplateBundles||  ||
-||feed_publishTemplatizedAction||  ||
-||feed_publishUserAction||  ||
-||feed_registerTemplateBundle||  ||
-||fql_multiquery||  ||
-||fql_query|| YES ||
-||friends_areFriends||  ||
-||friends_get||  ||
-||friends_getAppUsers||  ||
-||friends_getLists||  ||
-||friends_getMutualFriends||  ||
-||groups_get||  ||
-||groups_getMembers||  ||
-||intl_getTranslations||  ||
-||intl_uploadNativeStrings||  ||
-||links_get||  ||
-||links_post||  ||
-||liveMessage_send||  ||
-||message_getThreadsInFolder||  ||
-||notes_create||  ||
-||notes_delete||  ||
-||notes_edit||  ||
-||notes_get||  ||
-||notifications_get||  ||
-||notifications_getList||  ||
-||notifications_markRead||  ||
-||notifications_send||  ||
-||notifications_sendEmail||  ||
-||pages_getInfo||  ||
-||pages_isAdmin||  ||
-||pages_isAppAdded||  ||
-||pages_isFan||  ||
-||photos_addTag||  ||
-||photos_createAlbum||  ||
-||photos_getTags||  ||
-||photos_upload||  ||
-||photos_getAlbums||  ||
-||photos_get||  ||
-||profile_getFBML||  ||
-||profile_getInfo||  ||
-||profile_getInfoOptions||  ||
-||profile_setFBML||  ||
+||admin.banUsers||  ||
+||admin.unbanUsers||  ||
+||admin.getAllocation||  ||
+||admin.getAppProperties||  ||
+||admin.getBannedUsers||  ||
+||admin.getMetrics||  ||
+||admin.getRestrictionInfo||  ||
+||admin.setAppProperties||  ||
+||admin.setRestrictionInfo||  ||
+||application.getPublicInfo||  ||
+||auth.createToken||  ||
+||auth.expireSession||  ||
+||auth.getSession||  ||
+||auth.promoteSession||  ||
+||auth.revokeAuthorization||  ||
+||auth.revokeExtendedPermission||  ||
+||batch.run||  ||
+||comments.add||  ||
+||comments.get||  ||
+||comments.remove||  ||
+||connect.getUnconnectedFriendsCount||  ||
+||connect.registerUsers||  ||
+||connect.unregisterUsers||  ||
+||data.getCookies||  ||
+||data.setCookie||  ||
+||events.cancel||  ||
+||events.create||  ||
+||events.edit||  ||
+||events.get||  ||
+||events.getMembers||  ||
+||events.rsvp||  ||
+||fbml.deleteCustomTags||  ||
+||fbml.getCustomTags||  ||
+||fbml.refreshImgSrc||  ||
+||fbml.refreshRefUrl||  ||
+||fbml.registerCustomTags||  ||
+||fbml.setRefHandle||  ||
+||feed.deactivateTemplateBundleByID||  ||
+||feed.getRegisteredTemplateBundleByID||  ||
+||feed.getRegisteredTemplateBundles||  ||
+||feed.publishTemplatizedAction||  ||
+||feed.publishUserAction||  ||
+||feed.registerTemplateBundle||  ||
+||fql.multiquery||  ||
+||fql.query|| YES ||
+||friends.areFriends||  ||
+||friends.get||  ||
+||friends.getAppUsers||  ||
+||friends.getLists||  ||
+||friends.getMutualFriends||  ||
+||groups.get||  ||
+||groups.getMembers||  ||
+||intl.getTranslations||  ||
+||intl.uploadNativeStrings||  ||
+||links.get||  ||
+||links.post||  ||
+||liveMessage.send||  ||
+||message.getThreadsInFolder||  ||
+||notes.create||  ||
+||notes.delete||  ||
+||notes.edit||  ||
+||notes.get||  ||
+||notifications.get||  ||
+||notifications.getList||  ||
+||notifications.markRead||  ||
+||notifications.send||  ||
+||notifications.sendEmail||  ||
+||pages.getInfo||  ||
+||pages.isAdmin||  ||
+||pages.isAppAdded||  ||
+||pages.isFan||  ||
+||photos.addTag||  ||
+||photos.createAlbum||  ||
+||photos.getTags||  ||
+||photos.upload||  ||
+||photos.getAlbums||  ||
+||photos.get||  ||
+||profile.getFBML||  ||
+||profile.getInfo||  ||
+||profile.getInfoOptions||  ||
+||profile.setFBML||  ||
 ||profile_setInfo||  ||
-||profile_setInfoOptions||  ||
-||sms_canSend||  ||
-||sms_send||  ||
-||status_set|| YES ||
-||status_get|| YES ||
-||stream_addComment|| YES ||
-||stream_addLike|| YES ||
-||stream_get|| YES  ||
-||stream_getComments|| YES ||
-||stream_getFilters||  ||
-||stream_publish||  ||
-||stream_remove|| YES ||
-||stream_removeComment|| YES ||
-||stream_removeLike|| YES ||
-||users_getInfo||  ||
-||users_getLoggedInUser||  ||
-||users_getStandardInfo||  ||
-||users_hasAppPermission||  ||
-||users_isAppUser||  ||
-||users_isVerified||  ||
-||users_setStatus|| YES  ||
-||video_getUploadLimits||  ||
-||video_upload||  ||
+||profile.setInfoOptions||  ||
+||sms.canSend||  ||
+||sms.send||  ||
+||status.set|| YES ||
+||status.get|| YES ||
+||stream.addComment|| YES ||
+||stream.addLike|| YES ||
+||stream.get|| YES  ||
+||stream.getComments|| YES ||
+||stream.getFilters||  ||
+||stream.publish||  ||
+||stream.remove|| YES ||
+||stream.removeComment|| YES ||
+||stream.removeLike|| YES ||
+||users.getInfo||  ||
+||users.getLoggedInUser||  ||
+||users.getStandardInfo||  ||
+||users.hasAppPermission||  ||
+||users.isAppUser||  ||
+||users.isVerified||  ||
+||users.setStatus|| YES  ||
+||video.getUploadLimits||  ||
+||video.upload||  ||
