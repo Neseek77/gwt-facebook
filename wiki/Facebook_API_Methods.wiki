@@ -79,8 +79,8 @@
 ||photos.createAlbum||  ||
 ||photos.getTags||  ||
 ||photos.upload||  ||
-||photos.getAlbums||  ||
-||photos.get||  ||
+||photos.getAlbums|| YES ||
+||photos.get|| YES ||
 ||profile.getFBML||  ||
 ||profile.getInfo||  ||
 ||profile.getInfoOptions||  ||
