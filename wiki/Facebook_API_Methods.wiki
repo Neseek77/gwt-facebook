@@ -97,7 +97,7 @@
 ||stream_getFilters||  ||
 ||stream_publish||  ||
 ||stream_remove|| YES ||
-||stream_removeComment||  ||
+||stream_removeComment|| YES ||
 ||stream_removeLike|| YES ||
 ||users_getInfo||  ||
 ||users_getLoggedInUser||  ||
