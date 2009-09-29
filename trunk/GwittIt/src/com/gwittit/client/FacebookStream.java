@@ -11,177 +11,242 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.entities.Stream;
+import com.gwittit.client.facebook.entities.StreamFilter;
 import com.gwittit.client.facebook.ui.StreamUi;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
- * Display facebook stream 
+ * Display facebook stream
  */
 public class FacebookStream extends Composite {
-	
-	private VerticalPanel outer = new VerticalPanel ();
 
-	private VerticalPanel streamListing = new VerticalPanel ();
+	private VerticalPanel outer = new VerticalPanel();
 
+	private FlowPanel streamFilterPnl = new FlowPanel();
+
+	private VerticalPanel streamListing = new VerticalPanel();
 
 	private Panel unlockPnl = createUnlockPanel();
-	
-	private Image ajaxLoader = new Image ( "/loader.gif" );
-	
+
+	private Image ajaxLoader = new Image("/loader.gif");
+
+	private String filterKey;
+
 	private FacebookApi apiClient;
-	
+
 	/**
 	 * Create new object.
 	 */
-	public FacebookStream ( final FacebookApi apiClient ) {
+	public FacebookStream(final FacebookApi apiClient) {
 
 		this.apiClient = apiClient;
-		
 
-		
-		GWT.log( "FacebookStream()", null);
-		Map<String,String> params = new HashMap<String,String> ();
-		
+		GWT.log("FacebookStream()", null);
+		Map<String, String> params = new HashMap<String, String>();
+
 		// StyleNames...
-		outer.getElement().setId( "FacebookStream" );
+		outer.getElement().setId("FacebookStream");
+		outer.addStyleName("gwittit-FacebookStream");
+
 		streamListing.getElement().setId("StreamListing");
-		streamListing.addStyleName( "streamListing" );
-		
-		//ask.setHTML( "<img src=/fb_permission.png> Click to enable facebook stream in Gwittee" );
-		
-		GWT.log( "FacebookStream: Checking app permission", null );
-		
-		apiClient.users_hasAppPermission( com.gwittit.client.facebook.FacebookApi.Permission.read_stream , 
-				new AsyncCallback<Boolean>()  {
-			
-			public void onFailure(Throwable caught) {
-				Window.alert ( "Failed to check permissino " + caught );
-			}
+		streamListing.addStyleName("streamListing");
 
-			public void onSuccess(Boolean result) {
-				if ( result ) {
-					renderStream();
-				} else {
-					
-					outer.add ( unlockPnl );
-				}				
-			}
-		} );
+		streamFilterPnl.addStyleName("streamFilter");
 
-		outer.add ( streamListing );
-	
-		initWidget ( outer );
+		outer.add(streamFilterPnl);
+		// ask.setHTML(
+		// "<img src=/fb_permission.png> Click to enable facebook stream in Gwittee"
+		// );
+
+		GWT.log("FacebookStream: Checking app permission", null);
+
+		apiClient.users_hasAppPermission(
+				com.gwittit.client.facebook.FacebookApi.Permission.read_stream,
+				new AsyncCallback<Boolean>() {
+
+					public void onFailure(Throwable caught) {
+						Window.alert("Failed to check permissino " + caught);
+					}
+
+					public void onSuccess(Boolean result) {
+						if (result) {
+							renderStreamFilter();
+							renderStream();
+						} else {
+
+							outer.add(unlockPnl);
+						}
+					}
+				});
+
+		outer.add(streamListing);
+
+		initWidget(outer);
 	}
 
-	
-	public void refresh () {
+	public String getFilterKey() {
+		return filterKey;
+	}
+
+	public void setFilterKey(String filterKey) {
+		this.filterKey = filterKey;
+	}
+
+	public void refresh() {
 		renderStream();
 	}
-	private Panel createUnlockPanel () {
-		final VerticalPanel inner = new VerticalPanel ();
-		
-		
-		inner.add( new HTML ( "Oups, gwittit need some extra permissions to work properly..." ) );
-		
-		final Anchor permissionLnk = new Anchor ( );
+
+	private Panel createUnlockPanel() {
+		final VerticalPanel inner = new VerticalPanel();
+
+		inner.add(new HTML("Oups, gwittit need some extra permissions to work properly..."));
+
+		final Anchor permissionLnk = new Anchor();
 		permissionLnk.setHTML("Click here to enable facebook news feed ");
-		permissionLnk.addStyleName("clickable" );
-		
-		permissionLnk.addClickHandler( new ClickHandler () {
+		permissionLnk.addStyleName("clickable");
+
+		permissionLnk.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				askForPermission();
 			}
 		});
-		inner.add( permissionLnk );
+		inner.add(permissionLnk);
 
-		
-		Image image = new Image ( "/locked.png");
-		
-		HorizontalPanel outer = new HorizontalPanel ();
-		outer.addStyleName ( "needStreamPermission" );
-		outer.add ( image );
-		outer.add ( inner );
-		
+		Image image = new Image("/locked.png");
+
+		HorizontalPanel outer = new HorizontalPanel();
+		outer.addStyleName("needStreamPermission");
+		outer.add(image);
+		outer.add(inner);
+
 		return outer;
 	}
-	
 
 	public void addFirst(Stream stream) {
-		
-		StreamUi su = new StreamUi ( stream );
-		streamListing.insert( su, 0);
-	}
-	
-	
-	public void askForPermission () {
-		FacebookConnect.showPermissionDialog(FacebookApi.Permission.read_stream, new AsyncCallback<Boolean> () {
-			public void onFailure(Throwable caught) {
-				Window.alert( "Error: " + caught );
-				
-			}
-			public void onSuccess(Boolean canRead ) {
-				if ( canRead ) {
-					outer.remove(unlockPnl );
-					renderStream ();
-				}
-			}
-		});
-	}
-	
-	/*
-	public native void askForPermission ()/*-{
-		var app=this;
-	
-		$wnd.FB.Connect.showPermissionDialog("read_stream", 
-			function(x)
-			{ 
-				app.@com.gwittit.client.FacebookStream::handlePermission(Ljava/lang/String;)(x);
-			}, 
-			true,  null);	
-		
-	}-*/;
 
-	public void handlePermission ( String s ) {
-		if ( "read_stream".equals( s ) ) {
-			outer.remove ( unlockPnl );
+		StreamUi su = new StreamUi(stream);
+		streamListing.insert(su, 0);
+	}
+
+	public void askForPermission() {
+		FacebookConnect.showPermissionDialog(FacebookApi.Permission.read_stream,
+				new AsyncCallback<Boolean>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Error: " + caught);
+
+					}
+
+					public void onSuccess(Boolean canRead) {
+						if (canRead) {
+							outer.remove(unlockPnl);
+							renderStream();
+						}
+					}
+				});
+	}
+
+	/*
+	 * public native void askForPermission ()/*-{ var app=this;
+	 * 
+	 * $wnd.FB.Connect.showPermissionDialog("read_stream", function(x) {
+	 * app.@com
+	 * .gwittit.client.FacebookStream::handlePermission(Ljava/lang/String;)(x);
+	 * }, true, null);
+	 * 
+	 * }-
+	 */;
+
+	public void handlePermission(String s) {
+		if ("read_stream".equals(s)) {
+			outer.remove(unlockPnl);
 			renderStream();
 		}
 	}
-	
-	
-	private void renderStream ( ) {
-		GWT.log( "FacebookStream: render Stream", null );
-		streamListing.add( ajaxLoader );
 
-		Map<String,String> params = new HashMap<String,String> ();
-		
-		apiClient.stream_get(params, new AsyncCallback<List<Stream>> () {
+	private void renderStream() {
+		GWT.log("FacebookStream: render Stream", null);
+		streamListing.add(ajaxLoader);
+
+		Map<String, String> params = new HashMap<String, String>();
+
+		if (getFilterKey() != null) {
+			params.put("filter_key", getFilterKey());
+		}
+		apiClient.stream_get(params, new AsyncCallback<List<Stream>>() {
 
 			public void onFailure(Throwable caught) {
-				Window.alert ( "Stream Get Failed : " + caught );
+				Window.alert("Stream Get Failed : " + caught);
 			}
 
 			public void onSuccess(List<Stream> result) {
-				streamListing.clear ();
-				try {
-				for ( Stream s : result ) {
-					streamListing.add( new StreamUi (s) );
+				streamListing.clear();
+				if (result.size() == 0) {
+					streamListing.add(new HTML("No result"));
+				} else {
+
 				}
-				}catch (Exception e ) {  Window.alert ( "Exception " + e ); }
-				Xfbml.parse(streamListing.getElement() );
+				try {
+
+					for (Stream s : result) {
+						streamListing.add(new StreamUi(s));
+					}
+				} catch (Exception e) {
+					Window.alert("Exception " + e);
+				}
+				Xfbml.parse(streamListing.getElement());
 			}
-			
+
 		});
 	}
-	
+
+	public void renderStreamFilter() {
+
+		streamFilterPnl.add(ajaxLoader);
+
+		Map<String, String> params = new HashMap<String, String>();
+		apiClient.stream_getFilters(params, new AsyncCallback<List<StreamFilter>>() {
+
+			public void onFailure(Throwable caught) {
+				Window.alert(FacebookStream.class + ": Failure" + caught);
+			}
+
+			public void onSuccess(List<StreamFilter> result) {
+
+				streamFilterPnl.remove(ajaxLoader);
+
+				for (final StreamFilter sf : result) {
+
+					Anchor a = new Anchor();
+					a.setHTML("<img src=\"" + sf.getIconUrl() + "\"/>");
+					a.setTitle(sf.getName());
+					a.addStyleName("clickable");
+					a.addClickHandler(new ClickHandler() {
+
+						public void onClick(ClickEvent event) {
+							setFilterKey(sf.getFilterKey());
+							renderStream();
+							// Window.alert ( "Name:" + sf.getName() +
+							// ", FilterKey: " + sf.getFilterKey() + " , Rank:"
+							// + sf.getRank() );
+						}
+
+					});
+
+					streamFilterPnl.add(a);
+				}
+
+			}
+
+		});
+	}
 
 }

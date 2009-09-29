@@ -208,13 +208,13 @@ public class Frontpage extends Example implements ClickHandler {
 				Window.alert ( "Failed " );
 			}
 			public void onSuccess ( JSONValue v ) {
-				Window.alert ( "Success: " + v);
 				//Stream stream = new Stream ();
 				//stream.setMessage( inputTextArea.getValue() );
 				//stream.setSourceId( UserInfo.getUidLong() );
 
 				inputBar.remove( updateStatusLoader );
 				submit.setEnabled(true);
+				inputTextArea.setValue(null);
 
 				facebookStream.refresh();
 				
@@ -222,7 +222,6 @@ public class Frontpage extends Example implements ClickHandler {
 				facebookStream.addFirst ( stream );
 				inputBar.remove( updateStatusLoader );
 				submit.setEnabled(true);
-				inputTextArea.setValue(null);
 				*/
 				//Xfbml.parse( facebookStream.getElement());
 			}
