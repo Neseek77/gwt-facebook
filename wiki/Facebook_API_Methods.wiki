@@ -53,7 +53,7 @@
 ||friends.get|| YES || 1.0 ||
 ||friends.getAppUsers||  || 1.0 ||
 ||friends.getLists||  || 1.0 ||
-||friends.getMutualFriends||  || 1.0 ||
+||friends.getMutualFriends|| YES || 1.0 ||
 ||groups.get||  ||
 ||groups.getMembers||  ||
 ||intl.getTranslations||  ||
