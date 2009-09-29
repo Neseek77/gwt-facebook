@@ -132,7 +132,10 @@ public class Frontpage extends Example implements ClickHandler {
 				for (final StreamFilter sf : result) {
 
 					final Anchor a = new Anchor();
-					a.setHTML("<img src=\"" + sf.getIconUrl() + "\"/> " + sf.getName() );
+					Image image = new Image ( sf.getIconUrl() );
+					image.setVisibleRect(16, 0, 16, 16);
+					
+					a.setHTML ( image.toString() + " " + sf.getName() );
 					a.setTitle(sf.getName());
 					a.addStyleName("clickable");
 					a.addClickHandler(new ClickHandler() {

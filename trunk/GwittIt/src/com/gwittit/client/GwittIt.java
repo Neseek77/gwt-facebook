@@ -11,6 +11,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -24,6 +25,7 @@ import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
+import com.gwittit.client.facebook.ui.FriendList;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
@@ -34,6 +36,8 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	// Where we hold everything
 	private VerticalPanel outer = new VerticalPanel ();
 	
+	private HorizontalPanel menuBar = new HorizontalPanel  ();
+	
 	private HorizontalPanel inner = new HorizontalPanel ();
 	
 	// TopMenu displayed on every page
@@ -42,7 +46,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	
 	private Frontpage frontpage;
 
-	private Anchor streamGetLink = new Anchor ( "News Feed" );
+	private Anchor friendsGetLink = new Anchor ( "Friends" );
 	private Anchor photosGetLink = new Anchor ( "Photos" );
 
 	// Where we hold the main body
@@ -83,7 +87,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		outer.getElement().setId("GwittIt");
 		outer.ensureDebugId("GwittIt");
 		
+		menuBar.addStyleName("menuBar" );
 
+		friendsGetLink.addClickHandler(this);
 		// Render page
 		render ( Window.Location.getHash() );
 		
@@ -104,19 +110,15 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		if ( UserInfo.isLoggedIn() ) {
 			
 			setLeftMargin();
-
-			
-			
-			
 			// Add the app.
 			frontpage = new Frontpage ( apiClient, eventBus );
-			
 			Panel menu = frontpage.getMenu ();
-			
 			
 			inner.add ( menu );
 			inner.add ( example );
 	
+			menuBar.add(friendsGetLink );
+			outer.add ( menuBar ) ;
 			outer.add ( inner );
 
 			renderPage ( hash );
@@ -154,8 +156,13 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	 * Get whatever user clicks.
 	 */
 	public void onClick(ClickEvent event) {
-		if ( event.getSource() == streamGetLink ) {
-			History.newItem("stream.get");
+		if ( event.getSource() == friendsGetLink ) {
+			
+			FriendList friendList = new FriendList ();
+			friendList.setAutoHideEnabled(true);
+			friendList.center();
+			friendList.show();
+			
 		} else if ( event.getSource() == photosGetLink ) {
 			History.newItem( "photos.getAlbums");
 		} else {

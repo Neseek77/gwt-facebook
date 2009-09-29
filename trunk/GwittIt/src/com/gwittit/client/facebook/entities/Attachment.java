@@ -84,12 +84,15 @@ public class Attachment {
 
 	public Attachment ( JSONValue j ) {
 		
+		GWT.log ( Attachment.class + ": create attachment "+ j, null);
+		
 		JSONObject o = j.isObject();
 		
 		if ( o == null ) {
 			return ;
 		}
 		
+		try {
 		name = JsonUtil.getString(o, "name" );
 		href = JsonUtil.getString(o, "href" );
 		caption = JsonUtil.getString ( o, "caption" );
@@ -104,12 +107,16 @@ public class Attachment {
 				for ( int i = 0 ; i  < mediasJson.size() ; i++ ) {
 					JSONValue mv = mediasJson.get(i);
 					if ( mv.isObject() != null ) {
-						GWT.log( Attachment.class + ": Attachment: create new Media file", null);
 						Media media = new Media ( mv.isObject() );
 						medias.add ( media );
+						GWT.log( Attachment.class + ": Attachment: create new Media file " + mv, null);
+
 					}
 				}
 			}
+		}
+		}catch ( Exception e ) {
+			GWT.log ( Attachment.class + "", e );
 		}
 	}
 	
