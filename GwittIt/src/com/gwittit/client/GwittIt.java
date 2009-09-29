@@ -46,7 +46,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	
 	private Frontpage frontpage;
 
-	private Anchor friendsGetLink = new Anchor ( "Friends" );
+	private Anchor friendsGetLink = new Anchor ( "My Friends" );
+	private Anchor calendarGetLink = new Anchor ( "My Calendar" );
+	
 	private Anchor photosGetLink = new Anchor ( "Photos" );
 
 	// Where we hold the main body
@@ -90,10 +92,14 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		menuBar.addStyleName("menuBar" );
 
 		friendsGetLink.addClickHandler(this);
+		calendarGetLink.addClickHandler(this);
+		
 		// Render page
 		render ( Window.Location.getHash() );
 		
 		RootPanel.get().add ( outer );
+		
+		showFriendList ();
 		Xfbml.parse( outer.getElement() );
 
 	}
@@ -118,6 +124,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			inner.add ( example );
 	
 			menuBar.add(friendsGetLink );
+			menuBar.add(calendarGetLink);
 			outer.add ( menuBar ) ;
 			outer.add ( inner );
 
@@ -151,17 +158,19 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 
 	}
 
+	private void showFriendList () {
+		FriendList friendList = new FriendList ();
+		friendList.setAutoHideEnabled(true);
+		friendList.center();
+		friendList.show();
+	}
 	
 	/**
 	 * Get whatever user clicks.
 	 */
 	public void onClick(ClickEvent event) {
 		if ( event.getSource() == friendsGetLink ) {
-			
-			FriendList friendList = new FriendList ();
-			friendList.setAutoHideEnabled(true);
-			friendList.center();
-			friendList.show();
+			showFriendList ();
 			
 		} else if ( event.getSource() == photosGetLink ) {
 			History.newItem( "photos.getAlbums");

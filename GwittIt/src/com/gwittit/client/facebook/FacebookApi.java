@@ -545,19 +545,19 @@ public class FacebookApi {
 	 *            We suggest using the current time in milliseconds, such as
 	 *            PHP's microtime(true) function. If you specify the call ID in
 	 *            your client, you don't need to pass it with every call.
-
+	 * 
 	 * @param session_key
 	 *            string The session key of the logged in user. The session key
 	 *            is automatically included by our PHP client.
 	 * @param format
 	 *            string The desired response format, which can be either XML or
 	 *            JSON. (Default value is XML.)
-	 * @param callback (not tested)
-	 *            string Name of a function to call. This is primarily to enable
-	 *            cross-domain JavaScript requests using the <script> tag, also
-	 *            known as JSONP, and works with both the XML and JSON formats.
-	 *            The function will be called with the response passed as the
-	 *            parameter.
+	 * @param callback
+	 *            (not tested) string Name of a function to call. This is
+	 *            primarily to enable cross-domain JavaScript requests using the
+	 *            <script> tag, also known as JSONP, and works with both the XML
+	 *            and JSON formats. The function will be called with the
+	 *            response passed as the parameter.
 	 * @param flid
 	 *            int Returns the friends in a friend list.
 	 * @param uid
@@ -567,34 +567,11 @@ public class FacebookApi {
 	 */
 	public void friends_get(Map<String, String> params, final AsyncCallback<List<Long>> callback) {
 		JSONObject p = getDefaultParams();
-		
-		AsyncCallback<JSONValue> ac = new AsyncCallback<JSONValue> () {
-
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void onSuccess(JSONValue jv) {
-				List<Long> result = new ArrayList<Long> ();
-				
-				JSONObject o = jv.isObject();
-				JSONValue value ;
-				int key = 0;
-				
-				while (( value = o.get(key+"")) != null ) {
-					result.add( new Long ( value.isNumber () + "" ) );
-					key++;
-				}
-				callback.onSuccess( result );
-			}
-			
-		};
-		
-		callMethod("friends.get", p.getJavaScriptObject(), ac);
+		friends_getGeneric("friends.get", p.getJavaScriptObject(), callback);
 	}
 
 	public void friends_getAppUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+
 		// TODO Auto-generated method stub
 
 	}
@@ -604,9 +581,104 @@ public class FacebookApi {
 
 	}
 
-	public void friends_getMutualFriends(Map<String, String> params,
-			AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * Returns the Facebook user IDs of the mutual friends between the source
+	 * user and target user. For the source user, you can either specify the
+	 * source's user ID (the source_id) or use the session key of the logged-in
+	 * user, but not specify both.
+	 * 
+	 * The source user must have authorized your application.
+	 * 
+	 * You cannot store the IDs that get returned from this call.
+	 * 
+	 * Privacy applies to the results of this method: If the source user chooses
+	 * to not show friends on his or her public profile, then no mutual friends
+	 * get returned. If a mutual friend chooses to be hidden from search
+	 * results, then that user's UID does not get returned from this call.
+	 * 
+	 * required
+	 * 
+	 * @param api_key
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call.
+	 * @param target_uid
+	 *            int The user ID of one of the target user whose mutual friends
+	 *            you want to retrieve. 
+	 * optional
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. If you don't pass
+	 *            a session key, then you must pass a source_id. Desktop
+	 *            applications must always include a session_key
+	 * @param format
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param source_uid
+	 *            int The user ID of the other user for which you are getting
+	 *            mutual friends of. Defaults to the current session user.
+	 *            Specify the source_uid when calling this method without a
+	 *            session key.
+	 */
+	public void friends_getMutualFriends(Map<String, String> params, AsyncCallback<List<Long>> callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "session_key,target_uid,source_uid");
+		friends_getGeneric("friends.getMutualFriends", p.getJavaScriptObject(), callback);
+		
+	}
+
+	/**
+	 * Method that parses long's from the response.
+	 * @param method
+	 * @param params
+	 * @param callback
+	 */
+	private void friends_getGeneric(String method, JavaScriptObject params, final AsyncCallback<List<Long>> callback) {
+		AsyncCallback<JSONValue> ac = new AsyncCallback<JSONValue>() {
+
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void onSuccess(JSONValue jv) {
+				List<Long> result = new ArrayList<Long>();
+
+				JSONObject o = jv.isObject();
+				JSONValue value;
+				int key = 0;
+
+				while ((value = o.get(key + "")) != null) {
+					result.add(new Long(value.isNumber() + ""));
+					key++;
+				}
+				callback.onSuccess(result);
+			}
+
+		};
+
+		callMethod(method, params, ac);
 
 	}
 
