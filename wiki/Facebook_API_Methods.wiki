@@ -90,7 +90,6 @@
 ||sms.send||  ||
 ||status.set|| YES ||
 ||status.get|| YES ||
-=Stream=
 ||stream.addComment|| YES ||
 ||stream.addLike|| YES ||
 ||stream.get|| YES  ||
