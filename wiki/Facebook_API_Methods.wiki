@@ -2,7 +2,7 @@
 
 = This list of api methods that should be implemented =
 
-|| *Method* || *Implemented* ||
+|| *Method* || *Implemented* || *Version ||
 ||admin.banUsers||  ||
 ||admin.unbanUsers||  ||
 ||admin.getAllocation||  ||
@@ -88,7 +88,7 @@
 ||profile.setInfoOptions||  ||
 ||sms.canSend||  ||
 ||sms.send||  ||
-||status.set|| YES ||
+||status.set|| YES || 1.0 ||
 ||status.get|| YES ||
 ||stream.addComment|| YES ||
 ||stream.addLike|| YES ||
