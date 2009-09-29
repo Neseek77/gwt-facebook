@@ -15,6 +15,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
+import com.gwittit.client.facebook.entities.JsonUtil;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
 
@@ -101,7 +102,8 @@ public class FacebookApi {
 
 		JSONObject p = getDefaultParams();
 
-		copyAllParams(p, params,"viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata");
+		copyAllParams(p, params,
+				"viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata");
 
 		// Create native callback and parse response.
 		final AsyncCallback<JSONValue> c = new AsyncCallback<JSONValue>() {
@@ -119,7 +121,7 @@ public class FacebookApi {
 					Stream stream = new Stream(o);
 					result.add(stream);
 				}
-				GWT.log( FacebookApi.class + ": result size = " + result.size(), null );
+				GWT.log(FacebookApi.class + ": result size = " + result.size(), null);
 				ac.onSuccess(result);
 			}
 
@@ -520,12 +522,76 @@ public class FacebookApi {
 
 	}
 
-	/*
+	/**
+	 * Returns the Facebook user IDs of the current user's Facebook friends. The
+	 * current user is determined from the session_key parameter. The values
+	 * returned from this call are not storable.
 	 * 
+	 * You can call this method without a session key to return a list of
+	 * friends of a user on your application's canvas page. The user must have
+	 * authorized your application in order to make this call without a session
+	 * key. This is similar to how Facebook passes the UIDs of friends of a user
+	 * on your application's canvas page.
+	 * 
+	 * @param params
+	 *            consists of required
+	 * @param api_key
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param call_id
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client.
+	 * @param format
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback (not tested)
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 * @param flid
+	 *            int Returns the friends in a friend list.
+	 * @param uid
+	 *            int The user ID for the user whose friends you want to return.
+	 *            Specify the uid when calling this method without a session
+	 *            key.
 	 */
-	public void friends_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
+	public void friends_get(Map<String, String> params, final AsyncCallback<List<Long>> callback) {
 		JSONObject p = getDefaultParams();
-		callMethod("friends.get", p.getJavaScriptObject(), callback);
+		
+		AsyncCallback<JSONValue> ac = new AsyncCallback<JSONValue> () {
+
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void onSuccess(JSONValue jv) {
+				List<Long> result = new ArrayList<Long> ();
+				
+				JSONObject o = jv.isObject();
+				JSONValue value ;
+				int key = 0;
+				
+				while (( value = o.get(key+"")) != null ) {
+					result.add( new Long ( value.isNumber () + "" ) );
+					key++;
+				}
+				callback.onSuccess( result );
+			}
+			
+		};
+		
+		callMethod("friends.get", p.getJavaScriptObject(), ac);
 	}
 
 	public void friends_getAppUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -991,10 +1057,11 @@ public class FacebookApi {
 	 *            key.
 	 * @see com.gwittit.client.facebook.entities.StreamFilter StreamFilter
 	 */
-	public void stream_getFilters(final Map<String, String> params, final AsyncCallback<List<StreamFilter>> callback) {
+	public void stream_getFilters(final Map<String, String> params,
+			final AsyncCallback<List<StreamFilter>> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "uid,session_key");
-		
+
 		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable caught) {
@@ -1003,24 +1070,24 @@ public class FacebookApi {
 
 			public void onSuccess(JSONValue jv) {
 
-				List<StreamFilter> result = new ArrayList<StreamFilter> ();
-				
+				List<StreamFilter> result = new ArrayList<StreamFilter>();
+
 				int key = 0;
 				JSONObject o = jv.isObject();
 				JSONValue value;
 
 				while ((value = o.get(key + "")) != null) {
-					
-					StreamFilter sf = new StreamFilter ( value );
-					result.add ( sf );
-					
+
+					StreamFilter sf = new StreamFilter(value);
+					result.add(sf);
+
 					key++;
 				}
-				callback.onSuccess( result );
+				callback.onSuccess(result);
 			}
 		};
-		
-		callMethod ("stream.getFilters", p.getJavaScriptObject(), internCallback );
+
+		callMethod("stream.getFilters", p.getJavaScriptObject(), internCallback);
 	}
 
 	public void stream_publish(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -1102,16 +1169,15 @@ public class FacebookApi {
 	 *            user. Note: This parameter applies only to Web applications
 	 *            and is required by them only if the session_key is not
 	 *            specified. Facebook ignores this parameter if it is passed by
-	 *            a desktop application. 
-	 * required
+	 *            a desktop application. required
 	 * 
 	 * @param comment_id
 	 *            string The ID for the comment you want to remove.
 	 */
 	public void stream_removeComment(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		JSONObject obj = getDefaultParams();
-		copyAllParams(obj, params, "session_key,uid,*comment_id" );
-		callMethod ( "stream.removeComment", obj.getJavaScriptObject(), callback );
+		copyAllParams(obj, params, "session_key,uid,*comment_id");
+		callMethod("stream.removeComment", obj.getJavaScriptObject(), callback);
 	}
 
 	/**

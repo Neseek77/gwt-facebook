@@ -69,7 +69,7 @@ public class Media {
 		alt = JsonUtil.getString(o, "alt");
 		if ( Type.valueOf(type) == Type.video ) {
 			video = new Video ( o.get("video") );
-		}
+		} 
 		GWT.log( Media.class + ": Parse media of type " + type , null);
 		
 	}

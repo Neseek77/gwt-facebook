@@ -56,7 +56,6 @@ public class FacebookStream extends Composite {
 		streamListing.getElement().setId("StreamListing");
 		streamListing.addStyleName("streamListing");
 
-
 		GWT.log("FacebookStream: Checking app permission", null);
 
 		/**
