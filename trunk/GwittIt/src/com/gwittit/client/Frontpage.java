@@ -201,21 +201,30 @@ public class Frontpage extends Example implements ClickHandler {
 		
 		Map<String,String> params = new HashMap<String,String> ();
 		params.put("uid", inputTextArea.getValue() );
+		params.put("status", inputTextArea.getValue() );
 		
 		api.status_set( params, new AsyncCallback<JSONValue> () {
 			public void onFailure ( Throwable t ) {
 				Window.alert ( "Failed " );
 			}
 			public void onSuccess ( JSONValue v ) {
-				Stream stream = new Stream ();
-				stream.setMessage( inputTextArea.getValue() );
-				stream.setSourceId( UserInfo.getUidLong() );
+				Window.alert ( "Success: " + v);
+				//Stream stream = new Stream ();
+				//stream.setMessage( inputTextArea.getValue() );
+				//stream.setSourceId( UserInfo.getUidLong() );
+
+				inputBar.remove( updateStatusLoader );
+				submit.setEnabled(true);
+
+				facebookStream.refresh();
 				
+				/*
 				facebookStream.addFirst ( stream );
 				inputBar.remove( updateStatusLoader );
 				submit.setEnabled(true);
 				inputTextArea.setValue(null);
-				Xfbml.parse( facebookStream.getElement());
+				*/
+				//Xfbml.parse( facebookStream.getElement());
 			}
 			
 		});

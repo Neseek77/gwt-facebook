@@ -83,6 +83,9 @@ public class FacebookStream extends Composite {
 	}
 
 	
+	public void refresh () {
+		renderStream();
+	}
 	private Panel createUnlockPanel () {
 		final VerticalPanel inner = new VerticalPanel ();
 		
