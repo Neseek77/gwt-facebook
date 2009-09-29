@@ -141,6 +141,7 @@ public class Stream {
 	 */
 	public Stream ( JSONObject o ) {
 
+		GWT.log( Stream.class + ": create " + o, null );
 
 		wrappedObject = o;
 		postId = JsonUtil.getString(o, "post_id" );
@@ -158,7 +159,6 @@ public class Stream {
 		GWT.log ( "Create attachment " + o.get("attachment"), null );
 		attachment = new Attachment ( o.get("attachment") );
 		
-		GWT.log( "Create Likes ", null );
 		likes = new Likes ( o.get("likes" ) );
 		
 		GWT.log ( "Created new Stream Object, null ", null );

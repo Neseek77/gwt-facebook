@@ -45,6 +45,10 @@ public class JsonUtil {
 	
 	public static boolean getBoolean ( JSONObject o, String key ) {
 		
+		if ( o.get ( key ) == null ) {
+			return false;
+		}
+		
 		JSONBoolean b = o.get(key).isBoolean();
 		
 		if ( b != null ) {
@@ -58,6 +62,7 @@ public class JsonUtil {
 		return false;
 	}
 	
+	
 	public static Integer getInt ( JSONObject o , String key ) {
 		if ( getLong ( o, key ) != null ) {
 			return getLong ( o, key).intValue();
@@ -66,7 +71,15 @@ public class JsonUtil {
 		return null;
 	}
 	public static Long getLong ( JSONObject o, String key ) {
+	
+		if ( o == null || key == null ) {
+			return null;
+		}
+		JSONValue v = o.get(key);
 		
+		if ( v == null ) {
+			return null;
+		}
 		JSONNumber number = o.get(key).isNumber();
 		
 		if ( number != null ) {
