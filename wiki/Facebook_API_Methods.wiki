@@ -1,6 +1,6 @@
 #summary Implemented Facebook Methods
 
-= This list shows api that should be implemented =
+= This list shows methods that should be implemented =
 
 
 || *Method* || *Implemented* || *Version ||
