@@ -2,7 +2,7 @@
 
 = This list of api methods that should be implemented =
 
-
+|| *Method* || *Implemented* ||
 ||admin.banUsers||  ||
 ||admin.unbanUsers||  ||
 ||admin.getAllocation||  ||
