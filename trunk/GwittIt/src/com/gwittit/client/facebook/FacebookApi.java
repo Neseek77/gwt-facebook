@@ -15,9 +15,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
-import com.gwittit.client.facebook.entities.JsonUtil;
+import com.gwittit.client.facebook.entities.FriendInfo;
+import com.gwittit.client.facebook.entities.FriendList;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
+import com.gwittit.client.facebook.ui.FriendListWidget;
 
 /**
  * The class contains function defining the Facebook API. With the API, you can
@@ -517,9 +519,32 @@ public class FacebookApi {
 
 	}
 
-	public void friends_areFriends(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * Returns whether or not two specified users are friends with each other. The first array specifies one half of each pair, the second array the other half; therefore, they must be of equal size. 
+	 * @param uids1 array 	 A list of user IDs matched with uids2. This is a comma-separated list of user IDs. 	
+	 * @param uids2 array 	A list of user IDs matched with uids1. This is a comma-separated list of user IDs. 
+	 */
+	public void friends_areFriends(Map<String, String> params, final AsyncCallback<List<FriendInfo>> callback) {
 
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "*uids1,*uids2");
+		
+
+		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue> () {
+
+			public void onFailure(Throwable caught) {
+				Window.alert( "Failed: " + caught );
+			}
+
+			public void onSuccess(JSONValue jsonResult ) {
+				List<FriendInfo> result = new ArrayList<FriendInfo> ();
+				for ( JSONValue v : parse ( jsonResult ) )  {
+					result.add ( new FriendInfo ( v ) ) ;
+				}
+				callback.onSuccess(result);
+			}
+		};
+		callMethod ( "friends.areFriends", p.getJavaScriptObject(), a );
 	}
 
 	/**
@@ -570,16 +595,89 @@ public class FacebookApi {
 		friends_getGeneric("friends.get", p.getJavaScriptObject(), callback);
 	}
 
-	public void friends_getAppUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-
-		// TODO Auto-generated method stub
-
+	/**
+	 * Returns the user IDs of the current user's Facebook friends who have
+	 * authorized the specific calling application or who have already connected
+	 * their Facebook accounts via Facebook Connect. The current user is
+	 * determined from the session_key parameter. The values returned from this
+	 * call are not storable.
+	 * 
+	 * required
+	 * 
+	 * @param api_key
+	 *            string The application key associated with the calling
+	 *            application. If you specify the API key in your client, you
+	 *            don't need to pass it with every call.
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client.
+	 * @param call_id
+	 *            float The request's sequence number. Each successive call for
+	 *            any session must use a sequence number greater than the last.
+	 *            We suggest using the current time in milliseconds, such as
+	 *            PHP's microtime(true) function. If you specify the call ID in
+	 *            your client, you don't need to pass it with every call.
+	 * @param sig
+	 *            string An MD5 hash of the current request and your secret key,
+	 *            as described in the How Facebook Authenticates Your
+	 *            Application. Facebook computes the signature for you
+	 *            automatically.
+	 * @param v
+	 *            string This must be set to 1.0 to use this version of the API.
+	 *            If you specify the version in your client, you don't need to
+	 *            pass it with every call. optional
+	 * @param format
+	 *            string The desired response format, which can be either XML or
+	 *            JSON. (Default value is XML.)
+	 * @param callback
+	 *            string Name of a function to call. This is primarily to enable
+	 *            cross-domain JavaScript requests using the <script> tag, also
+	 *            known as JSONP, and works with both the XML and JSON formats.
+	 *            The function will be called with the response passed as the
+	 *            parameter.
+	 */
+	public void friends_getAppUsers(Map<String, String> params, AsyncCallback<List<Long>> callback) {
+		JSONObject p = getDefaultParams();
+		friends_getGeneric("friends.getAppUsers", p.getJavaScriptObject(), callback);
 	}
 
-	public void friends_getLists(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * Returns the names and identifiers of any friend lists that the user has
+	 * created. The current user is determined from the session_key parameter.
+	 * 
+	 * The values returned from this call are storable. You can store the ID of
+	 * a friend list that the user has elected for use in some feature of your
+	 * application, but you should verify the ID periodically, as users may
+	 * delete or modify lists at any time. Friend lists are private on Facebook,
+	 * so you cannot republish this information to anyone other than the logged
+	 * in user. Members of lists may be obtained using friends.get with an flid
+	 * parameter.
+	 * 
+	 * @param params
+	 * @param callback
+	 */
+	public void friends_getLists(Map<String, String> params, final AsyncCallback<List<FriendList>> callback) {
+		JSONObject p = getDefaultParams();
+
+		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue>() {
+			public void onFailure(Throwable caught) {
+			
+			}
+
+			public void onSuccess(JSONValue result) {
+				List<FriendList> returnList = new ArrayList<FriendList>();
+				for ( JSONValue v : parse ( result ) ) {
+					returnList.add ( new FriendList ( v  ) );
+				}
+				callback.onSuccess(returnList);
+			}
+
+		};
+
+		callMethod("friends.getLists", p.getJavaScriptObject(), a);
 
 	}
+	
 
 	/**
 	 * Returns the Facebook user IDs of the mutual friends between the source
@@ -619,8 +717,7 @@ public class FacebookApi {
 	 *            pass it with every call.
 	 * @param target_uid
 	 *            int The user ID of one of the target user whose mutual friends
-	 *            you want to retrieve. 
-	 * optional
+	 *            you want to retrieve. optional
 	 * @param session_key
 	 *            string The session key of the logged in user. The session key
 	 *            is automatically included by our PHP client. If you don't pass
@@ -641,20 +738,23 @@ public class FacebookApi {
 	 *            Specify the source_uid when calling this method without a
 	 *            session key.
 	 */
-	public void friends_getMutualFriends(Map<String, String> params, AsyncCallback<List<Long>> callback) {
+	public void friends_getMutualFriends(Map<String, String> params,
+			AsyncCallback<List<Long>> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,target_uid,source_uid");
 		friends_getGeneric("friends.getMutualFriends", p.getJavaScriptObject(), callback);
-		
+
 	}
 
 	/**
 	 * Method that parses long's from the response.
+	 * 
 	 * @param method
 	 * @param params
 	 * @param callback
 	 */
-	private void friends_getGeneric(String method, JavaScriptObject params, final AsyncCallback<List<Long>> callback) {
+	private void friends_getGeneric(String method, JavaScriptObject params,
+			final AsyncCallback<List<Long>> callback) {
 		AsyncCallback<JSONValue> ac = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable caught) {
@@ -1259,8 +1359,7 @@ public class FacebookApi {
 		stream_addOrRemoveLike(params, false, callback);
 	}
 
-	private void stream_addOrRemoveLike(Map<String, String> params, boolean add,
-			AsyncCallback<JSONValue> callback) {
+	private void stream_addOrRemoveLike(Map<String, String> params, boolean add, AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,*post_id");
 		callMethod(add ? "stream.addLike" : "stream.removeLike", p.getJavaScriptObject(), callback);
@@ -1388,6 +1487,27 @@ public class FacebookApi {
 			);
 		});
 	}-*/;
+
+	/**
+	 * Parse json result 
+	 * @param result
+	 * @return
+	 */
+	private List<JSONValue> parse ( JSONValue result ) {
+		
+		List<JSONValue> returnList = new ArrayList<JSONValue> ();
+		
+		JSONObject o = result.isObject();
+		JSONValue value;
+		int key = 0;
+
+		while ((value = o.get(key + "")) != null) {
+			returnList.add ( value );
+			key++;
+		}
+		
+		return returnList;
+	}
 
 	/**
 	 * Callbacks

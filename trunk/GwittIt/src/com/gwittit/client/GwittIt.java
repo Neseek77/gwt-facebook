@@ -11,6 +11,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -25,7 +26,7 @@ import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
-import com.gwittit.client.facebook.ui.FriendList;
+import com.gwittit.client.facebook.ui.FriendListWidget;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
@@ -36,7 +37,8 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	// Where we hold everything
 	private VerticalPanel outer = new VerticalPanel ();
 	
-	private HorizontalPanel menuBar = new HorizontalPanel  ();
+	private SimplePanel menuBarWrapper = new SimplePanel ();
+	private FlowPanel menuBar = new FlowPanel  ();
 	
 	private HorizontalPanel inner = new HorizontalPanel ();
 	
@@ -46,8 +48,8 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	
 	private Frontpage frontpage;
 
-	private Anchor friendsGetLink = new Anchor ( "My Friends" );
-	private Anchor calendarGetLink = new Anchor ( "My Calendar" );
+	private Anchor friendsGetLink = new Anchor ( "Friends" );
+	private Anchor calendarGetLink = new Anchor ( "Calendar" );
 	
 	private Anchor photosGetLink = new Anchor ( "Photos" );
 
@@ -89,8 +91,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		outer.getElement().setId("GwittIt");
 		outer.ensureDebugId("GwittIt");
 		
-		menuBar.addStyleName("menuBar" );
-
+		//menuBar.addStyleName("menuBar" );
+		//menuBarWrapper.addStyleName ( "menuBarWrapper" );
+		
 		friendsGetLink.addClickHandler(this);
 		calendarGetLink.addClickHandler(this);
 		
@@ -99,7 +102,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		
 		RootPanel.get().add ( outer );
 		
-		showFriendList ();
+		//showFriendList ();
 		Xfbml.parse( outer.getElement() );
 
 	}
@@ -117,15 +120,22 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			
 			setLeftMargin();
 			// Add the app.
-			frontpage = new Frontpage ( apiClient, eventBus );
-			Panel menu = frontpage.getMenu ();
 			
-			inner.add ( menu );
+			
+			if ( !"#testClient".equals ( hash ) )  {
+				frontpage = new Frontpage ( apiClient, eventBus );
+				Panel menu = frontpage.getMenu ();
+				inner.add ( menu );
+			}
+			
 			inner.add ( example );
 	
-			menuBar.add(friendsGetLink );
-			menuBar.add(calendarGetLink);
-			outer.add ( menuBar ) ;
+			//menuBar.add(friendsGetLink );
+			//menuBar.add(calendarGetLink);
+			
+			//menuBarWrapper.add( menuBar );
+			outer.add ( menuBarWrapper ) ;
+			outer.add( new HTML ( "<div style=\"clear: all\" />") );
 			outer.add ( inner );
 
 			renderPage ( hash );
@@ -152,6 +162,8 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			example.setWidget( frontpage );
 		} else if ( "#photos.getAlbums".equals ( hash ) ) {
 			example.setWidget( new PhotosGetAlbumsExample ( apiClient ) ) ;
+		} else if ( "#testClient".equals( hash ) ) {
+			example.setWidget(new TestClient () );
 		} else {
 			Window.alert ( "unkown path " + hash );
 		}
@@ -159,7 +171,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	}
 
 	private void showFriendList () {
-		FriendList friendList = new FriendList ();
+		FriendListWidget friendList = new FriendListWidget ();
 		friendList.setAutoHideEnabled(true);
 		friendList.center();
 		friendList.show();
