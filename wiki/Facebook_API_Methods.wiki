@@ -49,7 +49,7 @@
 ||feed.registerTemplateBundle||  ||
 ||fql.multiquery||  ||
 ||fql.query|| YES || 1.0 ||
-||friends.areFriends|| || 1.0 ||
+||friends.areFriends|| YES || 1.0 ||
 ||friends.get|| YES || 1.0 ||
 ||friends.getAppUsers|| YEs || 1.0 ||
 ||friends.getLists|| YES || 1.0 ||
