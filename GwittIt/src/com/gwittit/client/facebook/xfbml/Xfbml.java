@@ -13,6 +13,8 @@ public class Xfbml {
 	 * We need facebook to parse the DOM tree after we have added stuff to it.
 	 */
 	public static void parse ( final Element element) {
+		
+		
 		//Window.alert ( "ParseDomElement " + (element == null ? "null" : element.getId() ) );
 
 		DeferredCommand.addCommand( new Command () {
