@@ -17,6 +17,7 @@ import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
+import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
 import com.gwittit.client.facebook.ui.FriendListWidget;
@@ -240,8 +241,7 @@ public class FacebookApi {
 	 * com.gwittit.client.facebook.FacebookApi#photos_getAlbums(java.util.Map,
 	 * com.google.gwt.user.client.rpc.AsyncCallback)
 	 */
-	public void photos_getAlbums(Map<String, String> params,
-			final AsyncCallback<List<Album>> callback) {
+	public void photos_getAlbums(Map<String, String> params, final AsyncCallback<List<Album>> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "uid,aids");
 
@@ -274,16 +274,52 @@ public class FacebookApi {
 		callMethod("photos.getAlbums", p.getJavaScriptObject(), nativeCallback);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Returns all visible photos according to the filters specified. You can
+	 * use this method to find all photos that are:
 	 * 
-	 * @see com.gwittit.client.facebook.FacebookApi#photos_get(java.util.Map,
-	 * com.gwittit.client.facebook.FacebookCallback)
+	 * Tagged with the specified subject (passing the user's uid as the subj_id)
+	 * Contained within the album specified by aid Included in the list of
+	 * photos specified by pids Any combination of these three criteria
+	 * 
+	 * @param subj_id
+	 *            int Filter by photos tagged with this user. You must specify
+	 *            at least one of subj_id, aid or pids. The subj_id parameter
+	 *            has no default value, but if you pass one, it must be the
+	 *            user's user ID.
+	 * @param aid
+	 *            string Filter by photos in this album. You must specify at
+	 *            least one of subj_id, aid or pids. The aid parameter has no
+	 *            default value. The aid cannot be longer than 50 characters.
+	 * @param pids
+	 *            array Filter by photos in this list. This is a comma-separated
+	 *            list of pids. You must specify at least one of subj_id, aid or
+	 *            pids. The pids parameter has no default value.
+	 * @param params
+	 * @param callback
 	 */
-	public void photos_get(final Map<String, String> params, final AsyncCallback<JSONValue> callback) {
+	public void photos_get(final Map<String, String> params, final AsyncCallback<List<Photo>> callback) {
 		JSONObject obj = getDefaultParams();
 		copyAllParams(obj, params, "subj_id,aid,pids");
-		callMethod("photos.get", obj.getJavaScriptObject(), callback);
+		
+		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue> () {
+
+			public void onFailure(Throwable caught) {
+				callback.onFailure(caught);
+			}
+
+			public void onSuccess(JSONValue result) {
+				List<Photo> photos = new ArrayList<Photo> ();
+				for ( JSONValue v : parse ( result ) ) {
+					photos.add ( new Photo ( v.isObject() ) ); 
+				}
+				
+				callback.onSuccess(photos);
+			}
+			
+		};
+		
+		callMethod("photos.get", obj.getJavaScriptObject(), a);
 	}
 
 	public void admin_banUsers(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -520,31 +556,38 @@ public class FacebookApi {
 	}
 
 	/**
-	 * Returns whether or not two specified users are friends with each other. The first array specifies one half of each pair, the second array the other half; therefore, they must be of equal size. 
-	 * @param uids1 array 	 A list of user IDs matched with uids2. This is a comma-separated list of user IDs. 	
-	 * @param uids2 array 	A list of user IDs matched with uids1. This is a comma-separated list of user IDs. 
+	 * Returns whether or not two specified users are friends with each other.
+	 * The first array specifies one half of each pair, the second array the
+	 * other half; therefore, they must be of equal size.
+	 * 
+	 * @param uids1
+	 *            array A list of user IDs matched with uids2. This is a
+	 *            comma-separated list of user IDs.
+	 * @param uids2
+	 *            array A list of user IDs matched with uids1. This is a
+	 *            comma-separated list of user IDs.
 	 */
-	public void friends_areFriends(Map<String, String> params, final AsyncCallback<List<FriendInfo>> callback) {
+	public void friends_areFriends(Map<String, String> params,
+			final AsyncCallback<List<FriendInfo>> callback) {
 
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "*uids1,*uids2");
-		
 
-		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue> () {
+		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable caught) {
-				Window.alert( "Failed: " + caught );
+				Window.alert("Failed: " + caught);
 			}
 
-			public void onSuccess(JSONValue jsonResult ) {
-				List<FriendInfo> result = new ArrayList<FriendInfo> ();
-				for ( JSONValue v : parse ( jsonResult ) )  {
-					result.add ( new FriendInfo ( v ) ) ;
+			public void onSuccess(JSONValue jsonResult) {
+				List<FriendInfo> result = new ArrayList<FriendInfo>();
+				for (JSONValue v : parse(jsonResult)) {
+					result.add(new FriendInfo(v));
 				}
 				callback.onSuccess(result);
 			}
 		};
-		callMethod ( "friends.areFriends", p.getJavaScriptObject(), a );
+		callMethod("friends.areFriends", p.getJavaScriptObject(), a);
 	}
 
 	/**
@@ -656,18 +699,19 @@ public class FacebookApi {
 	 * @param params
 	 * @param callback
 	 */
-	public void friends_getLists(Map<String, String> params, final AsyncCallback<List<FriendList>> callback) {
+	public void friends_getLists(Map<String, String> params,
+			final AsyncCallback<List<FriendList>> callback) {
 		JSONObject p = getDefaultParams();
 
 		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue>() {
 			public void onFailure(Throwable caught) {
-			
+
 			}
 
 			public void onSuccess(JSONValue result) {
 				List<FriendList> returnList = new ArrayList<FriendList>();
-				for ( JSONValue v : parse ( result ) ) {
-					returnList.add ( new FriendList ( v  ) );
+				for (JSONValue v : parse(result)) {
+					returnList.add(new FriendList(v));
 				}
 				callback.onSuccess(returnList);
 			}
@@ -677,7 +721,6 @@ public class FacebookApi {
 		callMethod("friends.getLists", p.getJavaScriptObject(), a);
 
 	}
-	
 
 	/**
 	 * Returns the Facebook user IDs of the mutual friends between the source
@@ -1359,7 +1402,8 @@ public class FacebookApi {
 		stream_addOrRemoveLike(params, false, callback);
 	}
 
-	private void stream_addOrRemoveLike(Map<String, String> params, boolean add, AsyncCallback<JSONValue> callback) {
+	private void stream_addOrRemoveLike(Map<String, String> params, boolean add,
+			AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,*post_id");
 		callMethod(add ? "stream.addLike" : "stream.removeLike", p.getJavaScriptObject(), callback);
@@ -1489,23 +1533,24 @@ public class FacebookApi {
 	}-*/;
 
 	/**
-	 * Parse json result 
+	 * Parse json result
+	 * 
 	 * @param result
 	 * @return
 	 */
-	private List<JSONValue> parse ( JSONValue result ) {
-		
-		List<JSONValue> returnList = new ArrayList<JSONValue> ();
-		
+	private List<JSONValue> parse(JSONValue result) {
+
+		List<JSONValue> returnList = new ArrayList<JSONValue>();
+
 		JSONObject o = result.isObject();
 		JSONValue value;
 		int key = 0;
 
 		while ((value = o.get(key + "")) != null) {
-			returnList.add ( value );
+			returnList.add(value);
 			key++;
 		}
-		
+
 		return returnList;
 	}
 

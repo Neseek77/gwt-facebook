@@ -27,19 +27,18 @@ public class Photo {
 	private String caption;
 
 
-	public static Photo convert ( JSONObject o ) {
+	public Photo () { }
+	
+	public Photo  ( JSONObject o ) {
+		pid = JsonUtil.getString (o, "pid");
+		aid = JsonUtil.getString (o, "aid");
+		owner = JsonUtil.getLong (o, "owner");
 		
-		Photo p = new Photo ();
-		p.pid = JsonUtil.getString (o, "pid");
-		p.aid = JsonUtil.getString (o, "aid");
-		p.owner = JsonUtil.getLong (o, "owner");
-		
-		p.src = JsonUtil.getString ( o, "src");
-		p.srcBig = JsonUtil.getString(o, "src_big" );
-		p.srcSmall = JsonUtil.getString(o, "src_small" ); 
-		p.link = JsonUtil.getString( o, "link" );
-		p.caption = JsonUtil.getString ( o, "caption" );
-		return p;
+		src = JsonUtil.getString ( o, "src");
+		srcBig = JsonUtil.getString(o, "src_big" );
+		srcSmall = JsonUtil.getString(o, "src_small" ); 
+		link = JsonUtil.getString( o, "link" );
+		caption = JsonUtil.getString ( o, "caption" );
 	}
 	
 
