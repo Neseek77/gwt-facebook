@@ -10,8 +10,16 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class FbPhoto extends Widget  {
 	
+	public enum Size {normal,thumb,small};
+	
 	public FbPhoto ( Long pid ) {
 		this ( "" + pid );
+	}
+	
+	public FbPhoto ( String pid, Size size ) {
+		this ( pid );
+		
+		getElement().setAttribute( "size", size.toString() );
 	}
 	public FbPhoto ( String pid ) {
 		super.setElement( DOM.createElement ("fb:photo") ); 

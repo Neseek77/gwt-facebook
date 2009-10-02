@@ -5,9 +5,17 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Xfbml {
 	
+	
+	/**
+	 * Parse widget.
+	 */
+	public static void parse ( final Widget w ) {
+		parse ( w.getElement() );
+	}
 	
 	/**
 	 * We need facebook to parse the DOM tree after we have added stuff to it.
