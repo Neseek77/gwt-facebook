@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
@@ -14,7 +15,7 @@ import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
-public class ShowPhotosGetAlbums extends Example {
+public class Photos_getAlbums extends Example {
 
 	@Override
 	public String getDescription() {
@@ -28,23 +29,22 @@ public class ShowPhotosGetAlbums extends Example {
 	}
 
 	
-	private VerticalPanel outer = new VerticalPanel ();
 	
-	private FacebookApi apiClient = ApiFactory.newApiClient(Config.API_KEY);
 	
-	public ShowPhotosGetAlbums () {
+	public Widget createWidget () {
 		
-		
+		final VerticalPanel outer = new VerticalPanel ();
+
 		outer.add( getLoader () );
 		outer.getElement().setId( "ShowPhotosGetAlbums");
 		
 		Map<String,String> params = new HashMap<String,String> ();
 		
+		// Call facebook
 		apiClient.photos_getAlbums(params, new AsyncCallback<List<Album>> () {
 
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				handleFailure ( caught );
 			}
 
 			public void onSuccess(List<Album> result) {
@@ -59,8 +59,7 @@ public class ShowPhotosGetAlbums extends Example {
 			
 		});
 		
-		initWidget ( outer );
-		
+		return outer;
 	}
 	
 }

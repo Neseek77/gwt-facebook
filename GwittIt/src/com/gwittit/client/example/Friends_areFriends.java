@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
@@ -15,12 +16,10 @@ import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
-public class ShowFriendsAreFriends extends Example {
-
-	
-	FacebookApi apiClient = ApiFactory.newApiClient(Config.API_KEY);
-	
-	private VerticalPanel resultWrapper = new VerticalPanel ();
+/**
+ * Method friends.areFriends
+ */
+public class Friends_areFriends extends Example {
 	
 	@Override
 	public String getDescription() {
@@ -34,7 +33,9 @@ public class ShowFriendsAreFriends extends Example {
 	}
 
 	
-	public ShowFriendsAreFriends () {
+	@Override
+	public Widget createWidget () {
+			final VerticalPanel resultWrapper = new VerticalPanel ();
 
 			resultWrapper.add(getLoader());
 			final VerticalPanel result = new VerticalPanel ();
@@ -66,7 +67,7 @@ public class ShowFriendsAreFriends extends Example {
 					Xfbml.parse ( result.getElement() );
 				}
 			});
-			initWidget ( resultWrapper );
+			return resultWrapper;
 	}
 	
 	

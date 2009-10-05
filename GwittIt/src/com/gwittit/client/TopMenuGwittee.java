@@ -1,13 +1,17 @@
 package com.gwittit.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
+import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
@@ -23,6 +27,7 @@ public class TopMenuGwittee extends Composite {
 	
 	private HandlerManager eventBus ;
 	
+
 	public TopMenuGwittee ( HandlerManager eventBus ) {
 		
 		this.eventBus = eventBus ;
@@ -54,13 +59,24 @@ public class TopMenuGwittee extends Composite {
 		
 		GWT.log ( "TopMenuGwittee: render " + fbName.toString(), null );
 
-		loginInfo.add ( new HTML ( "Welcome&nbsp;"));
 		loginInfo.add ( fbName );
 
 		SimplePanel tmp = new SimplePanel ();
 		tmp.addStyleName( "miniProfilePic");
 		tmp.setWidget( pic );
+		
+		
 		loginInfo.add ( tmp );
+		
+		Anchor logout =new Anchor ( "Logout");
+		logout.addClickHandler( new ClickHandler () {
+
+			public void onClick(ClickEvent event) {
+				FacebookConnect.logoutAndRedirect ("/");
+			}
+			
+		});
+		loginInfo.add ( logout );
 	}
 	
 	private void listenToLogin () {

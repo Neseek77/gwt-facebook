@@ -8,15 +8,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
-public class ShowFriendsGet extends Example  {
+/**
+ * Method friends.get
+ */
+public class Friends_get extends Example  {
 
-	private VerticalPanel outer = new VerticalPanel ();
 	
 	@Override
 	public String getDescription() {
@@ -30,22 +33,23 @@ public class ShowFriendsGet extends Example  {
 		return "Friends.get";
 	}
 	
-	private FacebookApi apiClient = ApiFactory.newApiClient(Config.API_KEY);
-	public ShowFriendsGet () {
-		
-		
+
+	@Override
+	public Widget createWidget () {
+		final VerticalPanel outer = new VerticalPanel ();
+
 		outer.add(getLoader () );
 		final FlowPanel flow = new FlowPanel ();
 		flow.setWidth( "500px");
 		flow.getElement().setId( "friendsget");
 		
 		Map<String,String> params = new HashMap<String,String> ();
-		
+
+		// Call facebook
 		apiClient.friends_get(params, new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				handleFailure ( caught );
 			}
 
 			public void onSuccess(List<Long> result) {
@@ -54,16 +58,12 @@ public class ShowFriendsGet extends Example  {
 				for ( Long uid : result ) {
 					flow.add ( new HTML ( new FbName ( uid ) + ", " ));
 				}
-
 				outer.add ( flow );
 				Xfbml.parse( flow.getElement() );
-
 			}
 			
 		});
-	
-		
-		initWidget ( outer );
+		return  outer ;
 	}
 
 }
