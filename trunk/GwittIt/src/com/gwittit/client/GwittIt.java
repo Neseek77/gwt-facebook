@@ -46,7 +46,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	private Frontpage frontpage;
 
 	final Anchor frontPage = new Anchor ( "Frontpage");
-	final Anchor testClient = new Anchor ( "Showcases");
+	final Anchor testClient = new Anchor ( "Showcase");
 	
 	// Where we hold the main body
 	private SimplePanel example = new SimplePanel ();
@@ -94,6 +94,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		
 		if ( UserInfo.isLoggedIn() ) {
 			HorizontalPanel mainMenubar = new HorizontalPanel ();
+			mainMenubar.add( new HTML ( "<b>Browse:</b>" ) );
 			mainMenubar.add ( frontPage );
 			mainMenubar.add ( testClient );
 			frontPage.addClickHandler( this );

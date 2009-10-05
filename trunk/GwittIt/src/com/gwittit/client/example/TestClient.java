@@ -96,7 +96,7 @@ public class TestClient extends Composite  {
 		Tree menu = createMenu ();
 		menu.addStyleName("treeMenu");
 	
-		outer.add ( new HTML ( "<h1>Showcases of gwt + facebook </h1>" ) );
+		outer.add ( new HTML ( "<h1>Showcase of gwt-facebook </h1>" ) );
 		exampleWrapper.add( new HTML ( "Please choose a method." ) );
 		inner.add (  menu );
 		
@@ -134,8 +134,8 @@ public class TestClient extends Composite  {
 					exampleWrapper.clear();
 					
 					Anchor sourceLink = new Anchor ( "See Source Code" );
-					
-					String repo = "http://gwt-facebook.googlecode.com/svn/trunk/GwittIt/src/";
+
+					String repo = "http://code.google.com/p/gwt-facebook/source/browse/trunk/GwittIt/src/";
 					String className = (""+example.getClass().getName()).replace(".","/") + ".java";
 					
 					
