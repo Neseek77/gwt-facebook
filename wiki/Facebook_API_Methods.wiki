@@ -76,7 +76,7 @@
 ||pages.isAppAdded||  ||
 ||pages.isFan||  ||
 ||photos.addTag||  ||
-||photos.createAlbum||  ||
+||photos.createAlbum|| YES ||
 ||photos.getTags||  ||
 ||photos.upload||  ||
 ||photos.getAlbums|| YES ||
