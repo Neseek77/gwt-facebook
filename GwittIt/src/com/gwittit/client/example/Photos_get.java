@@ -59,6 +59,7 @@ public class Photos_get extends Example {
 			}
 			
 		});
+		paramsWrapper.add ( fs );
 		return paramsResultWrapper;
 	}
 	

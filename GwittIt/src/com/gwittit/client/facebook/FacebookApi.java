@@ -155,21 +155,6 @@ public class FacebookApi {
 	 *            string The application key associated with the calling
 	 *            application. If you specify the API key in your client, you
 	 *            don't need to pass it with every call.
-	 * @param call_id
-	 *            float The request's sequence number. Each successive call for
-	 *            any session must use a sequence number greater than the last.
-	 *            We suggest using the current time in milliseconds, such as
-	 *            PHP's microtime(true) function. If you specify the call ID in
-	 *            your client, you don't need to pass it with every call.
-	 * @param sig
-	 *            string An MD5 hash of the current request and your secret key,
-	 *            as described in the How Facebook Authenticates Your
-	 *            Application. Facebook computes the signature for you
-	 *            automatically.
-	 * @param v
-	 *            string This must be set to 1.0 to use this version of the API.
-	 *            If you specify the version in your client, you don't need to
-	 *            pass it with every call.
 	 * @param ext_perm
 	 *            string String identifier for the extended permission that is
 	 *            being checked for. Must be one of email, read_stream,
@@ -181,15 +166,6 @@ public class FacebookApi {
 	 *            checking. Note: A session key is always required for desktop
 	 *            applications. It is required for Web applications only when
 	 *            the uid is not specified.
-	 * @param format
-	 *            string The desired response format, which can be either XML or
-	 *            JSON. (Default value is XML.)
-	 * @param callback
-	 *            string Name of a function to call. This is primarily to enable
-	 *            cross-domain JavaScript requests using the <script> tag, also
-	 *            known as JSONP, and works with both the XML and JSON formats.
-	 *            The function will be called with the response passed as the
-	 *            parameter.
 	 * @param uid
 	 *            int The user ID of the user whose permissions you are
 	 *            checking. If this parameter is not specified, then it defaults
