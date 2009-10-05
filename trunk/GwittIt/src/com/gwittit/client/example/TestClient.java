@@ -65,11 +65,11 @@ public class TestClient extends Composite  {
 	final String noteMethods = "XNotes:notes_create,notes_delete,notes_edit,notes_get";
 	final String notificationMethods = "XNotification:notifications_get,notifications_getList,notifications_markRead,notifications_send,notifications_sendEmail";
 	final String pageMethods = "XPages:pages_getInfo,pages_isAdmin,pages_isAppAdded,pages_isFan";
-	final String photoMethods = "Photos:photos_addTag,photos_createAlbum,photos_get,photos_getAlbums,photos_getTags,photos_upload";
+	final String photoMethods = "Photos:Xphotos_addTag,photos_createAlbum,photos_get,photos_getAlbums,Xphotos_getTags,Xphotos_upload";
 	final String profileMethods = "XProfile:profile_getFBML,profile_getInfo,profile_getInfoOptions,profile_setFBML,profile_setInfo,profile_setInfoOptions";
 	final String smsMethods = "XSMS:sms_canSend,sms_send";
 	final String statusMethods = "XStatus:status_get,status_set";
-	final String streamMethods = "Stream:stream_addComment,stream_addLike,stream_get,stream_getComments,stream_getFilters,stream_publish,stream_remove,stream_removeComment,stream_removeLike";
+	final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,Xstream_publish,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
 	final String userMethods = "XUsers:users_getInfo,users_getLoggedInUser,users_getStandardInfo,users_hasAppPermission,users_isAppUser,users_isVerified,users_setStatus";
 	final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
 
@@ -158,9 +158,9 @@ public class TestClient extends Composite  {
 	
 	private void addSections ( TreeItem parent, String[] methods ) {
 		for ( String method : methods ) {
-	
-			parent.addItem ( method );
-		
+			if ( !method.startsWith("X") ) {
+				parent.addItem ( method );
+			}
 		}
 	}
 
@@ -418,7 +418,7 @@ public class TestClient extends Composite  {
 		    //  example = new Photos_addTag();
 		}
 		else if ( "photos_createAlbum".equals ( m ) ) { 
-		    //  example = new Photos_createAlbum();
+		    example = new Photos_createAlbum();
 		}
 		else if ( "photos_get".equals ( m ) ) { 
 			example = new Photos_get();
