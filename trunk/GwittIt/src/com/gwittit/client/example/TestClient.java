@@ -50,7 +50,7 @@ public class TestClient extends Composite  {
 	final String applicationMethods = "XApplication:application_getPublicInfo";
 	final String authMethods = "XAuth:auth_createToken,auth_expireSession,auth_getSession,auth_promoteSession,auth_revokeAuthorization,auth_revokeExtendedPermission";
 	final String batchMethods = "XBatch:batch_run";
-	final String commentMethods = "XComments:comments_add,comments_get,comments_remove";
+	final String commentMethods = "Comments:comments_add,comments_get,Xcomments_remove";
 	final String connectMethods = "XConnect:connect_getUnconnectedFriendsCount,connect_registerUsers,connect_unregisterUsers";
 	final String dataMethods = "XData:data_getCookies,data_setCookie";
 	final String eventMethods = "XEvents:events_cancel,events_create,events_edit,events_get,events_getMembers,events_rsvp";
@@ -240,10 +240,10 @@ public class TestClient extends Composite  {
 		    //  example = new CallbackSuccessString();
 		}
 		else if ( "comments_add".equals ( m ) ) { 
-		    //  example = new Comments_add();
+		      example = new Comments_add();
 		}
 		else if ( "comments_get".equals ( m ) ) { 
-		    //  example = new Comments_get();
+		     example = new Comments_get();
 		}
 		else if ( "comments_remove".equals ( m ) ) { 
 		    //  example = new Comments_remove();

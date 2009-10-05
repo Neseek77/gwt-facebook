@@ -390,14 +390,90 @@ public class FacebookApi {
 
 	}
 
+	/**
+	 * This method adds a comment to an xid on behalf of a user. This
+	 * essentially works like stream.addComment and allows addition of comments
+	 * to an application's fb:comment and Comments Boxes.
+	 * 
+	 * Desktop applications must pass a valid session key, and only the user
+	 * associated with that session key can add comments.
+	 * 
+	 * In order for your application to publish a feed story associated with a
+	 * comment, that user must grant your application the publish_stream
+	 * extended permission.
+	 * 
+	 * required
+	 * @param xid
+	 *            string The xid of a particular Comments Box or fb:comments.
+	 * @param text
+	 *            string The comment/text to be added, as inputted by a user.
+	 *            optional
+	 * @param uid
+	 *            int The user ID to add a comment on behalf of. This defaults
+	 *            to the session user and must only be the session user if using
+	 *            a session secret (example: Desktop and JSCL apps).
+	 * @param title
+	 *            string The title associated with the item the user is
+	 *            commenting on. This is required if publishing a feed story as
+	 *            it provides the text of the permalink to give context to the
+	 *            user's comment.
+	 * @param url
+	 *            string The url associated with the item the user is commenting
+	 *            on. This is required if publishing a feed story as it is the
+	 *            permalink associated with the comment.
+	 * @param publish_to_stream
+	 *            bool Whether a feed story should be published about this
+	 *            comment. This defaults to false and can only be 'true' if the
+	 *            user has granted the publish_stream extended permission.
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. Desktop and
+	 *            Javascript Client Library applications must pass a valid
+	 *            session key.
+	 * 
+	 * 
+	 */
 	public void comments_add(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
-
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "*xid,text,uid,title,url,publish_to_stream,session_key");
+		callMethod ( "comments.add", p.getJavaScriptObject(), callback );
 	}
 
-	public void comments_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * Returns all comments for a given XID posted through fb:comments or the
+	 * Comments Box (which is created with the fb:comments (XFBML) tag). This
+	 * method is a wrapper for the FQL query on the comment FQL table.
+	 * 
+	 * You can specify only one XID with this call. If you want to retrieve
+	 * comments for multiple XIDs, run fql.query against the comment FQL table.
+	 * 
+	 * @param xid
+	 *            int The comment xid that you want to retrieve. For a Comments
+	 *            Box, you can determine the xid on the admin panel or in the
+	 *            application settings editor in the Facebook Developer
+	 *            application.
+	 * @param callback
+	 */
+	public void comments_get(Map<String, String> params, final AsyncCallback<List<Comment>> callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "*xid");
 
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue>() {
+
+			public void onFailure(Throwable caught) {
+				callback.onFailure(caught);
+			}
+
+			public void onSuccess(JSONValue result) {
+				List<Comment> resultList = new ArrayList<Comment>();
+				for (JSONValue v : parse(result)) {
+					resultList.add(new Comment(v.isObject()));
+				}
+				callback.onSuccess(resultList);
+			}
+
+		};
+		callMethod("comments.get", p.getJavaScriptObject(), internCallback);
 	}
 
 	public void comments_remove(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -930,19 +1006,19 @@ public class FacebookApi {
 	public void photos_createAlbum(Map<String, String> params, final AsyncCallback<Photo> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "name,location,description,visible,uid");
-		
-		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
+
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable caught) {
 				callback.onFailure(caught);
 			}
 
 			public void onSuccess(JSONValue result) {
-				Photo p = new Photo ( result.isObject() );
+				Photo p = new Photo(result.isObject());
 				callback.onSuccess(p);
 			}
 		};
-		callMethod ( "photos.createAlbum", p.getJavaScriptObject(), internCallback );
+		callMethod("photos.createAlbum", p.getJavaScriptObject(), internCallback);
 	}
 
 	public void photos_getTags(Map<String, String> params, AsyncCallback<JSONValue> callback) {
