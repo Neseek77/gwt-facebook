@@ -13,7 +13,7 @@ import com.gwittit.client.facebook.entities.FriendList;
  */
 public class Friends_getLists extends Example { 
 	
-	private final static String method = "friends_getLists";
+	private final static String method = "friends.getLists";
 	
 	public Friends_getLists () {
 		super ( method );

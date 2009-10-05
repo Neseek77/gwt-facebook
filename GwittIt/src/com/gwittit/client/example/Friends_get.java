@@ -20,19 +20,11 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  */
 public class Friends_get extends Example  {
 
+	static String method = "friends.get";
 	
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return "method friends.get";
+	public Friends_get () {
+		super ( method );
 	}
-
-	@Override
-	public String getHeader() {
-		// TODO Auto-generated method stub
-		return "Friends.get";
-	}
-	
 
 	@Override
 	public Widget createWidget () {

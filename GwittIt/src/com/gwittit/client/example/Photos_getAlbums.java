@@ -14,22 +14,17 @@ import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.Xfbml;
+import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
 public class Photos_getAlbums extends Example {
 
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return "Display albums of current logged in user";
-	}
-
-	@Override
-	public String getHeader() {
-		return "photos.getAlbums";
-	}
-
 	
+	static final String method  = "photos.getAlbums";
 	
+	public Photos_getAlbums () {
+		super ( method );
+	}
+		
 	
 	public Widget createWidget () {
 		
@@ -52,7 +47,7 @@ public class Photos_getAlbums extends Example {
 				for ( Album a : result ) {
 					String html ="Name: " + a.getName() + ", Description: " + a.getDescription(); 
 					outer.add ( new HTML ( html ) );
-					outer.add ( new FbPhoto ( a.getCoverPid() ) );
+					outer.add ( new FbPhoto ( a.getCoverPid() , Size.small ) );
 				}
 				Xfbml.parse(outer);
 			}
@@ -60,6 +55,10 @@ public class Photos_getAlbums extends Example {
 		});
 		
 		return outer;
+	}
+	
+	private void displayAlbum ( Long uid ) {
+		
 	}
 	
 }

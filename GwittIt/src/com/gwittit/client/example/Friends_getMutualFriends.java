@@ -19,7 +19,7 @@ import com.gwittit.client.facebook.xfbml.FbProfilePic.Size;
  */
 public class Friends_getMutualFriends extends Example {
 	
-	static String method = "friends_getMutualFriends";
+	static String method = "friends.getMutualFriends";
 	
 	public Friends_getMutualFriends () {
 		super ( method );

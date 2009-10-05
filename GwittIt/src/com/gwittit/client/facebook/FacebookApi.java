@@ -105,7 +105,8 @@ public class FacebookApi {
 
 		JSONObject p = getDefaultParams();
 
-		copyAllParams(p, params, "viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata");
+		copyAllParams(p, params,
+				"viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata");
 
 		// Create native callback and parse response.
 		final AsyncCallback<JSONValue> c = new AsyncCallback<JSONValue>() {
@@ -216,7 +217,8 @@ public class FacebookApi {
 	 * com.gwittit.client.facebook.FacebookApi#photos_getAlbums(java.util.Map,
 	 * com.google.gwt.user.client.rpc.AsyncCallback)
 	 */
-	public void photos_getAlbums(Map<String, String> params, final AsyncCallback<List<Album>> callback) {
+	public void photos_getAlbums(Map<String, String> params,
+			final AsyncCallback<List<Album>> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "uid,aids");
 
@@ -273,27 +275,28 @@ public class FacebookApi {
 	 * @param params
 	 * @param callback
 	 */
-	public void photos_get(final Map<String, String> params, final AsyncCallback<List<Photo>> callback) {
+	public void photos_get(final Map<String, String> params,
+			final AsyncCallback<List<Photo>> callback) {
 		JSONObject obj = getDefaultParams();
 		copyAllParams(obj, params, "subj_id,aid,pids");
-		
-		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue> () {
+
+		AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable caught) {
 				callback.onFailure(caught);
 			}
 
 			public void onSuccess(JSONValue result) {
-				List<Photo> photos = new ArrayList<Photo> ();
-				for ( JSONValue v : parse ( result ) ) {
-					photos.add ( new Photo ( v.isObject() ) ); 
+				List<Photo> photos = new ArrayList<Photo>();
+				for (JSONValue v : parse(result)) {
+					photos.add(new Photo(v.isObject()));
 				}
-				
+
 				callback.onSuccess(photos);
 			}
-			
+
 		};
-		
+
 		callMethod("photos.get", obj.getJavaScriptObject(), a);
 	}
 
@@ -714,7 +717,7 @@ public class FacebookApi {
 	 * 
 	 * required
 	 * 
-
+	 * 
 	 * @param target_uid
 	 *            int The user ID of one of the target user whose mutual friends
 	 *            you want to retrieve. optional
@@ -734,9 +737,10 @@ public class FacebookApi {
 	 *            mutual friends of. Defaults to the current session user.
 	 *            Specify the source_uid when calling this method without a
 	 *            session key.
-	 * @param dummy           
+	 * @param dummy
 	 */
-	public void friends_getMutualFriends(Map<String, String> params, AsyncCallback<List<Long>> callback) {
+	public void friends_getMutualFriends(Map<String, String> params,
+			AsyncCallback<List<Long>> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,target_uid,source_uid");
 		friends_getGeneric("friends.getMutualFriends", p.getJavaScriptObject(), callback);
@@ -892,9 +896,53 @@ public class FacebookApi {
 
 	}
 
-	public void photos_createAlbum(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * Creates and returns a new album owned by the specified user or the
+	 * current session user. See photo uploads for a description of the upload
+	 * workflow. The only storable values returned from this call are aid and
+	 * owner. No relationships between them are storable.
+	 * 
+	 * For Web applications, you must pass either the ID of the user on whose
+	 * behalf you're making this call or the session key for that user, but not
+	 * both. If you don't specify a user with the uid parameter, then that user
+	 * whose session it is will be the target of the call.
+	 * 
+	 * However, if your application is a desktop application, you must pass a
+	 * valid session key for security reasons. Do not pass a uid parameter.
+	 * 
+	 * @param name
+	 *            string The album name.
+	 * @param location
+	 *            string The album location.
+	 * @param description
+	 *            string The album description.
+	 * @param visible
+	 *            string Visibility of the album. One of friends,
+	 *            friends-of-friends, networks, everyone.
+	 * @param uid
+	 *            int The user ID of the user for whom you are creating the
+	 *            album. If this parameter is not specified, then it defaults to
+	 *            the session user. Note: This parameter applies only to Web
+	 *            applications and is required by them only if the session_key
+	 *            is not specified. Facebook ignores this parameter if it is
+	 *            passed by a desktop application.
+	 */
+	public void photos_createAlbum(Map<String, String> params, final AsyncCallback<Photo> callback) {
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "name,location,description,visible,uid");
+		
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
 
+			public void onFailure(Throwable caught) {
+				callback.onFailure(caught);
+			}
+
+			public void onSuccess(JSONValue result) {
+				Photo p = new Photo ( result.isObject() );
+				callback.onSuccess(p);
+			}
+		};
+		callMethod ( "photos.createAlbum", p.getJavaScriptObject(), internCallback );
 	}
 
 	public void photos_getTags(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -1414,8 +1462,8 @@ public class FacebookApi {
 	 */
 	private void copyAllParams(JSONObject obj, Map<String, String> params, String list) {
 
-		if ( params == null ) {
-			return ;
+		if (params == null) {
+			return;
 		}
 		String errorString = "";
 

@@ -14,6 +14,8 @@ public class Photo {
 	
 	private String aid;
 	
+	private String name;
+	
 	private Long owner;
 	
 	private String src;
@@ -27,6 +29,7 @@ public class Photo {
 	private String caption;
 
 
+
 	public Photo () { }
 	
 	public Photo  ( JSONObject o ) {
@@ -34,6 +37,7 @@ public class Photo {
 		aid = JsonUtil.getString (o, "aid");
 		owner = JsonUtil.getLong (o, "owner");
 		
+		name = JsonUtil.getString(o, "name" );
 		src = JsonUtil.getString ( o, "src");
 		srcBig = JsonUtil.getString(o, "src_big" );
 		srcSmall = JsonUtil.getString(o, "src_small" ); 
@@ -41,6 +45,14 @@ public class Photo {
 		caption = JsonUtil.getString ( o, "caption" );
 	}
 	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getPid() {
 		return pid;
