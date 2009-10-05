@@ -403,6 +403,7 @@ public class FacebookApi {
 	 * extended permission.
 	 * 
 	 * required
+	 * 
 	 * @param xid
 	 *            string The xid of a particular Comments Box or fb:comments.
 	 * @param text
@@ -436,7 +437,7 @@ public class FacebookApi {
 	public void comments_add(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "*xid,text,uid,title,url,publish_to_stream,session_key");
-		callMethod ( "comments.add", p.getJavaScriptObject(), callback );
+		callMethod("comments.add", p.getJavaScriptObject(), callback);
 	}
 
 	/**
@@ -456,7 +457,7 @@ public class FacebookApi {
 	 */
 	public void comments_get(Map<String, String> params, final AsyncCallback<List<Comment>> callback) {
 		JSONObject p = getDefaultParams();
-		copyAllParams(p, params, "*xid");
+		// copyAllParams(p, params, "*xid");
 
 		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue>() {
 
@@ -473,12 +474,32 @@ public class FacebookApi {
 			}
 
 		};
-		callMethod("comments.get", p.getJavaScriptObject(), internCallback);
+		// Possible facebook bug
+		// callMethod("comments.get", p.getJavaScriptObject(), internCallback);
+		String fql = "select xid, text,fromid,time,id,username,reply_xid from comment where xid ='"
+				+ params.get("xid") + "'";
+		fql_query(fql, internCallback);
+
 	}
 
+	/**
+	 * This method removes a comment from an xid on behalf of a user (or not).
+	 * 
+	 * Desktop applications must pass a valid session key, and only comments
+	 * made by the user can be removed by that user. When using the app secret,
+	 * an application may remove any of its comments. required
+	 * 
+	 * @param xid
+	 *            string The xid of a particular Comments Box or fb:comments.
+	 * @param comment_id
+	 *            string The comment_id, as returned by Comments.add or
+	 *            Comments.get, to be removed.
+	 */
 	public void comments_remove(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
-
+		JSONObject p = getDefaultParams();
+		
+		copyAllParams(p, params, "*xid,*comment_id");
+		callMethod ( "comments.remove", p.getJavaScriptObject(), callback );
 	}
 
 	public void connect_getUnconnectedFriendsCount(Map<String, String> params,
