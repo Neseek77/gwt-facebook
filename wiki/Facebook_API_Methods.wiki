@@ -21,9 +21,9 @@
 ||auth.revokeAuthorization||  ||
 ||auth.revokeExtendedPermission||  ||
 ||batch.run||  ||
-||comments.add||  ||
-||comments.get||  ||
-||comments.remove||  ||
+||comments.add|| YES || 1.0 ||
+||comments.get|| YES || 1.0 ||
+||comments.remove|| YES || 1.0 ||
 ||connect.getUnconnectedFriendsCount||  ||
 ||connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
