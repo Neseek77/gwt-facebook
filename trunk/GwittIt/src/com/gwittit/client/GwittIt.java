@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.example.TestClient;
-import com.gwittit.client.examples.PhotosGetAlbumsExample;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
@@ -37,10 +36,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	
 	// Where we hold everything
 	private VerticalPanel outer = new VerticalPanel ();
-	
-	private SimplePanel menuBarWrapper = new SimplePanel ();
-	private FlowPanel menuBar = new FlowPanel  ();
-	
+		
 	private HorizontalPanel inner = new HorizontalPanel ();
 	
 	// TopMenu displayed on every page
@@ -49,11 +45,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	
 	private Frontpage frontpage;
 
-	private Anchor friendsGetLink = new Anchor ( "Friends" );
-	private Anchor calendarGetLink = new Anchor ( "Calendar" );
+	final Anchor frontPage = new Anchor ( "Frontpage");
+	final Anchor testClient = new Anchor ( "Showcases");
 	
-	private Anchor photosGetLink = new Anchor ( "Photos" );
-
 	// Where we hold the main body
 	private SimplePanel example = new SimplePanel ();
 	
@@ -95,101 +89,61 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		//menuBar.addStyleName("menuBar" );
 		//menuBarWrapper.addStyleName ( "menuBarWrapper" );
 		
-		friendsGetLink.addClickHandler(this);
-		calendarGetLink.addClickHandler(this);
+		outer.add ( topMenu );
 		
+		
+		if ( UserInfo.isLoggedIn() ) {
+			HorizontalPanel mainMenubar = new HorizontalPanel ();
+			mainMenubar.add ( frontPage );
+			mainMenubar.add ( testClient );
+			frontPage.addClickHandler( this );
+			testClient.addClickHandler( this );		
+			mainMenubar.addStyleName("mainMenubar");
+			outer.add ( mainMenubar );
+		}
+		
+		outer.add ( inner );
+		
+		if ( UserInfo.isLoggedIn () ) {
 		// Render page
-		render ( Window.Location.getHash() );
+			renderPage ( Window.Location.getHash() );
+		} else {
+			outer.add ( loginWidget );
+		}
+
 		
 		RootPanel.get().add ( outer );
-		
+		FacebookConnect.getLoggedInUser() ;
 		//showFriendList ();
 		Xfbml.parse( outer.getElement() );
 
 	}
 
 	
-	/**
-	 * Render based on hash 
-	 */
-	public void render( String hash ) {
-		
-		outer.clear();
-		outer.add ( topMenu );
-
-		if ( UserInfo.isLoggedIn() ) {
-			
-			setLeftMargin();
-			// Add the app.
-			
-			
-			if ( !"#testClient".equals ( hash ) )  {
-				frontpage = new Frontpage ( apiClient, eventBus );
-				Panel menu = frontpage.getMenu ();
-				inner.add ( menu );
-			}
-			
-			inner.add ( example );
-	
-			//menuBar.add(friendsGetLink );
-			//menuBar.add(calendarGetLink);
-			
-			//menuBarWrapper.add( menuBar );
-			outer.add ( menuBarWrapper ) ;
-			outer.add( new HTML ( "<div style=\"clear: all\" />") );
-			outer.add ( inner );
-
-			renderPage ( hash );
-			
-		} else {
-		
-			outer.add ( loginWidget );
-		}
-		
-	}
-
 	
 	/**
 	 * Route to correct page 
 	 */
 	public void renderPage ( String hash ) {
-		
-		if ( !UserInfo.isLoggedIn() ) {
-			render ( Window.Location.getHash() );
-			return ;
-		}
-	
-		if ( "#stream.get".equals ( hash ) || hash == null || "#".equals ( hash ) || "".equals( hash ) )  {
-			example.setWidget( frontpage );
-		} else if ( "#photos.getAlbums".equals ( hash ) ) {
-			example.setWidget( new PhotosGetAlbumsExample ( apiClient ) ) ;
+
+		inner.clear ();
+
+		if ( "#frontpage".equals ( hash ) || hash == null || "#".equals ( hash ) || "".equals( hash ) )  {
+
+			if ( frontpage == null ) {
+				frontpage = new Frontpage ( apiClient, eventBus );
+			}
+			Panel menu = frontpage.getMenu ();
+			inner.add ( menu );
+			inner.add ( frontpage );
+
 		} else if ( "#testClient".equals( hash ) ) {
-			example.setWidget(new TestClient () );
+			
+			inner .add ( new TestClient () );
 		} else {
 			Window.alert ( "unkown path " + hash );
 		}
 
-	}
-
-	private void showFriendList () {
-		FriendListWidget friendList = new FriendListWidget ();
-		friendList.setAutoHideEnabled(true);
-		friendList.center();
-		friendList.show();
-	}
-	
-	/**
-	 * Get whatever user clicks.
-	 */
-	public void onClick(ClickEvent event) {
-		if ( event.getSource() == friendsGetLink ) {
-			showFriendList ();
-			
-		} else if ( event.getSource() == photosGetLink ) {
-			History.newItem( "photos.getAlbums");
-		} else {
-			Window.alert ( "Unknown link clicked");
-		}
 	}
 
 	/**
@@ -206,7 +160,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
         eventBus.addHandler(LoginEvent.getType(), new LoginHandler () {
 			public void loginStatusChanged(LoginEvent event) {
 			   	outer.clear();
-            	render ( Window.Location.getHash() );				
+			   	onModuleLoad();
 			}
         });
 	}
@@ -214,7 +168,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	/**
 	 * Set a suitable leftmargin. Can be done with css ?
 	 */
-	public void setLeftMargin () {
+	public void sxxetLeftMargin () {
 		
 		if ( Window.getClientWidth() > 930 ) {
 			
@@ -231,6 +185,17 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	 */
 	public void onResize(ResizeEvent event) {
 		
-		setLeftMargin();
+	}
+
+
+	public void onClick(ClickEvent event) {
+		Anchor a  = ( Anchor)event.getSource();
+		
+		if ( a == frontPage ) {
+			History.newItem( "frontpage");
+		} else if ( a == testClient ) {
+			History.newItem( "testClient") ;
+			
+		}
 	}
 }

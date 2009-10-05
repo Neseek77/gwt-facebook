@@ -14,7 +14,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.Config;
+import com.gwittit.client.example.FriendSelector.FriendSelectionHandler;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.entities.Photo;
@@ -23,78 +25,44 @@ import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
-public class ShowPhotosGet extends Example {
+/**
+ * Photos get
+ */
+public class Photos_get extends Example {
 
-	final FacebookApi apiClient = ApiFactory.newApiClient(Config.API_KEY);
+	static final String method = "photos.get";
 	
-	final HorizontalPanel paramsWrapper = new HorizontalPanel ();
-	final VerticalPanel resultWrapper = new VerticalPanel ();
-	final VerticalPanel paramsResultWrapper = new VerticalPanel ();
 	
-
+	HorizontalPanel paramsWrapper;
+	VerticalPanel resultWrapper;
+	VerticalPanel paramsResultWrapper;
+	
+	public Photos_get () {
+		super( method );
+	}
+	
 	@Override
-	public String getHeader() {
-		// TODO Auto-generated method stub
-		return "Photos.get";
-	}
-	
-	public String getDescription () {
-		return "Executes photos.get  with param uid" ;
-	}
-	
-	public ShowPhotosGet () {
+	public Widget createWidget () {
+		paramsWrapper = new HorizontalPanel ();
+		resultWrapper = new VerticalPanel ();
+		paramsResultWrapper = new VerticalPanel ();
 		
 		paramsWrapper.addStyleName("params");
 		paramsResultWrapper.add ( paramsWrapper );
 		paramsResultWrapper.add ( resultWrapper );
 		
-		render ();
-		initWidget ( paramsResultWrapper );
-	}
-	
-	
-	private void render () {
-		
-		paramsWrapper.add(getLoader() );
-		
-		Map<String,String> params = new HashMap<String,String> ();
-		
-		apiClient.friends_get(params, new AsyncCallback<List<Long>> () {
+		FriendSelector fs = new FriendSelector ();
+		fs.addFriendSelectionHandler(new FriendSelectionHandler () {
 
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void onSuccess(List<Long> result) {
-				
-			    final ListBox dropBox = new ListBox(false);
-			    dropBox.getElement().setId( "dropBox");
-				for ( Long uid : result ) {
-				
-					dropBox.addItem ( uid + "" );
-				}
-				
-				paramsWrapper.clear ();
-				paramsWrapper.add ( new HTML ( "Choose Friend" ) );
-				paramsWrapper.add(dropBox);
-
-				Button b = new Button ( "Go");
-				paramsWrapper.add ( b );
-				b.addClickHandler(new ClickHandler () {
-
-					public void onClick(ClickEvent event) {
-						renderPhotos ( dropBox.getValue( dropBox.getSelectedIndex() ) ) ;
-					}
-					
-				});
+			public void onSelected(Long uid) {
+				displayPhotos(uid+"");
 			}
 			
-		});		
-		
+		});
+		return paramsResultWrapper;
 	}
 	
-	private void renderPhotos ( final String uid ) {
+	private void displayPhotos ( final String uid ) {
 		resultWrapper.add( getLoader() );
 		
 		Map<String,String> params = new HashMap<String,String> ();

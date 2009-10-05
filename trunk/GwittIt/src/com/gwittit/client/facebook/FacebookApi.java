@@ -105,8 +105,7 @@ public class FacebookApi {
 
 		JSONObject p = getDefaultParams();
 
-		copyAllParams(p, params,
-				"viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata");
+		copyAllParams(p, params, "viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata");
 
 		// Create native callback and parse response.
 		final AsyncCallback<JSONValue> c = new AsyncCallback<JSONValue>() {
@@ -739,25 +738,7 @@ public class FacebookApi {
 	 * 
 	 * required
 	 * 
-	 * @param api_key
-	 *            string The application key associated with the calling
-	 *            application. If you specify the API key in your client, you
-	 *            don't need to pass it with every call.
-	 * @param call_id
-	 *            float The request's sequence number. Each successive call for
-	 *            any session must use a sequence number greater than the last.
-	 *            We suggest using the current time in milliseconds, such as
-	 *            PHP's microtime(true) function. If you specify the call ID in
-	 *            your client, you don't need to pass it with every call.
-	 * @param sig
-	 *            string An MD5 hash of the current request and your secret key,
-	 *            as described in the How Facebook Authenticates Your
-	 *            Application. Facebook computes the signature for you
-	 *            automatically.
-	 * @param v
-	 *            string This must be set to 1.0 to use this version of the API.
-	 *            If you specify the version in your client, you don't need to
-	 *            pass it with every call.
+
 	 * @param target_uid
 	 *            int The user ID of one of the target user whose mutual friends
 	 *            you want to retrieve. optional
@@ -766,9 +747,6 @@ public class FacebookApi {
 	 *            is automatically included by our PHP client. If you don't pass
 	 *            a session key, then you must pass a source_id. Desktop
 	 *            applications must always include a session_key
-	 * @param format
-	 *            string The desired response format, which can be either XML or
-	 *            JSON. (Default value is XML.)
 	 * @param callback
 	 *            string Name of a function to call. This is primarily to enable
 	 *            cross-domain JavaScript requests using the <script> tag, also
@@ -780,9 +758,9 @@ public class FacebookApi {
 	 *            mutual friends of. Defaults to the current session user.
 	 *            Specify the source_uid when calling this method without a
 	 *            session key.
+	 * @param dummy           
 	 */
-	public void friends_getMutualFriends(Map<String, String> params,
-			AsyncCallback<List<Long>> callback) {
+	public void friends_getMutualFriends(Map<String, String> params, AsyncCallback<List<Long>> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,target_uid,source_uid");
 		friends_getGeneric("friends.getMutualFriends", p.getJavaScriptObject(), callback);
@@ -1460,6 +1438,9 @@ public class FacebookApi {
 	 */
 	private void copyAllParams(JSONObject obj, Map<String, String> params, String list) {
 
+		if ( params == null ) {
+			return ;
+		}
 		String errorString = "";
 
 		String[] keys = list.split(",");

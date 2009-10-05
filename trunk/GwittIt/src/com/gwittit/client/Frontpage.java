@@ -14,6 +14,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -24,7 +25,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
-import com.gwittit.client.examples.Example;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.entities.StreamFilter;
@@ -33,7 +33,7 @@ import com.gwittit.client.facebook.entities.StreamFilter;
 /**
  * This page let the user write a status and publish it to multiple sources. Facebook Profile, Facebook Pages and Twitter.
  */
-public class Frontpage extends Example implements ClickHandler {
+public class Frontpage  extends Composite implements ClickHandler {
 	
 	private static String LOGPREFIX = "Frontpage: ";
 	
@@ -109,6 +109,8 @@ public class Frontpage extends Example implements ClickHandler {
 		
 		renderUi();
 		
+		initWidget ( outer );
+		
 	}
 
 	/**
@@ -183,9 +185,6 @@ public class Frontpage extends Example implements ClickHandler {
 		statusBoxPnl.add ( inputBar );
 		statusBoxPnl.add ( inputTextArea );
 		statusBoxPnl.add ( submit );
-		
-	//	Xfbml.parse();
-		initWidget ( outer );
 		
 	}
 
@@ -285,14 +284,5 @@ public class Frontpage extends Example implements ClickHandler {
                 }
         });
 	}
-
-
-	@Override
-	public String getInfo() {
-		// TODO Auto-generated method stub
-		return "Demonstrates the call stream.get , status.set and more ";
-	}
-
-	
 
 }
