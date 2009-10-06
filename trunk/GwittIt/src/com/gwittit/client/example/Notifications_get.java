@@ -7,8 +7,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.facebook.entities.NotificationCurrent;
-import com.gwittit.client.facebook.entities.NotificationCurrent.NotificationType;
+import com.gwittit.client.facebook.entities.NotificationRequest;
+import com.gwittit.client.facebook.entities.NotificationRequest.NotificationType;
 import com.gwittit.client.facebook.xfbml.FbEventLink;
 import com.gwittit.client.facebook.xfbml.FbGroupLink;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
@@ -36,16 +36,16 @@ public class Notifications_get extends Example {
 		addLoader(outer);
 		
 		// Get facebook data
-		apiClient.notifications_get(new AsyncCallback<List<NotificationCurrent>> () {
+		apiClient.notifications_get(new AsyncCallback<List<NotificationRequest>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
 
-			public void onSuccess( List<NotificationCurrent> result ) {
+			public void onSuccess( List<NotificationRequest> result ) {
 				removeLoader ( outer );
 				
-				for ( NotificationCurrent nc : result ) {
+				for ( NotificationRequest nc : result ) {
 					outer.add ( new HTML ( "<h3>" + nc.getType() + "</h3>") );
 
 					if ( nc.getUnread() != null ) {

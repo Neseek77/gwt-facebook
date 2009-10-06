@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Window;
  * @author ola
  *
  */
-public class NotificationCurrent {
+public class NotificationRequest {
 
 	public enum NotificationType {messages,pokes,friend_requests,group_invites,shares,event_invites};
 	
@@ -30,10 +30,10 @@ public class NotificationCurrent {
 	private List<Long> requestIds = new ArrayList<Long> ();
 
 	
-	public NotificationCurrent( String type, JSONValue v ) {
+	public NotificationRequest( String type, JSONValue v ) {
 		this.type = type;
 
-		GWT.log ( NotificationCurrent.class + "Create new NotficationCurrent: " + type + ":" + v, null );
+		GWT.log ( NotificationRequest.class + "Create new NotficationCurrent: " + type + ":" + v, null );
 		
 		JSONObject o = v.isObject();
 		

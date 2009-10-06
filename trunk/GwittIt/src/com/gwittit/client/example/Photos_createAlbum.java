@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwittit.client.facebook.FacebookApi.PhotosCreateAlbumParams;
 import com.gwittit.client.facebook.entities.Photo;
 
 
@@ -66,15 +67,14 @@ public class Photos_createAlbum extends Example {
 		return outer;
 	}
 	
-	
-	
 	private void createAlbum ( final String name, final String visible ) {
+
+		// Set params 
+		Map<PhotosCreateAlbumParams,String> params = new HashMap<PhotosCreateAlbumParams,String> ();
+		params.put( PhotosCreateAlbumParams.name, name);
+		params.put( PhotosCreateAlbumParams.visible, visible );
 		
-		Map<String,String> params = new HashMap<String,String> ();
-		params.put( "name", name);
-		params.put("visible",visible );
-		
-		apiClient.photos_createAlbum(params, new AsyncCallback<Photo> () {
+		apiClient.photos_createAlbumSafe(params, new AsyncCallback<Photo> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
