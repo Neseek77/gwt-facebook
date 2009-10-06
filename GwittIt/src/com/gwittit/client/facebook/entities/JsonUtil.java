@@ -34,9 +34,14 @@ public class JsonUtil {
 	
 	
 	public static String getString ( JSONObject o , String key ) {
+		if ( o == null ) {
+			return null;
+		}
 		if ( o.get(key) != null ) {
 			if ( o.get(key).isString() != null )  {
 				return o.get(key).isString().stringValue();
+			} else if ( o.get(key).isNumber() != null )  {
+				return "" + o.get(key).isNumber().doubleValue();
 			}
 		} 
 		return null;

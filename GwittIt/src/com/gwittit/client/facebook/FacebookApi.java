@@ -17,10 +17,10 @@ import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
+import com.gwittit.client.facebook.entities.NotificationCurrent;
 import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
-import com.gwittit.client.facebook.ui.FriendListWidget;
 
 /**
  * The class contains function defining the Facebook API. With the API, you can
@@ -497,9 +497,9 @@ public class FacebookApi {
 	 */
 	public void comments_remove(Map<String, String> params, AsyncCallback<JSONValue> callback) {
 		JSONObject p = getDefaultParams();
-		
+
 		copyAllParams(p, params, "*xid,*comment_id");
-		callMethod ( "comments.remove", p.getJavaScriptObject(), callback );
+		callMethod("comments.remove", p.getJavaScriptObject(), callback);
 	}
 
 	public void connect_getUnconnectedFriendsCount(Map<String, String> params,
@@ -942,14 +942,72 @@ public class FacebookApi {
 
 	}
 
-	public void notifications_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
+	/**
+	 * This method returns the same set of subelements, whether or not there are
+	 * outstanding notifications in any area. Note that if the unread subelement
+	 * value is 0 for any of the pokes or shares elements, the most_recent
+	 * element is also 0. Otherwise, the most_recent element contains an
+	 * identifier for the most recent notification of the enclosing type.
+	 * 
+	 * If you are building an application that notifies users of new
+	 * messages/pokes/shares, we encourage you to use the following logic when
+	 * deciding whether to show a notification:
+	 * 
+	 * 
+	 * @param params
+	 * @param callback
+	 */
+	public void notifications_get(final AsyncCallback<List<NotificationCurrent>> callback) { 
+		JSONObject p = getDefaultParams();
+		final NotificationCurrent.NotificationType[] types = NotificationCurrent.NotificationType.values();
+		
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
 
+			public void onFailure(Throwable caught) {
+				callback.onFailure(caught);
+			}
+
+			public void onSuccess(JSONValue result) {
+				List<NotificationCurrent> resultList = new ArrayList<NotificationCurrent> ();
+				
+				for ( NotificationCurrent.NotificationType t : types ) {
+					if ( result.isObject().get(t.toString()) != null ) {
+						resultList.add ( new NotificationCurrent (t.toString(), result.isObject().get(t.toString()) )  );
+					}
+				}
+				callback.onSuccess(resultList);
+			}
+		};
+		callMethod("notifications.get", p.getJavaScriptObject(), internCallback);
 	}
 
+	/**
+	 * This method gets all the current session user's notifications, as well as
+	 * data for the applications that generated those notifications. It is a
+	 * wrapper around the notification and application FQL tables; you can
+	 * achieve more fine-grained control by using those two FQL tables in
+	 * conjunction with the fql.multiquery API call.
+	 * 
+	 * Applications must pass a valid session key.
+	 * 
+	 * optional
+	 * 
+	 * @param start_time
+	 *            time Indicates the earliest time to return a notification.
+	 *            This equates to the updated_time field in the notification FQL
+	 *            table. If not specified, this call returns all available
+	 *            notifications.
+	 * @param include_read
+	 *            bool Indicates whether to include notifications that have
+	 *            already been read. By default, notifications a user has read
+	 *            are not included.
+	 */
+	public enum NotificationsGetListParams{session_key,start_time, include_read }
 	public void notifications_getList(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
-
+		
+		JSONObject p = getDefaultParams();
+		copyAllParams(p, params, "session_key,start_time,include_read");
+		callMethod ( "notifications.getList", p.getJavaScriptObject(), callback );
 	}
 
 	public void notifications_markRead(Map<String, String> params, AsyncCallback<JSONValue> callback) {

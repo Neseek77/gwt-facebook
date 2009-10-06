@@ -57,33 +57,27 @@ public class Comments_get extends Example {
 					outer.add ( ui );
 					
 					ui.addDeleteHandler(new DeleteHandler () {
-
-						public void onDelete(Long id) {
+						public void onDelete(String id) {
 							Map<String,String> params = new HashMap<String,String> ();
-							params.put ( "comment_id", ""+id );
+							params.put ( "comment_id", id );
 							params.put("xid", XID);
 							
+							addLoader ( outer );
 							apiClient.comments_remove(params, new AsyncCallback<JSONValue> () {
 								public void onFailure(Throwable caught) {
 									handleFailure ( caught );
 								}
 								public void onSuccess(JSONValue result) {
+									removeLoader ( outer );
 									outer.remove ( ui );
 								}
 							});
-									
 						} 
-						
 					});
-					
 					Xfbml.parse(outer);
-						
 				}
 			}
-			
 		});
 		return outer;
 	}
-
-	
 }
