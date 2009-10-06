@@ -3,7 +3,7 @@
 = This list shows methods that should be implemented =
 
 
-|| *Method* || *Implemented* || *Version ||
+|| *Method* || *Implemented* || *Planned Version* ||
 ||admin.banUsers||  || 2.0 ||
 ||admin.unbanUsers||  || 2.0 ||
 ||admin.getAllocation||  || 2.0 ||
