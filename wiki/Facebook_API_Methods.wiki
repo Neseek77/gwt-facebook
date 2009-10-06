@@ -75,10 +75,10 @@
 ||pages.isAdmin||  ||
 ||pages.isAppAdded||  ||
 ||pages.isFan||  ||
-||photos.addTag||  ||
+||photos.addTag||  || 2.0 ||
 ||photos.createAlbum|| YES || 1.0 ||
-||photos.getTags||  ||
-||photos.upload||  ||
+||photos.getTags||   || 1.0 ||
+||photos.upload||  || 1.0 ||
 ||photos.getAlbums|| YES || 1.0 ||
 ||photos.get|| YES || 1.0 ||
 ||profile.getFBML||  ||
