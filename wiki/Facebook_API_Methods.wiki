@@ -66,11 +66,11 @@
 ||notes.delete||  ||
 ||notes.edit||  ||
 ||notes.get||  ||
-||notifications.get||  ||
-||notifications.getList||  ||
-||notifications.markRead||  ||
-||notifications.send||  ||
-||notifications.sendEmail||  ||
+||notifications.get|| YES || 1.0 ||
+||notifications.getList||  || 1.0 ||
+||notifications.markRead||  || 1.0 ||
+||notifications.send||  || 1.0
+||notifications.sendEmail||  || 1.0
 ||pages.getInfo||  ||
 ||pages.isAdmin||  ||
 ||pages.isAppAdded||  ||
