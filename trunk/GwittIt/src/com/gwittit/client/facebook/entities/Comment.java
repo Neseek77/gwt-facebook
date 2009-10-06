@@ -40,7 +40,7 @@ public class Comment {
 	/*
 	 * A unique ID for a given XID for each comment. 
 	 */
-	private Long id;
+	private String id;
 	
 	/*
 	 * The user name that a user entered when they posted a comment. In these cases, the fromid returned will be 0. Note that user names for valid users are not returned here. 
@@ -69,7 +69,7 @@ public class Comment {
 		fromId = JsonUtil.getLong(o, "fromid");
 		time = JsonUtil.getDate(o, "time");
 		text = JsonUtil.getString (o, "text");
-		id = JsonUtil.getLong(o, "id");
+		id = JsonUtil.getString(o, "id");
 		username = JsonUtil.getString(o, "username" );
 		replyXid = JsonUtil.getString(o, "reply_xid");
 		
@@ -118,11 +118,11 @@ public class Comment {
 
 
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
