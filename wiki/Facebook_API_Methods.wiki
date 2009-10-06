@@ -4,23 +4,23 @@
 
 
 || *Method* || *Implemented* || *Version ||
-||admin.banUsers||  ||
-||admin.unbanUsers||  ||
-||admin.getAllocation||  ||
-||admin.getAppProperties||  ||
-||admin.getBannedUsers||  ||
-||admin.getMetrics||  ||
-||admin.getRestrictionInfo||  ||
-||admin.setAppProperties||  ||
-||admin.setRestrictionInfo||  ||
-||application.getPublicInfo||  ||
-||auth.createToken||  ||
+||admin.banUsers||  || 2.0 ||
+||admin.unbanUsers||  || 2.0 ||
+||admin.getAllocation||  || 2.0 ||
+||admin.getAppProperties||  || 2.0 ||
+||admin.getBannedUsers||  || 2.0 ||
+||admin.getMetrics||  || 2.0 ||
+||admin.getRestrictionInfo||  || 2.0 ||
+||admin.setAppProperties||  || 2.0 ||
+||admin.setRestrictionInfo||  || 2.0 ||
+||application.getPublicInfo||  || 2.0 ||
+||auth.createToken||  || 
 ||auth.expireSession||  ||
 ||auth.getSession||  ||
 ||auth.promoteSession||  ||
 ||auth.revokeAuthorization||  ||
 ||auth.revokeExtendedPermission||  ||
-||batch.run||  ||
+||batch.run||  || 2.0 ||
 ||comments.add|| YES || 1.0 ||
 ||comments.get|| YES || 1.0 ||
 ||comments.remove|| YES || 1.0 ||
@@ -29,12 +29,12 @@
 ||connect.unregisterUsers||  ||
 ||data.getCookies||  ||
 ||data.setCookie||  ||
-||events.cancel||  ||
-||events.create||  ||
-||events.edit||  ||
-||events.get||  ||
-||events.getMembers||  ||
-||events.rsvp||  ||
+||events.cancel||  || 1.0 ||
+||events.create||  || 1.0 ||
+||events.edit||  || 1.0 ||
+||events.get||  || 1.0 ||
+||events.getMembers||  || 1.0 ||
+||events.rsvp||  || 1.0 ||
 ||fbml.deleteCustomTags||  ||
 ||fbml.getCustomTags||  ||
 ||fbml.refreshImgSrc||  ||
