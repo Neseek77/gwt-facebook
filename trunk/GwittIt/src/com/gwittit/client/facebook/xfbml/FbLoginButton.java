@@ -5,7 +5,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
 
 
-/*
+/**
  * Renders a <fb:login> tag.
  * 
  * Style gwittit-FbLoginButton
