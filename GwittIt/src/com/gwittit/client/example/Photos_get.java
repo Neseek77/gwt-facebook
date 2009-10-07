@@ -26,16 +26,17 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
 /**
- * Photos get
+ * Showcase for method call <code>photos.get</code>
+ * 
+ * @author olamar72
  */
 public class Photos_get extends Example {
 
 	static final String method = "photos.get";
 	
-	
-	HorizontalPanel paramsWrapper;
-	VerticalPanel resultWrapper;
-	VerticalPanel paramsResultWrapper;
+	private HorizontalPanel paramsWrapper;
+	private VerticalPanel resultWrapper;
+	private VerticalPanel paramsResultWrapper;
 	
 	public Photos_get () {
 		super( method );
@@ -63,12 +64,17 @@ public class Photos_get extends Example {
 		return paramsResultWrapper;
 	}
 	
+	
+	/*
+	 * Display photos of selected user 
+	 */
 	private void displayPhotos ( final String uid ) {
 		resultWrapper.add( getLoader() );
 		
 		Map<String,String> params = new HashMap<String,String> ();
 		params.put("subj_id", uid);
-		
+
+		// Get photos from facebook
 		apiClient.photos_get(params, new AsyncCallback<List<Photo>> () {
 
 			public void onFailure(Throwable caught) {

@@ -14,6 +14,11 @@ import com.gwittit.client.facebook.xfbml.FbGroupLink;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
+/**
+ * Showcase for method call <code>notifications.get</code>
+ *
+ * @author olamar72
+ */
 public class Notifications_get extends Example {
 	
 	public Notifications_get(){

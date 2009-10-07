@@ -17,21 +17,15 @@ import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
- * Method friends.areFriends
+ * Showcase for method call  <code>friends.areFriends</code>
+ * 
+ * @author olamar72
  */
 public class Friends_areFriends extends Example {
 	
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return "Execute friends.areFriends";
+	public Friends_areFriends() {
+		super ( "friends.areFriends");
 	}
-
-	@Override
-	public String getHeader() {
-		return "Friends.areFriends";
-	}
-
 	
 	@Override
 	public Widget createWidget () {
@@ -59,7 +53,8 @@ public class Friends_areFriends extends Example {
 					for ( FriendInfo fi : friendInfoList ) {
 						result.add ( 
 								new HTML (
-								new FbName  ( fi.getUid1() ).toString()  +  " friend with " +  new FbName ( fi.getUid2() ).toString() + " ? " + fi.getAreFriends() ) 
+								new FbName  ( fi.getUid1() )+  " friend with " +  
+								new FbName ( fi.getUid2() ) + " ? " + fi.getAreFriends() ) 
 								);
 					}
 

@@ -16,7 +16,9 @@ import com.gwittit.client.facebook.ui.CommentUi.DeleteHandler;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
- * Method comments.get
+ * Showcase for method call <code>comments.get</code>
+ * 
+ * @author olamar72
  */
 public class Comments_get extends Example {
 	

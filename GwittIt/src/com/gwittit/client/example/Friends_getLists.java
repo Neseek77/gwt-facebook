@@ -8,8 +8,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.entities.FriendList;
 
-/*
- * Method friends_getLists
+/**
+ * Showcase for method call  <code>friends_getLists</code>
+ * 
+ * @author olamar72
  */
 public class Friends_getLists extends Example { 
 	

@@ -15,7 +15,9 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbProfilePic.Size;
 
 /**
- * Method friends.getMutualFriends
+ * Showcase for method call <code>friends.getMutualFriends</code>
+ * 
+ * @author olamar72
  */
 public class Friends_getMutualFriends extends Example {
 	

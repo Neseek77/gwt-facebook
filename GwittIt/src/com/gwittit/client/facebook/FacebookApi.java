@@ -17,6 +17,7 @@ import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
+import com.gwittit.client.facebook.entities.JsonUtil;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
@@ -477,7 +478,8 @@ public class FacebookApi {
 		};
 		// Possible facebook bug
 		// callMethod("comments.get", p.getJavaScriptObject(), internCallback);
-		String fql = "select xid, text,fromid,time,id,username,reply_xid from comment where xid ='"+ params.get("xid") + "'";
+		String fql = "select xid, text,fromid,time,id,username,reply_xid from comment where xid ='"
+				+ params.get("xid") + "'";
 		fql_query(fql, internCallback);
 
 	}
@@ -750,9 +752,11 @@ public class FacebookApi {
 	}
 
 	/**
-	 * Params passeed to friends.getMutualFriends 
+	 * Params passeed to friends.getMutualFriends
 	 */
-	public enum FriendsGetMutualFriendsParam{target_uid,session_key,source_uid}
+	public enum FriendsGetMutualFriendsParam {
+		target_uid, session_key, source_uid
+	}
 
 	/**
 	 * Returns the Facebook user IDs of the mutual friends between the source
@@ -913,22 +917,24 @@ public class FacebookApi {
 	 * @param params
 	 * @param callback
 	 */
-	public void notifications_get(final AsyncCallback<List<NotificationRequest>> callback) { 
+	public void notifications_get(final AsyncCallback<List<NotificationRequest>> callback) {
 		JSONObject p = getDefaultParams();
-		final NotificationRequest.NotificationType[] types = NotificationRequest.NotificationType.values();
-		
-		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
+		final NotificationRequest.NotificationType[] types = NotificationRequest.NotificationType
+				.values();
+
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable caught) {
 				callback.onFailure(caught);
 			}
 
 			public void onSuccess(JSONValue result) {
-				List<NotificationRequest> resultList = new ArrayList<NotificationRequest> ();
-				
-				for ( NotificationRequest.NotificationType t : types ) {
-					if ( result.isObject().get(t.toString()) != null ) {
-						resultList.add ( new NotificationRequest (t.toString(), result.isObject().get(t.toString()) )  );
+				List<NotificationRequest> resultList = new ArrayList<NotificationRequest>();
+
+				for (NotificationRequest.NotificationType t : types) {
+					if (result.isObject().get(t.toString()) != null) {
+						resultList.add(new NotificationRequest(t.toString(), result.isObject().get(
+								t.toString())));
 					}
 				}
 				callback.onSuccess(resultList);
@@ -958,41 +964,89 @@ public class FacebookApi {
 	 *            already been read. By default, notifications a user has read
 	 *            are not included.
 	 */
-	public enum NotificationsGetListParams{session_key,start_time, include_read }
-	public void notifications_getList(Map<String, String> params, final AsyncCallback<List<Notification>> callback) {
-		
+	public enum NotificationsGetListParams {
+		session_key, start_time, include_read
+	}
+
+	public void notifications_getList(Map<String, String> params,
+			final AsyncCallback<List<Notification>> callback) {
+
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "session_key,start_time,include_read");
-		
-		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
+
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable caught) {
 				callback.onFailure(caught);
 			}
 
 			public void onSuccess(JSONValue result) {
-				
-				List<Notification> resultList = new ArrayList<Notification> ();
-				
-				JSONValue v = result.isObject().get ( "notifications" );
-				
+
+				List<Notification> resultList = new ArrayList<Notification>();
+
+				JSONValue v = result.isObject().get("notifications");
+
 				JSONArray a = v.isArray();
-				
-				for ( int i = 0; a != null && i < a.size(); i++ ) {
-					
-					resultList.add( new Notification ( a.get(i).isObject() ) );
+
+				for (int i = 0; a != null && i < a.size(); i++) {
+
+					resultList.add(new Notification(a.get(i).isObject()));
 				}
-				
+
 				callback.onSuccess(resultList);
+			}
+
+		};
+		callMethod("notifications.getList", p.getJavaScriptObject(), internCallback);
+	}
+
+	/**
+	 * Valid parameters for method notifications.markRead
+	 */
+	public enum NotificationsMarkReadParams{notification_ids}
+	
+	/**
+	 * 
+	 * This method marks one or more notifications as read. You return the
+	 * notifications by calling notifications.getList or querying the
+	 * notification FQL table.
+	 * 
+	 * Applications must pass a valid session key, and can only mark the
+	 * notifications of the current session user.
+	 * 
+	 * 
+	 * @param session_key
+	 *            string The session key of the logged in user. The session key
+	 *            is automatically included by our PHP client. Applications must
+	 *            pass a valid session key.
+	 * @param notification_ids
+	 *            array The IDs of the notifications to mark as read, as
+	 *            retrieved via the notification FQL table or the
+	 *            notifications.getList API method. This is a comma-separated
+	 *            list.
+	 * @param params
+	 * @param callback
+	 * 
+	 * @see http://wiki.developers.facebook.com/index.php/Notifications.markRead
+	 */
+	public void notifications_markRead(final Map<String, String> params, final AsyncCallback<Boolean> callback) {
+		JSONObject p = getDefaultParams();
+
+		copyAllParams( p, params, "session_key,*notification_ids");
+
+		AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
+
+			public void onFailure(Throwable caught) {
+				callback.onFailure(caught);
+				
+			}
+			public void onSuccess(JSONValue result) {
+				Boolean b = JsonUtil.getBoolean(result.isObject(), "result");
+				callback.onSuccess(b);
 			}
 			
 		};
-		callMethod ( "notifications.getList", p.getJavaScriptObject(), internCallback );
-	}
-
-	public void notifications_markRead(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-		// TODO Auto-generated method stub
-
+		callMethod ( "notifications.markRead", p.getJavaScriptObject(), internCallback );
 	}
 
 	public void notifications_send(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -1034,26 +1088,29 @@ public class FacebookApi {
 	/**
 	 * Valid params for method photos.createAlbum
 	 */
-	public enum PhotosCreateAlbumParams{name,location,description,visible,uid}
+	public enum PhotosCreateAlbumParams {
+		name, location, description, visible, uid
+	}
 
 	/**
 	 * Typesafe version of photos_createAlbum
+	 * 
 	 * @see #photos_createAlbum(Map, AsyncCallback)
 	 */
-	public void photos_createAlbumSafe(Map<PhotosCreateAlbumParams,String> params, final AsyncCallback<Photo> callback ) {
-		
-		Map<String,String> stringParams = new HashMap<String,String> ();
-		
-		for ( PhotosCreateAlbumParams p : PhotosCreateAlbumParams.values() ) {
-			Window.alert ( "params. " + p.name ());
-			if ( params.get(p)!= null ) {
-				stringParams.put(p.name(), params.get( p ) );
+	public void photos_createAlbumSafe(Map<PhotosCreateAlbumParams, String> params,
+			final AsyncCallback<Photo> callback) {
+
+		Map<String, String> stringParams = new HashMap<String, String>();
+
+		for (PhotosCreateAlbumParams p : PhotosCreateAlbumParams.values()) {
+			Window.alert("params. " + p.name());
+			if (params.get(p) != null) {
+				stringParams.put(p.name(), params.get(p));
 			}
 		}
-		photos_createAlbum ( stringParams, callback );
+		photos_createAlbum(stringParams, callback);
 	}
-	
-	
+
 	/**
 	 * Creates and returns a new album owned by the specified user or the
 	 * current session user. See photo uploads for a description of the upload
@@ -1085,7 +1142,7 @@ public class FacebookApi {
 	 *            is not specified. Facebook ignores this parameter if it is
 	 *            passed by a desktop application.
 	 */
-	
+
 	public void photos_createAlbum(Map<String, String> params, final AsyncCallback<Photo> callback) {
 		JSONObject p = getDefaultParams();
 		copyAllParams(p, params, "*name,location,description,visible,uid");

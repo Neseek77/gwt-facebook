@@ -7,9 +7,9 @@ import com.gwittit.client.example.Example;
 
 
 /**
- * Object that represents a Notification.
+ * Class that represents a Notification.
  */
-public class Notification extends Example {
+public class Notification {
 	
 	private Long notificationId;
 	
