@@ -25,6 +25,7 @@ public class Notifications_get extends Example {
 		super("notifications.get");
 	}
 
+	@Override
 	public Widget createWidget () {
 	
 		final VerticalPanel outer = new VerticalPanel ();
