@@ -16,7 +16,9 @@ import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
- * Method friends.get
+ * Showcase for method call <code>friends.get</code>
+ * 
+ * @author olamar72
  */
 public class Friends_get extends Example  {
 

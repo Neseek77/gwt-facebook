@@ -333,7 +333,7 @@ public class TestClient extends Composite  {
 			example = new Friends_get();
 		}
 		else if ( "friends_getAppUsers".equals ( m ) ) { 
-			example = new Friends_getAppUsers( m );
+			example = new Friends_getAppUsers();
 		}
 		else if ( "friends_getLists".equals ( m ) ) { 
 		    example = new Friends_getLists();

@@ -8,14 +8,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.Config;
-import com.gwittit.client.facebook.ApiFactory;
-import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
+/**
+ * Showcase for method call <code>photos.getAlbums</code>
+ * 
+ * @author olamar72
+ *
+ */
 public class Photos_getAlbums extends Example {
 
 	
@@ -25,7 +28,7 @@ public class Photos_getAlbums extends Example {
 		super ( method );
 	}
 		
-	
+	@Override
 	public Widget createWidget () {
 		
 		final VerticalPanel outer = new VerticalPanel ();
@@ -56,9 +59,4 @@ public class Photos_getAlbums extends Example {
 		
 		return outer;
 	}
-	
-	private void displayAlbum ( Long uid ) {
-		
-	}
-	
 }

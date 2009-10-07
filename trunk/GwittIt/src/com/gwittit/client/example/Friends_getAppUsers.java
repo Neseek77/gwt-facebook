@@ -9,13 +9,20 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
+/**
+ * Showcase for method call <code>friends.getAppUsers</code>
+ * 
+ * @author olamar72
+ *
+ */
 public class Friends_getAppUsers extends Example {
 
 	
-	public Friends_getAppUsers ( String method ) {
-		super ( method );
+	public Friends_getAppUsers () {
+		super ( "friends.getAppUsers" );
 	}
 	
+	@Override
 	public Widget createWidget () {
 
 		final VerticalPanel outer = new VerticalPanel ();

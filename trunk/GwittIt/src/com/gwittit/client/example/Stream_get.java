@@ -11,7 +11,9 @@ import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
- * Stream get
+ * Showcase for method call <code>stream.get</code>
+ * 
+ * @author olamar72
  */
 public class Stream_get extends Example {
 
