@@ -2,11 +2,13 @@ package com.gwittit.client.facebook.entities;
 
 import com.google.gwt.json.client.JSONObject;
 
+/**
+ * Photo Album
+ * @author olamar72
+ *
+ */
 public class Album {
-	/*
-	<aid>34595963571485</aid>  <cover_pid>34595991612812</cover_pid>  <owner>8055</owner>  <name>Films you will never see</name>  <created>1132553109</created>  <modified>1132553363</modified>  <description>No I will not make out with you</description>  <location>York, PA</location>  <link>http://www.facebook.com/album.php?aid=2002205&id=8055</link>  <size>30</size>  <visible>friends</visible>  <modified_major>1241834423</modified_major> 
-	*/
-
+	
 	private String aid;
 
 	private String coverPid;

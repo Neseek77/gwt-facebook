@@ -77,10 +77,7 @@ public class Attachment {
 	
 	
 	public Attachment () {
-		
 	}
-	
-	
 
 	public Attachment ( JSONValue j ) {
 		

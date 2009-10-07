@@ -24,7 +24,6 @@ public class Notifications_get extends Example {
 	public Notifications_get(){
 		super("notifications.get");
 	}
-
 	
 	@Override
 	public Widget createWidget () {
