@@ -68,7 +68,7 @@
 ||notes.get||  ||
 ||notifications.get|| YES || 1.0 ||
 ||notifications.getList|| YES || 1.0 ||
-||notifications.markRead||  || 1.0 ||
+||notifications.markRead|| YES || 1.0 ||
 ||notifications.send||  || 1.0 ||
 ||notifications.sendEmail||  || 1.0 ||
 ||pages.getInfo||  ||
