@@ -29,23 +29,15 @@ import com.gwittit.client.facebook.entities.StreamFilter;
  * add social context to your application by utilizing profile, friend, Page,
  * group, photo, and event data.
  * 
- * 
  * @see http://wiki.developers.facebook.com/index.php/API Facebook API
  * 
- * @author ola
  */
 public class FacebookApi {
-
-    public enum Permission {
-        read_stream, publish_stream
-    };
 
     private String apiKey;
 
     /**
      * Creates a new api
-     * 
-     * @param apiKey
      */
     protected FacebookApi(String apiKey) {
         this.apiKey = apiKey;
@@ -55,7 +47,7 @@ public class FacebookApi {
      * Valid params for <code>stream.get</code>
      */
     public enum StreamGetParams {
-        uid,session_key,viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata 
+        uid, session_key, viewer_id, source_ids, start_time, end_time, limit, filter_key, metadata
     }
 
     /**
@@ -114,7 +106,8 @@ public class FacebookApi {
 
         JSONObject p = getDefaultParams ();
 
-        copyAllParams ( p, convertEnumMap ( StreamGetParams.values(), params ), "uid,session_key,viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata" );
+        copyAllParams ( p, convertEnumMap ( StreamGetParams.values (), params ),
+                "uid,session_key,viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata" );
 
         // Create native callback and parse response.
         final AsyncCallback<JSONValue> c = new AsyncCallback<JSONValue> () {
@@ -139,11 +132,16 @@ public class FacebookApi {
             public void onFailure(Throwable caught) {
                 ac.onFailure ( null );
             }
-
         };
-
         callMethod ( "stream.get", p.getJavaScriptObject (), c );
     }
+
+    /**
+     * Valid permissions
+     */
+    public enum Permission {
+        read_stream, publish_stream
+    };
 
     /**
      * Checks whether the user has opted in to an extended application
@@ -203,16 +201,20 @@ public class FacebookApi {
         callMethod ( "users.hasAppPermission", p.getJavaScriptObject (), nativeCallback );
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Evaluates an FQL (Facebook Query Language) query.
      * 
-     * @see com.gwittit.client.facebook.FacebookApi#fql_query(java.lang.String,
-     * com.gwittit.client.facebook.FacebookCallback)
+     * Warning: If you use JSON as the output format, you may run into problems
+     * when selecting multiple fields with the same name or with selecting
+     * multiple "anonymous" fields (for example, SELECT 1+2, 3+4 ...).
+     * 
+     * @param query The query to perform, as described in the FQL documentation. 
+     * @see http://wiki.developers.facebook.com/index.php/FQL FQL Documentation
      */
-    public void fql_query(String fql, AsyncCallback<JSONValue> callback) {
+    public void fql_query(String query, AsyncCallback<JSONValue> callback) {
 
-        Map<String, String> params = new HashMap ();
-        params.put ( "query", fql );
+        Map<String, String> params = new HashMap<String,String> ();
+        params.put ( "query", query );
         JSONObject p = getDefaultParams ();
         copyParams ( p, params, "query" );
         callMethod ( "fql.query", p.getJavaScriptObject (), callback );
@@ -223,6 +225,13 @@ public class FacebookApi {
      */
     public enum PhotosGetAlbumsParams {
         uid, session_key, aids
+    }
+    
+    /**
+     * @see #photos_getAlbums(Map, AsyncCallback)
+     */
+    public void photos_getAlbums( final AsyncCallback<List<Album>> callback ) {
+        photos_getAlbums ( null, callback );
     }
 
     /**
@@ -251,9 +260,9 @@ public class FacebookApi {
      *            comma-separated list of aids. You must specify either uid or
      *            aids. The aids parameter has no default value.
      */
-    public void photos_getAlbums(Map<String, String> params, final AsyncCallback<List<Album>> callback) {
+    public void photos_getAlbums(Map<Enum<PhotosGetAlbumsParams>, String> params, final AsyncCallback<List<Album>> callback) {
         JSONObject p = getDefaultParams ();
-        copyAllParams ( p, params, "uid,aids" );
+        copyAllParams ( p, convertEnumMap ( PhotosGetAlbumsParams.values (), params ), "uid,aids" );
 
         // Create javascript native callback and parse response
         AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue> () {
@@ -696,7 +705,7 @@ public class FacebookApi {
      *            comma-separated list of user IDs.
      */
     public void friends_areFriends(Map<Enum<FriendsAreFriendsParams>, String> params,
-            final AsyncCallback<List<FriendInfo>> callback) {
+                                   final AsyncCallback<List<FriendInfo>> callback) {
 
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( FriendsAreFriendsParams.values (), params ), "*uids1,*uids2" );
@@ -725,14 +734,13 @@ public class FacebookApi {
         uid, session_key, flid
     }
 
-    
     /**
      * @see #friends_get(Map, AsyncCallback)
      */
-    public void friends_get( final AsyncCallback<List<Long>> callback ) {
+    public void friends_get(final AsyncCallback<List<Long>> callback) {
         friends_get ( null, callback );
     }
-    
+
     /**
      * Returns the Facebook user IDs of the current user's Facebook friends. The
      * current user is determined from the session_key parameter. The values
@@ -807,7 +815,7 @@ public class FacebookApi {
     }
 
     /**
-     * Params passeed to friends.getMutualFriends
+     * Valid params for method <code>friends.getMutualFriends</code>
      */
     public enum FriendsGetMutualFriendsParams {
         target_uid, session_key, source_uid
@@ -852,7 +860,7 @@ public class FacebookApi {
      *            session key.
      */
     public void friends_getMutualFriends(Map<Enum<FriendsGetMutualFriendsParams>, String> params,
-            AsyncCallback<List<Long>> callback) {
+                                         AsyncCallback<List<Long>> callback) {
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( FriendsGetMutualFriendsParams.values (), params ),
                 "session_key,target_uid,source_uid" );
@@ -862,17 +870,11 @@ public class FacebookApi {
 
     /**
      * Method that parses long's from the response.
-     * 
-     * @param method
-     * @param params
-     * @param callback
      */
     private void friends_getGeneric(String method, JavaScriptObject params, final AsyncCallback<List<Long>> callback) {
         AsyncCallback<JSONValue> ac = new AsyncCallback<JSONValue> () {
 
             public void onFailure(Throwable caught) {
-                // TODO Auto-generated method stub
-
             }
 
             public void onSuccess(JSONValue jv) {
@@ -888,11 +890,8 @@ public class FacebookApi {
                 }
                 callback.onSuccess ( result );
             }
-
         };
-
         callMethod ( method, params, ac );
-
     }
 
     public void groups_get(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -966,22 +965,17 @@ public class FacebookApi {
      * messages/pokes/shares, we encourage you to use the following logic when
      * deciding whether to show a notification:
      * 
-     * 
-     * @param params
-     * @param callback
      */
     public void notifications_get(final AsyncCallback<List<NotificationRequest>> callback) {
         JSONObject p = getDefaultParams ();
         final NotificationRequest.NotificationType[] types = NotificationRequest.NotificationType.values ();
 
-        AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
-
+        final AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
             public void onFailure(Throwable caught) {
                 callback.onFailure ( caught );
             }
 
             public void onSuccess(JSONValue result) {
-                
                 List<NotificationRequest> resultList = new ArrayList<NotificationRequest> ();
 
                 for (NotificationRequest.NotificationType t : types) {
@@ -997,7 +991,7 @@ public class FacebookApi {
     }
 
     /**
-     * notifications.getList method params
+     * Valid params for method <code>notifications.getList</code>
      */
     public enum NotificationsGetListParams {
         session_key, start_time, include_read
@@ -1025,7 +1019,7 @@ public class FacebookApi {
      *            are not included.
      */
     public void notifications_getList(Map<Enum<NotificationsGetListParams>, String> params,
-            final AsyncCallback<List<Notification>> callback) {
+                                      final AsyncCallback<List<Notification>> callback) {
 
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( NotificationsGetListParams.values (), params ),
@@ -1080,13 +1074,11 @@ public class FacebookApi {
      *            retrieved via the notification FQL table or the
      *            notifications.getList API method. This is a comma-separated
      *            list.
-     * @param params
-     * @param callback
      * 
      * @see http://wiki.developers.facebook.com/index.php/Notifications.markRead
      */
     public void notifications_markRead(final Map<Enum<NotificationsMarkReadParams>, String> params,
-            final AsyncCallback<Boolean> callback) {
+                                       final AsyncCallback<Boolean> callback) {
 
         JSONObject p = getDefaultParams ();
 
@@ -1160,8 +1152,7 @@ public class FacebookApi {
      */
     public void notifications_send(Map<Enum<NotificationsSendParams>, String> params, AsyncCallback<JSONValue> callback) {
         JSONObject p = getDefaultParams ();
-        Map<String, String> stringParams = convertEnumMap ( NotificationsSendParams.values (), params );
-        copyAllParams ( p, stringParams, "to_ids,notification,type" );
+        copyAllParams ( p, convertEnumMap ( NotificationsSendParams.values (), params ), "to_ids,notification,type" );
         callMethod ( "notifications.send", p.getJavaScriptObject (), callback, "string" );
 
     }
@@ -1236,7 +1227,7 @@ public class FacebookApi {
      */
 
     public void photos_createAlbum(Map<Enum<PhotosCreateAlbumParams>, String> params,
-            final AsyncCallback<Photo> callback) {
+                                   final AsyncCallback<Photo> callback) {
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( PhotosCreateAlbumParams.values (), params ),
                 "*name,location,description,visible,uid" );
@@ -1491,6 +1482,9 @@ public class FacebookApi {
         stream_addOrRemoveLike ( convertEnumMap ( StreamLikeParams.values (), params ), false, callback );
     }
 
+    //
+    // 
+    // 
     private void stream_addOrRemoveLike(Map<String, String> params, boolean add, AsyncCallback<JSONValue> callback) {
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, params, "*post_id" );
@@ -1514,7 +1508,7 @@ public class FacebookApi {
      * than xid.
      */
     public void stream_getComments(final Map<Enum<StreamGetCommentsParams>, String> params,
-            final AsyncCallback<List<Comment>> callback) {
+                                   final AsyncCallback<List<Comment>> callback) {
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( StreamGetCommentsParams.values (), params ), "session_key,uid,*post_id" );
 
@@ -1577,7 +1571,7 @@ public class FacebookApi {
      * @see com.gwittit.client.facebook.entities.StreamFilter StreamFilter
      */
     public void stream_getFilters(final Map<Enum<StreamGetFiltersParams>, String> params,
-            final AsyncCallback<List<StreamFilter>> callback) {
+                                  final AsyncCallback<List<StreamFilter>> callback) {
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( StreamGetFiltersParams.values (), params ), "uid,session_key" );
 
@@ -1610,12 +1604,11 @@ public class FacebookApi {
     }
 
     public void stream_publish(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-        // TODO Auto-generated method stub
 
     }
 
     /**
-     * Valid params to the method <code>stream.remove</code>
+     * Valid params for <code>stream.remove</code>
      */
     public enum StreamRemoveParams {
         uid, session_key, post_id
@@ -1692,11 +1685,11 @@ public class FacebookApi {
      *            string The ID for the comment you want to remove.
      */
     public void stream_removeComment(Map<Enum<StreamRemoveCommentParams>, String> params,
-            AsyncCallback<JSONValue> callback) {
-        JSONObject obj = getDefaultParams ();
-        copyAllParams ( obj, convertEnumMap ( StreamRemoveCommentParams.values (), params ),
+                                     AsyncCallback<JSONValue> callback) {
+        JSONObject p = getDefaultParams ();
+        copyAllParams ( p, convertEnumMap ( StreamRemoveCommentParams.values (), params ),
                 "session_key,uid,*comment_id" );
-        callMethod ( "stream.removeComment", obj.getJavaScriptObject (), callback );
+        callMethod ( "stream.removeComment", p.getJavaScriptObject (), callback );
     }
 
     public void users_getInfo(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -1745,7 +1738,7 @@ public class FacebookApi {
     private <T extends Enum<T>> Map<String, String> convertEnumMap(Enum<T>[] enumValues, Map<Enum<T>, String> params) {
         Map<String, String> stringParams = new HashMap<String, String> ();
 
-        if ( params == null ) {
+        if (params == null) {
             return stringParams;
         }
 
@@ -1815,8 +1808,10 @@ public class FacebookApi {
         callMethod ( method, params, callback, "json" );
     }
 
-    private native void callMethod(String method, JavaScriptObject params, AsyncCallback<JSONValue> callback,
-            String returnType)/*-{
+    private native void callMethod(String method,
+                                   JavaScriptObject params,
+                                   AsyncCallback<JSONValue> callback,
+                                   String returnType)/*-{
         var app=this;
         $wnd.FB_RequireFeatures(["Api"], function(){			
         	$wnd.FB.Facebook.apiClient.callMethod( method, params, 

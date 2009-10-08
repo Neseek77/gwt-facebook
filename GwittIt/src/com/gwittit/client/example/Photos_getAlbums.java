@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwittit.client.facebook.FacebookApi.PhotosGetAlbumsParams;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -36,7 +37,8 @@ public class Photos_getAlbums extends Example {
 		outer.add( getLoader () );
 		outer.getElement().setId( "ShowPhotosGetAlbums");
 		
-		Map<String,String> params = new HashMap<String,String> ();
+		// You can pass params here to 
+		Map<Enum<PhotosGetAlbumsParams>,String> params = new HashMap<Enum<PhotosGetAlbumsParams>,String> ();
 		
 		// Call facebook
 		apiClient.photos_getAlbums(params, new AsyncCallback<List<Album>> () {
