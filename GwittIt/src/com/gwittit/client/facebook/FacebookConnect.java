@@ -13,18 +13,9 @@ import com.gwittit.client.facebook.events.EventHelper;
  * Class that wraps the facebook conncet API. Here you will find the javascripts
  * that requires the users interactions.
  * 
- * TODO: More doc, find out what this class really shoud do ; ) static vs
- * non-static
- * 
- * @author ola
- * 
+ * @see http://wiki.developers.facebook.com/index.php/JS_API_T_FB.Connect
  */
 public class FacebookConnect {
-
-	public static enum ConnectState {
-		appNotAuthorized, connected, userNotLoggedIn
-	}
-
 	
 	public static native String getLoggedInUser()/*-{
 		$wnd.FB_RequireFeatures(["Connect"], function() {
@@ -48,6 +39,7 @@ public class FacebookConnect {
 	public static void showPermissionDialog(final FacebookApi.Permission permission,final AsyncCallback<Boolean> callback) {
 
 		AsyncCallback<JSONValue> nativeCallback = new AsyncCallback<JSONValue>() {
+		    
 			public void onFailure(Throwable t) {
 				Window.alert(FacebookConnect.class + ": showPermissionDialog failed " + t);
 			}
@@ -79,8 +71,7 @@ public class FacebookConnect {
 	/**
 	 * Native show permission
 	 */
-	static native void showPermissionDialogNative(String permission,
-			AsyncCallback<JSONValue> callback)/*-{
+	static native void showPermissionDialogNative( final String permission, final AsyncCallback<JSONValue> callback)/*-{
 		$wnd.FB.Connect.showPermissionDialog( permission, 
 			function(x)
 			{ 
@@ -93,9 +84,7 @@ public class FacebookConnect {
 	 * Call this function when you want to enforce that the current user is
 	 * logged into Facebook.
 	 * 
-	 * @see http://wiki.developers.facebook.com/index.php/JS_API_M_FB.Connect.
-	 *      RequireSession
-	 * 
+	 * @see http://wiki.developers.facebook.com/index.php/JS_API_M_FB.Connect.RequireSession
 	 */
 	public static void requireSession(final AsyncCallback<Boolean> callback) {
 
@@ -104,8 +93,6 @@ public class FacebookConnect {
 			public void onFailure(Throwable t) {
 				Window.alert(FacebookConnect.class + ": requireSession failed " + t);
 			}
-
-			// It shou
 			public void onSuccess(JSONValue jv) {
 				callback.onSuccess(true);
 			}
@@ -113,7 +100,7 @@ public class FacebookConnect {
 		requireSessionNative(nativeCallback);
 	}
 
-	static native void requireSessionNative(final AsyncCallback<JSONValue> callback)/*-{
+	public static native void requireSessionNative ( final AsyncCallback<JSONValue> callback )/*-{
 		$wnd.FB.Connect.requireSession(function(x,y){
 			@com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,null,x,y);
 		});
@@ -127,8 +114,7 @@ public class FacebookConnect {
 	 * @param success
 	 * @param error
 	 */
-	static void onSuccess(AsyncCallback<JSONValue> callback, String successString,
-			JavaScriptObject success, JavaScriptObject error) {
+	static void onSuccess( AsyncCallback<JSONValue> callback, String successString, JavaScriptObject success, JavaScriptObject error ) {
 		if (error != null) {
 			callback.onFailure(new Exception("" + new JSONObject(error)));
 		} else if (successString != null) {
@@ -148,7 +134,7 @@ public class FacebookConnect {
 	 * @param eventBus
 	 *            Fire events.
 	 */
-	public static void init(String apiKey, final HandlerManager eventBus) {
+	public static void init ( String apiKey, final HandlerManager eventBus ) {
 		init(apiKey, "/xd_receiver.htm", eventBus);
 	}
 
@@ -160,7 +146,7 @@ public class FacebookConnect {
 	 * @param eventBus
 	 *            application event bus, fire loginEvent.
 	 */
-	public static void init(String apiKey, String xdReceiver, final HandlerManager eventBus) {
+	public static void init ( String apiKey, String xdReceiver, final HandlerManager eventBus ) {
 
 		if (eventBus == null) {
 			Window.alert("eventbus null");
