@@ -51,7 +51,7 @@
 ||fql.query|| YES || 1.0 ||
 ||friends.areFriends|| YES || 1.0 ||
 ||friends.get|| YES || 1.0 ||
-||friends.getAppUsers|| YEs || 1.0 ||
+||friends.getAppUsers|| YES || 1.0 ||
 ||friends.getLists|| YES || 1.0 ||
 ||friends.getMutualFriends|| YES || 1.0 ||
 ||groups.get||  ||
