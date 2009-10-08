@@ -7,23 +7,30 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
+
+/**
+ * Wrapper class for javascript API XFBML.Host. 
+ * In general try to avoid parsing the whole domtree, and instead limit it to
+ * a specific widget.  This way you will get a smoother feeling when displaying
+ * facebook photos and tags.
+ * 
+ * @see http://wiki.developers.facebook.com/index.php/JS_API_T_FB.XFBML.Host
+ */
 public class Xfbml {
 	
 	
 	/**
-	 * Parse widget.
-	 */
+     * Parse the children under the specified DOM Element to search for XFBML tags and render them. 	 
+     */
 	public static void parse ( final Widget w ) {
 		parse ( w.getElement() );
 	}
+
 	
 	/**
-	 * We need facebook to parse the DOM tree after we have added stuff to it.
+     *  Start parse the DOM tree to search for XFBML tags and render them. This will be invoked automatically unless FB.XFBML.Host.autoParseDomTree is set to false. 
 	 */
 	public static void parse ( final Element element) {
-		
-		
-		//Window.alert ( "ParseDomElement " + (element == null ? "null" : element.getId() ) );
 
 		DeferredCommand.addCommand( new Command () {
 			public void execute() {
@@ -42,22 +49,23 @@ public class Xfbml {
 		});
 	}
 
-	protected static native void parseDomElement( String id ) /*-{		
-	$wnd.FB_RequireFeatures(["Api"], function(){	
-		try{
-			$wnd.FB.XFBML.Host.parseDomElement( $wnd.document.getElementById(id) );
-		}catch(err){
-			alert(err+"");
-		}
-	});
-}-*/;
+	private static native void parseDomElement( String id ) /*-{		
+    	$wnd.FB_RequireFeatures(["Api"], function(){	
+    		try{
+    			$wnd.FB.XFBML.Host.parseDomElement( $wnd.document.getElementById(id) );
+    		}catch(err){
+    			alert(err+"");
+    		}
+    	});
+    }-*/;
 
-	protected static native void parseDomTree(  ) /*-{		
+	/**
+	 * Facebook will
+	 */
+	private static native void parseDomTree(  ) /*-{		
 		$wnd.FB_RequireFeatures(["Api"], function(){	
 			try{
-				alert ( 'start parse dom tree' );
 				$wnd.FB.XFBML.Host.parseDomTree();
-				alert ( 'donw parse dom tree' );
 			}catch(err){
 				alert(err+"");
 			}
