@@ -90,28 +90,29 @@ public class Attachment {
 		}
 		
 		try {
-		name = JsonUtil.getString(o, "name" );
-		href = JsonUtil.getString(o, "href" );
-		caption = JsonUtil.getString ( o, "caption" );
-		description = JsonUtil.getString (o, "description" );
-		icon = JsonUtil.getString(o, "icon");
-
-		// Parse media, this is a pretty complex structure. See facebook doc for info 
-		JSONValue v = o.get ( "media" );
-		if ( v !=  null ) {
-			JSONArray mediasJson = v.isArray();
-			if ( mediasJson != null ) {
-				for ( int i = 0 ; i  < mediasJson.size() ; i++ ) {
-					JSONValue mv = mediasJson.get(i);
-					if ( mv.isObject() != null ) {
-						Media media = new Media ( mv.isObject() );
-						medias.add ( media );
-						GWT.log( Attachment.class + ": Attachment: create new Media file " + mv, null);
-
-					}
-				}
-			}
-		}
+    		name = JsonUtil.getString(o, "name" );
+    		href = JsonUtil.getString(o, "href" );
+    		caption = JsonUtil.getString ( o, "caption" );
+    		description = JsonUtil.getString (o, "description" );
+    		icon = JsonUtil.getString(o, "icon");
+    
+    		// Parse media, this is a pretty complex structure. See facebook doc for info 
+    		JSONValue v = o.get ( "media" );
+    		if ( v !=  null ) {
+    			JSONArray mediasJson = v.isArray();
+    			if ( mediasJson != null ) {
+    				for ( int i = 0 ; i  < mediasJson.size() ; i++ ) {
+    					JSONValue mv = mediasJson.get(i);
+    					if ( mv.isObject() != null ) {
+    						Media media = new Media ( mv.isObject() );
+    						medias.add ( media );
+    						GWT.log( Attachment.class + ": Attachment: create new Media file " + mv, null);
+    
+    					}
+    				}
+    			}
+    		}
+    		// bad code TODO: Fix me.
 		}catch ( Exception e ) {
 			GWT.log ( Attachment.class + "", e );
 		}

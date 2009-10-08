@@ -62,7 +62,6 @@ public class Comment {
 			GWT.log( "Comment: Null argument ", null );
 		}
 		
-		
 		GWT.log( Comment.class + ": create new comment object " + o , null );
 		xid = JsonUtil.getString(o, "xid");
 		postId = JsonUtil.getString(o, "post_id");
