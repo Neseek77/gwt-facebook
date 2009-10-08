@@ -27,6 +27,8 @@ import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.FacebookApi.StatusSetParams;
+import com.gwittit.client.facebook.FacebookApi.StreamGetFiltersParams;
 import com.gwittit.client.facebook.entities.StreamFilter;
 
 
@@ -122,7 +124,7 @@ public class Frontpage  extends Composite implements ClickHandler {
 		menu.addStyleName("menu");
 		
 	
-		Map<String, String> params = new HashMap<String, String>();
+		Map<Enum<StreamGetFiltersParams>, String> params = new HashMap<Enum<StreamGetFiltersParams>, String>();
 		apiClient.stream_getFilters(params, new AsyncCallback<List<StreamFilter>>() {
 
 			public void onFailure(Throwable caught) {
@@ -245,18 +247,15 @@ public class Frontpage  extends Composite implements ClickHandler {
 	 */
 	private void statusSet  () {
 		
-		Map<String,String> params = new HashMap<String,String> ();
-		params.put("uid", inputTextArea.getValue() );
-		params.put("status", inputTextArea.getValue() );
+		Map<Enum<StatusSetParams>,String> params = new HashMap<Enum<StatusSetParams>,String> ();
+		params.put(StatusSetParams.uid, inputTextArea.getValue() );
+		params.put(StatusSetParams.status, inputTextArea.getValue() );
 		
 		api.status_set( params, new AsyncCallback<JSONValue> () {
 			public void onFailure ( Throwable t ) {
 				Window.alert ( "Failed " );
 			}
 			public void onSuccess ( JSONValue v ) {
-				//Stream stream = new Stream ();
-				//stream.setMessage( inputTextArea.getValue() );
-				//stream.setSourceId( UserInfo.getUidLong() );
 
 				inputBar.remove( updateStatusLoader );
 				submit.setEnabled(true);

@@ -42,10 +42,8 @@ public class FriendSelector extends Composite {
 	public FriendSelector () {
 		
 		outer.add ( loader );
-		
-		Map<String,String> params = new HashMap<String,String> ();
-		
-		apiClient.friends_get(params, new AsyncCallback<List<Long>> () {
+				
+		apiClient.friends_get( new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub

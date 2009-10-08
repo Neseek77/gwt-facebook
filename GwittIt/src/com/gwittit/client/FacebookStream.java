@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
+import com.gwittit.client.facebook.FacebookApi.StreamGetParams;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.ui.StreamUi;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -175,10 +176,10 @@ public class FacebookStream extends Composite {
 		
 		streamListing.insert(ajaxLoader, 0);
 
-		Map<String, String> params = new HashMap<String, String>();
+		Map<Enum<StreamGetParams>, String> params = new HashMap<Enum<StreamGetParams>, String>();
 
 		if (getFilterKey() != null) {
-			params.put("filter_key", getFilterKey());
+			params.put( StreamGetParams.filter_key, getFilterKey());
 		}
 		apiClient.stream_get(params, new AsyncCallback<List<Stream>>() {
 

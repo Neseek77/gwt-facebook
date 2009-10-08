@@ -34,8 +34,8 @@ public class Notifications_getList extends Example {
 		
 		addLoader ( outer );
 		
-		Map<String,String> params = new HashMap<String,String> ();
-		params.put(NotificationsGetListParams.include_read.toString(), "true");
+		Map<Enum<NotificationsGetListParams>,String> params = new HashMap<Enum<NotificationsGetListParams>,String> ();
+		params.put(NotificationsGetListParams.include_read, "true");
 
 		// Get facebook data
 		apiClient.notifications_getList(params, new AsyncCallback<List<Notification>> () {

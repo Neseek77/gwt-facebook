@@ -70,11 +70,11 @@ public class Photos_createAlbum extends Example {
 	private void createAlbum ( final String name, final String visible ) {
 
 		// Set params 
-		Map<PhotosCreateAlbumParams,String> params = new HashMap<PhotosCreateAlbumParams,String> ();
+		Map<Enum<PhotosCreateAlbumParams>,String> params = new HashMap<Enum<PhotosCreateAlbumParams>,String> ();
 		params.put( PhotosCreateAlbumParams.name, name);
 		params.put( PhotosCreateAlbumParams.visible, visible );
 		
-		apiClient.photos_createAlbumSafe(params, new AsyncCallback<Photo> () {
+		apiClient.photos_createAlbum(params, new AsyncCallback<Photo> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}

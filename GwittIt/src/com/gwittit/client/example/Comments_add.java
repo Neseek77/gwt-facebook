@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwittit.client.facebook.FacebookApi.CommentsAddParams;
 
 /**
  * Showcase for method call <code>comments.add</code>
@@ -49,9 +50,9 @@ public class Comments_add extends Example  {
 			public void onClick(ClickEvent event) {
 				
 				addLoader ( outer );
-				Map<String,String> params = new HashMap<String,String> ();
-				params.put( "xid", "comments_test");
-				params.put("text", text.getValue());
+				Map<Enum<CommentsAddParams>,String> params = new HashMap<Enum<CommentsAddParams>,String> ();
+				params.put( CommentsAddParams.xid, "comments_test");
+				params.put( CommentsAddParams.text, text.getValue());
 								
 				apiClient.comments_add(params, new AsyncCallback<JSONValue> () {
 

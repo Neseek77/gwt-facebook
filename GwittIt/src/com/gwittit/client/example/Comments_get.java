@@ -10,6 +10,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwittit.client.facebook.FacebookApi.CommentsGetParams;
+import com.gwittit.client.facebook.FacebookApi.CommentsRemoveParams;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.ui.CommentUi;
 import com.gwittit.client.facebook.ui.CommentUi.DeleteHandler;
@@ -39,8 +41,8 @@ public class Comments_get extends Example {
 		outer.getElement().setId(method);
 		addLoader ( outer );
 		
-		Map<String,String> params = new HashMap<String,String> ();
-		params.put( "xid", XID );
+		Map<Enum<CommentsGetParams>,String> params = new HashMap<Enum<CommentsGetParams>,String> ();
+		params.put( CommentsGetParams.xid, XID );
 
 		// Get facebook data
 		apiClient.comments_get(params, new AsyncCallback<List<Comment>> () {
@@ -60,9 +62,9 @@ public class Comments_get extends Example {
 					
 					ui.addDeleteHandler(new DeleteHandler () {
 						public void onDelete(String id) {
-							Map<String,String> params = new HashMap<String,String> ();
-							params.put ( "comment_id", id );
-							params.put("xid", XID);
+							Map<Enum<CommentsRemoveParams>,String> params = new HashMap<Enum<CommentsRemoveParams>,String> ();
+                            params.put( CommentsRemoveParams.xid, XID);
+							params.put ( CommentsRemoveParams.comment_id, id );
 							
 							addLoader ( outer );
 							apiClient.comments_remove(params, new AsyncCallback<JSONValue> () {
