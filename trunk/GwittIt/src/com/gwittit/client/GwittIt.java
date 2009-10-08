@@ -156,7 +156,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	 */
 	private void listenToLogin () {
         eventBus.addHandler(LoginEvent.getType(), new LoginHandler () {
-			public void loginStatusChanged(LoginEvent event) {
+			public void onLogin() {
 			   	outer.clear();
 			   	onModuleLoad();
 			}
