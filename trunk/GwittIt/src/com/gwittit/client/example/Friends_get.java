@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.FacebookApi.FriendsGetParams;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
@@ -37,17 +38,14 @@ public class Friends_get extends Example  {
 		flow.setWidth( "500px");
 		flow.getElement().setId( "friendsget");
 		
-		Map<String,String> params = new HashMap<String,String> ();
-
+		Map<Enum<FriendsGetParams>,String> params = new HashMap<Enum<FriendsGetParams>,String> ();
 		// Call facebook
 		apiClient.friends_get(params, new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
-
 			public void onSuccess(List<Long> result) {
-				
 				outer.remove( getLoader () );
 				for ( Long uid : result ) {
 					flow.add ( new HTML ( new FbName ( uid ) + ", " ));

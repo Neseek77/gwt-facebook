@@ -12,6 +12,7 @@ import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.UserInfo;
+import com.gwittit.client.facebook.FacebookApi.FriendsAreFriendsParams;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -35,17 +36,14 @@ public class Friends_areFriends extends Example {
 			final VerticalPanel result = new VerticalPanel ();
 			result.getElement().setId ( "friendsAreFriendsResult" );
 			
-			Map<String,String> params = new HashMap<String,String> ();
-			
-			params.put ( "uids1", UserInfo.getUid()+",751836969,708775201");
-			params.put ( "uids2", "709281400,560635378,709281400");
+			Map<Enum<FriendsAreFriendsParams>,String> params = new HashMap<Enum<FriendsAreFriendsParams>,String> ();
+			params.put ( FriendsAreFriendsParams.uids1, UserInfo.getUid()+",751836969,708775201");
+			params.put ( FriendsAreFriendsParams.uids2, "709281400,560635378,709281400");
 			
 			apiClient.friends_areFriends(params, new AsyncCallback<List<FriendInfo>> () {
-
 				public void onFailure(Throwable caught) {
 					result.add( new HTML ( "" + caught ) ) ;
 				}
-
 				public void onSuccess(List<FriendInfo> friendInfoList) {
 					resultWrapper.clear ();
 					

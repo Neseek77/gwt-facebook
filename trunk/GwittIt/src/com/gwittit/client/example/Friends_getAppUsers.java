@@ -28,13 +28,12 @@ public class Friends_getAppUsers extends Example {
 		final VerticalPanel outer = new VerticalPanel ();
 		outer.getElement().setId( "Friends_getAppUsers" );
 		addLoader ( outer );
-		
-		apiClient.friends_getAppUsers(null, new AsyncCallback<List<Long>> () {
+				
+		apiClient.friends_getAppUsers( new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
-
 			public void onSuccess(List<Long> result) {
 				removeLoader ( outer );
 				for ( Long uid : result ) {

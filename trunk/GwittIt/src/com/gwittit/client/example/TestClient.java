@@ -63,7 +63,7 @@ public class TestClient extends Composite  {
 	final String linkMethods = "XLinks:links_get,links_post";
 	final String messageMethods = "XMessage:liveMessage_send,message_getThreadsInFolder";
 	final String noteMethods = "XNotes:notes_create,notes_delete,notes_edit,notes_get";
-	final String notificationMethods = "Notification:notifications_get,notifications_getList,Xnotifications_markRead,Xnotifications_send,Xnotifications_sendEmail";
+	final String notificationMethods = "Notification:notifications_get,notifications_getList,Xnotifications_markRead,notifications_send,Xnotifications_sendEmail";
 	final String pageMethods = "XPages:pages_getInfo,pages_isAdmin,pages_isAppAdded,pages_isFan";
 	final String photoMethods = "Photos:Xphotos_addTag,photos_createAlbum,photos_get,photos_getAlbums,Xphotos_getTags,Xphotos_upload";
 	final String profileMethods = "XProfile:profile_getFBML,profile_getInfo,profile_getInfoOptions,profile_setFBML,profile_setInfo,profile_setInfoOptions";
@@ -391,7 +391,7 @@ public class TestClient extends Composite  {
 		    //  example = new Notifications_markRead();
 		}
 		else if ( "notifications_send".equals ( m ) ) { 
-		    //  example = new Notifications_send();
+		    example = new Notifications_send();
 		}
 		else if ( "notifications_sendEmail".equals ( m ) ) { 
 		    //  example = new Notifications_sendEmail();

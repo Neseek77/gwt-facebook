@@ -19,6 +19,7 @@ import com.gwittit.client.Config;
 import com.gwittit.client.example.FriendSelector.FriendSelectionHandler;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.FacebookApi.PhotosGetParams;
 import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
@@ -71,8 +72,8 @@ public class Photos_get extends Example {
 	private void displayPhotos ( final String uid ) {
 		resultWrapper.add( getLoader() );
 		
-		Map<String,String> params = new HashMap<String,String> ();
-		params.put("subj_id", uid);
+		Map<Enum<PhotosGetParams>,String> params = new HashMap<Enum<PhotosGetParams>,String> ();
+		params.put( PhotosGetParams.uid, uid);
 
 		// Get photos from facebook
 		apiClient.photos_get(params, new AsyncCallback<List<Photo>> () {

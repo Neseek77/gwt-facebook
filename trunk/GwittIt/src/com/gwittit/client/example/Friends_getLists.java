@@ -30,13 +30,13 @@ public class Friends_getLists extends Example {
 
 		addLoader ( outer );
 
+		
 		// Call facebook
-		apiClient.friends_getLists(null, new AsyncCallback<List<FriendList>> () {
+		apiClient.friends_getLists( new AsyncCallback<List<FriendList>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
-
 			public void onSuccess(List<FriendList> result) {
 				removeLoader ( outer );
 				for ( FriendList fl : result ) {

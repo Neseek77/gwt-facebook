@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.example.FriendSelector.FriendSelectionHandler;
+import com.gwittit.client.facebook.FacebookApi.FriendsGetMutualFriendsParams;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -46,9 +47,8 @@ public class Friends_getMutualFriends extends Example {
 				mutualFriends.clear();
 				addLoader ( mutualFriends);
 				
-				Map<String,String> params =new HashMap<String,String> ();
-				params.put("target_uid", "" + uid );
-				
+				Map<Enum<FriendsGetMutualFriendsParams>,String> params =new HashMap<Enum<FriendsGetMutualFriendsParams>,String> ();
+				params.put( FriendsGetMutualFriendsParams.target_uid, "" + uid );
 				
 				apiClient.friends_getMutualFriends(params, new AsyncCallback<List<Long>> () {
 
