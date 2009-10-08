@@ -81,15 +81,14 @@ public class Notifications_getList extends Example {
 	 */
 	private void markRead ( final Long nid ) {
 	
-		Map<String,String> params = new HashMap<String,String> ();
-		params.put( NotificationsMarkReadParams.notification_ids.toString(), nid+"");
+		Map<Enum<NotificationsMarkReadParams>,String> params = new HashMap<Enum<NotificationsMarkReadParams>,String> ();
+		params.put( NotificationsMarkReadParams.notification_ids, nid+"");
 		
 		// Mark notification as read.
 		apiClient.notifications_markRead(params, new AsyncCallback<Boolean> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
-
 			public void onSuccess(Boolean result) {
 				Window.alert ( "Mared notification with id " + nid + " as read" );
 			}
