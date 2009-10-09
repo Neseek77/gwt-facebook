@@ -17,6 +17,8 @@ import com.gwittit.client.facebook.events.EventHelper;
  */
 public class FacebookConnect {
 	
+    
+    
 	public static native String getLoggedInUser()/*-{
 		$wnd.FB_RequireFeatures(["Connect"], function() {
 			return $wnd.FB.Connect.get_loggedInUser();
@@ -101,9 +103,9 @@ public class FacebookConnect {
 	}
 
 	public static native void requireSessionNative ( final AsyncCallback<JSONValue> callback )/*-{
-		$wnd.FB.Connect.requireSession(function(x,y){
+		$wnd.FB.Connect.requireSession( function(x,y) {
 			@com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,null,x,y);
-		});
+		}, false );
 	}-*/;
 
 	/**
@@ -171,12 +173,13 @@ public class FacebookConnect {
 			}
 
 			public void onSuccess(JSONValue o) {
+			    Window.alert ( "logged in " + o );
 				EventHelper.fireLoginEvent(eventBus);
 			}
 
 		};
-		setupXdReceiver(apiKey, xdReceiver);
 
+		setupXdReceiver(apiKey, xdReceiver);
 		defineFacebookConnectLogin(cb);
 	}
 

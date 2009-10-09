@@ -1,15 +1,17 @@
 package com.gwittit.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -22,6 +24,8 @@ import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.UserInfo;
+import com.gwittit.client.facebook.FacebookApi.AuthGetSessionParams;
+import com.gwittit.client.facebook.entities.Session;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -164,14 +168,14 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			public void onLogin() {
 			   	outer.clear();
 			   	onModuleLoad();
+			   	
+			   	Window.alert (  apiClient.getSessionKey () );
 			}
         });
 	}
 
 	public void onClick(ClickEvent event) {
 		Anchor a  = ( Anchor)event.getSource();
-		
-	
 		if ( a == frontpageLink ) {
 			History.newItem( "frontpage");
 		} else if ( a == showcaseLink ) {

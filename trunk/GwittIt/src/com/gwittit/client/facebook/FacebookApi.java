@@ -11,6 +11,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
@@ -21,6 +22,7 @@ import com.gwittit.client.facebook.entities.JsonUtil;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
+import com.gwittit.client.facebook.entities.Session;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
 
@@ -36,11 +38,22 @@ public class FacebookApi {
 
     private String apiKey;
 
+
     /**
      * Creates a new api
      */
     protected FacebookApi(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    
+    /**
+     * Get the cached session key from cookie.
+     */
+    public String getSessionKey () {
+        final String C_SESSION_KEY =  apiKey + "_session_key";
+        return Cookies.getCookie ( C_SESSION_KEY );
+        
     }
 
     /**
@@ -208,12 +221,13 @@ public class FacebookApi {
      * when selecting multiple fields with the same name or with selecting
      * multiple "anonymous" fields (for example, SELECT 1+2, 3+4 ...).
      * 
-     * @param query The query to perform, as described in the FQL documentation. 
+     * @param query
+     *            The query to perform, as described in the FQL documentation.
      * @see http://wiki.developers.facebook.com/index.php/FQL FQL Documentation
      */
     public void fql_query(String query, AsyncCallback<JSONValue> callback) {
 
-        Map<String, String> params = new HashMap<String,String> ();
+        Map<String, String> params = new HashMap<String, String> ();
         params.put ( "query", query );
         JSONObject p = getDefaultParams ();
         copyParams ( p, params, "query" );
@@ -226,11 +240,11 @@ public class FacebookApi {
     public enum PhotosGetAlbumsParams {
         uid, session_key, aids
     }
-    
+
     /**
      * @see #photos_getAlbums(Map, AsyncCallback)
      */
-    public void photos_getAlbums( final AsyncCallback<List<Album>> callback ) {
+    public void photos_getAlbums(final AsyncCallback<List<Album>> callback) {
         photos_getAlbums ( null, callback );
     }
 
@@ -260,7 +274,8 @@ public class FacebookApi {
      *            comma-separated list of aids. You must specify either uid or
      *            aids. The aids parameter has no default value.
      */
-    public void photos_getAlbums(Map<Enum<PhotosGetAlbumsParams>, String> params, final AsyncCallback<List<Album>> callback) {
+    public void photos_getAlbums(Map<Enum<PhotosGetAlbumsParams>, String> params,
+                                 final AsyncCallback<List<Album>> callback) {
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( PhotosGetAlbumsParams.values (), params ), "uid,aids" );
 
@@ -406,9 +421,47 @@ public class FacebookApi {
 
     }
 
-    public void auth_getSession(Map<String, String> params, AsyncCallback<JSONValue> callback) {
-        // TODO Auto-generated method stub
+    /**
+     * Valid params for <code>auth.getSession</code>
+     */
+    public enum AuthGetSessionParams {
+        generate_session_secret
+    }
 
+    /**
+     * Returns the session key bound to an auth_token, as returned by
+     * auth.createToken or in the callback_url. Should be called immediately
+     * after the user has logged in.
+     * 
+     * @param generate_session_secret
+     *            bool Whether to generate a temporary session secret associated
+     *            with this session. This is for use only with non-infinite
+     *            sessions, for applications that want to use a client-side
+     *            component without exposing the application secret. Note that
+     *            the app secret will continue to be used for all server-side
+     *            calls, for security reasons.
+     */
+    public void auth_getSession ( final Map<Enum<AuthGetSessionParams>, String> params, final AsyncCallback<Session> callback) {
+        JSONObject p = getDefaultParams ();
+
+        copyAllParams ( p, convertEnumMap ( AuthGetSessionParams.values (), params ), "generate_session_secret" );
+
+        AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
+            public void onFailure(Throwable caught) {
+                callback.onFailure ( caught );
+            }
+
+            public void onSuccess(JSONValue result) {
+                Window.alert ( "result " + result );
+                Session session = new Session ( result.isObject () );
+                callback.onSuccess ( session );
+            }
+
+        };
+        
+        Window.alert ( "auth get session "); 
+
+        callMethod ( "auth.getSession", p.getJavaScriptObject (), internCallback );
     }
 
     public void auth_promoteSession(Map<String, String> params, AsyncCallback<JSONValue> callback) {
