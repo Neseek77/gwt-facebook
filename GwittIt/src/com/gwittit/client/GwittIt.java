@@ -43,7 +43,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	private Frontpage frontpage;
 
 	// Horizontal Menu links
-	final Anchor frontpageLink = new Anchor ( "Frontpage");
+	final Anchor frontpageLink = new Anchor ( "NewsFeed");
 	final Anchor showcaseLink = new Anchor ( "Showcase");
 	
 	// Where we hold the main body
@@ -124,9 +124,14 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	 */
 	public void renderPage ( String hash ) {
 
+	    showcaseLink.removeStyleName ( "selected" );
+	    frontpageLink.removeStyleName ( "selected" );
+	    
 		inner.clear ();
 
 		if ( "#frontpage".equals ( hash ) || hash == null || "#".equals ( hash ) || "".equals( hash ) )  {
+	       
+		    frontpageLink.addStyleName ( "selected" );
 
 			if ( frontpage == null ) {
 				frontpage = new Frontpage ( apiClient, eventBus );
@@ -136,6 +141,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			inner.add ( frontpage );
 
 		} else if ( "#showcase".equals ( hash ) || "#testClient".equals( hash ) ) {
+	        showcaseLink.addStyleName ( "selected" );
 			inner .add ( new ShowcaseClient () );
 		} else {
 			Window.alert ( "unkown path " + hash );
@@ -165,11 +171,12 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	public void onClick(ClickEvent event) {
 		Anchor a  = ( Anchor)event.getSource();
 		
+	
 		if ( a == frontpageLink ) {
 			History.newItem( "frontpage");
 		} else if ( a == showcaseLink ) {
 			History.newItem( "showcase") ;
-			
 		}
 	}
+	
 }
