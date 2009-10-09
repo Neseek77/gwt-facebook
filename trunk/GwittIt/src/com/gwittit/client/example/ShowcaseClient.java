@@ -85,29 +85,40 @@ public class ShowcaseClient extends Composite  {
 	
 	final Image loader = new Image ( "/loader.gif" );
 
+	final  Tree treeMenu = createMenu ();
+
 	/**
 	 * Create showcase client.
 	 */
 	public ShowcaseClient () {
 
-
-		outer.getElement().setId( "ShowcaseClient" );
+	    outer.getElement().setId( "ShowcaseClient" );
 		inner.setSpacing ( 10 );
-	
 		showcaseWrapper.setWidth( "700px");
-		showcaseWrapper.addStyleName("exampleWrapper");
-
-		Tree menu = createMenu ();
-		menu.addStyleName("treeMenu");
-	
-		outer.add ( new HTML ( "<h1>Showcase of gwt-facebook </h1>" ) );
-		showcaseWrapper.add( new HTML ( "Please choose a method." ) );
-		inner.add (  menu );
+		showcaseWrapper.addStyleName("showcaseWrapper");
+		treeMenu.addStyleName("treeMenu");
 		
-	
+		outer.add ( new HTML ( "<h1>Showcase of gwt-facebook </h1>" ) );
+		
+		FbName name = new FbName ( UserInfo.getUidLong () );
+		name.setUseyou ( false );
+		name.setLinked ( false );
+		
+		showcaseWrapper.add ( new HTML ( "<h3>Welcome, " + name + "</h3>" ) );
+		showcaseWrapper.add( new HTML ( "To start, click the menu on the left" ) );
+		
+		
+		VerticalPanel treeMenuWrapper = new VerticalPanel ();
+		treeMenuWrapper.addStyleName ( "treeMenuWrapper");
+		treeMenuWrapper.add ( new HTML ("<h4>Methods: </h4>" ) );
+		treeMenuWrapper.add ( treeMenu );
+		
+		// Add left + right column
+		inner.add (  treeMenuWrapper );
 		inner.add (  decorate ( showcaseWrapper ) );
 		
 		outer.add ( inner );
+		Xfbml.parse ( showcaseWrapper );
 		initWidget ( outer );
 	}
 	
