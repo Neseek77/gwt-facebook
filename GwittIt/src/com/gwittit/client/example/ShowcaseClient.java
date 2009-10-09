@@ -40,12 +40,16 @@ import com.gwittit.client.facebook.xfbml.FbProfilePic;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
-public class TestClient extends Composite  {
+
+/**
+ * This class wraps showcases and adds a treemenu for navigation.
+ */
+public class ShowcaseClient extends Composite  {
 
 	private VerticalPanel outer = new VerticalPanel ();
 	private HorizontalPanel inner = new HorizontalPanel ();
 	
-	
+	// All methods, methods prefixed with X is ignored when creating the menu.
 	final String adminMethods = "XAdmin:admin_banUsers,admin_getAllocation,admin_getAppProperties,admin_getBannedUsers,admin_getMetrics,admin_getRestrictionInfo,admin_setAppProperties,admin_setRestrictionInfo,admin_unbanUsers";
 	final String applicationMethods = "XApplication:application_getPublicInfo";
 	final String authMethods = "XAuth:auth_createToken,auth_expireSession,auth_getSession,auth_promoteSession,auth_revokeAuthorization,auth_revokeExtendedPermission";
@@ -76,32 +80,32 @@ public class TestClient extends Composite  {
 	final String[]menu = { adminMethods,applicationMethods,authMethods, batchMethods,commentMethods,connectMethods,dataMethods,eventMethods,
 			               fbmlMethods,feedMethods,fqlMethods,friendMethods,groupMethods,intlMethods,linkMethods,messageMethods,noteMethods,
 			               notificationMethods,pageMethods,photoMethods,profileMethods,smsMethods,statusMethods,streamMethods,userMethods,videoMethods};
-	final VerticalPanel exampleWrapper = new VerticalPanel ();
-
+	
+	final VerticalPanel showcaseWrapper = new VerticalPanel ();
 	
 	final Image loader = new Image ( "/loader.gif" );
 
 	/**
-	 * Create testClient.
+	 * Create showcase client.
 	 */
-	public TestClient () {
+	public ShowcaseClient () {
 
 
-		outer.getElement().setId( "TestClient" );
+		outer.getElement().setId( "ShowcaseClient" );
 		inner.setSpacing ( 10 );
 	
-		exampleWrapper.setWidth( "700px");
-		exampleWrapper.addStyleName("exampleWrapper");
+		showcaseWrapper.setWidth( "700px");
+		showcaseWrapper.addStyleName("exampleWrapper");
 
 		Tree menu = createMenu ();
 		menu.addStyleName("treeMenu");
 	
 		outer.add ( new HTML ( "<h1>Showcase of gwt-facebook </h1>" ) );
-		exampleWrapper.add( new HTML ( "Please choose a method." ) );
+		showcaseWrapper.add( new HTML ( "Please choose a method." ) );
 		inner.add (  menu );
 		
 	
-		inner.add (  decorate ( exampleWrapper ) );
+		inner.add (  decorate ( showcaseWrapper ) );
 		
 		outer.add ( inner );
 		initWidget ( outer );
@@ -127,32 +131,29 @@ public class TestClient extends Composite  {
 		treeMenu.addSelectionHandler( new SelectionHandler<TreeItem> () {
 			public void onSelection(SelectionEvent<TreeItem> event) {
 				
-				TreeItem item =(TreeItem) event.getSelectedItem();
+				TreeItem clickedLink =(TreeItem) event.getSelectedItem();
 				
-				if ( item.getChildCount() == 0 ) {
-					Example example = createExample( item.getText() );
-					exampleWrapper.clear();
+				if ( clickedLink.getChildCount() == 0 ) {
+					Showcase example = createExample( clickedLink.getText() );
+					showcaseWrapper.clear();
 					
 					Anchor sourceLink = new Anchor ( "See Source Code" );
 
 					String repo = "http://code.google.com/p/gwt-facebook/source/browse/trunk/GwittIt/src/";
 					String className = (""+example.getClass().getName()).replace(".","/") + ".java";
 					
-					
 					sourceLink.setHref( repo + className );
 					sourceLink.setTarget( "_blank" );
 					
-					exampleWrapper.add( sourceLink );
-					exampleWrapper.add( new HTML ( "<h2>" + example.getHeader () + "</h2>" ) );
-					exampleWrapper.add( new HTML ( example.getDescription() ) ) ;
-					exampleWrapper.add( new HTML ( "<hr/>" ) );
-					exampleWrapper.add( example );
-
+					showcaseWrapper.add( sourceLink );
+					showcaseWrapper.add( new HTML ( "<h2>" + example.getHeader () + "</h2>" ) );
+					showcaseWrapper.add( new HTML ( example.getDescription() ) ) ;
+					showcaseWrapper.add( new HTML ( "<hr/>" ) );
+					showcaseWrapper.add( example );
 				}
 			}
 			
 		});
-		
 		return treeMenu;
 	}
 	
@@ -170,11 +171,10 @@ public class TestClient extends Composite  {
 		return dp;
 	}
 
-	
-	private Example createExample ( String m ) {
+	private Showcase createExample ( String m ) {
 
 		GWT.log( "Create example " + m , null );
-		Example example = new Example ( m + "(not implemented)");
+		Showcase showcase = new Showcase ( m + "(not implemented)");
 
 		if ( "admin_banUsers".equals ( m ) ) { 
 		    //  example = new Admin_banUsers();
@@ -240,10 +240,10 @@ public class TestClient extends Composite  {
 		    //  example = new CallbackSuccessString();
 		}
 		else if ( "comments_add".equals ( m ) ) { 
-		      example = new Comments_add();
+		      showcase = new Comments_add();
 		}
 		else if ( "comments_get".equals ( m ) ) { 
-		     example = new Comments_get();
+		     showcase = new Comments_get();
 		}
 		else if ( "comments_remove".equals ( m ) ) { 
 		    //  example = new Comments_remove();
@@ -327,19 +327,19 @@ public class TestClient extends Composite  {
 		    //  example = new Fql_query();
 		}
 		else if ( "friends_areFriends".equals ( m ) ) { 
-		    example = new Friends_areFriends();
+		    showcase = new Friends_areFriends();
 		}
 		else if ( "friends_get".equals ( m ) ) { 
-			example = new Friends_get();
+			showcase = new Friends_get();
 		}
 		else if ( "friends_getAppUsers".equals ( m ) ) { 
-			example = new Friends_getAppUsers();
+			showcase = new Friends_getAppUsers();
 		}
 		else if ( "friends_getLists".equals ( m ) ) { 
-		    example = new Friends_getLists();
+		    showcase = new Friends_getLists();
 		}
 		else if ( "friends_getMutualFriends".equals ( m ) ) { 
-			example = new Friends_getMutualFriends();
+			showcase = new Friends_getMutualFriends();
 		}
 	
 		else if ( "groups_get".equals ( m ) ) { 
@@ -382,16 +382,16 @@ public class TestClient extends Composite  {
 		    //  example = new Notes_get();
 		}
 		else if ( "notifications_get".equals ( m ) ) { 
-			example = new Notifications_get();
+			showcase = new Notifications_get();
 		}
 		else if ( "notifications_getList".equals ( m ) ) { 
-		    example = new Notifications_getList();
+		    showcase = new Notifications_getList();
 		}
 		else if ( "notifications_markRead".equals ( m ) ) { 
 		    //  example = new Notifications_markRead();
 		}
 		else if ( "notifications_send".equals ( m ) ) { 
-		    example = new Notifications_send();
+		    showcase = new Notifications_send();
 		}
 		else if ( "notifications_sendEmail".equals ( m ) ) { 
 		    //  example = new Notifications_sendEmail();
@@ -418,13 +418,13 @@ public class TestClient extends Composite  {
 		    //  example = new Photos_addTag();
 		}
 		else if ( "photos_createAlbum".equals ( m ) ) { 
-		    example = new Photos_createAlbum();
+		    showcase = new Photos_createAlbum();
 		}
 		else if ( "photos_get".equals ( m ) ) { 
-			example = new Photos_get();
+			showcase = new Photos_get();
 		}
 		else if ( "photos_getAlbums".equals ( m ) ) { 
-		    example = new Photos_getAlbums();
+		    showcase = new Photos_getAlbums();
 		}
 		else if ( "photos_getTags".equals ( m ) ) { 
 		    //  example = new Photos_getTags();
@@ -469,7 +469,7 @@ public class TestClient extends Composite  {
 		    //  example = new Stream_addLike();
 		}
 		else if ( "stream_get".equals ( m ) ) { 
-		     example = new Stream_get();
+		     showcase = new Stream_get();
 		}
 		else if ( "stream_getComments".equals ( m ) ) { 
 		    //  example = new Stream_getComments();
@@ -519,6 +519,6 @@ public class TestClient extends Composite  {
 		else if ( "video_upload".equals ( m ) ) { 
 		    //  example = new Video_upload();
 		}
-			return example;
+			return showcase;
 	}
 }

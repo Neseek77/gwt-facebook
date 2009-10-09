@@ -15,7 +15,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  * @author olamar72
  *
  */
-public class Friends_getAppUsers extends Example {
+public class Friends_getAppUsers extends Showcase {
 
 	
 	public Friends_getAppUsers () {

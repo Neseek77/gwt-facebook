@@ -22,7 +22,7 @@ import com.gwittit.client.ui.CommentUi.DeleteHandler;
  * 
  * @author olamar72
  */
-public class Comments_get extends Example {
+public class Comments_get extends Showcase {
 	
 	public static final String XID = "comments_test";
 	

@@ -22,7 +22,7 @@ import com.gwittit.client.facebook.entities.Photo;
  * Showcase for method call <code>photos.createAlbum</code>
  * @author olamar72
  */
-public class Photos_createAlbum extends Example {
+public class Photos_createAlbum extends Showcase {
 
 	private VerticalPanel outer;
 

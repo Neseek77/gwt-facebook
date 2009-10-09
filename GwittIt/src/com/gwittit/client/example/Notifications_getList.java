@@ -21,7 +21,7 @@ import com.gwittit.client.facebook.entities.Notification;
  * 
  * @author olamar72 
  */
-public class Notifications_getList extends Example {
+public class Notifications_getList extends Showcase {
 
 	
 	public Notifications_getList () {

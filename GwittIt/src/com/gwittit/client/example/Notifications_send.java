@@ -19,7 +19,7 @@ import com.gwittit.client.facebook.FacebookApi.NotificationsSendParams;
 /**
  * Showcase for <code>notifications.send</code>
  */
-public class Notifications_send extends Example {
+public class Notifications_send extends Showcase {
     
     private VerticalPanel outer;
 

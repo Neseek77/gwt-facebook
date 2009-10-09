@@ -20,7 +20,7 @@ import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
  * @author olamar72
  *
  */
-public class Photos_getAlbums extends Example {
+public class Photos_getAlbums extends Showcase {
 
 	
 	static final String method  = "photos.getAlbums";

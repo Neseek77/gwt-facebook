@@ -19,7 +19,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  *
  * @author olamar72
  */
-public class Notifications_get extends Example {
+public class Notifications_get extends Showcase {
 	
 	public Notifications_get(){
 		super("notifications.get");

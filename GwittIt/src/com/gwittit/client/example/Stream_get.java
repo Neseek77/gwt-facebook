@@ -15,7 +15,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  * 
  * @author olamar72
  */
-public class Stream_get extends Example {
+public class Stream_get extends Showcase {
 
 	static String method  = "stream.get";
 	
