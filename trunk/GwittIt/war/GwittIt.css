@@ -4,18 +4,21 @@
 * {margin: 0px; padding: 0px; text-decoration: none }
 
 body {
-	width: 100%;
 	background-image:url(bg.png);
 	background-repeat:repeat-x;
+	margin-left: 20px;
 }
 
 .clickable {
 	cursor: pointer;
 }
 
+.deleted {
+	display: none;
+}
 #GwittIt {
 	/*margin-left: 150px;*/
-	width: 750px;
+	width: 950px;
 }
 
 .FbName {
@@ -36,11 +39,10 @@ h2 {
 }
 
 
-#Frontpage,
-#TopMenuGwittee {
-	width: 100%;
+/* --------------------- Top Menu ------------------------------ */
+#TopMenu{
+	width: 900px;
 }
-
 
 .whatIsGwittit {
 	margin-top: 20px;	
@@ -48,50 +50,65 @@ h2 {
 	margin-left: 50px;
 }
 
-#TopMenuGwittee {
+#TopMenu{
 	padding-left: 5px;
-	height: 80px;
+	height: 100px;
 	
 	background-image: url(/gwittit-bg.png);
 	background-repeat: no-repeat;
 }
 
-#TopMenuGwittee .loginInfo {
+#TopMenu .loginInfo {
 	color: white;
 	float: right;
 }
 
-#TopMenuGwittee .miniProfilePic {
+#TopMenu .miniProfilePic {
 	margin: 2px;
 	border: 3px solid white;
+}
+#TopMenu a {
+	color: white;
+}
+
+/* ------------------- Main menu bar horizonal ------------------- */
+.horizontalMenuBar {
+	margin-bottom: 40px;
+}
+.horizontalMenuBar a {
+	font-size: 110%;
+	margin: 10px;
 }
 
 
 /* -------------------- Frontpage / set status ------------------ */
-
 #Frontpage .inputTextArea {
 	font-size: 14px;
 	padding: 10px;	
 }
 
+/* Textarea */
 .waitingForInput {
 	color: #808080;
 }
 
+.selected:hover {
+	color: white;
+}
+.selected {
+	color: white;
+	background: #6D84B4;
+	padding: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
 
 /* -------------------------- Login ----------------------- */
-
-#NeedLoginWidget {
+#LoginBox {
 	margin: 50px;
 }
 
-.sourceCode {
-	font-weight: bold;
-	padding: 20px;
-		
-}
-
-#NeedLoginWidget, .statusBoxPnl {
+#LoginBox, .statusBoxPnl {
 	background: #DDEEF6;
 	border: 1px solid #5599BB;
 	padding: 20px;
@@ -99,12 +116,11 @@ h2 {
 	-webkit-border-radius: 5px;
 }
 
-
-/* --------------------------- Menu ------------------------ */
-.menu {
-	width: 150px;
-	margin-right: 10px;
-	margin-top: 40px;
+/* --------------------------- Stream Menu ------------------------ */
+.streamFilterMenu {
+	width: 200px;
+	margin-right: 20px;
+	margin-top: 10px;
 	padding: 0px;
 }
 
@@ -122,112 +138,214 @@ h2 {
 	border-bottom: 1px solid #dcd9de;
 }
 .menu a {
+	color: #808080;
 	font-size: 14px;
 }
 
+/* -------------------------- MenuBar ( horizontal ) ------------------------- */
 
-/* -------------------------------- .gwittit-Stream ------------------------- */
-
-.streamListing, .stream {
-}
-
-.streamListing {
+.menuBarWrapper {
+	width: 100%;
 	padding: 10px;
 }
 
-.gwittit-Stream {
+.menuBar {
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+.menuBar a {
+	margin: 5px;
+	float:left;
+}
+
+.menuBar a:hover {
+	color: white;
+	background: #6D84B4;	
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+/* -------------------------------- Stream ------------------------- */
+
+#FacebookStream {
+	width: 100%;
+}
+
+.streamFilter {
+	margin-top: 10px;
+	background: #ECEFF5;
+	width: 100%;
+}
+
+#FacebookStream .streamFilter img {
+	margin: 10px;
+	border: 1px solid #f7f7f7;
+}
+
+.streamMainContent {
+	width: 450px;
+}
+
+.gwittit-StreamUI {
 	padding-bottom: 5px;
 	margin: 4px;
 	margin-bottom: 15px;
 	border-bottom: 1px solid #eeeeee;
 }
 
-.gwittit-Stream .gwittit-FbProfilePic {
+.gwittit-StreamUI .gwittit-FbProfilePic {
 	margin-right: 5px;
 	border: 1px solid #f7f7f7;
 }
 
-.gwittit-StreamInfo {
+
+.streamListing {
+	padding: 10px;
+}
+
+.streamInfo {
 	margin: 5px;
 	padding: 4px;
 	color: #cccccc;
 }
 
-.gwittit-StreamInfo img {
+.streamInfo * {
+	float: left;
+	margin-left: 5px;
+}
+
+.streamInfo img {
 	margin-right: 5px;
 }
 
-.gwittit-Attachment {
+.streamAttachment {
 	color: #808080;
 	padding: 3px;
 }
 
-.gwittit-Attachment .gwt-HTML {
+.streamAttachment .gwt-HTML {
 	color: #808080;
 }	
 
-.gwittit-Media img {
+.streamMedia img {
 	border: 1px solid #f7f7f7;
 	padding: 5px;
 	margin: 5px;
 }
 
-.gwittit-FbLiveSteam {
-	width: 650px;
+/* ----------------------- Comments ------------------------------- */
+.gwittit-CommentBoxUI .textArea {
+	margin: 3px; 
 }
 
+.collapsed {
+	width: 440px;
+	color: #cccccc;	
+}
 
+.expanded {
+	width: 380px;
+}
 
-.unlockStream {
+.gwittit-CommentBoxUI .gwt-Button {
+	float: right;
+}
+
+.commentList {
+	padding: 3px;
+}
+
+.gwittit-CommentUI-inner {
+	padding: 4px;
+
+}
+
+.gwittit-LikesUI,
+.gwittit-CommentUI,
+.gwittit-CommentBoxUI,
+.commentList {
+	width: 100%;
+}
+
+.gwittit-LikesUI,
+.gwittit-CommentUI,
+.gwittit-CommentBoxUI {
+	background: #ECEFF5;
+	
+}
+
+.gwittit-CommentUI-inner .gwt-HTML {
+	overflow: auto;
+}
+
+.gwittit-CommentUI {
+	margin-bottom: 3px;
+}
+
+.gwittit-LikesUI {
+	border: 1px solid #dcd9de;
+}
+.gwittit-CommentBoxUI {
+	padding: 4px;
+	border-bottom: 1px solid #dcd9de;
+}
+
+.gwittit-CommentBoxUI {
+	margin-top: 3px;
+}
+
+/* ------------------------ Displayed when user has not granted permission ------------------- */
+.needStreamPermission {
 	width: 550px;
 	padding: 30px;
 	border: 1px solid #F7F7F7;
 }
 
-.unlockStream img {
+.needStreamPermission img {
 	margin: 10px;
 }
 
 .actions {
-	width: 650px;
 	padding-left: 75px;
 }
 
-.feedBack {
-	width: 400px;
-}
+/* --------------------------------- TestClient ---------------------------- */
 
-.feedBack {
-	background: #ECEFF5;
-	padding: 3px;
-	border-bottom: 1px solid #dcd9de;
-	margin-bottom: 15px;
-}
-
-.text {
-	margin-left: 5px;
-}
-
-
-
-
-/* ---------------------------------- Examples -------------------------- */
-
-#Example {
-	width: 750px;
+#ShowcaseClient .showcaseWrapper  {
+	width: 500px;
 	padding: 40px;
-	border-left: 1px solid #f7f7f7;
 }
 
-#Example .info {
-	/*background: #ddeef6;*/
+.params {Ê
+	width: 100%;
+}
+
+.treeMenu {
+	width: 220px;
+}
+
+.treeMenuWrapper h3 {
+	padding: 0px;
+	margin: 0px;
+}
+
+#ShowcaseClient h1 {
+	margin-bottom: 40px;
+	text-decoration:  underline;
+}
+
+#ShowcaseClient .gwittit-CommentUI {
+	width: 500px;
+}
+
+#ShowcaseClient .gwittit-CommentUI .gwittit-FbProfilePic {
+	margin: 5px;
+}
+
+#ShowcaseClient .notification {
 	margin: 10px;
-	color: #CCCCCC;
 }
-	
-
-
-
 
 /* ---------------------------------- PhotosGetAlbumsExample ----------- */
 
@@ -244,6 +362,9 @@ h2 {
 	border: 1px solid #5599bb;	
 }
 
+#TestClient hr {
+	margin: 20px;
+}
 
 /* ---------------------------------------------------------------------- */
 .gwt-TabPanel {
