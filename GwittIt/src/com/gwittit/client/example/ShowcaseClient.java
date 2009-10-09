@@ -158,7 +158,7 @@ public class ShowcaseClient extends Composite  {
 					
 					showcaseWrapper.add( sourceLink );
 					showcaseWrapper.add( new HTML ( "<h2>" + example.getHeader () + "</h2>" ) );
-					showcaseWrapper.add( new HTML ( example.getDescription() ) ) ;
+					showcaseWrapper.add( new HTML ( "<h3>" + example.getDescription() + "</h3>" ) ) ;
 					showcaseWrapper.add( new HTML ( "<hr/>" ) );
 					showcaseWrapper.add( example );
 				}

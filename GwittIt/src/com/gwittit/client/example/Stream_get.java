@@ -30,6 +30,8 @@ public class Stream_get extends Showcase {
 		
 		final VerticalPanel outer = new VerticalPanel();
 		outer.getElement().setId ( method );
+		outer.setSpacing ( 5 );
+		outer.addStyleName ( "gwittit-Stream_get" );
 		
 		addLoader ( outer );
 		
