@@ -17,24 +17,23 @@ import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 
 /**
- * 
- *
+ * Top Menu
  */
-public class TopMenuGwittee extends Composite {
+public class TopMenu extends Composite {
 
 	private HorizontalPanel outer = new HorizontalPanel ();
 	private HorizontalPanel loginInfo = new HorizontalPanel ();
 	
 	private HandlerManager eventBus ;
 	
-
-	public TopMenuGwittee ( HandlerManager eventBus ) {
+	
+	public TopMenu ( HandlerManager eventBus ) {
 		
 		this.eventBus = eventBus ;
 		
 		listenToLogin ();
 		
-		outer.getElement().setId( "TopMenuGwittee" );
+		outer.getElement().setId( "TopMenu" );
 		loginInfo.addStyleName( "loginInfo" );
 		
 		outer.add ( new HTML ( "&nbsp;" ) );
@@ -57,7 +56,7 @@ public class TopMenuGwittee extends Composite {
 		FbProfilePic pic = new FbProfilePic ( UserInfo.getUidLong(), FbProfilePic.Size.square );
 		pic.setSize("15px", "15px");
 		
-		GWT.log ( "TopMenuGwittee: render " + fbName.toString(), null );
+		GWT.log ( "TopMenu: render " + fbName.toString(), null );
 
 		loginInfo.add ( fbName );
 

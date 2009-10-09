@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.gwittit.client.example.TestClient;
+import com.gwittit.client.example.ShowcaseClient;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
@@ -29,7 +29,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<String>, ResizeHandler {
+public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<String> {
 	
 	// Where we hold everything
 	private VerticalPanel outer = new VerticalPanel ();
@@ -37,13 +37,14 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	private HorizontalPanel inner = new HorizontalPanel ();
 	
 	// TopMenu displayed on every page
-	private TopMenuGwittee topMenu;
+	private TopMenu topMenu;
 
-	
+	// Main page, display facebook stream
 	private Frontpage frontpage;
 
-	final Anchor frontPage = new Anchor ( "Frontpage");
-	final Anchor testClient = new Anchor ( "Showcase");
+	// Horizontal Menu links
+	final Anchor frontpageLink = new Anchor ( "Frontpage");
+	final Anchor showcaseLink = new Anchor ( "Showcase");
 	
 	// Where we hold the main body
 	private SimplePanel example = new SimplePanel ();
@@ -55,7 +56,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	private HandlerManager eventBus;
 	
 	// Display Login Dialog
-	private LoginDialogWidget loginWidget;
+	private LoginBox loginWidget;
 	
 	/**
 	 * Demonstrates how to use the facebook api. 
@@ -63,12 +64,11 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	public void onModuleLoad() {
 	
 		History.addValueChangeHandler(this);
-		Window.addResizeHandler(this);
 		
 		// Need this to catch the login event.
 		this.eventBus = new HandlerManager ( null );
-		this.topMenu = new TopMenuGwittee ( eventBus );
-		this.loginWidget = new LoginDialogWidget ( eventBus );
+		this.topMenu = new TopMenu ( eventBus );
+		this.loginWidget = new LoginBox ( eventBus );
 
 		// -------------------------------------------------------------------------
 		// This is all you need to initialize Facebook Connect:
@@ -90,14 +90,14 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		
 		
 		if ( UserInfo.isLoggedIn() ) {
-			HorizontalPanel mainMenubar = new HorizontalPanel ();
-			mainMenubar.add( new HTML ( "<b>Browse:</b>" ) );
-			mainMenubar.add ( frontPage );
-			mainMenubar.add ( testClient );
-			frontPage.addClickHandler( this );
-			testClient.addClickHandler( this );		
-			mainMenubar.addStyleName("mainMenubar");
-			outer.add ( mainMenubar );
+			HorizontalPanel horizontalMenuBar = new HorizontalPanel ();
+			horizontalMenuBar.add( new HTML ( "<b>Browse:</b>" ) );
+			horizontalMenuBar.add ( frontpageLink );
+			horizontalMenuBar.add ( showcaseLink );
+			frontpageLink.addClickHandler( this );
+			showcaseLink.addClickHandler( this );		
+			horizontalMenuBar.addStyleName("horizontalMenuBar");
+			outer.add ( horizontalMenuBar );
 		}
 		
 		outer.add ( inner );
@@ -131,13 +131,12 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			if ( frontpage == null ) {
 				frontpage = new Frontpage ( apiClient, eventBus );
 			}
-			Panel menu = frontpage.getMenu ();
+			Panel menu = frontpage.getVerticalMenu ();
 			inner.add ( menu );
 			inner.add ( frontpage );
 
-		} else if ( "#testClient".equals( hash ) ) {
-			
-			inner .add ( new TestClient () );
+		} else if ( "#showcase".equals ( hash ) || "#testClient".equals( hash ) ) {
+			inner .add ( new ShowcaseClient () );
 		} else {
 			Window.alert ( "unkown path " + hash );
 		}
@@ -163,36 +162,13 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
         });
 	}
 
-	/**
-	 * Set a suitable leftmargin. Can be done with css ?
-	 */
-	public void sxxetLeftMargin () {
-		
-		if ( Window.getClientWidth() > 930 ) {
-			
-			int lm = (Window.getClientWidth()-930)/2;
-			outer.getElement().setAttribute("style", "margin-left:"  + lm + "px" );
-		}
-		else {
-			outer.getElement().setAttribute("style", "margin-left: 10px" );
-		}
-	}
-	
-	/**
-	 * Handle resize , set som basic styles.
-	 */
-	public void onResize(ResizeEvent event) {
-		
-	}
-
-
 	public void onClick(ClickEvent event) {
 		Anchor a  = ( Anchor)event.getSource();
 		
-		if ( a == frontPage ) {
+		if ( a == frontpageLink ) {
 			History.newItem( "frontpage");
-		} else if ( a == testClient ) {
-			History.newItem( "testClient") ;
+		} else if ( a == showcaseLink ) {
+			History.newItem( "showcase") ;
 			
 		}
 	}

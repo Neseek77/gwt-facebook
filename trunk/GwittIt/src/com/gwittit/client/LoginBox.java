@@ -16,7 +16,11 @@ import com.gwittit.client.facebook.events.EventHelper;
 import com.gwittit.client.facebook.xfbml.FbLoginButton;
 
 
-public class LoginDialogWidget extends Composite {
+/**
+ * Displays a rounded box ( firefox/safari ) with at facebook connect button.
+ * And a link as backup in case the button is not rendered.
+ */
+public class LoginBox extends Composite {
 	
 	private VerticalPanel outer = new VerticalPanel ();
 	
@@ -26,7 +30,7 @@ public class LoginDialogWidget extends Composite {
 	
 	private Anchor loginLink = new Anchor ( "don't see a button? Click here to login");
 	
-	public LoginDialogWidget ( final HandlerManager eventBus ) {
+	public LoginBox ( final HandlerManager eventBus ) {
 		
 		// Login with the javascript api. GWT client doesnt render the fb:login-button
 		loginLink.addClickHandler( new ClickHandler () {
@@ -43,7 +47,7 @@ public class LoginDialogWidget extends Composite {
 			
 		});
 		
-		outer.getElement().setId ( "NeedLoginWidget");
+		outer.getElement().setId ( "LoginBox");
 		inner.addStyleName("inner");
 		
 		outer.add ( new HTML ( "<h1>Please login with your facebook id</h1>" ) );
@@ -74,8 +78,6 @@ public class LoginDialogWidget extends Composite {
 		leftRightPanel.add ( outer );
 
 		initWidget ( leftRightPanel );
-		
-		
 	}
 	
 

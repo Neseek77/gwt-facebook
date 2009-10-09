@@ -27,6 +27,7 @@ import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.FacebookApi.Permission;
 import com.gwittit.client.facebook.FacebookApi.StatusSetParams;
 import com.gwittit.client.facebook.FacebookApi.StreamGetFiltersParams;
 import com.gwittit.client.facebook.entities.StreamFilter;
@@ -114,16 +115,32 @@ public class Frontpage  extends Composite implements ClickHandler {
 		initWidget ( outer );
 		
 	}
+	
+   private void renderUi () {
+        
+        facebookStream = new FacebookStream ( apiClient );
+        
+        outer.add ( statusBoxPnl );
+        outer.add ( facebookStream );
+        
+        inputTextArea.setWidth( "500px" );
+        inputBar.add ( statusHtml );
+
+        statusBoxPnl.add ( inputBar );
+        statusBoxPnl.add ( inputTextArea );
+        statusBoxPnl.add ( submit );
+        
+    }
 
 	/**
-	 * Render left side menu. This is a list of streamfilter keys.
+	 * Render vertical left side menu. This is a list of streamfilter keys.
 	 */
-	public Panel getMenu () {
+	public Panel getVerticalMenu () {
 
 		final VerticalPanel menu = new VerticalPanel ();
-		menu.addStyleName("menu");
-		
-	
+		menu.addStyleName("streamFilterMenu");
+
+		// Get all valid filter keys from facebook.
 		Map<Enum<StreamGetFiltersParams>, String> params = new HashMap<Enum<StreamGetFiltersParams>, String>();
 		apiClient.stream_getFilters(params, new AsyncCallback<List<StreamFilter>>() {
 
@@ -147,9 +164,6 @@ public class Frontpage  extends Composite implements ClickHandler {
 						public void onClick(ClickEvent event) {
 							facebookStream.setFilterKey(sf.getFilterKey());
 							facebookStream.renderStream();
-							// Window.alert ( "Name:" + sf.getName() +
-							// ", FilterKey: " + sf.getFilterKey() + " , Rank:"
-							// + sf.getRank() );
 						}
 					});
 					
@@ -172,45 +186,36 @@ public class Frontpage  extends Composite implements ClickHandler {
 		return menuItem;
 	}
 
-	private void renderUi () {
-		
-		facebookStream = new FacebookStream ( apiClient );
-		
-		outer.add ( statusBoxPnl );
-		
-		outer.add ( facebookStream );
-		
-		inputTextArea.setWidth( "500px" );
-		
-		inputBar.add ( statusHtml );
-
-		statusBoxPnl.add ( inputBar );
-		statusBoxPnl.add ( inputTextArea );
-		statusBoxPnl.add ( submit );
-		
-	}
 
 
+
+	/**
+	 * Set status.
+	 */
+   public void onClick(ClickEvent event) {
+        checkPublishEnabled ();
+        inputBar.add ( updateStatusLoader );
+        submit.setEnabled(false);
+    }
+	 
+   /**
+    * Show permission dialog
+    */
 	private native void askForPermission ( String extPerm )/*-{
 		var app=this;
 		$wnd.FB.Connect.showPermissionDialog(extPerm, 
 		function(x){
-				app.@com.gwittit.client.Frontpage::handlePermission(Ljava/lang/String;)(x);
+				app.@com.gwittit.client.Frontpage::permissionDialogResponse(Ljava/lang/String;)(x);
 		}, true, null);	
 	}-*/;
 	
 	
-	public void onClick(ClickEvent event) {
-		checkPublishStreamOnSubmit ();
-		
-		inputBar.add ( updateStatusLoader );
-		submit.setEnabled(false);
-		// WHen user submit new stauts
-		
-	}
-	
-	
-	public void handlePermission ( String s ) {
+	/**
+	 * Parse permission dialog rasponse. If user grants this application
+	 * "publish_stream" permissions, the response will be "publish_stream" 
+	 * otherwise null.
+	 */
+	public void permissionDialogResponse ( String s ) {
 		if ( "publish_stream".equals ( s ) ) {
 			statusSet ();
 		} else {
@@ -218,17 +223,18 @@ public class Frontpage  extends Composite implements ClickHandler {
 		}
 	}
 	
-
-
-	
 	/**
 	 * Check if the user can publish to facebook befor setting status.
+	 * When user clicks submit, we need to check if the user has granted
+	 * this application with "publish" permissions. If not, first show
+	 * permission dialog, then update status.
 	 */
-	private void checkPublishStreamOnSubmit () {
+	private void checkPublishEnabled () {
 		
-		apiClient.users_hasAppPermission( com.gwittit.client.facebook.FacebookApi.Permission.publish_stream , new AsyncCallback<Boolean>()  {
+		apiClient.users_hasAppPermission( Permission.publish_stream , new AsyncCallback<Boolean>()  {
 
 			public void onFailure(Throwable caught) {
+			    Window.alert ( "Call failed " + caught );
 			}
 
 			public void onSuccess ( Boolean canPublishStream ) {
@@ -242,7 +248,7 @@ public class Frontpage  extends Composite implements ClickHandler {
 		});
 	}
 
-	/**
+	/*
 	 *Set status 
 	 */
 	private void statusSet  () {
@@ -250,31 +256,28 @@ public class Frontpage  extends Composite implements ClickHandler {
 		Map<Enum<StatusSetParams>,String> params = new HashMap<Enum<StatusSetParams>,String> ();
 		params.put(StatusSetParams.uid, inputTextArea.getValue() );
 		params.put(StatusSetParams.status, inputTextArea.getValue() );
-		
+
+		// Set facebook status
 		api.status_set( params, new AsyncCallback<JSONValue> () {
 			public void onFailure ( Throwable t ) {
 				Window.alert ( "Failed " );
 			}
 			public void onSuccess ( JSONValue v ) {
-
 				inputBar.remove( updateStatusLoader );
 				submit.setEnabled(true);
 				inputTextArea.setValue(null);
-
-				facebookStream.refresh();
 				
-				/*
-				facebookStream.addFirst ( stream );
-				inputBar.remove( updateStatusLoader );
-				submit.setEnabled(true);
-				*/
-				//Xfbml.parse( facebookStream.getElement());
+				// refresh the stream
+				facebookStream.refresh();
 			}
 			
 		});
 	}
 
 	
+	/*
+	 * Rerender when user logs in.
+	 */
 	private void listenToLogin () {
         eventBus.addHandler(AppEvents.TYPE, new DefaultEventHandler () {
                 public void login() {

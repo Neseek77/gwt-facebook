@@ -22,7 +22,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  * 
  * @author olamar72
  */
-public class Friends_areFriends extends Example {
+public class Friends_areFriends extends Showcase {
 	
 	public Friends_areFriends() {
 		super ( "friends.areFriends");

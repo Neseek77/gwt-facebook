@@ -20,7 +20,7 @@ import com.gwittit.client.facebook.FacebookApi.CommentsAddParams;
  * 
  * @author olamar72
  */
-public class Comments_add extends Example  {
+public class Comments_add extends Showcase  {
 	
 	public Comments_add() {
 		super ( "comments.add" );

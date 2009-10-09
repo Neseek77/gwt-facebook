@@ -21,7 +21,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  * 
  * @author olamar72
  */
-public class Friends_get extends Example  {
+public class Friends_get extends Showcase  {
 
 	static String method = "friends.get";
 	

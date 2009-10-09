@@ -17,7 +17,7 @@ import com.gwittit.client.facebook.FacebookApi;
 /**
  * Core class for examples. 
  */
-public  class Example extends Composite {
+public  class Showcase extends Composite {
 	
 	private Image loader = new Image ( "/loader.gif" );
 	
@@ -25,7 +25,7 @@ public  class Example extends Composite {
 	
 	protected FacebookApi apiClient = ApiFactory.newApiClient( Config.API_KEY);
 	
-	public Example () {
+	public Showcase () {
 		this ( null );
 	}
 	
@@ -65,10 +65,8 @@ public  class Example extends Composite {
 	private String method;
 	
 
-	public Example ( String method ) {
+	public Showcase ( String method ) {
 		this.method = method;
-		
-		
 		outer.add ( createWidget () );
 		initWidget(outer);
 		
