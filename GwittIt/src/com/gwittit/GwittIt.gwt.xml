@@ -17,7 +17,7 @@
   <entry-point class='com.gwittit.client.GwittIt'/>
   
   <inherits name="com.google.gwt.json.JSON" /> 
-	<inherits name="com.google.gwt.user.Debug"/>
+  <inherits name="com.google.gwt.user.Debug"/>
 
   <stylesheet src="../GwittIt.css"/>
  
