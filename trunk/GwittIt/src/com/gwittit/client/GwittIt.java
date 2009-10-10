@@ -118,10 +118,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		FacebookConnect.getLoggedInUser() ;
 		//showFriendList ();
 		Xfbml.parse( outer.getElement() );
-
 	}
-
-	
 	
 	/**
 	 * Route to correct page 
