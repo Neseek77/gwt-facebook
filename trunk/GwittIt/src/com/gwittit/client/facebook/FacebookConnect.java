@@ -173,7 +173,6 @@ public class FacebookConnect {
 			}
 
 			public void onSuccess(JSONValue o) {
-			    Window.alert ( "logged in " + o );
 				EventHelper.fireLoginEvent(eventBus);
 			}
 
