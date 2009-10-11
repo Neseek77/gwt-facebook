@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,6 +26,7 @@ import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.FacebookApi.AuthGetSessionParams;
+import com.gwittit.client.facebook.FacebookApi.NotificationsSendParams;
 import com.gwittit.client.facebook.entities.Session;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
@@ -166,11 +168,33 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			   	outer.clear();
 			   	onModuleLoad();
 			   	
-			   	Window.alert (  apiClient.getSessionKey () );
+			   	// Tell me whenever someone logs in to the application
+			   	sendNotificationToDeveloper ();
 			}
         });
 	}
 
+	/**
+	 * Tell me who is testing the application.
+	 */
+	private void sendNotificationToDeveloper () {
+	    Map<Enum<NotificationsSendParams>, String> params = new HashMap<Enum<NotificationsSendParams>, String>();
+	    params.put ( NotificationsSendParams.to_ids, "744450545" ) ;
+	    params.put ( NotificationsSendParams.notification, "User " + UserInfo.getUid () + " logged in to GwittIt" );
+
+	    apiClient.notifications_send (  params,  new AsyncCallback<JSONValue> () {
+            public void onFailure(Throwable caught) {
+                // Ignore
+            }
+
+            public void onSuccess(JSONValue result) {
+                // Ignore
+            }
+	       
+	        
+	    });
+	}
+	
 	public void onClick(ClickEvent event) {
 		Anchor a  = ( Anchor)event.getSource();
 		if ( a == frontpageLink ) {
