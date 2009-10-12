@@ -1,122 +1,35 @@
 package com.gwittit.client.facebook.entities;
 
-import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * Photo Album
  * @author olamar72
- *
  */
-public class Album {
+public class Album extends JavaScriptObject {
 	
-	private String aid;
+    protected Album () { }
+    
+	public final native String getAid () /*-{ return this.aid; }-*/;
 
-	private String coverPid;
+	public final native String getCoverPid () /*-{ return this.cover_pid; }-*/;
 	
-	private Long owner;
+	public final native String getOwner () /*-{ return this.owner + ""; }-*/;
 	
-	private String name;
+	public final native String getName() /*-{ return this.name; }-*/;
 	
-	private String description;
+	public final native String getDescription () /*-{ return this.description; }-*/;
 	
-	private String location;
+	public final native String getLocation  () /*-{ return this.location; }-*/;
 	
-	private Integer size;
+	public final native Integer getSize () /*-{ return this.size; }-*/;
 	
-	private String visible;
+	public final native String getVisible () /*-{ return this.visible; }-*/;
 	
-	private String link;
+	public final native String getLink () /*-{ return this.link; }-*/;
 
-	public static Album newInstance ( JSONObject o ) {
-		Album a = new Album ();
-		a.aid = JsonUtil.getString(o, "aid");
-		a.coverPid =JsonUtil.getString(o, "cover_pid");
-		a.owner = JsonUtil.getLong(o, "owner");
-		a.name = JsonUtil.getString(o, "name");
-		a.description =JsonUtil.getString(o, "description");
-		a.location = JsonUtil.getString(o, "location");
-		a.size =JsonUtil.getInt(o, "size");
-		a.visible =JsonUtil.getString(o, "visible");
-		a.link =JsonUtil.getString(o, "link");
-		return a;
-	}
-	
-	public String getAid() {
-		return aid;
-	}
-
-	public void setAid(String aid) {
-		this.aid = aid;
-	}
-
-	public String getCoverPid() {
-		return coverPid;
-	}
-
-	public void setCoverPid(String coverPid) {
-		this.coverPid = coverPid;
-	}
-
-	public Long getOwner() {
-		return owner;
-	}
-
-	public void setOwner(Long owner) {
-		this.owner = owner;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public Integer getSize() {
-		return size;
-	}
-
-	public void setSize(Integer size) {
-		this.size = size;
-	}
-
-	public String getVisible() {
-		return visible;
-	}
-
-	public void setVisible(String visible) {
-		this.visible = visible;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-	
-
-	
-	
-	
-	
+	public static native Album  newInstance ( String jsonString ) /*-{
+	       return eval('(' + jsonString + ')');
+	}-*/;
 	
 }

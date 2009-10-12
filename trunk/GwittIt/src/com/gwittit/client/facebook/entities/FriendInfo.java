@@ -4,7 +4,7 @@ import com.google.gwt.json.client.JSONValue;
 
 /**
  * Indicates if two persons are friends.
- *
+ * TODO: Let this class extend JavaScriptObject
  */
 public class FriendInfo {
 

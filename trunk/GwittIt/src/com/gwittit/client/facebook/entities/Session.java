@@ -4,6 +4,9 @@ import java.util.Date;
 
 import com.google.gwt.json.client.JSONObject;
 
+/**
+ * @deprecated only used in desktop apps.
+ */
 public class Session {
 
     private String sessionKey;

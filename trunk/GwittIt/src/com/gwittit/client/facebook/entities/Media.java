@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * See http://wiki.developers.facebook.com/index.php/Attachment_%28Streams%29
+ * TODO: Let this class extend JavaScriptObject
  */
 public class Media {
 	

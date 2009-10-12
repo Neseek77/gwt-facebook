@@ -5,6 +5,8 @@ import com.google.gwt.json.client.JSONValue;
 
 /**
  * Represents a video object in facebook 
+ *
+ * TODO: Let this class extend JavaScriptObject
  */
 public class Video {
 	

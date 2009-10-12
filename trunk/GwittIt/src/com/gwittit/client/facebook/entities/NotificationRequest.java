@@ -15,7 +15,7 @@ import com.google.gwt.user.client.Window;
  * 
  * @see http://wiki.developers.facebook.com/index.php/Notifications.get
  * @author ola
- *
+ * TODO: Let this class extend JavaScriptObject
  */
 public class NotificationRequest {
 

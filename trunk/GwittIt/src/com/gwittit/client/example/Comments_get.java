@@ -57,6 +57,10 @@ public class Comments_get extends Showcase {
 				
 				// OUh a little messy
 				for ( Comment comment: result ) {
+				    
+				    outer.add ( new HTML ( comment.getId () + "/" + comment.getPostId () + "/" + comment.getText () 
+				            + "/" + comment.getUsername() + "/" + comment.getXid () + "/ "  + comment.getFromId () ) );
+				    /*
 					final CommentUi ui = new CommentUi ( comment );
 					outer.add ( ui );
 					
@@ -78,6 +82,7 @@ public class Comments_get extends Showcase {
 							});
 						} 
 					});
+					*/
 					Xfbml.parse(outer);
 				}
 			}

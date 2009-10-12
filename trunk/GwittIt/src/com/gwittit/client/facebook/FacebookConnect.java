@@ -16,9 +16,54 @@ import com.gwittit.client.facebook.events.EventHelper;
  * @see http://wiki.developers.facebook.com/index.php/JS_API_T_FB.Connect
  */
 public class FacebookConnect {
-	
+
+ 
+    /**
+     * TODO: Fix
+     * @param callback
+     */
+    public static native void getConnectState ( AsyncCallback<ConnectState> callback )/*-{
+        
+        $wnd.FB_RequireFeatures(["Connect"],function() {
+            
+            alert ( $wnd.FB.Connect.get_status().result );
+            alert ( "is ready: " + $wnd.FB.Connect.get_status().get_isReady());
+            
+            if ( $wnd.FB.Connect.get_status().is_Ready() ) {
+                var status=$wnd.FB.Connect.get_status().result; 
+                    alert ( "status " + status );
+                    @com.gwittit.client.facebook.FacebookConnect::callbackConnectState(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,status+"");
+            } else {
+                    @com.gwittit.client.facebook.FacebookConnect::callbackConnectState(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,"1");
+                
+            }
+        });
+    }-*/;
     
     
+    /**
+     * TODO: Fix
+     * @param callback
+     * @param state
+     */
+    public static void callbackConnectState(AsyncCallback<ConnectState> callback, String state ) {
+
+        if ( state == null || "null".equals ( state )) {
+            callback.onSuccess ( ConnectState.userNotLoggedIn );
+            return ; 
+        }
+        
+        switch(new Integer ( state ) ) {
+            case 1: callback.onSuccess ( ConnectState.connected ); break;
+            case 2: callback.onSuccess ( ConnectState.userNotLoggedIn ); break;
+            case 3: callback.onSuccess (  ConnectState.appNotAuthorized ); break;
+        }
+    }
+    
+    /**
+     * Get current logged in users userid
+     * @return userid
+     */
 	public static native String getLoggedInUser()/*-{
 		$wnd.FB_RequireFeatures(["Connect"], function() {
 			return $wnd.FB.Connect.get_loggedInUser();
@@ -137,7 +182,7 @@ public class FacebookConnect {
 	 *            Fire events.
 	 */
 	public static void init ( String apiKey, final HandlerManager eventBus ) {
-		init(apiKey, "/xd_receiver.htm", eventBus);
+		init(apiKey, "/xd_receiver.htm", eventBus );
 	}
 
 	/**
@@ -151,22 +196,19 @@ public class FacebookConnect {
 	public static void init ( String apiKey, String xdReceiver, final HandlerManager eventBus ) {
 
 		if (eventBus == null) {
-			Window.alert("eventbus null");
 			throw new IllegalArgumentException("eventBus null");
 		}
 
 		if (apiKey == null) {
-			Window.alert("api key null");
 			throw new IllegalArgumentException("apiKey null");
 		}
 
 		if (xdReceiver == null) {
-			Window.alert("xd receiver null");
 			throw new IllegalArgumentException("eventBus null");
 		}
 
 		// Create a local callback to deal with login.
-		AsyncCallback<JSONValue> cb = new AsyncCallback<JSONValue>() {
+		AsyncCallback<JSONValue> loginCallback = new AsyncCallback<JSONValue>() {
 
 			public void onFailure(Throwable t) {
 				Window.alert("Error occured on login : " + t);
@@ -178,8 +220,8 @@ public class FacebookConnect {
 
 		};
 
-		setupXdReceiver(apiKey, xdReceiver);
-		defineFacebookConnectLogin(cb);
+		setupXdReceiver ( apiKey, xdReceiver );
+		defineJsCallbackFunction ( loginCallback );
 	}
 
 	/**
@@ -188,9 +230,13 @@ public class FacebookConnect {
 	 * @param apiKey
 	 * @param xdReceiver
 	 */
-	public static native void setupXdReceiver(String apiKey, String xdReceiver)/*-{
-		$wnd.FB_RequireFeatures(["XFBML"], function(){$wnd.FB.Facebook.init(apiKey, xdReceiver );
-		});
+	public static native void setupXdReceiver(String apiKey, String xdReceiver )/*-{
+		    $wnd.FB_RequireFeatures(["Connect"], function() { 
+    		   // $wnd.FB.init(apiKey, xdReceiver, {"ifUserConnected":onConnected, "ifUserNotConnected":onNotConnected});
+            
+            $wnd.FB.init(apiKey, xdReceiver);
+          
+		    });
 	}-*/;
 
 	/**
@@ -199,7 +245,7 @@ public class FacebookConnect {
 	 * 
 	 * @param callback
 	 */
-	private static native void defineFacebookConnectLogin(AsyncCallback<JSONValue> callback) /*-{
+	private static native void defineJsCallbackFunction (AsyncCallback<JSONValue> callback) /*-{
 		$wnd.facebookConnectLogin = function() {
 		    @com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;)(callback);
 		};

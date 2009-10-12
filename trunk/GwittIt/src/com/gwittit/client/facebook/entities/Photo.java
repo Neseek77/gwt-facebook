@@ -4,6 +4,11 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 
+/**
+ *  Represents a photo object
+ * @author ola
+ * TODO: Let this class extend JavaScriptObject
+ */
 public class Photo {
 
 	/*
