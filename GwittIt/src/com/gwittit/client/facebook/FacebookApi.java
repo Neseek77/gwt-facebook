@@ -295,7 +295,8 @@ public class FacebookApi {
                 JSONValue value;
 
                 while ((value = o.get ( key + "" )) != null) {
-                    final Album album = Album.newInstance ( value.isObject () );
+                    Window.alert ( "Create new Album from string " + value.isObject ().toString () );
+                    final Album album = Album.newInstance (  value.isObject ().toString () );
                     albums.add ( album );
                     key++;
                 }
@@ -421,47 +422,8 @@ public class FacebookApi {
 
     }
 
-    /**
-     * Valid params for <code>auth.getSession</code>
-     */
-    public enum AuthGetSessionParams {
-        generate_session_secret
-    }
-
-    /**
-     * Returns the session key bound to an auth_token, as returned by
-     * auth.createToken or in the callback_url. Should be called immediately
-     * after the user has logged in.
-     * 
-     * @param generate_session_secret
-     *            bool Whether to generate a temporary session secret associated
-     *            with this session. This is for use only with non-infinite
-     *            sessions, for applications that want to use a client-side
-     *            component without exposing the application secret. Note that
-     *            the app secret will continue to be used for all server-side
-     *            calls, for security reasons.
-     */
-    public void auth_getSession ( final Map<Enum<AuthGetSessionParams>, String> params, final AsyncCallback<Session> callback) {
-        JSONObject p = getDefaultParams ();
-
-        copyAllParams ( p, convertEnumMap ( AuthGetSessionParams.values (), params ), "generate_session_secret" );
-
-        AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
-            public void onFailure(Throwable caught) {
-                callback.onFailure ( caught );
-            }
-
-            public void onSuccess(JSONValue result) {
-                Window.alert ( "result " + result );
-                Session session = new Session ( result.isObject () );
-                callback.onSuccess ( session );
-            }
-
-        };
-        
-        Window.alert ( "auth get session "); 
-
-        callMethod ( "auth.getSession", p.getJavaScriptObject (), internCallback );
+    public void auth_getSession ( Map<String, String> params, final AsyncCallback<Session> callback) {
+        Window.alert ( "auth.getSession desktop only" );
     }
 
     public void auth_promoteSession(Map<String, String> params, AsyncCallback<JSONValue> callback) {
@@ -567,7 +529,6 @@ public class FacebookApi {
     public void comments_get(Map<Enum<CommentsGetParams>, String> params, final AsyncCallback<List<Comment>> callback) {
         JSONObject p = getDefaultParams ();
         // copyAllParams(p, params, "*xid");
-
         AsyncCallback<JSONValue> internCallback = new AsyncCallback<JSONValue> () {
 
             public void onFailure(Throwable caught) {
@@ -577,7 +538,8 @@ public class FacebookApi {
             public void onSuccess(JSONValue result) {
                 List<Comment> resultList = new ArrayList<Comment> ();
                 for (JSONValue v : parse ( result )) {
-                    resultList.add ( new Comment ( v.isObject () ) );
+                    Comment c = Comment.fromJson ( v.isObject() + ""  );
+                    resultList.add ( c );
                 }
                 callback.onSuccess ( resultList );
             }
@@ -1205,7 +1167,8 @@ public class FacebookApi {
      */
     public void notifications_send(Map<Enum<NotificationsSendParams>, String> params, AsyncCallback<JSONValue> callback) {
         JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( NotificationsSendParams.values (), params ), "to_ids,notification,type" );
+        Map<String,String> stringParams = convertEnumMap ( NotificationsSendParams.values(), params );
+        copyAllParams ( p, stringParams, "to_ids,notification,type" );
         callMethod ( "notifications.send", p.getJavaScriptObject (), callback, "string" );
 
     }
@@ -1583,8 +1546,9 @@ public class FacebookApi {
                     JSONValue value = null;
 
                     for (int i = 0; (value = jo.get ( "" + i )) != null; i++) {
-                        Comment comment = new Comment ( value.isObject () );
-                        returnList.add ( comment );
+                        
+                        //Comment comment = new Comment ( value.isObject () );
+                        returnList.add ( Comment.fromJson (  value.toString () ) );
 
                     }
                     callback.onSuccess ( returnList );

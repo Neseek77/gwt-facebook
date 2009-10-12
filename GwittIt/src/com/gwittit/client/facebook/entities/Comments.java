@@ -4,6 +4,8 @@ import com.google.gwt.json.client.JSONValue;
 
 /**
  * Indicates if this stream has comments
+ *  
+ * TODO: Let this class extend JavaScriptObject
  */
 public class Comments {
 

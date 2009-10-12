@@ -25,6 +25,7 @@ import com.gwittit.client.facebook.xfbml.FbProfilePic;
 /**
  * Defines a facebook stream. See
  * http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29 Stream Table
+ * TODO: Let this class extend JavaScriptObject
  */
 public class Stream {
 	

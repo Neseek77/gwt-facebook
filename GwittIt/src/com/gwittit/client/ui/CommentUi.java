@@ -56,7 +56,7 @@ public class CommentUi extends Composite implements ClickHandler {
 
 		deleteCommentLink.addClickHandler( this );
 		
-		FbProfilePic pp = new FbProfilePic ( comment.getFromId(), FbProfilePic.Size.square );
+		FbProfilePic pp = new FbProfilePic ( new Long ( comment.getFromId() ), FbProfilePic.Size.square );
 		pp.setSize("40px", "40px");
 		
 		outer.add ( pp );
@@ -71,31 +71,6 @@ public class CommentUi extends Composite implements ClickHandler {
 			wrapper.add ( deleteCommentLink );
 		}
 		initWidget ( wrapper );
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CommentUi other = (CommentUi) obj;
-		if (comment == null) {
-			if (other.comment != null)
-				return false;
-		} else if (!comment.equals(other.comment))
-			return false;
-		return true;
 	}
 
 	public void onClick(ClickEvent event) {

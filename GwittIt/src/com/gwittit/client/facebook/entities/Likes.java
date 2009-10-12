@@ -13,8 +13,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
- * @author ola
- *
+ * @author olamar72
+ * TODO: Let this class extend JavaScriptObject
  */
 public class Likes {
 

@@ -5,6 +5,7 @@ import com.google.gwt.json.client.JSONValue;
 
 /**
  * Facebook friendlist
+ * TODO: Let this class extend JavaScriptObject
  */
 public class FriendList {
 

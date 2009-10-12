@@ -9,6 +9,8 @@ import com.google.gwt.json.client.JSONValue;
  * 
  * @see http://wiki.developers.facebook.com/index.php/Stream_filter_%28FQL%29
  *
+ * TODO: Let this class extend JavaScriptObject
+ *
  */
 public class StreamFilter {
 
@@ -58,8 +60,6 @@ public class StreamFilter {
 	public StreamFilter ( JSONValue j ) {
 		
 		JSONObject o = j.isObject();
-		
-		GWT.log( StreamFilter.class + ": create " + o , null );
 		uid = JsonUtil.getString(o, "uid");
 		filterKey = JsonUtil.getString(o, "filter_key");
 		name = JsonUtil.getString ( o, "name" );

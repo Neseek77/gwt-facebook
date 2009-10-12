@@ -10,6 +10,12 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 
+/**
+ * This class is a hack. Let object extend JavaScriptObject to make parsing
+ * more effective.
+ * @author ola
+ *
+ */
 public class JsonUtil {
 	
 	

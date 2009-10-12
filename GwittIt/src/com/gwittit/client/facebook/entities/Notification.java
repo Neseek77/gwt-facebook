@@ -8,6 +8,7 @@ import com.gwittit.client.example.Showcase;
 
 /**
  * Class that represents a Notification.
+ * TODO: Let this class extend JavaScriptObject
  */
 public class Notification {
 	
