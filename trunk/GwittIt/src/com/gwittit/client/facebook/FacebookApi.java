@@ -14,6 +14,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwittit.client.JsonDebugPopup;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.FriendInfo;
@@ -36,6 +37,8 @@ import com.gwittit.client.facebook.entities.StreamFilter;
  */
 public class FacebookApi {
 
+    static final boolean DEBUG = false;
+    
     private String apiKey;
 
 
@@ -732,9 +735,17 @@ public class FacebookApi {
             }
 
             public void onSuccess(JSONValue jsonResult) {
+                
+                if ( DEBUG ) {
+                    JsonDebugPopup pop = new JsonDebugPopup ( jsonResult.toString () );
+                    pop.center ();
+                    pop.show ();
+                    testFriendsAreFriends();
+                }
+                
                 List<FriendInfo> result = new ArrayList<FriendInfo> ();
                 for (JSONValue v : parse ( jsonResult )) {
-                    result.add ( new FriendInfo ( v ) );
+                    result.add ( FriendInfo.fromJson (  v.toString () ) );
                 }
                 callback.onSuccess ( result );
             }
@@ -742,6 +753,14 @@ public class FacebookApi {
         callMethod ( "friends.areFriends", p.getJavaScriptObject (), a );
     }
 
+    
+    private native void testFriendsAreFriends() /*-{
+    
+        $wnd.FB.Facebook.apiClient.friends_areFriends('123456789','987654321',function(result)
+        {
+            alert ( "test result =" + result );
+        });
+    }-*/;
     /**
      * Valid params for method <code>friends.get</code>
      */
@@ -812,9 +831,8 @@ public class FacebookApi {
 
         AsyncCallback<JSONValue> a = new AsyncCallback<JSONValue> () {
             public void onFailure(Throwable caught) {
-
+                callback.onFailure ( caught );
             }
-
             public void onSuccess(JSONValue result) {
                 List<FriendList> returnList = new ArrayList<FriendList> ();
                 for (JSONValue v : parse ( result )) {
@@ -1048,6 +1066,12 @@ public class FacebookApi {
 
             public void onSuccess(JSONValue result) {
 
+                if ( DEBUG ) {
+                    JsonDebugPopup pop = new JsonDebugPopup ( result.toString () );
+                    pop.center ();
+                    pop.show ();
+                    }
+                
                 List<Notification> resultList = new ArrayList<Notification> ();
 
                 JSONValue v = result.isObject ().get ( "notifications" );
@@ -1833,7 +1857,7 @@ public class FacebookApi {
         $wnd.FB_RequireFeatures(["Api"], function(){			
         	$wnd.FB.Facebook.apiClient.callMethod( method, params, 
         		function(result, exception){
-        				// this is the result when we run in hosted mode for some reason
+        	        				// this is the result when we run in hosted mode for some reason
         			if(!isNaN(result)) {
         				app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessNumber(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,result+"");
         			} else {
@@ -1901,6 +1925,10 @@ public class FacebookApi {
      */
     public void callbackSuccess(AsyncCallback<JSONValue> callback, JavaScriptObject obj) {
         GWT.log ( "FacebookApi: callbackSuccess " + obj, null );
+        
+        
+        //indow.alert ("" +  new JSONObject ( obj  ).isString () );
+        
         callback.onSuccess ( new JSONObject ( obj ) );
     }
 
@@ -1913,6 +1941,7 @@ public class FacebookApi {
         }
         JSONObject obj = new JSONObject ();
         obj.put ( "api_key", new JSONString ( apiKey ) );
+        obj.put ( "format",  new JSONString ( "JSON" ) ) ;
         return obj;
     }
 
