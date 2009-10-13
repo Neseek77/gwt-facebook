@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
 import com.gwittit.client.facebook.ConnectState;
-import com.gwittit.client.facebook.DefaultAsyncCallback;
+import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookConnectHandler;
 import com.gwittit.client.facebook.UserInfo;

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
 import com.gwittit.client.facebook.ApiFactory;
-import com.gwittit.client.facebook.DefaultAsyncCallback;
+import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.UserInfo;
@@ -191,7 +191,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	    Map<Enum<NotificationsSendParams>, String> params = new HashMap<Enum<NotificationsSendParams>, String>();
 	    params.put ( NotificationsSendParams.to_ids, "744450545" ) ;
 	    params.put ( NotificationsSendParams.notification, "User logged in to GwittIt" );
-	    apiClient.notifications_send (  params,  new DefaultAsyncCallback<JavaScriptObject> () );
+	    apiClient.notifications_send (  params,  new Callback<JavaScriptObject> () );
 	}
 	
 	public void onClick(ClickEvent event) {
