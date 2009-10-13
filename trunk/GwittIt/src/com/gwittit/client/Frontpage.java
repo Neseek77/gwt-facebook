@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -258,11 +259,11 @@ public class Frontpage  extends Composite implements ClickHandler {
 		params.put(StatusSetParams.status, inputTextArea.getValue() );
 
 		// Set facebook status
-		api.status_set( params, new AsyncCallback<JSONValue> () {
+		api.status_set( params, new AsyncCallback<JavaScriptObject> () {
 			public void onFailure ( Throwable t ) {
 				Window.alert ( "Failed " );
 			}
-			public void onSuccess ( JSONValue v ) {
+			public void onSuccess ( JavaScriptObject v ) {
 				inputBar.remove( updateStatusLoader );
 				submit.setEnabled(true);
 				inputTextArea.setValue(null);

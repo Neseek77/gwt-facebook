@@ -3,6 +3,7 @@ package com.gwittit.client.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONValue;
@@ -87,10 +88,11 @@ public class CommentUi extends Composite implements ClickHandler {
 			Map<Enum<StreamRemoveCommentParams>,String> params = new HashMap<Enum<StreamRemoveCommentParams>,String> ();
 			params.put( StreamRemoveCommentParams.comment_id,  ""+ comment.getId() );
 			
-			apiClient.stream_removeComment(params, new AsyncCallback<JSONValue> () {
+			
+			apiClient.stream_removeComment(params, new AsyncCallback<JavaScriptObject> () {
 				public void onFailure(Throwable caught) {
 				}
-				public void onSuccess(JSONValue result) {
+				public void onSuccess(JavaScriptObject result) {
 					CommentUi.this.addStyleName("deleted");
 				}
 			});

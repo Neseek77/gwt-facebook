@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -49,10 +50,14 @@ public class Photos_getAlbums extends Showcase {
 
 			public void onSuccess(List<Album> result) {
 				outer.remove( getLoader () );
+				
+				outer.add ( new HTML ( "Result Size: " + result.size () ) );
 				for ( Album a : result ) {
-					String html ="Name: " + a.getName() + ", Description: " + a.getDescription(); 
+					String html ="<h2>Name: " + a.getName() + ", Description: " + a.getDescription() + "</h2>";
 					outer.add ( new HTML ( html ) );
-					outer.add ( new FbPhoto ( a.getCoverPid() , Size.small ) );
+					if ( a.hasCover () ) {
+					    outer.add ( new FbPhoto ( a.getCoverPidString() , Size.small ) );
+					}
 				}
 				Xfbml.parse(outer);
 			}

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -40,7 +41,7 @@ public class Friends_areFriends extends Showcase {
 			params.put ( FriendsAreFriendsParams.uids1, UserInfo.getUid()+",751836969,708775201");
 			params.put ( FriendsAreFriendsParams.uids2, "709281400,560635378,709281400");
 			
-			apiClient.friends_areFriends(params, new AsyncCallback<List<FriendInfo>> () {
+			apiClient.friends_areFriends(params, new AsyncCallback <List <FriendInfo>> () {
 				public void onFailure(Throwable caught) {
 					result.add( new HTML ( "" + caught ) ) ;
 				}
