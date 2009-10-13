@@ -1,6 +1,6 @@
 #summary Implemented Facebook Methods
 
-= This list shows methods that should be implemented =
+= This list shows methods implemented in gwt-facebook lib =
 
 
 || *Method* || *Implemented* || *Planned Version* || *Info* ||
