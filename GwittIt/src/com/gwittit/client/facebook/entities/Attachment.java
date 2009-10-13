@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @see http://wiki.developers.facebook.com/index.php/Attachment_%28Streams%29
  * @author ola
  * 
+ * TODO: Let this class extend JavaScriptObject
  */
 public class Attachment {
 

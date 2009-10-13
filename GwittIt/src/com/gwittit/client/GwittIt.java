@@ -12,26 +12,21 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
 import com.gwittit.client.facebook.ApiFactory;
-import com.gwittit.client.facebook.ConnectState;
 import com.gwittit.client.facebook.DefaultAsyncCallback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
-import com.gwittit.client.facebook.FacebookConnectHandler;
 import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.FacebookApi.NotificationsSendParams;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
-import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

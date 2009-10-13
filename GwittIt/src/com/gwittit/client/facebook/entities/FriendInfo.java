@@ -1,54 +1,43 @@
 package com.gwittit.client.facebook.entities;
 
-import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * Indicates if two persons are friends.
- * TODO: Let this class extend JavaScriptObject
+ * 
+ * @see http://wiki.developers.facebook.com/index.php/Friends.areFriends Api Method
  */
-public class FriendInfo {
+public class FriendInfo extends JavaScriptObject {
 
-	private Long uid1 ;
-	
-	private Long uid2; 
-	
-	private Boolean areFriends ;
-	
-	public FriendInfo () {
-		
-	}
-	
-	public FriendInfo ( JSONValue v ) {
-		if ( v == null ) { return ; }
-		
-		uid1 = JsonUtil.getLong(v.isObject(), "uid1");
-		uid2 = JsonUtil.getLong(v.isObject(), "uid2" );
-		areFriends = JsonUtil.getBoolean(v.isObject(), "are_friends");
-		
-	}
+    protected FriendInfo () {}
+    
+    /**
+     * First uid as String
+     */
+    public final native String getUid1String() /*-{ return this.uid1 + ""; }-*/;
+  
+    /**
+     * First uid
+     */
+    public final Long getUid1() { return new Long ( getUid1String() ); }
+    
+    /**
+     * Second uid as String
+     */
+    public final native String getUid2String() /*-{ return this.uid2 + ""; }-*/;
+    
+    /**
+     * Second uid
+     */
+    public final Long getUid2() { return new Long ( getUid2String() ); }
+    
+    /**
+     * True if uid1 and uid2 are friends
+     */
+    public final native boolean getAreFriends() /*-{ return this.are_friends == true ; }-*/;
+    
+    public static native FriendInfo fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
+    
 
-	public Long getUid1() {
-		return uid1;
-	}
-
-	public void setUid1(Long uid1) {
-		this.uid1 = uid1;
-	}
-
-	public Long getUid2() {
-		return uid2;
-	}
-
-	public void setUid2(Long uid2) {
-		this.uid2 = uid2;
-	}
-
-	public Boolean getAreFriends() {
-		return areFriends;
-	}
-
-	public void setAreFriends(Boolean areFriends) {
-		this.areFriends = areFriends;
-	}
 	
 }
