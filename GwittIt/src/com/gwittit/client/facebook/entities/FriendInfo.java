@@ -35,9 +35,5 @@ public class FriendInfo extends JavaScriptObject {
      * True if uid1 and uid2 are friends
      */
     public final native boolean getAreFriends() /*-{ return this.are_friends == true ; }-*/;
-    
-    public static native FriendInfo fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
-    
-
 	
 }

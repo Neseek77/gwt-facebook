@@ -3,7 +3,7 @@ package com.gwittit.client.facebook.entities;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
- *  Represents a photo object
+ * Represents a photo object
  * @author ola
  */
 public class Photo extends JavaScriptObject {
@@ -56,26 +56,4 @@ public class Photo extends JavaScriptObject {
      */
     public final native String getCaption() /*-{ return this.caption; }-*/;
 
-    
-    //public static native Photo fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
-
-    /*
-	public Photo () { }
-	
-	public Photo  ( JSONObject o ) {
-		pid = JsonUtil.getString (o, "pid");
-		aid = JsonUtil.getString (o, "aid");
-		owner = JsonUtil.getLong (o, "owner");
-		
-		name = JsonUtil.getString(o, "name" );
-		src = JsonUtil.getString ( o, "src");
-		srcBig = JsonUtil.getString(o, "src_big" );
-		srcSmall = JsonUtil.getString(o, "src_small" ); 
-		link = JsonUtil.getString( o, "link" );
-		caption = JsonUtil.getString ( o, "caption" );
-	}
-	
-    */
-    
- 	
 }
