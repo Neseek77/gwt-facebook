@@ -3,8 +3,10 @@ package com.gwittit.client.example;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -54,16 +56,16 @@ public class Comments_add extends Showcase  {
 				params.put( CommentsAddParams.xid, "comments_test");
 				params.put( CommentsAddParams.text, text.getValue());
 								
-				apiClient.comments_add(params, new AsyncCallback<JSONValue> () {
+				apiClient.comments_add(params, new AsyncCallback<JavaScriptObject> () {
 
 					public void onFailure(Throwable caught) {
 						handleFailure ( caught );
 					}
 
-					public void onSuccess(JSONValue result) {
+					public void onSuccess(JavaScriptObject result) {
 						removeLoader ( outer );
 						text.setValue(null);
-						responseWrapper.add( new HTML (""+ result ) );
+						responseWrapper.add( new HTML (""+ new JSONObject( result )) );
 					}
 					
 					

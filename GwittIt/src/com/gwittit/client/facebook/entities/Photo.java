@@ -1,40 +1,65 @@
 package com.gwittit.client.facebook.entities;
 
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  *  Represents a photo object
  * @author ola
- * TODO: Let this class extend JavaScriptObject
  */
-public class Photo {
+public class Photo extends JavaScriptObject {
 
-	/*
-	 * <pid>34585991612804</pid>  <aid>34585963571485</aid>  <owner>1240077</owner>  <src>http://ip002.facebook.com/v11/135/18/8055/s1240077_30043524_2020.jpg</src>  <src_big>http://ip002.facebook.com/v11/135/18/8055/n1240077_30043524_2020.jpg</src>  <src_small>http://ip002.facebook.com/v11/135/18/8055/t1240077_30043524_2020.jpg</src>  <link>http://www.facebook.com/photo.php?pid=30043524&id=8055</link>  <caption>From The Deathmatch (Trailer) (1999)</caption>  <created>1132553361</created> 
-	 */
-	
-	private String pid;
-	
-	private String aid;
-	
-	private String name;
-	
-	private Long owner;
-	
-	private String src;
-	
-	private String srcBig;
-	
-	private String srcSmall;
-	
-	private String link;
-	
-	private String caption;
+    protected Photo () {}
+    
+    /**
+     * Pid
+     */
+    public final native String getPid() /*-{ return this.pid; }-*/;
+    
+    /**
+     * Album id
+     */
+    public final native String getAid() /*-{ return this.aid; }-*/;
 
+    /**
+     * Name
+     */
+    public final native String getName() /*-{ return this.name; }-*/;
 
+    /**
+     * Owner string
+     */
+    public final native String getOwnerString() /*-{ return this.owner + ""; }-*/;
+    public final Long getOwner() { return new Long ( getOwnerString() ); }
 
+    /**
+     * Source url
+     */
+    public final native String getSrc() /*-{ return this.src; }-*/;
+
+    /**
+     * Source big url
+     */
+    public final native String getSrcBig() /*-{ return this.src_big; }-*/;
+
+    /**
+     * Source small url
+     */
+    public final native String getSrcSmall() /*-{ return this.src_small; }-*/;
+
+    /**
+     * Link url
+     */
+    public final native String getLink() /*-{ return this.link; }-*/;
+
+    /**
+     * Caption
+     */
+    public final native String getCaption() /*-{ return this.caption; }-*/;
+
+    
+    //public static native Photo fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
+
+    /*
 	public Photo () { }
 	
 	public Photo  ( JSONObject o ) {
@@ -50,77 +75,7 @@ public class Photo {
 		caption = JsonUtil.getString ( o, "caption" );
 	}
 	
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPid() {
-		return pid;
-	}
-
-	public void setPid(String pid) {
-		this.pid = pid;
-	}
-
-	public String getAid() {
-		return aid;
-	}
-
-	public void setAid(String aid) {
-		this.aid = aid;
-	}
-
-	public Long getOwner() {
-		return owner;
-	}
-
-	public void setOwner(Long owner) {
-		this.owner = owner;
-	}
-
-	public String getSrc() {
-		return src;
-	}
-
-	public void setSrc(String src) {
-		this.src = src;
-	}
-
-	public String getSrcBig() {
-		return srcBig;
-	}
-
-	public void setSrcBig(String srcBig) {
-		this.srcBig = srcBig;
-	}
-
-	public String getSrcSmall() {
-		return srcSmall;
-	}
-
-	public void setSrcSmall(String srcSmall) {
-		this.srcSmall = srcSmall;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public String getCaption() {
-		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}	
-	
+    */
+    
+ 	
 }

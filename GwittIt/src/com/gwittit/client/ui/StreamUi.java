@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONValue;
@@ -231,12 +232,12 @@ public class StreamUi extends Composite implements ClickHandler {
 				params.put ( StreamAddCommentParams.post_id, stream.getPostId() );
 				params.put ( StreamAddCommentParams.comment, commentBox.getText() ); 
 				
-				apiClient.stream_addComment ( params, new AsyncCallback<JSONValue> () {
+				apiClient.stream_addComment ( params, new AsyncCallback<JavaScriptObject> () {
 					public void onFailure(Throwable t) {
 						Window.alert ( "Failed to set comment" );
 					}
 
-					public void onSuccess(JSONValue v) {
+					public void onSuccess(JavaScriptObject v) {
 						commentBox.reset();
 						renderComments();
 						GWT.log( StreamUi.class +  "StreamUI: added comment " + commentBox.getText(), null );
@@ -439,12 +440,12 @@ public class StreamUi extends Composite implements ClickHandler {
 		Map<Enum<StreamLikeParams>, String> params = new HashMap<Enum<StreamLikeParams>, String>();
 		params.put(StreamLikeParams.post_id, stream.getPostId());
 		
-		apiClient.stream_removeLike(params, new AsyncCallback<JSONValue>() {
+		apiClient.stream_removeLike(params, new AsyncCallback<JavaScriptObject>() {
 			public void onFailure(Throwable t) {
 				Window.alert("Failed to remove like");
 			}
 
-			public void onSuccess(JSONValue o) {
+			public void onSuccess(JavaScriptObject o) {
 				clickedLink.setHTML("like");
 			}
 		});
@@ -454,11 +455,11 @@ public class StreamUi extends Composite implements ClickHandler {
 		Map<Enum<StreamLikeParams>, String> params = new HashMap<Enum<StreamLikeParams>, String>();
 		params.put( StreamLikeParams.post_id, stream.getPostId() );
 
-		apiClient.stream_addLike(params, new AsyncCallback<JSONValue>() {
+		apiClient.stream_addLike(params, new AsyncCallback<JavaScriptObject>() {
 			public void onFailure ( Throwable t ) {
 				Window.alert("Failed to add like");
 			}
-			public void onSuccess(JSONValue o) {
+			public void onSuccess(JavaScriptObject o) {
 				clickedLink.setText("Unlike");
 			}
 
@@ -475,11 +476,11 @@ public class StreamUi extends Composite implements ClickHandler {
 			Map<Enum<StreamRemoveParams>,String> params = new HashMap<Enum<StreamRemoveParams>,String> ();
 			params.put( StreamRemoveParams.post_id, stream.getPostId() );
 		
-			apiClient.stream_remove(params, new AsyncCallback<JSONValue> () {
+			apiClient.stream_remove(params, new AsyncCallback<JavaScriptObject> () {
 				public void onFailure(Throwable caught) {
 					Window.alert( StreamUi.class + ": Failed " + caught );
 				}
-				public void onSuccess(JSONValue v) {
+				public void onSuccess(JavaScriptObject v) {
 					StreamUi.this.addStyleName("deleted");
 					
 				}

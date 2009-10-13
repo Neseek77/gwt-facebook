@@ -12,8 +12,11 @@ public class Album extends JavaScriptObject {
     
 	public final native String getAid () /*-{ return this.aid; }-*/;
 
-	public final native String getCoverPid () /*-{ return this.cover_pid; }-*/;
-	
+	public final native String getCoverPidString () /*-{ return this.cover_pid +""; }-*/;
+	public final Long getCoverPid() { return new Long ( getCoverPidString() ); };
+	public final boolean hasCover () {
+	    return getCoverPid().compareTo ( new Long(0 ) )!= 0;
+	}
 	public final native String getOwner () /*-{ return this.owner + ""; }-*/;
 	
 	public final native String getName() /*-{ return this.name; }-*/;
@@ -27,9 +30,5 @@ public class Album extends JavaScriptObject {
 	public final native String getVisible () /*-{ return this.visible; }-*/;
 	
 	public final native String getLink () /*-{ return this.link; }-*/;
-
-	public static native Album  newInstance ( String jsonString ) /*-{
-	       return eval('(' + jsonString + ')');
-	}-*/;
 	
 }

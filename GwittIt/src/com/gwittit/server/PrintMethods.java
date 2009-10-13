@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.FriendInfo;
+import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.entities.Video;
 
 
@@ -17,7 +18,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = FriendInfo.class;
+	    Class c = Photo.class;
 		
 		Field fields[] = c.getFields ();
 		

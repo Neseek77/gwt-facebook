@@ -3,6 +3,7 @@ package com.gwittit.client.example;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONValue;
@@ -63,11 +64,11 @@ public class Notifications_send extends Showcase {
         params.put ( NotificationsSendParams.notification, notification );
         params.put ( NotificationsSendParams.to_ids, "807462490,744450545" );
         
-        apiClient.notifications_send ( params, new AsyncCallback<JSONValue> () {
+        apiClient.notifications_send ( params, new AsyncCallback<JavaScriptObject> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
-            public void onSuccess(JSONValue result) {
+            public void onSuccess(JavaScriptObject result) {
                 Window.alert ( "success" );
                 notificationText.setValue ( null );
             }

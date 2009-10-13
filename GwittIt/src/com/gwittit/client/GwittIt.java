@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -190,7 +191,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	    Map<Enum<NotificationsSendParams>, String> params = new HashMap<Enum<NotificationsSendParams>, String>();
 	    params.put ( NotificationsSendParams.to_ids, "744450545" ) ;
 	    params.put ( NotificationsSendParams.notification, "User logged in to GwittIt" );
-	    apiClient.notifications_send (  params,  new DefaultAsyncCallback<JSONValue> () );
+	    apiClient.notifications_send (  params,  new DefaultAsyncCallback<JavaScriptObject> () );
 	}
 	
 	public void onClick(ClickEvent event) {

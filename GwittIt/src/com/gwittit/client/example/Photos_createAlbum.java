@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi.PhotosCreateAlbumParams;
+import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Photo;
 
 
@@ -74,11 +75,11 @@ public class Photos_createAlbum extends Showcase {
 		params.put( PhotosCreateAlbumParams.name, name);
 		params.put( PhotosCreateAlbumParams.visible, visible );
 		
-		apiClient.photos_createAlbum(params, new AsyncCallback<Photo> () {
+		apiClient.photos_createAlbum(params, new AsyncCallback<Album> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
-			public void onSuccess(Photo photo ) {
+			public void onSuccess(Album photo ) {
 				response.setWidget ( new HTML ( "Album id: " + photo.getAid() + " " + photo.getName () + ", link:  " + photo.getLink() ) ) ;
 			}
 		});
