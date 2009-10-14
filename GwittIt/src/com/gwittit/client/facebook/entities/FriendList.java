@@ -1,54 +1,26 @@
 package com.gwittit.client.facebook.entities;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 
 /**
  * Facebook friendlist
- * TODO: Let this class extend JavaScriptObject
  */
-public class FriendList {
+public class FriendList extends JavaScriptObject {
 
-	/*
-	 * id of friend list 
-	 */
-	private Long flid;
-	
-	/*
-	 * name of friend list
-	 */
-	private String name;
-	
-	
-	public FriendList () {
-		
-	}
-	
-	public FriendList ( JSONValue v ) {
-		if ( v == null ) {
-			return;
-		}
-		JSONObject o = v.isObject();
-		
-		flid = JsonUtil.getLong(o, "flid" );
-		name = JsonUtil.getString(o,"name" );
-	}
+    protected FriendList() {
+    }
 
-	public Long getFlid() {
-		return flid;
-	}
+    public final native String getFlidString() /*-{
+        return this.flid + "";
+    }-*/;
 
-	public void setFlid(Long flid) {
-		this.flid = flid;
-	}
+    public final Long getFlid() {
+        return new Long ( getFlidString () );
+    }
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
+    public final native String getName() /*-{
+        return this.name;
+    }-*/;
 }
