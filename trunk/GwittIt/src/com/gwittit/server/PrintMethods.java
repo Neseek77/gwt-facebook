@@ -7,9 +7,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.gwittit.client.facebook.entities.ApplicationPublicInfo;
 import com.gwittit.client.facebook.entities.Comment;
+import com.gwittit.client.facebook.entities.ErrorResponse;
 import com.gwittit.client.facebook.entities.FriendInfo;
+import com.gwittit.client.facebook.entities.KeyValue;
 import com.gwittit.client.facebook.entities.Photo;
+import com.gwittit.client.facebook.entities.StreamFilter;
+import com.gwittit.client.facebook.entities.User;
+import com.gwittit.client.facebook.entities.UserData;
 import com.gwittit.client.facebook.entities.Video;
 
 
@@ -18,7 +24,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = Photo.class;
+	    Class c = UserData.class;
 		
 		Field fields[] = c.getFields ();
 		

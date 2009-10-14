@@ -51,7 +51,7 @@ public class ShowcaseClient extends Composite  {
 	
 	// All methods, methods prefixed with X is ignored when creating the menu.
 	final String adminMethods = "XAdmin:admin_banUsers,admin_getAllocation,admin_getAppProperties,admin_getBannedUsers,admin_getMetrics,admin_getRestrictionInfo,admin_setAppProperties,admin_setRestrictionInfo,admin_unbanUsers";
-	final String applicationMethods = "XApplication:application_getPublicInfo";
+	final String applicationMethods = "Application:application_getPublicInfo";
 	final String authMethods = "XAuth:auth_createToken,auth_expireSession,auth_getSession,auth_promoteSession,auth_revokeAuthorization,auth_revokeExtendedPermission";
 	final String batchMethods = "XBatch:batch_run";
 	final String commentMethods = "Comments:comments_add,comments_get,Xcomments_remove";
@@ -215,7 +215,7 @@ public class ShowcaseClient extends Composite  {
 		    //  example = new Admin_unbanUsers();
 		}
 		else if ( "application_getPublicInfo".equals ( m ) ) { 
-		    //  example = new Application_getPublicInfo();
+		    showcase = new Application_getPublicInfo();
 		}
 		else if ( "auth_createToken".equals ( m ) ) { 
 		    //  example = new Auth_createToken();

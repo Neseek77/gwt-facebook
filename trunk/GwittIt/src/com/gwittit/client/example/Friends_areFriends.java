@@ -43,7 +43,7 @@ public class Friends_areFriends extends Showcase {
 			
 			apiClient.friends_areFriends(params, new AsyncCallback <List <FriendInfo>> () {
 				public void onFailure(Throwable caught) {
-					result.add( new HTML ( "" + caught ) ) ;
+				    handleFailure ( caught );
 				}
 				public void onSuccess(List<FriendInfo> friendInfoList) {
 					resultWrapper.clear ();

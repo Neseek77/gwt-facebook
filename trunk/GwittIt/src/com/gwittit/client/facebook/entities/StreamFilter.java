@@ -1,154 +1,86 @@
 package com.gwittit.client.facebook.entities;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * Represents a stream filter.
  * 
  * @see http://wiki.developers.facebook.com/index.php/Stream_filter_%28FQL%29
- *
- * TODO: Let this class extend JavaScriptObject
- *
  */
-public class StreamFilter {
+public class StreamFilter extends JavaScriptObject {
 
-	public enum Type {application,newsfeed,friendlist,network,publicprofile}
-	
-	/*
-	 * The ID of the user whose filters you are querying. 
-	 */
-	private String uid;
-	
-	/*
-	 * A key identifying a particular filter for a user's stream. This filter is useful to retrieve relevant items from the stream table. 
-	 */
-	private String filterKey;
-	
-	/*
-	 * The name of the filter as it appears on the home page. 
-	 */
-	private String name;
-	
-	/*
-	 * A 32-bit int that indicates where the filter appears in the sort. 
-	 */
-	private int rank;
-	
-	/*
-	 * The URL to the filter icon. For applications, this is the same as your application icon. 
-	 */
-	private String iconUrl;
-	
-	/*
-	 * If true, indicates that the filter is visible on the home page. If false, the filter is hidden in the More link. 
-	 */
-	private boolean isVisible;
-	
-	/*
-	 * The type of filter. One of application, newsfeed, friendlist, network, or publicprofile. 
-	 */
-	private String type;
-	
-	/*
-	 * A 64-bit ID for the filter type. 
-	 */
-	private int value;
-	
-	
-	public StreamFilter ( JSONValue j ) {
-		
-		JSONObject o = j.isObject();
-		uid = JsonUtil.getString(o, "uid");
-		filterKey = JsonUtil.getString(o, "filter_key");
-		name = JsonUtil.getString ( o, "name" );
-		rank = JsonUtil.getInt(o,"rank");
-		iconUrl = JsonUtil.getString ( o, "icon_url" );
-		isVisible = JsonUtil.getBoolean ( o, "is_visible" );
-		type = JsonUtil.getString ( o, "type");
-		//value = JsonUtil.getInt ( o, "value");
-	}
+    protected StreamFilter() {
+    }
 
+    public enum Type {
+        application, newsfeed, friendlist, network, publicprofile
+    }
 
-	public String getUid() {
-		return uid;
-	}
+    /**
+     * The ID of the user whose filters you are querying.
+     */
+    public final native String getUid() /*-{
+        return this.uid;
+    }-*/;
 
+    /**
+     * A key identifying a particular filter for a user's stream. This filter is
+     * useful to retrieve relevant items from the stream table.
+     */
+    public final native String getFilterKey() /*-{
+        return this.filter_key;
+    }-*/;
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
+    /**
+     * The name of the filter as it appears on the home page.
+     */
+    public final native String getName() /*-{
+        return this.name;
+    }-*/;
 
+    /**
+     * A 32-bit int that indicates where the filter appears in the sort.
+     */
+    public final native int getRank() /*-{
+        return this.rank;
+    }-*/;
 
-	public String getFilterKey() {
-		return filterKey;
-	}
+    /**
+     * The URL to the filter icon. For applications, this is the same as your
+     * application icon.
+     */
+    public final native String getIconUrl() /*-{
+        return this.icon_url;
+    }-*/;
 
+    /**
+     * If true, indicates that the filter is visible on the home page. If false,
+     * the filter is hidden in the More link.
+     */
+    public final native boolean getIsVisible() /*-{
+        return this.is_visible;
+    }-*/;
 
-	public void setFilterKey(String filterKey) {
-		this.filterKey = filterKey;
-	}
+    /**
+     * The type of filter. One of application, newsfeed, friendlist, network, or
+     * publicprofile.
+     */
+    public final native String getType() /*-{
+        return this.type;
+    }-*/;
 
+    /**
+     * Get type as enum
+     */
+    public final Type getTypeEnum() {
+        return Type.valueOf ( getType () );
+    }
 
-	public String getName() {
-		return name;
-	}
+    /*
+     * A 64-bit ID for the filter type.
+     */
+    public final native int getValue() /*-{
+        return this.value;
+    }-*/;
 
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	public int getRank() {
-		return rank;
-	}
-
-
-	public void setRank(int rank) {
-		this.rank = rank;
-	}
-
-
-	public String getIconUrl() {
-		return iconUrl;
-	}
-
-
-	public void setIconUrl(String iconUrl) {
-		this.iconUrl = iconUrl;
-	}
-
-
-	public boolean isVisible() {
-		return isVisible;
-	}
-
-
-	public void setVisible(boolean isVisible) {
-		this.isVisible = isVisible;
-	}
-
-
-	public String getType() {
-		return type;
-	}
-
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-
-	public int getValue() {
-		return value;
-	}
-
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
-	
 }

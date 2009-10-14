@@ -8,6 +8,8 @@ import java.util.Map;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayNumber;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -17,7 +19,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.JsonDebugPopup;
 import com.gwittit.client.facebook.entities.Album;
+import com.gwittit.client.facebook.entities.ApplicationPublicInfo;
 import com.gwittit.client.facebook.entities.Comment;
+import com.gwittit.client.facebook.entities.ErrorResponse;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
 import com.gwittit.client.facebook.entities.JsonUtil;
@@ -41,7 +45,8 @@ public class FacebookApi {
 
     private String apiKey;
 
-    // ----------------------------- PRIVATE  --------------------------------------------
+    // ----------------------------- PRIVATE
+    // --------------------------------------------
     // Convenient method for casting a javascriptobject to a list.
     private <T extends JavaScriptObject> List<T> cast(Class<T> entity, JavaScriptObject jso) {
 
@@ -77,344 +82,126 @@ public class FacebookApi {
 
     }
 
-    /**
-     * Valid params for <code>stream.get</code>
-     */
-    public enum StreamGetParams {
-        uid, session_key, viewer_id, source_ids, start_time, end_time, limit, filter_key, metadata
-    }
-
-    /**
-     * This method returns a list of Stream objects that contains the stream
-     * from the perspective of a specific viewer -- a user or a Facebook Page.
-     * 
-     * The hashmap takes the following arguments:
-     * 
-     * @param viewer_id
-     *            int The user ID for whom you are fetching stream data. You can
-     *            pass 0 for this parameter to retrieve publicly viewable
-     *            information. However, desktop applications must always specify
-     *            a viewer as well as a session key. (Default value is the
-     *            current session user.)
-     * @param source_ids
-     *            array An array containing all the stream data for the user
-     *            profiles and Pages connected to the viewer_id. You can filter
-     *            the stream to include posts by the IDs you specify here.
-     *            (Default value is all connections of the viewer.)
-     * @param start_time
-     *            time The earliest time (in Unix time) for which to retrieve
-     *            posts from the stream. The start_time uses the updated_time
-     *            field in the stream (FQL) table as the baseline for
-     *            determining the earliest time for which to get the stream.
-     *            (Default value is 1 day ago.)
-     * @param end_time
-     *            time The latest time (in Unix time) for which to retrieve
-     *            posts from the stream. The end_time uses the updated_time
-     *            field in the stream (FQL) table as the baseline for
-     *            determining the latest time for which to get the stream.
-     *            (Default value is now.)
-     * @param limit
-     *            int A 32-bit int representing the total number of posts to
-     *            return. (Default value is 30 posts.)
-     * @param filter_key
-     *            string A filter associated with the user. Filters get returned
-     *            by stream.getFilters or the stream_filter FQL table. To filter
-     *            for stream posts from your application, look for a filter with
-     *            a filter_key set to app_YOUR_APPLICATION_ID.
-     * @param metadata
-     *            array A JSON-encoded array in which you can specify one or
-     *            more of 'albums', 'profiles', and 'photo_tags' to request the
-     *            user's aid, id (user ID or Page ID), and pid (respectively)
-     *            when you call stream.get. All three parameters are optional.
-     *            (Default value is false for all three keys.)
-     * 
-     * @see com.gwittit.client.facebook.entities.Stream Stream
-     * @see http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
-     * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
-     *      Stream Table
-     */
-    public void stream_get(Map<Enum<StreamGetParams>, String> params, final AsyncCallback<List<Stream>> ac) {
-
-        final String lp = "FacebookApiImpl#stream_get:";
-        GWT.log ( lp + " called", null );
-
-        JSONObject p = getDefaultParams ();
-
-        copyAllParams ( p, convertEnumMap ( StreamGetParams.values (), params ),
-                "uid,session_key,viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata" );
-
-        // Create native callback and parse response.
-        final AsyncCallback<JavaScriptObject> c = new AsyncCallback<JavaScriptObject> () {
-
-            public void onSuccess(JavaScriptObject js) {
-                GWT.log ( FacebookApi.class + ": stream.get got response", null );
-                List<Stream> result = new ArrayList<Stream> ();
-
-                JSONObject jv = new JSONObject ( js );
-                JSONValue value = jv.isObject ().get ( "posts" );
-                JSONArray array = value.isArray ();
-
-                for (int i = 0; array != null && i < array.size (); i++) {
-                    JSONValue v = array.get ( i );
-                    JSONObject o = v.isObject ();
-                    Stream stream = new Stream ( o );
-                    result.add ( stream );
-                }
-                GWT.log ( FacebookApi.class + ": result size = " + result.size (), null );
-                ac.onSuccess ( result );
-            }
-
-            public void onFailure(Throwable caught) {
-                ac.onFailure ( null );
-            }
-        };
-        callMethod ( "stream.get", p.getJavaScriptObject (), c );
-    }
-
-    /**
-     * Valid permissions
-     */
-    public enum Permission {
-        read_stream, publish_stream
-    };
-
-    /**
-     * Checks whether the user has opted in to an extended application
-     * permission.
-     * 
-     * For non-desktop applications, you may pass the ID of the user on whose
-     * behalf you're making this call. If you don't specify a user with the uid
-     * parameter but you do specify a session_key, then that user whose session
-     * it is will be the target of the call.
-     * 
-     * However, if your application is a desktop application, you must pass a
-     * valid session key for security reasons. Passing a uid parameter will
-     * result in an error.
-     * 
-     * required
-     * 
-     * @param api_key
-     *            string The application key associated with the calling
-     *            application. If you specify the API key in your client, you
-     *            don't need to pass it with every call.
-     * @param ext_perm
-     *            string String identifier for the extended permission that is
-     *            being checked for. Must be one of email, read_stream,
-     *            publish_stream, offline_access, status_update, photo_upload,
-     *            create_event, rsvp_event, sms, video_upload, create_note,
-     *            share_item. optional
-     * @param session_key
-     *            string The session key of the user whose permissions you are
-     *            checking. Note: A session key is always required for desktop
-     *            applications. It is required for Web applications only when
-     *            the uid is not specified.
-     * @param uid
-     *            int The user ID of the user whose permissions you are
-     *            checking. If this parameter is not specified, then it defaults
-     *            to the session user. Note: This parameter applies only to Web
-     *            applications and is required by them only if the session_key
-     *            is not specified. Facebook ignores this parameter if it is
-     *            passed by a desktop application.
-     */
-    public void users_hasAppPermission(Permission permission, final AsyncCallback<Boolean> callback) {
-        GWT.log ( "users_hasAppPermission: " + permission.toString (), null );
-
-        JSONObject p = getDefaultParams ();
-        p.put ( "ext_perm", new JSONString ( permission.toString () ) );
-
-        Callback<JavaScriptObject> nativeCallback = new Callback<JavaScriptObject> ( callback ) {
-            public void onSuccess(JavaScriptObject jv) {
-                JSONString result = new JSONObject ( jv ).isObject ().get ( "result" ).isString ();
-                callback.onSuccess ( "1".equals ( result.isString ().stringValue () ) );
-            }
-        };
-        callMethod ( "users.hasAppPermission", p.getJavaScriptObject (), nativeCallback );
-    }
-
-    /**
-     * Evaluates an FQL (Facebook Query Language) query.
-     * 
-     * Warning: If you use JSON as the output format, you may run into problems
-     * when selecting multiple fields with the same name or with selecting
-     * multiple "anonymous" fields (for example, SELECT 1+2, 3+4 ...).
-     * 
-     * @param query
-     *            The query to perform, as described in the FQL documentation.
-     * @see http://wiki.developers.facebook.com/index.php/FQL FQL Documentation
-     */
-    public void fql_query(String query, AsyncCallback<JavaScriptObject> callback) {
-
-        Map<String, String> params = new HashMap<String, String> ();
-        params.put ( "query", query );
-        JSONObject p = getDefaultParams ();
-        copyParams ( p, params, "query" );
-        callMethod ( "fql.query", p.getJavaScriptObject (), callback );
-    }
-
-    /**
-     * Valid params for method <code>photos.getAlbums</code>
-     */
-    public enum PhotosGetAlbumsParams {
-        uid, session_key, aids
-    }
-
-    /**
-     * @see #photos_getAlbums(Map, AsyncCallback)
-     */
-    public void photos_getAlbums(final AsyncCallback<List<Album>> callback) {
-        photos_getAlbums ( null, callback );
-    }
-
-    /**
-     * Returns metadata about all of the photo albums uploaded by the specified
-     * user.
-     * 
-     * This method returns information from all visible albums satisfying the
-     * filters specified. The method can be used to return all photo albums
-     * created by a user, query a specific set of albums by a list of aids, or
-     * filter on any combination of these two.
-     * 
-     * This call does return a user's profile picture album. However, you cannot
-     * upload photos to this album using photos.upload. You can determine
-     * whether an album is the profile album by comparing the album cover pid
-     * with the user's profile picture pid. If they are the same pid, then
-     * that's the profile picture album. Also, see the Notes below for another
-     * way of returning the profile picture album.
-     * 
-     * You cannot store the values returned from this call.
-     * 
-     * @param uid
-     *            int Return albums created by this user. You must specify
-     *            either uid or aids. The uid parameter has no default value.
-     * @param aids
-     *            array Return albums with aids in this list. This is a
-     *            comma-separated list of aids. You must specify either uid or
-     *            aids. The aids parameter has no default value.
-     */
-    public void photos_getAlbums ( final Map<Enum<PhotosGetAlbumsParams>, String> params, 
-                                   final AsyncCallback<List<Album>> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( PhotosGetAlbumsParams.values (), params ), "uid,aids" );
-
-        // Create javascript native callback and parse response
-        callMethodRetList ( "photos.getAlbums", p.getJavaScriptObject (), Album.class, callback );
-    }
-
-
-    /**
-     * Valid params for method <code>photos.get</code>
-     */
-    public enum PhotosGetParams {
-        uid, session_key, subj_id, aid, pids
-    }
-
-    /**
-     * Returns all visible photos according to the filters specified. You can
-     * use this method to find all photos that are:
-     * 
-     * Tagged with the specified subject (passing the user's uid as the subj_id)
-     * Contained within the album specified by aid Included in the list of
-     * photos specified by pids Any combination of these three criteria
-     * 
-     * @param subj_id
-     *            int Filter by photos tagged with this user. You must specify
-     *            at least one of subj_id, aid or pids. The subj_id parameter
-     *            has no default value, but if you pass one, it must be the
-     *            user's user ID.
-     * @param aid
-     *            string Filter by photos in this album. You must specify at
-     *            least one of subj_id, aid or pids. The aid parameter has no
-     *            default value. The aid cannot be longer than 50 characters.
-     * @param pids
-     *            array Filter by photos in this list. This is a comma-separated
-     *            list of pids. You must specify at least one of subj_id, aid or
-     *            pids. The pids parameter has no default value.
-     */
-    public void photos_get(final Map<Enum<PhotosGetParams>, String> params, final AsyncCallback<List<Photo>> callback) {
-        JSONObject obj = getDefaultParams ();
-        copyAllParams ( obj, convertEnumMap ( PhotosGetParams.values (), params ), "uid,session_key,subj_id,aid,pids" );
-        callMethodRetList ( "photos.get", obj.getJavaScriptObject (), Photo.class, callback );
-    }
-
     public void admin_banUsers(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_unbanUsers(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_getAllocation(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_getAppProperties(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_getBannedUsers(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_getMetrics(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_getRestrictionInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_setAppProperties(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
     public void admin_setRestrictionInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        // TODO Version 2.0
     }
 
-    public void application_getPublicInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    /**
+     * Valid parameters for method <code>application.getPublicInfo</code>
+     */
+    public static enum ApplicationPublicInfoParams {
+        application_id, application_api_key, application_canvas_name
     }
 
+    /**
+     * Returns public information for an application (as shown in the
+     * application directory) by either application ID, API key, or canvas page
+     * name. Returned fields include:
+     *
+     * The params map takes the following parameters
+     * @param application_id
+     *            int Application ID of the desired application. You must
+     *            specify exactly one of application_id, application_api_key or
+     *            application_canvas_name.
+     * @param application_api_key
+     *            string API key of the desired application. You must specify
+     *            exactly one of application_id, application_api_key or
+     *            application_canvas_name.
+     * @param application_canvas_name
+     *            string Canvas page name of the desired application. You must
+     *            specify exactly one of application_id, application_api_key or
+     *            application_canvas_name.
+     * 
+     * 
+     * @param callback 
+     * 
+     * @see http://wiki.developers.facebook.com/index.php/Application.getPublicInfo ApplicationGetPublicInfo
+     */
+    public void application_getPublicInfo( Map<Enum<ApplicationPublicInfoParams>, String> params, 
+                                           AsyncCallback<ApplicationPublicInfo> callback) {
+        JSONObject p = getDefaultParams ();
+        Map<String,String> inParams = convertEnumMap ( ApplicationPublicInfoParams.values(), params );
+        copyAllParams ( p, inParams, "application_id,application_api_key,application_canvas_name" );
+        callMethodRetObject ( "application.getPublicInfo", 
+                              p.getJavaScriptObject (), ApplicationPublicInfo.class, callback );
+    }
+
+    /**
+     * Desktop only, kept for future use.
+     */
     public void auth_createToken(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "auth.* methods not supported in web mode" );
     }
 
+    /**
+     * Desktop only, kept for future use.
+     */
     public void auth_expireSession(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "auth.* methods not supported in web mode" );
     }
 
+
+    /**
+     * Desktop only, kept for future use.
+     */
     public void auth_getSession(Map<String, String> params, final AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "auth.getSession desktop only" );
+        Window.alert ( "auth.* methods not supported in web mode" );
     }
 
+    /**
+     * Desktop only, kept for future use.
+     */
     public void auth_promoteSession(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "auth.* methods not supported in web mode" );
     }
 
+    /**
+     * Desktop only, kept for future use.
+     */
     public void auth_revokeAuthorization(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "auth.* methods not supported in web mode" );
     }
 
+    /**
+     * Desktop only, kept for future use.
+     */
     public void auth_revokeExtendedPermission(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "auth.* methods not supported in web mode" );
     }
 
+    
     public void batch_run(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         // TODO Auto-generated method stub
 
@@ -842,26 +629,43 @@ public class FacebookApi {
         AsyncCallback<JavaScriptObject> ac = new AsyncCallback<JavaScriptObject> () {
 
             public void onFailure(Throwable caught) {
+                callback.onFailure ( caught );
             }
 
             public void onSuccess(JavaScriptObject jso) {
-                
-                 Window.alert ( "Response: " + new JSONObject ( jso ) + "" );
+                JsArrayNumber jsArray = jso.cast ();
                 List<Long> result = new ArrayList<Long> ();
 
-                JSONObject jv = new JSONObject ( jso );
-                JSONObject o = jv.isObject ();
-                JSONValue value;
-                int key = 0;
-
-                while ((value = o.get ( key + "" )) != null) {
-                    result.add ( new Long ( value.isNumber () + "" ) );
-                    key++;
+                for (int i = 0; i < jsArray.length (); i++) {
+                    NumberFormat fmt = NumberFormat.getFormat ( "0" );
+                    double friendIdDbl = jsArray.get ( i );
+                    Long l = Long.parseLong ( fmt.format ( friendIdDbl ) );
+                    result.add ( l );
                 }
                 callback.onSuccess ( result );
             }
         };
         callMethod ( method, params, ac );
+    }
+
+    /**
+     * Evaluates an FQL (Facebook Query Language) query.
+     * 
+     * Warning: If you use JSON as the output format, you may run into problems
+     * when selecting multiple fields with the same name or with selecting
+     * multiple "anonymous" fields (for example, SELECT 1+2, 3+4 ...).
+     * 
+     * @param query
+     *            The query to perform, as described in the FQL documentation.
+     * @see http://wiki.developers.facebook.com/index.php/FQL FQL Documentation
+     */
+    public void fql_query(String query, AsyncCallback<JavaScriptObject> callback) {
+
+        Map<String, String> params = new HashMap<String, String> ();
+        params.put ( "query", query );
+        JSONObject p = getDefaultParams ();
+        copyParams ( p, params, "query" );
+        callMethod ( "fql.query", p.getJavaScriptObject (), callback );
     }
 
     public void groups_get(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1063,9 +867,7 @@ public class FacebookApi {
             }
 
             public void onSuccess(JavaScriptObject jso) {
-                JSONObject result = new JSONObject ( jso );
-                Boolean b = JsonUtil.getBoolean ( result.isObject (), "result" );
-                callback.onSuccess ( b );
+                callback.onSuccess ( new Boolean ( jso.toString () ) );
             }
         };
         callMethod ( "notifications.markRead", p.getJavaScriptObject (), internCallback );
@@ -1126,7 +928,7 @@ public class FacebookApi {
         JSONObject p = getDefaultParams ();
         Map<String, String> stringParams = convertEnumMap ( NotificationsSendParams.values (), params );
         copyAllParams ( p, stringParams, "to_ids,notification,type" );
-        callMethod ( "notifications.send", p.getJavaScriptObject (), callback, "string" );
+        callMethod ( "notifications.send", p.getJavaScriptObject (), callback );
 
     }
 
@@ -1216,6 +1018,89 @@ public class FacebookApi {
         callMethod ( "photos.createAlbum", p.getJavaScriptObject (), internCallback );
     }
 
+    /**
+     * Valid params for method <code>photos.getAlbums</code>
+     */
+    public enum PhotosGetAlbumsParams {
+        uid, session_key, aids
+    }
+
+    /**
+     * @see #photos_getAlbums(Map, AsyncCallback)
+     */
+    public void photos_getAlbums(final AsyncCallback<List<Album>> callback) {
+        photos_getAlbums ( null, callback );
+    }
+
+    /**
+     * Returns metadata about all of the photo albums uploaded by the specified
+     * user.
+     * 
+     * This method returns information from all visible albums satisfying the
+     * filters specified. The method can be used to return all photo albums
+     * created by a user, query a specific set of albums by a list of aids, or
+     * filter on any combination of these two.
+     * 
+     * This call does return a user's profile picture album. However, you cannot
+     * upload photos to this album using photos.upload. You can determine
+     * whether an album is the profile album by comparing the album cover pid
+     * with the user's profile picture pid. If they are the same pid, then
+     * that's the profile picture album. Also, see the Notes below for another
+     * way of returning the profile picture album.
+     * 
+     * You cannot store the values returned from this call.
+     * 
+     * @param uid
+     *            int Return albums created by this user. You must specify
+     *            either uid or aids. The uid parameter has no default value.
+     * @param aids
+     *            array Return albums with aids in this list. This is a
+     *            comma-separated list of aids. You must specify either uid or
+     *            aids. The aids parameter has no default value.
+     */
+    public void photos_getAlbums(final Map<Enum<PhotosGetAlbumsParams>, String> params, final AsyncCallback<List<Album>> callback) {
+        JSONObject p = getDefaultParams ();
+        copyAllParams ( p, convertEnumMap ( PhotosGetAlbumsParams.values (), params ), "uid,aids" );
+
+        // Create javascript native callback and parse response
+        callMethodRetList ( "photos.getAlbums", p.getJavaScriptObject (), Album.class, callback );
+    }
+
+    /**
+     * Valid params for method <code>photos.get</code>
+     */
+    public enum PhotosGetParams {
+        uid, session_key, subj_id, aid, pids
+    }
+
+    /**
+     * Returns all visible photos according to the filters specified. You can
+     * use this method to find all photos that are:
+     * 
+     * Tagged with the specified subject (passing the user's uid as the subj_id)
+     * Contained within the album specified by aid Included in the list of
+     * photos specified by pids Any combination of these three criteria
+     * 
+     * @param subj_id
+     *            int Filter by photos tagged with this user. You must specify
+     *            at least one of subj_id, aid or pids. The subj_id parameter
+     *            has no default value, but if you pass one, it must be the
+     *            user's user ID.
+     * @param aid
+     *            string Filter by photos in this album. You must specify at
+     *            least one of subj_id, aid or pids. The aid parameter has no
+     *            default value. The aid cannot be longer than 50 characters.
+     * @param pids
+     *            array Filter by photos in this list. This is a comma-separated
+     *            list of pids. You must specify at least one of subj_id, aid or
+     *            pids. The pids parameter has no default value.
+     */
+    public void photos_get(final Map<Enum<PhotosGetParams>, String> params, final AsyncCallback<List<Photo>> callback) {
+        JSONObject obj = getDefaultParams ();
+        copyAllParams ( obj, convertEnumMap ( PhotosGetParams.values (), params ), "uid,session_key,subj_id,aid,pids" );
+        callMethodRetList ( "photos.get", obj.getJavaScriptObject (), Photo.class, callback );
+    }
+
     public void photos_getTags(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         // TODO Auto-generated method stub
 
@@ -1254,6 +1139,159 @@ public class FacebookApi {
     public void profile_setInfoOptions(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         // TODO Auto-generated method stub
 
+    }
+
+    /**
+     * Valid params for <code>stream.get</code>
+     */
+    public enum StreamGetParams {
+        uid, session_key, viewer_id, source_ids, start_time, end_time, limit, filter_key, metadata
+    }
+
+    /**
+     * This method returns a list of Stream objects that contains the stream
+     * from the perspective of a specific viewer -- a user or a Facebook Page.
+     * 
+     * The hashmap takes the following arguments:
+     * 
+     * @param viewer_id
+     *            int The user ID for whom you are fetching stream data. You can
+     *            pass 0 for this parameter to retrieve publicly viewable
+     *            information. However, desktop applications must always specify
+     *            a viewer as well as a session key. (Default value is the
+     *            current session user.)
+     * @param source_ids
+     *            array An array containing all the stream data for the user
+     *            profiles and Pages connected to the viewer_id. You can filter
+     *            the stream to include posts by the IDs you specify here.
+     *            (Default value is all connections of the viewer.)
+     * @param start_time
+     *            time The earliest time (in Unix time) for which to retrieve
+     *            posts from the stream. The start_time uses the updated_time
+     *            field in the stream (FQL) table as the baseline for
+     *            determining the earliest time for which to get the stream.
+     *            (Default value is 1 day ago.)
+     * @param end_time
+     *            time The latest time (in Unix time) for which to retrieve
+     *            posts from the stream. The end_time uses the updated_time
+     *            field in the stream (FQL) table as the baseline for
+     *            determining the latest time for which to get the stream.
+     *            (Default value is now.)
+     * @param limit
+     *            int A 32-bit int representing the total number of posts to
+     *            return. (Default value is 30 posts.)
+     * @param filter_key
+     *            string A filter associated with the user. Filters get returned
+     *            by stream.getFilters or the stream_filter FQL table. To filter
+     *            for stream posts from your application, look for a filter with
+     *            a filter_key set to app_YOUR_APPLICATION_ID.
+     * @param metadata
+     *            array A JSON-encoded array in which you can specify one or
+     *            more of 'albums', 'profiles', and 'photo_tags' to request the
+     *            user's aid, id (user ID or Page ID), and pid (respectively)
+     *            when you call stream.get. All three parameters are optional.
+     *            (Default value is false for all three keys.)
+     * 
+     * @see com.gwittit.client.facebook.entities.Stream Stream
+     * @see http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
+     * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
+     *      Stream Table
+     */
+    public void stream_get(Map<Enum<StreamGetParams>, String> params, final AsyncCallback<List<Stream>> ac) {
+
+        final String lp = "FacebookApiImpl#stream_get:";
+        GWT.log ( lp + " called", null );
+
+        JSONObject p = getDefaultParams ();
+
+        copyAllParams ( p, convertEnumMap ( StreamGetParams.values (), params ),
+                "uid,session_key,viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata" );
+
+        // Create native callback and parse response.
+        final AsyncCallback<JavaScriptObject> c = new AsyncCallback<JavaScriptObject> () {
+
+            public void onSuccess(JavaScriptObject js) {
+                GWT.log ( FacebookApi.class + ": stream.get got response", null );
+                List<Stream> result = new ArrayList<Stream> ();
+
+                JSONObject jv = new JSONObject ( js );
+                JSONValue value = jv.isObject ().get ( "posts" );
+                JSONArray array = value.isArray ();
+
+                for (int i = 0; array != null && i < array.size (); i++) {
+                    JSONValue v = array.get ( i );
+                    JSONObject o = v.isObject ();
+                    Stream stream = new Stream ( o );
+                    result.add ( stream );
+                }
+                GWT.log ( FacebookApi.class + ": result size = " + result.size (), null );
+                ac.onSuccess ( result );
+            }
+
+            public void onFailure(Throwable caught) {
+                ac.onFailure ( null );
+            }
+        };
+        callMethod ( "stream.get", p.getJavaScriptObject (), c );
+    }
+
+    /**
+     * Valid permissions
+     */
+    public enum Permission {
+        read_stream, publish_stream
+    };
+
+    /**
+     * Checks whether the user has opted in to an extended application
+     * permission.
+     * 
+     * For non-desktop applications, you may pass the ID of the user on whose
+     * behalf you're making this call. If you don't specify a user with the uid
+     * parameter but you do specify a session_key, then that user whose session
+     * it is will be the target of the call.
+     * 
+     * However, if your application is a desktop application, you must pass a
+     * valid session key for security reasons. Passing a uid parameter will
+     * result in an error.
+     * 
+     * required
+     * 
+     * @param api_key
+     *            string The application key associated with the calling
+     *            application. If you specify the API key in your client, you
+     *            don't need to pass it with every call.
+     * @param ext_perm
+     *            string String identifier for the extended permission that is
+     *            being checked for. Must be one of email, read_stream,
+     *            publish_stream, offline_access, status_update, photo_upload,
+     *            create_event, rsvp_event, sms, video_upload, create_note,
+     *            share_item. optional
+     * @param session_key
+     *            string The session key of the user whose permissions you are
+     *            checking. Note: A session key is always required for desktop
+     *            applications. It is required for Web applications only when
+     *            the uid is not specified.
+     * @param uid
+     *            int The user ID of the user whose permissions you are
+     *            checking. If this parameter is not specified, then it defaults
+     *            to the session user. Note: This parameter applies only to Web
+     *            applications and is required by them only if the session_key
+     *            is not specified. Facebook ignores this parameter if it is
+     *            passed by a desktop application.
+     */
+    public void users_hasAppPermission(Permission permission, final AsyncCallback<Boolean> callback) {
+        GWT.log ( "users_hasAppPermission: " + permission.toString (), null );
+
+        JSONObject p = getDefaultParams ();
+        p.put ( "ext_perm", new JSONString ( permission.toString () ) );
+
+        Callback<JavaScriptObject> nativeCallback = new Callback<JavaScriptObject> ( callback ) {
+            public void onSuccess(JavaScriptObject jso) {
+                callback.onSuccess ( "1".equals ( jso.toString () ) );
+            }
+        };
+        callMethod ( "users.hasAppPermission", p.getJavaScriptObject (), nativeCallback );
     }
 
     public void sms_canSend(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1388,7 +1426,7 @@ public class FacebookApi {
         JSONObject p = getDefaultParams ();
 
         copyAllParams ( p, convertEnumMap ( StreamAddCommentParams.values (), params ), "uid,*post_id,*comment" );
-        callMethod ( "stream.addComment", p.getJavaScriptObject (), callback, "string" );
+        callMethod ( "stream.addComment", p.getJavaScriptObject (), callback );
 
         GWT.log ( "FacebookApi: call method stream.addComment DONE", null );
     }
@@ -1544,34 +1582,11 @@ public class FacebookApi {
     public void stream_getFilters(final Map<Enum<StreamGetFiltersParams>, String> params, final AsyncCallback<List<StreamFilter>> callback) {
         JSONObject p = getDefaultParams ();
         copyAllParams ( p, convertEnumMap ( StreamGetFiltersParams.values (), params ), "uid,session_key" );
-
-        AsyncCallback<JavaScriptObject> internCallback = new AsyncCallback<JavaScriptObject> () {
-
-            public void onFailure(Throwable caught) {
-                callback.onFailure ( caught );
-            }
-
-            public void onSuccess(JavaScriptObject jso) {
-                List<StreamFilter> result = new ArrayList<StreamFilter> ();
-
-                int key = 0;
-                JSONObject jv = new JSONObject ( jso );
-                JSONObject o = jv.isObject ();
-                JSONValue value;
-
-                while ((value = o.get ( key + "" )) != null) {
-                    StreamFilter sf = new StreamFilter ( value );
-                    result.add ( sf );
-                    key++;
-                }
-                callback.onSuccess ( result );
-            }
-        };
-        callMethod ( "stream.getFilters", p.getJavaScriptObject (), internCallback );
+        callMethodRetList ( "stream.getFilters", p.getJavaScriptObject (), StreamFilter.class, callback );
     }
 
     public void stream_publish(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-
+        Window.alert ( "stream.publish: Not Implemented" );
     }
 
     /**
@@ -1756,24 +1771,41 @@ public class FacebookApi {
     /**
      * Copy param
      */
-    private void copyParams ( JSONObject obj, Map<String, String> params, String key ) {
+    private void copyParams(JSONObject obj, Map<String, String> params, String key) {
         if (params.get ( key ) != null) {
             obj.put ( key, new JSONString ( params.get ( key ) ) );
             params.remove ( key );
         }
     }
 
+    
     /**
-     * Wrapper method
-     * @param method
-     * @param params
-     * @param entity
-     * @param callback
+     * Call method and cast javascriptobject to a single entity.
+     * @param <T> Entity
+     * @param method to call
+     * @param params params to method
+     * @param entity entity type
+     * @param callback to execute
      */
-    public void callMethodRetList(final String method, 
-                                  final JavaScriptObject params, 
-                                  final Class entity, 
-                                  final AsyncCallback callback) {
+    public <T extends JavaScriptObject> void callMethodRetObject ( final String method,
+                                      final JavaScriptObject params,
+                                      final Class<T> entity,
+                                      final AsyncCallback<T> callback ) {
+        
+        callMethod ( method, params, new Callback<JavaScriptObject> ( callback ) {
+            public void onSuccess ( JavaScriptObject jso ) {
+                T entity = jso.cast ();
+                callback.onSuccess ( entity );
+            }
+        } );
+    }
+                                       
+    
+    /**
+     * Convenient method for calling a method and return a list.
+     */
+    @SuppressWarnings("unchecked")
+    public void callMethodRetList(final String method, final JavaScriptObject params, final Class entity, final AsyncCallback callback) {
 
         callMethod ( method, params, new Callback<JavaScriptObject> ( callback ) {
             public void onSuccess(JavaScriptObject jso) {
@@ -1783,44 +1815,34 @@ public class FacebookApi {
     }
 
     /*
-     * Run facebook method, parse result and call callback function.
-     */
-    private void callMethod ( String method, 
-                              JavaScriptObject params, 
-                              AsyncCallback<JavaScriptObject> callback) {
-        callMethod ( method, params, callback, "json" );
-    }
-
-    
-    /*
      * Call Facebook method and execute callback method
+     * 
      * @param method name of method
+     * 
      * @param params to method
+     * 
      * @param callback to execute
+     * 
      * @param returnType json, string whatever. (deprecated)
      */
-    private native void callMethod( String method, 
-                                    JavaScriptObject params, 
-                                    AsyncCallback<JavaScriptObject> callback, 
-                                    String returnType) /*-{
+    private native void callMethod(String method, JavaScriptObject params, AsyncCallback<JavaScriptObject> callback) /*-{
         var app=this;
         $wnd.FB_RequireFeatures(["Api"], function(){			
         	$wnd.FB.Facebook.apiClient.callMethod( method, params, 
         		function(result, exception){
-        	        				// this is the result when we run in hosted mode for some reason
-        			if(!isNaN(result)) {
-        				app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessNumber(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,result+"");
-        			} else {
-        				if ( result != undefined ) {
-        				   if ( returnType == "string" ) {
-        						app.@com.gwittit.client.facebook.FacebookApi::callbackSuccessString(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,result);
-        				   } else if ( returnType == "json" ) {
-        						app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
-        				   } 
-        				} else {
-        					app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
-        				}
-        			}
+        		    var jso=null;        		    
+        		    if ( result == undefined ) {
+        		        app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
+        		    } else {
+            		    if ( typeof ( result ) == 'object' ) {
+            		        jso = result;
+            		    } else if ( typeof ( result ) == 'string' ) {
+            		        jso = new String ( result );
+            		    } else if ( typeof ( result ) == 'number' ) {
+            		        jso = new Number ( result );
+            		    } 
+                        app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,jso);
+        		    }
         		}
         	);
         });
@@ -1851,37 +1873,9 @@ public class FacebookApi {
     /**
      * Callbacks
      */
-    public void callbackError(AsyncCallback<JSONValue> callback, JavaScriptObject value) {
-        callback.onFailure ( new Exception ( "" + new JSONObject ( value ) ) );
-    }
-
-    /**
-     * Called when result is a number
-     */
-    public void callbackSuccessNumber(AsyncCallback<JavaScriptObject> callback, String i) {
-
-        if ("null".equals ( i )) {
-            i = null;
-        }
-
-        if (i == null) {
-            callback.onSuccess ( null );
-        } else {
-            GWT.log ( "CallbackSuccessNumber: " + (i == null ? "NULL" : i), null );
-            JSONObject o = new JSONObject ();
-            JSONString s = new JSONString ( i );
-            o.put ( "result", s );
-            callback.onSuccess ( o.getJavaScriptObject () );
-        }
-    }
-
-    public void callbackSuccessString(AsyncCallback<JavaScriptObject> callback, String s) {
-
-        GWT.log ( "callbackSuccessString: " + s, null );
-        JSONObject o = new JSONObject ();
-        JSONString js = new JSONString ( s );
-        o.put ( "result", js );
-        callback.onSuccess ( o.getJavaScriptObject () );
+    public void callbackError(AsyncCallback<JSONValue> callback, JavaScriptObject jso) {
+        ErrorResponse er = jso.cast ();
+        callback.onFailure ( new FacebookException ( er ) );
     }
 
     /**
@@ -1901,7 +1895,6 @@ public class FacebookApi {
         }
         JSONObject obj = new JSONObject ();
         obj.put ( "api_key", new JSONString ( apiKey ) );
-        obj.put ( "format", new JSONString ( "JSON" ) );
         return obj;
     }
 

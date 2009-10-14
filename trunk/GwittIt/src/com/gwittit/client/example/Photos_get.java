@@ -79,7 +79,7 @@ public class Photos_get extends Showcase {
 		apiClient.photos_get(params, new AsyncCallback<List<Photo>> () {
 
 			public void onFailure(Throwable caught) {
-				Window.alert ( "Failed " + caught );
+			    handleFailure ( caught );
 			}
 
 			public void onSuccess(List<Photo> result) {
