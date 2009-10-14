@@ -1,3 +1,4 @@
+
 package com.gwittit.client.facebook;
 
 import java.util.ArrayList;
@@ -45,8 +46,7 @@ public class FacebookApi {
 
     private String apiKey;
 
-    // ----------------------------- PRIVATE
-    // --------------------------------------------
+    // ---------------- Private Methods  ---------------------
     // Convenient method for casting a javascriptobject to a list.
     private <T extends JavaScriptObject> List<T> cast(Class<T> entity, JavaScriptObject jso) {
 
@@ -63,15 +63,13 @@ public class FacebookApi {
         return result;
     }
 
+    // ---------------- Public Methods  ---------------------
     /**
      * Creates a new api
      */
     protected FacebookApi(String apiKey) {
         this.apiKey = apiKey;
     }
-
-    // ------------------------------ PUBLIC
-    // ---------------------------------------------
 
     /**
      * Get the cached session key from cookie.
