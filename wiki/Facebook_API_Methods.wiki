@@ -13,7 +13,7 @@
 ||admin.getRestrictionInfo||  || 2.0 ||
 ||admin.setAppProperties||  || 2.0 ||
 ||admin.setRestrictionInfo||  || 2.0 ||
-||application.getPublicInfo||  || 2.0 ||
+||application.getPublicInfo|| YES || 1.0 || Unknown Method Error from Facebook|| 
 ||auth.createToken   ||  ||  || Desktop Only ||
 ||auth.expireSession ||  ||  || Desktop Only ||
 ||auth.getSession    ||  ||  || Desktop Only ||
