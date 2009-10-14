@@ -6,7 +6,6 @@ import java.util.Map;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
@@ -23,9 +22,10 @@ import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 
 /**
+ * 
  * Render a small comment under stream item.
  * 
- * CSS gwittit-CommentUi
+ * CSS Configuration <code>.gwittit-CommentUi</code>
  */
 
 public class CommentUi extends Composite implements ClickHandler {

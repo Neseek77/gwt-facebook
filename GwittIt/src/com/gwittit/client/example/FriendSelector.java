@@ -16,6 +16,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.FacebookException;
+import com.gwittit.client.ui.ErrorResponseUI;
 
 /**
  * Class that let the user select a friend. Used to make the examples a little
@@ -46,8 +48,10 @@ public class FriendSelector extends Composite {
 		apiClient.friends_get( new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+			    FacebookException fe = ( FacebookException ) caught;
+			    ErrorResponseUI ui = new ErrorResponseUI ( fe.getErrorMessage () );
+			    ui.center ();
+			    ui.show ();
 			}
 
 			public void onSuccess(List<Long> result) {

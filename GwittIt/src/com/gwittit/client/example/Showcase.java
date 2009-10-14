@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.FacebookException;
+import com.gwittit.client.ui.ErrorResponseUI;
 
 /**
  * Core class for examples. 
@@ -33,12 +35,10 @@ public  class Showcase extends Composite {
 		if ( method == null ) {
 			return "This method is not implemented";
 		}
-		
 		return "Call facebook method " + method.replace("_", ".");
 	}
 	
 	public  String getHeader () {
-		
 		if ( method == null ) {
 			return "Not Implemnted";
 		}
@@ -59,7 +59,16 @@ public  class Showcase extends Composite {
 	}
 	
 	public void handleFailure ( Throwable t ) {
-		Window.alert ( t + "" );
+	    
+	    if ( t instanceof FacebookException ) {
+	        FacebookException e = (FacebookException)t;
+	        ErrorResponseUI ui = new ErrorResponseUI ( e.getErrorMessage () );
+	        ui.center ();
+	        ui.show ();
+	        
+	    } else {
+	        Window.alert ( t + "" );
+	    }
 	}
 	
 	private String method;
