@@ -46,7 +46,6 @@ public class FacebookApi {
 
     private String apiKey;
 
-    // ---------------- Private Methods  ---------------------
     // Convenient method for casting a javascriptobject to a list.
     private <T extends JavaScriptObject> List<T> cast(Class<T> entity, JavaScriptObject jso) {
 
@@ -547,24 +546,7 @@ public class FacebookApi {
      */
     public void friends_getLists(final AsyncCallback<List<FriendList>> callback) {
         JSONObject p = getDefaultParams ();
-
-        AsyncCallback<JavaScriptObject> a = new AsyncCallback<JavaScriptObject> () {
-            public void onFailure(Throwable caught) {
-                callback.onFailure ( caught );
-            }
-
-            public void onSuccess(JavaScriptObject result) {
-                List<FriendList> returnList = new ArrayList<FriendList> ();
-                for (JSONValue v : parse ( new JSONObject ( result ) )) {
-                    returnList.add ( new FriendList ( v ) );
-                }
-                callback.onSuccess ( returnList );
-            }
-
-        };
-
-        callMethod ( "friends.getLists", p.getJavaScriptObject (), a );
-
+        callMethodRetList ( "friends.getLists", p.getJavaScriptObject (), FriendList.class, callback );
     }
 
     /**

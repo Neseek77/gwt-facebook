@@ -11,6 +11,7 @@ import com.gwittit.client.facebook.entities.ApplicationPublicInfo;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.ErrorResponse;
 import com.gwittit.client.facebook.entities.FriendInfo;
+import com.gwittit.client.facebook.entities.FriendList;
 import com.gwittit.client.facebook.entities.KeyValue;
 import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.entities.StreamFilter;
@@ -24,7 +25,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = UserData.class;
+	    Class c = FriendList.class;
 		
 		Field fields[] = c.getFields ();
 		
