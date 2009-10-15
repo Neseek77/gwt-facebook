@@ -1,5 +1,23 @@
 package com.gwittit.client.facebook;
 
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.  
+ */
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +27,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayNumber;
-import com.google.gwt.dev.js.ast.JsBooleanLiteral;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -34,9 +51,7 @@ import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
 
 /**
- * The class contains function defining the Facebook API. With the API, you can
- * add social context to your application by utilizing profile, friend, Page,
- * group, photo, and event data.
+ * The class wraps the Facebook Javascript API in GWT.
  * 
  * @see http://wiki.developers.facebook.com/index.php/API Facebook API
  * 
@@ -421,8 +436,10 @@ public class FacebookApi {
     /**
      * Valid parameters for method <code>events.get</code>
      */
-    public static enum EventsGetParams { uid,eids,start_time,end_time,rsvp_status}
-    
+    public static enum EventsGetParams {
+        uid, eids, start_time, end_time, rsvp_status
+    }
+
     /**
      * Returns all visible events according to the filters specified. You can
      * use this method to find all events for a user, or to query a specific set
@@ -478,7 +495,7 @@ public class FacebookApi {
      * @param callback
      */
     public void events_get(Map<Enum<EventsGetParams>, String> params, AsyncCallback<List<Event>> callback) {
-        JavaScriptObject p = getAllParams ( EventsGetParams.values(), params );
+        JavaScriptObject p = getAllParams ( EventsGetParams.values (), params );
         callMethodRetList ( "events.get", p, Event.class, callback );
     }
 
