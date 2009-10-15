@@ -735,15 +735,7 @@ public class FacebookApi {
 
             public void onSuccess(JavaScriptObject jso) {
                 JsArrayNumber jsArray = jso.cast ();
-                List<Long> result = new ArrayList<Long> ();
-
-                for (int i = 0; i < jsArray.length (); i++) {
-                    NumberFormat fmt = NumberFormat.getFormat ( "0" );
-                    double friendIdDbl = jsArray.get ( i );
-                    Long l = Long.parseLong ( fmt.format ( friendIdDbl ) );
-                    result.add ( l );
-                }
-                callback.onSuccess ( result );
+                callback.onSuccess ( Util.convertNumberArray ( jsArray ) );
             }
         };
         callMethod ( method, params, ac );
