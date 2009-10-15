@@ -40,7 +40,7 @@ public class Events_get extends Showcase {
                     }
                     tmp.add ( new HTML ( "<h4>" + e.getName () +"</h4>" ) ); 
                     outer.add ( tmp );
-         
+                    outer.add ( new HTML ( "EventId: " + e.getEid () ) ) ;
                 }
             }
         });

@@ -57,7 +57,7 @@ public class ShowcaseClient extends Composite  {
 	final String commentMethods = "Comments:comments_add,comments_get,Xcomments_remove";
 	final String connectMethods = "XConnect:connect_getUnconnectedFriendsCount,connect_registerUsers,connect_unregisterUsers";
 	final String dataMethods = "Data:data_getCookies,data_setCookie";
-	final String eventMethods = "Events:Xevents_cancel,Xevents_create,Xevents_edit,events_get,Xevents_getMembers,Xevents_rsvp";
+	final String eventMethods = "Events:Xevents_cancel,Xevents_create,Xevents_edit,events_get,events_getMembers,Xevents_rsvp";
 	final String fbmlMethods = "XFBML:fbml_deleteCustomTags,fbml_getCustomTags,fbml_refreshImgSrc,fbml_refreshRefUrl,fbml_registerCustomTags,fbml_setRefHandle";
 	final String feedMethods = "XFeed:feed_deactivateTemplateBundleByID,feed_getRegisteredTemplateBundleByID,feed_getRegisteredTemplateBundles,feed_publishTemplatizedAction,feed_publishUserAction,feed_registerTemplateBundle";
 	final String fqlMethods = "XFql:fql_multiquery,fql_query";
@@ -289,7 +289,7 @@ public class ShowcaseClient extends Composite  {
 		    showcase = new Events_get();
 		}
 		else if ( "events_getMembers".equals ( m ) ) { 
-		    //  example = new Events_getMembers();
+		    showcase = new Events_getMembers();
 		}
 		else if ( "events_rsvp".equals ( m ) ) { 
 		    //  example = new Events_rsvp();

@@ -15,7 +15,7 @@ public class Event extends JavaScriptObject {
      * @return eid as String ( this is returned as String from facebook )
      */
     public final native String getEid() /*-{
-        return this.eid;
+        return this.eid + "";
     }-*/;
 
     public final native String getName() /*-{

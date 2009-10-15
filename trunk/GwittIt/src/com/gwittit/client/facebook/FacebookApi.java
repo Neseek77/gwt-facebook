@@ -41,6 +41,7 @@ import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Cookie;
 import com.gwittit.client.facebook.entities.ErrorResponse;
 import com.gwittit.client.facebook.entities.Event;
+import com.gwittit.client.facebook.entities.EventMembers;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
 import com.gwittit.client.facebook.entities.Notification;
@@ -56,12 +57,11 @@ import com.gwittit.client.facebook.entities.StreamFilter;
  * 
  */
 public class FacebookApi {
-    
+
     /**
      * Api Key used for calling methods.
      */
     private String apiKey;
-
 
     // ---------------- Public Methods ---------------------
     /**
@@ -484,9 +484,28 @@ public class FacebookApi {
         callMethodRetList ( "events.get", p, Event.class, callback );
     }
 
-    public void events_getMembers(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    
+    /**
+     * Valid params for method <code>events.getMembers</code>
+     */
+    public static enum EventsGetMembersParams { eid }
+    
+    /**
+     * Returns membership list data associated with an event.
+     * 
+     * This method no longer requires a session key. However if you call this
+     * method without an active user session, you can only get the events for
+     * which your application was the creator; you can see only those event
+     * attendees who have authorized your application. Applications can create
+     * events for users if the users grant the application the create_event
+     * extended permission.
+     * 
+     * @param params
+     * @param callback
+     */
+    public void events_getMembers(Map<Enum<EventsGetMembersParams>, String> params, AsyncCallback<EventMembers> callback) {
+        JavaScriptObject p = getAllParams ( EventsGetMembersParams.values(), params );
+        callMethodRetObject ( "events.getMembers",p, EventMembers.class, callback );
     }
 
     public void events_rsvp(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1842,7 +1861,7 @@ public class FacebookApi {
             }
         } );
     }
-    
+
     // Convenient method for casting a javascriptobject to a list.
     private <T extends JavaScriptObject> List<T> cast(Class<T> entity, JavaScriptObject jso) {
         if (jso == null) {
@@ -1857,7 +1876,6 @@ public class FacebookApi {
         }
         return result;
     }
-
 
     /*
      * Call Facebook method and execute callback method

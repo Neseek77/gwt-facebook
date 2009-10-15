@@ -10,7 +10,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = Event.class;
+	    Class c = EventMembers.class;
 		
 		Field fields[] = c.getFields ();
 		
