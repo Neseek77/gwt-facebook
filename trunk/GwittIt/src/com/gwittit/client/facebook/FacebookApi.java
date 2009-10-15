@@ -35,7 +35,6 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.gwittit.client.JsonDebugPopup;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.ApplicationPublicInfo;
 import com.gwittit.client.facebook.entities.Comment;
@@ -57,26 +56,12 @@ import com.gwittit.client.facebook.entities.StreamFilter;
  * 
  */
 public class FacebookApi {
-
-    static final boolean DEBUG = false;
-
+    
+    /**
+     * Api Key used for calling methods.
+     */
     private String apiKey;
 
-    // Convenient method for casting a javascriptobject to a list.
-    private <T extends JavaScriptObject> List<T> cast(Class<T> entity, JavaScriptObject jso) {
-
-        if (jso == null) {
-            return new ArrayList<T> ();
-        }
-        List<T> result = new ArrayList<T> ();
-
-        JsArray<T> array = jso.cast ();
-
-        for (int i = 0; i < array.length (); i++) {
-            result.add ( array.get ( i ) );
-        }
-        return result;
-    }
 
     // ---------------- Public Methods ---------------------
     /**
@@ -899,13 +884,6 @@ public class FacebookApi {
             }
 
             public void onSuccess(JavaScriptObject jso) {
-
-                if (DEBUG) {
-                    JsonDebugPopup pop = new JsonDebugPopup ( new JSONObject ( jso ).toString () );
-                    pop.center ();
-                    pop.show ();
-                }
-
                 List<Notification> resultList = new ArrayList<Notification> ();
                 JSONObject result = new JSONObject ( jso );
                 JSONValue v = result.isObject ().get ( "notifications" );
@@ -1864,6 +1842,22 @@ public class FacebookApi {
             }
         } );
     }
+    
+    // Convenient method for casting a javascriptobject to a list.
+    private <T extends JavaScriptObject> List<T> cast(Class<T> entity, JavaScriptObject jso) {
+        if (jso == null) {
+            return new ArrayList<T> ();
+        }
+        List<T> result = new ArrayList<T> ();
+
+        JsArray<T> array = jso.cast ();
+
+        for (int i = 0; i < array.length (); i++) {
+            result.add ( array.get ( i ) );
+        }
+        return result;
+    }
+
 
     /*
      * Call Facebook method and execute callback method
