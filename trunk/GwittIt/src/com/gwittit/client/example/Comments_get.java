@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -37,6 +38,7 @@ public class Comments_get extends Showcase {
 	 */
 	@Override
 	public Widget createWidget () {
+	    // TODO clean up this example.
 		final VerticalPanel outer = new VerticalPanel ();
 		outer.getElement().setId(method);
 		addLoader ( outer );
@@ -55,13 +57,10 @@ public class Comments_get extends Showcase {
 				removeLoader ( outer );
 				outer.add ( new HTML ( "Comments size " + result.size() ) );
 				
-				// OUh a little messy
+				// OUh a "little" ALOT messy
 				for ( Comment comment: result ) {
-				    
-				    outer.add ( new HTML ( comment.getId () + "/" + comment.getPostId () + "/" + comment.getText () 
-				            + "/" + comment.getUsername() + "/" + comment.getXid () + "/ "  + comment.getFromId () ) );
-				    /*
-					final CommentUi ui = new CommentUi ( comment );
+
+				    final CommentUi ui = new CommentUi ( comment );
 					outer.add ( ui );
 					
 					ui.addDeleteHandler(new DeleteHandler () {
@@ -71,18 +70,17 @@ public class Comments_get extends Showcase {
 							params.put ( CommentsRemoveParams.comment_id, id );
 							
 							addLoader ( outer );
-							apiClient.comments_remove(params, new AsyncCallback<JSONValue> () {
+							apiClient.comments_remove(params, new AsyncCallback<JavaScriptObject> () {
 								public void onFailure(Throwable caught) {
 									handleFailure ( caught );
 								}
-								public void onSuccess(JSONValue result) {
+								public void onSuccess(JavaScriptObject result) {
 									removeLoader ( outer );
 									outer.remove ( ui );
 								}
 							});
 						} 
 					});
-					*/
 					Xfbml.parse(outer);
 				}
 			}

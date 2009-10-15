@@ -32,7 +32,11 @@ public class ErrorResponse extends JavaScriptObject {
      * User Data         
      */
     public final UserData getUserData () {
-        return getUserDataNative().cast ();
+        try {
+            return getUserDataNative().cast ();
+        } catch ( Exception e ) {
+            return null;
+        }
     }
 
 }

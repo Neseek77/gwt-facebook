@@ -42,7 +42,8 @@ public class ErrorResponseUI extends DecoratedPopupPanel  {
         
         super.setAutoHideEnabled ( true );
         String msg = errorResponse.getMessage ();
-        UserData userData = errorResponse.getUserData ();
+        
+        
     
         outer.setWidth ( "600px" );
         
@@ -55,15 +56,18 @@ public class ErrorResponseUI extends DecoratedPopupPanel  {
         outer.add ( new HTML ( "<h3 class=gwittit-ErrorResponse-header> Oups, Error Response: " + msg + "</h3>" ) );
        
         // User Data
+    
+        UserData userData = errorResponse.getUserData ();
         
-        String userDataHtml = "<h3>User Data </h3>" + 
-                               "<ul>" +
-                               "<li>ErrorCode: " + userData.getErrorCode () + 
-                               "<li>ErrorMessage: " + userData.getErrorMsg () +
-                               "</li>";
-        userDataPanel.add ( new HTML ( userDataHtml ) ) ;
-        outer.add ( userDataPanel );
-        
+        if ( userData != null ) {
+            String userDataHtml = "<h3>User Data </h3>" + 
+                                   "<ul>" +
+                                   "<li>ErrorCode: " + userData.getErrorCode () + 
+                                   "<li>ErrorMessage: " + userData.getErrorMsg () +
+                                   "</li>";
+            userDataPanel.add ( new HTML ( userDataHtml ) ) ;
+            outer.add ( userDataPanel );
+        }
         // Request Args
         JsArray<KeyValue> requestArgs = userData.getRequestArgs ();
         requestArgsPanel.add ( new HTML ( "<h3> Request Args </h3>" ) );
