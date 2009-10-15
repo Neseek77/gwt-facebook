@@ -18,7 +18,7 @@
 ||auth.expireSession ||  || N || Desktop Only ||
 ||auth.getSession    ||  || N || Desktop Only ||
 ||auth.promoteSession||  || N || Desktop Only ||
-||auth.revokeAuthorization|| N || || Desktop Only ||
+||auth.revokeAuthorization||  || N || Desktop Only ||
 ||auth.revokeExtendedPermission||  || N || Desktop Only ||
 ||batch.run||  || 2.0 ||
 ||comments.add|| YES || 1.0 ||
