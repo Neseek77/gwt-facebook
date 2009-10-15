@@ -1,31 +1,16 @@
 package com.gwittit.server;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.regex.Pattern;
 
-import com.gwittit.client.facebook.entities.ApplicationPublicInfo;
-import com.gwittit.client.facebook.entities.Comment;
-import com.gwittit.client.facebook.entities.ErrorResponse;
-import com.gwittit.client.facebook.entities.FriendInfo;
-import com.gwittit.client.facebook.entities.FriendList;
-import com.gwittit.client.facebook.entities.KeyValue;
-import com.gwittit.client.facebook.entities.Photo;
-import com.gwittit.client.facebook.entities.StreamFilter;
-import com.gwittit.client.facebook.entities.User;
-import com.gwittit.client.facebook.entities.UserData;
-import com.gwittit.client.facebook.entities.Video;
-
+import com.gwittit.client.facebook.entities.*;
 
 public class PrintMethods {
     
     
 	public static void main ( String[] args ) {
 		
-	    Class c = FriendList.class;
+	    Class c = Event.class;
 		
 		Field fields[] = c.getFields ();
 		

@@ -56,8 +56,8 @@ public class ShowcaseClient extends Composite  {
 	final String batchMethods = "XBatch:batch_run";
 	final String commentMethods = "Comments:comments_add,comments_get,Xcomments_remove";
 	final String connectMethods = "XConnect:connect_getUnconnectedFriendsCount,connect_registerUsers,connect_unregisterUsers";
-	final String dataMethods = "XData:data_getCookies,data_setCookie";
-	final String eventMethods = "XEvents:events_cancel,events_create,events_edit,events_get,events_getMembers,events_rsvp";
+	final String dataMethods = "Data:data_getCookies,data_setCookie";
+	final String eventMethods = "Events:Xevents_cancel,Xevents_create,Xevents_edit,events_get,Xevents_getMembers,Xevents_rsvp";
 	final String fbmlMethods = "XFBML:fbml_deleteCustomTags,fbml_getCustomTags,fbml_refreshImgSrc,fbml_refreshRefUrl,fbml_registerCustomTags,fbml_setRefHandle";
 	final String feedMethods = "XFeed:feed_deactivateTemplateBundleByID,feed_getRegisteredTemplateBundleByID,feed_getRegisteredTemplateBundles,feed_publishTemplatizedAction,feed_publishUserAction,feed_registerTemplateBundle";
 	final String fqlMethods = "XFql:fql_multiquery,fql_query";
@@ -269,13 +269,10 @@ public class ShowcaseClient extends Composite  {
 		    //  example = new Connect_unregisterUsers();
 		}
 		else if ( "data_getCookies".equals ( m ) ) { 
-		    //  example = new Data_getCookies();
+		    showcase = new Data_getCookies();
 		}
 		else if ( "data_setCookie".equals ( m ) ) { 
-		    //  example = new Data_setCookie();
-		}
-		else if ( "equals".equals ( m ) ) { 
-		    //  example = new Equals();
+		    showcase = new Data_setCookie();
 		}
 		else if ( "events_cancel".equals ( m ) ) { 
 		    //  example = new Events_cancel();
@@ -287,7 +284,7 @@ public class ShowcaseClient extends Composite  {
 		    //  example = new Events_edit();
 		}
 		else if ( "events_get".equals ( m ) ) { 
-		    //  example = new Events_get();
+		    showcase = new Events_get();
 		}
 		else if ( "events_getMembers".equals ( m ) ) { 
 		    //  example = new Events_getMembers();

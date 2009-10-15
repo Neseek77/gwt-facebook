@@ -1,4 +1,3 @@
-
 package com.gwittit.client.facebook;
 
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayNumber;
+import com.google.gwt.dev.js.ast.JsBooleanLiteral;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -22,10 +22,11 @@ import com.gwittit.client.JsonDebugPopup;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.ApplicationPublicInfo;
 import com.gwittit.client.facebook.entities.Comment;
+import com.gwittit.client.facebook.entities.Cookie;
 import com.gwittit.client.facebook.entities.ErrorResponse;
+import com.gwittit.client.facebook.entities.Event;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
-import com.gwittit.client.facebook.entities.JsonUtil;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
@@ -52,9 +53,9 @@ public class FacebookApi {
         if (jso == null) {
             return new ArrayList<T> ();
         }
+        List<T> result = new ArrayList<T> ();
 
         JsArray<T> array = jso.cast ();
-        List<T> result = new ArrayList<T> ();
 
         for (int i = 0; i < array.length (); i++) {
             result.add ( array.get ( i ) );
@@ -62,7 +63,7 @@ public class FacebookApi {
         return result;
     }
 
-    // ---------------- Public Methods  ---------------------
+    // ---------------- Public Methods ---------------------
     /**
      * Creates a new api
      */
@@ -126,8 +127,9 @@ public class FacebookApi {
      * Returns public information for an application (as shown in the
      * application directory) by either application ID, API key, or canvas page
      * name. Returned fields include:
-     *
+     * 
      * The params map takes the following parameters
+     * 
      * @param application_id
      *            int Application ID of the desired application. You must
      *            specify exactly one of application_id, application_api_key or
@@ -142,17 +144,15 @@ public class FacebookApi {
      *            application_canvas_name.
      * 
      * 
-     * @param callback 
+     * @param callback
      * 
-     * @see http://wiki.developers.facebook.com/index.php/Application.getPublicInfo ApplicationGetPublicInfo
+     * @see http 
+     *      ://wiki.developers.facebook.com/index.php/Application.getPublicInfo
+     *      ApplicationGetPublicInfo
      */
-    public void application_getPublicInfo( Map<Enum<ApplicationPublicInfoParams>, String> params, 
-                                           AsyncCallback<ApplicationPublicInfo> callback) {
-        JSONObject p = getDefaultParams ();
-        Map<String,String> inParams = convertEnumMap ( ApplicationPublicInfoParams.values(), params );
-        copyAllParams ( p, inParams, "application_id,application_api_key,application_canvas_name" );
-        callMethodRetObject ( "application.getPublicInfo", 
-                              p.getJavaScriptObject (), ApplicationPublicInfo.class, callback );
+    public void application_getPublicInfo(Map<Enum<ApplicationPublicInfoParams>, String> params, AsyncCallback<ApplicationPublicInfo> callback) {
+        JavaScriptObject p = getAllParams ( ApplicationPublicInfoParams.values (), params );
+        callMethodRetObject ( "application.getPublicInfo", p, ApplicationPublicInfo.class, callback );
     }
 
     /**
@@ -168,7 +168,6 @@ public class FacebookApi {
     public void auth_expireSession(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         Window.alert ( "auth.* methods not supported in web mode" );
     }
-
 
     /**
      * Desktop only, kept for future use.
@@ -198,7 +197,6 @@ public class FacebookApi {
         Window.alert ( "auth.* methods not supported in web mode" );
     }
 
-    
     public void batch_run(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         // TODO Auto-generated method stub
 
@@ -256,9 +254,8 @@ public class FacebookApi {
      * 
      */
     public void comments_add(Map<Enum<CommentsAddParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( CommentsAddParams.values (), params ), "*xid,text,uid,title,url,publish_to_stream,session_key" );
-        callMethod ( "comments.add", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( CommentsAddParams.values (), params );
+        callMethod ( "comments.add", p, callback );
     }
 
     /**
@@ -269,6 +266,9 @@ public class FacebookApi {
     }
 
     /**
+     * Note: Currently there is a bug in the facebook api, causing
+     * <code>comments.get</code> to result with unknown method error.
+     * 
      * Returns all comments for a given XID posted through fb:comments or the
      * Comments Box (which is created with the fb:comments (XFBML) tag). This
      * method is a wrapper for the FQL query on the comment FQL table.
@@ -284,10 +284,12 @@ public class FacebookApi {
      * @param callback
      */
     public void comments_get(Map<Enum<CommentsGetParams>, String> params, final AsyncCallback<List<Comment>> callback) {
-        JSONObject p = getDefaultParams ();
-        // copyAllParams(p, params, "*xid");
-        // Possible facebook bug
-        // callMethod("comments.get", p.getJavaScriptObject(), internCallback);
+        // Facebook Bug Error
+        // JavaScriptObject p = getAllParams ( CommentsGetParams.values (),
+        // params );
+        // callMethodRetList ( "comments.get", p, Comment.class, callback );
+
+        // JSONObject p = getDefaultParams ();
         String fql = "select xid, text,fromid,time,id,username,reply_xid from comment where xid ='" + params.get ( CommentsGetParams.xid ) + "'";
 
         // Call Facebook Method
@@ -321,9 +323,8 @@ public class FacebookApi {
      *            Comments.get, to be removed.
      */
     public void comments_remove(Map<Enum<CommentsRemoveParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( CommentsRemoveParams.values (), params ), "*xid,*comment_id" );
-        callMethod ( "comments.remove", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( CommentsRemoveParams.values (), params );
+        callMethod ( "comments.remove", p, callback );
     }
 
     public void connect_getUnconnectedFriendsCount(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -341,14 +342,65 @@ public class FacebookApi {
 
     }
 
-    public void data_getCookies(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    /**
+     * Valid params for method <code>data.getCookies</code>
+     */
+    public static enum DataGetCookiesParams {
+        uid, name
     }
 
-    public void data_setCookie(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
+    /**
+     * This method returns all cookies for a given user and application.
+     * 
+     * Cookies only apply to Web applications; they do not apply to desktop
+     * applications.
+     * 
+     * required
+     * 
+     * @param uid
+     *            int The user from whom to get the cookies. optional
+     * @param name
+     *            string The name of the cookie. If not specified, all the
+     *            cookies for the given user get returned.
+     * @param callback
+     */
+    public void data_getCookies(Map<Enum<DataGetCookiesParams>, String> params, AsyncCallback<List<Cookie>> callback) {
+        JavaScriptObject p = getAllParams ( DataGetCookiesParams.values (), params );
+        callMethodRetList ( "data.getCookies", p, Cookie.class, callback );
+    }
 
+    /**
+     * Valid params for the method <code>data.setCookie</code>
+     */
+    public static enum DataSetCookieParams {
+        uid, name, value, expires, path
+    }
+
+    /**
+     * This method sets a cookie for a given user and application.
+     * 
+     * You can set cookies for Web applications only; you cannot set cookies for
+     * desktop applications.
+     * 
+     * required
+     * 
+     * @param uid
+     *            int The user for whom this cookie needs to be set.
+     * @param name
+     *            string Name of the cookie.
+     * @param value
+     *            string Value of the cookie.
+     * @param expires
+     *            int Time stamp when the cookie should expire. If not
+     *            specified, the cookie expires after 24 hours. (The time stamp
+     *            can be longer than 24 hours and currently has no limit)
+     * @param path
+     *            string Path relative to the application's callback URL, with
+     *            which the cookie should be associated. (Default value is /.)
+     */
+    public void data_setCookie(Map<Enum<DataSetCookieParams>, String> params, AsyncCallback<Boolean> callback) {
+        JavaScriptObject p = getAllParams ( DataSetCookieParams.values (), params );
+        callMethodRetBoolean ( "data.setCookie", p, callback );
     }
 
     public void events_cancel(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -366,9 +418,68 @@ public class FacebookApi {
 
     }
 
-    public void events_get(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    /**
+     * Valid parameters for method <code>events.get</code>
+     */
+    public static enum EventsGetParams { uid,eids,start_time,end_time,rsvp_status}
+    
+    /**
+     * Returns all visible events according to the filters specified. You can
+     * use this method to find all events for a user, or to query a specific set
+     * of events by a list of event IDs (eids).
+     * 
+     * If both the uid and eids parameters are provided, the method returns all
+     * events in the set of eids that are associated with the user. If no eids
+     * parameter are specified, the method returns all events associated with
+     * the specified user.
+     * 
+     * If the uid parameter is omitted, the method returns all events associated
+     * with the provided eids, regardless of any user relationship.
+     * 
+     * The uid can be replaced by gid in order to get events hosted by a group
+     * instead of by an individual user.
+     * 
+     * If both parameters are omitted, the method returns all events associated
+     * with the session user.
+     * 
+     * The start_time and end_time parameters specify a (possibly open-ended)
+     * window in which all events returned overlap. Note that if start_time is
+     * greater than or equal to end_time, an empty top-level element is
+     * returned.
+     * 
+     * This method no longer requires a session key. However if you call this
+     * method without an active user session, you can only get the events for
+     * which your application was the creator; you can see only those event
+     * attendees who authorized your application. Applications can create events
+     * for users if the users grant the application the create_event extended
+     * permission.
+     * 
+     * optional
+     * 
+     * @param uid
+     *            int Filter by events associated with a user with this uid.
+     * @param eids
+     *            array Filter by this list of event IDs. This is a
+     *            comma-separated list of event IDs.
+     * @param start_time
+     *            int Filter with this UTC as lower bound. A missing or zero
+     *            parameter indicates no lower bound.
+     * @param end_time
+     *            int Filter with this UTC as upper bound. A missing or zero
+     *            parameter indicates no upper bound.
+     * @param rsvp_status
+     *            string Filter by this RSVP status. The RSVP status should be
+     *            one of the following strings:
+     * 
+     *            attending unsure declined not_replied
+     * 
+     * @param params
+     *            containing valid parameters
+     * @param callback
+     */
+    public void events_get(Map<Enum<EventsGetParams>, String> params, AsyncCallback<List<Event>> callback) {
+        JavaScriptObject p = getAllParams ( EventsGetParams.values(), params );
+        callMethodRetList ( "events.get", p, Event.class, callback );
     }
 
     public void events_getMembers(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -466,17 +577,8 @@ public class FacebookApi {
      *            comma-separated list of user IDs.
      */
     public void friends_areFriends(Map<Enum<FriendsAreFriendsParams>, String> params, final AsyncCallback<List<FriendInfo>> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( FriendsAreFriendsParams.values (), params ), "*uids1,*uids2" );
-
-        // Call Facebook
-        callMethod ( "friends.areFriends", p.getJavaScriptObject (),
-
-        new Callback<JavaScriptObject> ( callback ) {
-            public void onSuccess(JavaScriptObject jso) {
-                callback.onSuccess ( cast ( FriendInfo.class, jso ) );
-            }
-        } );
+        JavaScriptObject p = getAllParams ( FriendsAreFriendsParams.values (), params );
+        callMethodRetList ( "friends.areFriends", p, FriendInfo.class, callback );
     }
 
     /**
@@ -508,9 +610,8 @@ public class FacebookApi {
      *            int Returns the friends in a friend list.
      */
     public void friends_get(Map<Enum<FriendsGetParams>, String> params, final AsyncCallback<List<Long>> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( FriendsGetParams.values (), params ), "uid,session_key,flid" );
-        friends_getGeneric ( "friends.get", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( FriendsGetParams.values (), params );
+        friends_getGeneric ( "friends.get", p, callback );
     }
 
     /**
@@ -595,9 +696,8 @@ public class FacebookApi {
      *            session key.
      */
     public void friends_getMutualFriends(Map<Enum<FriendsGetMutualFriendsParams>, String> params, AsyncCallback<List<Long>> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( FriendsGetMutualFriendsParams.values (), params ), "session_key,target_uid,source_uid" );
-        friends_getGeneric ( "friends.getMutualFriends", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( FriendsGetMutualFriendsParams.values (), params );
+        friends_getGeneric ( "friends.getMutualFriends", p, callback );
 
     }
 
@@ -644,7 +744,7 @@ public class FacebookApi {
         Map<String, String> params = new HashMap<String, String> ();
         params.put ( "query", query );
         JSONObject p = getDefaultParams ();
-        copyParams ( p, params, "query" );
+        copyParam ( p, params, "query" );
         callMethod ( "fql.query", p.getJavaScriptObject (), callback );
     }
 
@@ -773,8 +873,7 @@ public class FacebookApi {
      */
     public void notifications_getList(Map<Enum<NotificationsGetListParams>, String> params, final AsyncCallback<List<Notification>> callback) {
 
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( NotificationsGetListParams.values (), params ), "session_key,start_time,include_read" );
+        JavaScriptObject p = getAllParams ( NotificationsGetListParams.values (), params );
 
         AsyncCallback<JavaScriptObject> internCallback = new AsyncCallback<JavaScriptObject> () {
 
@@ -802,7 +901,7 @@ public class FacebookApi {
             }
 
         };
-        callMethod ( "notifications.getList", p.getJavaScriptObject (), internCallback );
+        callMethod ( "notifications.getList", p, internCallback );
     }
 
     /**
@@ -835,22 +934,8 @@ public class FacebookApi {
      * @see http://wiki.developers.facebook.com/index.php/Notifications.markRead
      */
     public void notifications_markRead(final Map<Enum<NotificationsMarkReadParams>, String> params, final AsyncCallback<Boolean> callback) {
-
-        JSONObject p = getDefaultParams ();
-
-        copyAllParams ( p, convertEnumMap ( NotificationsMarkReadParams.values (), params ), "session_key,*notification_ids" );
-
-        AsyncCallback<JavaScriptObject> internCallback = new AsyncCallback<JavaScriptObject> () {
-
-            public void onFailure(Throwable caught) {
-                callback.onFailure ( caught );
-            }
-
-            public void onSuccess(JavaScriptObject jso) {
-                callback.onSuccess ( new Boolean ( jso.toString () ) );
-            }
-        };
-        callMethod ( "notifications.markRead", p.getJavaScriptObject (), internCallback );
+        JavaScriptObject p = getAllParams ( NotificationsMarkReadParams.values (), params );
+        callMethodRetBoolean ( "notifications.markRead", p, callback );
     }
 
     /**
@@ -905,10 +990,8 @@ public class FacebookApi {
      *            or an app_to_user. (Default value is user_to_user.)
      */
     public void notifications_send(Map<Enum<NotificationsSendParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JSONObject p = getDefaultParams ();
-        Map<String, String> stringParams = convertEnumMap ( NotificationsSendParams.values (), params );
-        copyAllParams ( p, stringParams, "to_ids,notification,type" );
-        callMethod ( "notifications.send", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( NotificationsSendParams.values (), params );
+        callMethod ( "notifications.send", p, callback );
 
     }
 
@@ -982,20 +1065,8 @@ public class FacebookApi {
      */
 
     public void photos_createAlbum(Map<Enum<PhotosCreateAlbumParams>, String> params, final AsyncCallback<Album> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( PhotosCreateAlbumParams.values (), params ), "*name,location,description,visible,uid" );
-
-        AsyncCallback<JavaScriptObject> internCallback = new AsyncCallback<JavaScriptObject> () {
-
-            public void onFailure(Throwable caught) {
-                callback.onFailure ( caught );
-            }
-
-            public void onSuccess(JavaScriptObject jso) {
-                callback.onSuccess ( (Album) jso.cast () );
-            }
-        };
-        callMethod ( "photos.createAlbum", p.getJavaScriptObject (), internCallback );
+        JavaScriptObject p = getAllParams ( PhotosCreateAlbumParams.values (), params );
+        callMethodRetObject ( "photos.createAlbum", p, Album.class, callback );
     }
 
     /**
@@ -1039,11 +1110,8 @@ public class FacebookApi {
      *            aids. The aids parameter has no default value.
      */
     public void photos_getAlbums(final Map<Enum<PhotosGetAlbumsParams>, String> params, final AsyncCallback<List<Album>> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( PhotosGetAlbumsParams.values (), params ), "uid,aids" );
-
-        // Create javascript native callback and parse response
-        callMethodRetList ( "photos.getAlbums", p.getJavaScriptObject (), Album.class, callback );
+        JavaScriptObject p = getAllParams ( PhotosGetAlbumsParams.values (), params );
+        callMethodRetList ( "photos.getAlbums", p, Album.class, callback );
     }
 
     /**
@@ -1076,9 +1144,8 @@ public class FacebookApi {
      *            pids. The pids parameter has no default value.
      */
     public void photos_get(final Map<Enum<PhotosGetParams>, String> params, final AsyncCallback<List<Photo>> callback) {
-        JSONObject obj = getDefaultParams ();
-        copyAllParams ( obj, convertEnumMap ( PhotosGetParams.values (), params ), "uid,session_key,subj_id,aid,pids" );
-        callMethodRetList ( "photos.get", obj.getJavaScriptObject (), Photo.class, callback );
+        JavaScriptObject p = getAllParams ( PhotosGetParams.values (), params );
+        callMethodRetList ( "photos.get", p, Photo.class, callback );
     }
 
     public void photos_getTags(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1182,10 +1249,7 @@ public class FacebookApi {
         final String lp = "FacebookApiImpl#stream_get:";
         GWT.log ( lp + " called", null );
 
-        JSONObject p = getDefaultParams ();
-
-        copyAllParams ( p, convertEnumMap ( StreamGetParams.values (), params ),
-                "uid,session_key,viewer_id,source_ids,start_time,end_time,limit,filter_key,metadata" );
+        JavaScriptObject p = getAllParams ( StreamGetParams.values (), params );
 
         // Create native callback and parse response.
         final AsyncCallback<JavaScriptObject> c = new AsyncCallback<JavaScriptObject> () {
@@ -1212,7 +1276,7 @@ public class FacebookApi {
                 ac.onFailure ( null );
             }
         };
-        callMethod ( "stream.get", p.getJavaScriptObject (), c );
+        callMethod ( "stream.get", p, c );
     }
 
     /**
@@ -1314,10 +1378,8 @@ public class FacebookApi {
      *            be truncated and appended with "...".
      */
     public void status_set(Map<Enum<StatusSetParams>, String> params, AsyncCallback<JavaScriptObject> c) {
-
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( StatusSetParams.values (), params ), "*status,uid" );
-        callMethod ( "users.setStatus", p.getJavaScriptObject (), c );
+        JavaScriptObject p = getAllParams ( StatusSetParams.values (), params );
+        callMethod ( "users.setStatus", p, c );
     }
 
     /**
@@ -1402,13 +1464,8 @@ public class FacebookApi {
      *            only; you cannot format the comment with HTML or FBML.
      */
     public void stream_addComment(Map<Enum<StreamAddCommentParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        GWT.log ( "FacbookApi: call method stream.addComment", null );
-        JSONObject p = getDefaultParams ();
-
-        copyAllParams ( p, convertEnumMap ( StreamAddCommentParams.values (), params ), "uid,*post_id,*comment" );
-        callMethod ( "stream.addComment", p.getJavaScriptObject (), callback );
-
-        GWT.log ( "FacebookApi: call method stream.addComment DONE", null );
+        JavaScriptObject p = getAllParams ( StreamAddCommentParams.values (), params );
+        callMethod ( "stream.addComment", p, callback );
     }
 
     /**
@@ -1443,7 +1500,8 @@ public class FacebookApi {
      * 
      */
     public void stream_addLike(Map<Enum<StreamLikeParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        stream_addOrRemoveLike ( convertEnumMap ( StreamLikeParams.values (), params ), true, callback );
+        JavaScriptObject p = getAllParams ( StreamLikeParams.values (), params );
+        callMethod ( "stream.addLike", p, callback );
     }
 
     /**
@@ -1467,16 +1525,8 @@ public class FacebookApi {
      *            string The ID of the post.
      */
     public void stream_removeLike(Map<Enum<StreamLikeParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        stream_addOrRemoveLike ( convertEnumMap ( StreamLikeParams.values (), params ), false, callback );
-    }
-
-    //
-    // 
-    // 
-    private void stream_addOrRemoveLike(Map<String, String> params, boolean add, AsyncCallback<JavaScriptObject> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, params, "*post_id" );
-        callMethod ( add ? "stream.addLike" : "stream.removeLike", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( StreamLikeParams.values (), params );
+        callMethod ( "stream.removeLike", p, callback );
     }
 
     /**
@@ -1496,38 +1546,36 @@ public class FacebookApi {
      * than xid.
      */
     public void stream_getComments(final Map<Enum<StreamGetCommentsParams>, String> params, final AsyncCallback<List<Comment>> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( StreamGetCommentsParams.values (), params ), "session_key,uid,*post_id" );
 
-        AsyncCallback<JavaScriptObject> nativeCallback = new AsyncCallback<JavaScriptObject> () {
+        JavaScriptObject p = getAllParams ( StreamGetCommentsParams.values (), params );
+        callMethodRetList ( "stream.getComments", p, Comment.class, callback );
 
-            public void onFailure(Throwable v) {
-                callback.onFailure ( v );
-            }
-
-            public void onSuccess(JavaScriptObject jso) {
-
-                final List<Comment> returnList = new ArrayList<Comment> ();
-                JSONObject v = new JSONObject ( jso );
-                JSONObject o = v.isObject ();
-
-                if (o == null) {
-                    callback.onSuccess ( returnList );
-                } else {
-                    JSONObject jo = v.isObject ();
-                    JSONValue value = null;
-
-                    for (int i = 0; (value = jo.get ( "" + i )) != null; i++) {
-
-                        // Comment comment = new Comment ( value.isObject () );
-                        returnList.add ( Comment.fromJson ( value.toString () ) );
-
-                    }
-                    callback.onSuccess ( returnList );
-                }
-            }
-        };
-        callMethod ( "stream.getComments", p.getJavaScriptObject (), nativeCallback );
+        /*
+         * JSONObject p = getDefaultParams (); copyAllParams ( p, convertEnumMap
+         * ( StreamGetCommentsParams.values (), params ),
+         * "session_key,uid,*post_id" );
+         * 
+         * AsyncCallback<JavaScriptObject> nativeCallback = new
+         * AsyncCallback<JavaScriptObject> () {
+         * 
+         * public void onFailure(Throwable v) { callback.onFailure ( v ); }
+         * 
+         * public void onSuccess(JavaScriptObject jso) {
+         * 
+         * final List<Comment> returnList = new ArrayList<Comment> ();
+         * JSONObject v = new JSONObject ( jso ); JSONObject o = v.isObject ();
+         * 
+         * if (o == null) { callback.onSuccess ( returnList ); } else {
+         * JSONObject jo = v.isObject (); JSONValue value = null;
+         * 
+         * for (int i = 0; (value = jo.get ( "" + i )) != null; i++) {
+         * 
+         * // Comment comment = new Comment ( value.isObject () );
+         * returnList.add ( Comment.fromJson ( value.toString () ) );
+         * 
+         * } callback.onSuccess ( returnList ); } } }; callMethod (
+         * "stream.getComments", p.getJavaScriptObject (), nativeCallback );
+         */
     }
 
     /**
@@ -1560,9 +1608,8 @@ public class FacebookApi {
      * @see com.gwittit.client.facebook.entities.StreamFilter StreamFilter
      */
     public void stream_getFilters(final Map<Enum<StreamGetFiltersParams>, String> params, final AsyncCallback<List<StreamFilter>> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( StreamGetFiltersParams.values (), params ), "uid,session_key" );
-        callMethodRetList ( "stream.getFilters", p.getJavaScriptObject (), StreamFilter.class, callback );
+        JavaScriptObject p = getAllParams ( StreamGetFiltersParams.values (), params );
+        callMethodRetList ( "stream.getFilters", p, StreamFilter.class, callback );
     }
 
     public void stream_publish(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1606,9 +1653,8 @@ public class FacebookApi {
      *            a desktop application.
      */
     public void stream_remove(Map<Enum<StreamRemoveParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( StreamRemoveParams.values (), params ), "session_key,uid,*post_id" );
-        callMethod ( "stream.remove", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( StreamRemoveParams.values (), params );
+        callMethod ( "stream.remove", p, callback );
     }
 
     /**
@@ -1647,9 +1693,8 @@ public class FacebookApi {
      *            string The ID for the comment you want to remove.
      */
     public void stream_removeComment(Map<Enum<StreamRemoveCommentParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JSONObject p = getDefaultParams ();
-        copyAllParams ( p, convertEnumMap ( StreamRemoveCommentParams.values (), params ), "session_key,uid,*comment_id" );
-        callMethod ( "stream.removeComment", p.getJavaScriptObject (), callback );
+        JavaScriptObject p = getAllParams ( StreamRemoveCommentParams.values (), params );
+        callMethod ( "stream.removeComment", p, callback );
     }
 
     public void users_getInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1692,96 +1737,97 @@ public class FacebookApi {
 
     }
 
-    /**
-     * Method that converts a map with enums to a map with string values.
+    /*
+     * Yet another wrapper. Use this to get all parameters in one line.
      */
-    private <T extends Enum<T>> Map<String, String> convertEnumMap(Enum<T>[] enumValues, Map<Enum<T>, String> params) {
-        Map<String, String> stringParams = new HashMap<String, String> ();
+    public <T extends Enum<T>> JavaScriptObject getAllParams(final Enum<T>[] enumValues, final Map<Enum<T>, String> params) {
 
-        if (params == null) {
-            return stringParams;
-        }
-        for (Enum<?> e : enumValues) {
-            String propValue = params.get ( e );
-            if (propValue != null) {
-                stringParams.put ( e.toString (), propValue );
-            }
-        }
-        return stringParams;
+        JSONObject allParams = getDefaultParams ();
+        copyAllParams ( allParams, enumValues, params );
+        return allParams.getJavaScriptObject ();
     }
 
-    /**
-     * Takes a list of params and converts them to json string. If the param
-     * starts withh "*' its considered a required param. The use will get a
-     * warning if its not passed.
+    /*
+     * Get jsonobject with api_key parameter
      * 
-     * @param obj
-     * @param params
-     * @param list
+     * @return
      */
-    private void copyAllParams(JSONObject obj, Map<String, String> params, String list) {
+    private JSONObject getDefaultParams() {
+        if (apiKey == null) {
+            Window.alert ( "api_key==null" );
+        }
+        JSONObject obj = new JSONObject ();
+        obj.put ( "api_key", new JSONString ( apiKey ) );
+        return obj;
+    }
+
+    /*
+     * Copy a list of enum values to a json object
+     */
+    private <T extends Enum<T>> void copyAllParams(final JSONObject jo, final Enum<T>[] enumValues, final Map<Enum<T>, String> params) {
 
         if (params == null) {
             return;
         }
-        String errorString = "";
-        String[] keys = list.split ( "," );
+        for (Enum<?> e : enumValues) {
+            String propValue = params.get ( e );
 
-        for (String k : keys) {
-            String useKey = k;
-            if (useKey.startsWith ( "*" )) {
-                useKey = useKey.replace ( "*", "" );
-                if (!params.containsKey ( useKey )) {
-                    errorString += "The param " + useKey + " is required.\n";
-                }
+            if (propValue != null) {
+                jo.put ( e.toString (), new JSONString ( propValue ) );
             }
-            copyParams ( obj, params, useKey );
-        }
-
-        if (!params.isEmpty ()) {
-            errorString += "You passed invalid parameters: " + params.toString ();
-        }
-        if (!"".equals ( errorString )) {
-            errorString = "Oups, You passed invalid parameters to a method. \n\n" + errorString;
-            Window.alert ( errorString );
-            throw new RuntimeException ( errorString );
         }
     }
 
-    /**
+    /*
      * Copy param
      */
-    private void copyParams(JSONObject obj, Map<String, String> params, String key) {
+    private void copyParam(JSONObject obj, Map<String, String> params, String key) {
         if (params.get ( key ) != null) {
             obj.put ( key, new JSONString ( params.get ( key ) ) );
             params.remove ( key );
         }
     }
 
-    
-    /**
+    /*
      * Call method and cast javascriptobject to a single entity.
-     * @param <T> Entity
-     * @param method to call
-     * @param params params to method
-     * @param entity entity type
-     * @param callback to execute
      */
-    public <T extends JavaScriptObject> void callMethodRetObject ( final String method,
-                                      final JavaScriptObject params,
-                                      final Class<T> entity,
-                                      final AsyncCallback<T> callback ) {
-        
+    private <T extends JavaScriptObject> void callMethodRetObject(final String method,
+                                                                  final JavaScriptObject params,
+                                                                  final Class<T> entity,
+                                                                  final AsyncCallback<T> callback) {
+
         callMethod ( method, params, new Callback<JavaScriptObject> ( callback ) {
-            public void onSuccess ( JavaScriptObject jso ) {
+            public void onSuccess(JavaScriptObject jso) {
                 T entity = jso.cast ();
                 callback.onSuccess ( entity );
             }
         } );
     }
-                                       
-    
-    /**
+
+    /*
+     * Method for calling method wich returns a boolean in the form "1" or "0"
+     */
+    private void callMethodRetBoolean(final String method, final JavaScriptObject params, final AsyncCallback<Boolean> callback) {
+
+        callMethod ( method, params, new Callback<JavaScriptObject> ( callback ) {
+
+            public void onSuccess(JavaScriptObject response) {
+
+                // Hackarond facebook bug, data.setCookie returns an empty
+                // object, should return 0 or 1.
+                if (method.startsWith ( "data" )) {
+                    if (new JSONObject ( response ).toString ().equals ( "{}" )) {
+                        callback.onSuccess ( true );
+                        return;
+                    }
+                }
+
+                callback.onSuccess ( ("1".equals ( response.toString () ) || "true".equals ( response.toString () )) );
+            }
+        } );
+    }
+
+    /*
      * Convenient method for calling a method and return a list.
      */
     @SuppressWarnings("unchecked")
@@ -1789,7 +1835,15 @@ public class FacebookApi {
 
         callMethod ( method, params, new Callback<JavaScriptObject> ( callback ) {
             public void onSuccess(JavaScriptObject jso) {
-                callback.onSuccess ( cast ( entity, jso ) );
+                try {
+
+                    if ("{}".equals ( new JSONObject ( jso ).toString ().trim () )) {
+                        callback.onSuccess ( new ArrayList () );
+                    } else {
+                        callback.onSuccess ( cast ( entity, jso ) );
+                    }
+                } catch (Exception e) {
+                }
             }
         } );
     }
@@ -1802,10 +1856,8 @@ public class FacebookApi {
      * @param params to method
      * 
      * @param callback to execute
-     * 
-     * @param returnType json, string whatever. (deprecated)
      */
-    private native void callMethod(String method, JavaScriptObject params, AsyncCallback<JavaScriptObject> callback) /*-{
+    private native void callMethod(final String method, final JavaScriptObject params, final AsyncCallback<JavaScriptObject> callback) /*-{
         var app=this;
         $wnd.FB_RequireFeatures(["Api"], function(){			
         	$wnd.FB.Facebook.apiClient.callMethod( method, params, 
@@ -1828,29 +1880,7 @@ public class FacebookApi {
         });
     }-*/;
 
-    /**
-     * Parse json result
-     * 
-     * @param result
-     * @return
-     */
-    private List<JSONValue> parse(JSONValue result) {
-
-        List<JSONValue> returnList = new ArrayList<JSONValue> ();
-
-        JSONObject o = result.isObject ();
-        JSONValue value;
-        int key = 0;
-
-        while ((value = o.get ( key + "" )) != null) {
-            returnList.add ( value );
-            key++;
-        }
-
-        return returnList;
-    }
-
-    /**
+    /*
      * Callbacks
      */
     public void callbackError(AsyncCallback<JSONValue> callback, JavaScriptObject jso) {
@@ -1858,24 +1888,12 @@ public class FacebookApi {
         callback.onFailure ( new FacebookException ( er ) );
     }
 
-    /**
+    /*
      * Called when method succeeded.
      */
     public void callbackSuccess(AsyncCallback<JavaScriptObject> callback, JavaScriptObject obj) {
-        GWT.log ( "FacebookApi: callbackSuccess " + obj, null );
+        GWT.log ( "FacebookApi: callbackSuccess " + new JSONObject ( obj ), null );
         callback.onSuccess ( obj );
-    }
-
-    /**
-     * Get default params, minimum is the api key
-     */
-    private JSONObject getDefaultParams() {
-        if (apiKey == null) {
-            Window.alert ( "api_key==null" );
-        }
-        JSONObject obj = new JSONObject ();
-        obj.put ( "api_key", new JSONString ( apiKey ) );
-        return obj;
     }
 
 }
