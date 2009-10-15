@@ -27,9 +27,9 @@
 ||connect.getUnconnectedFriendsCount||  ||
 ||connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
-||data.getCookies||  ||
-||data.setCookie||  ||
-||events.cancel||  || 1.0 ||
+||data.getCookies|| YES || 1.0 ||
+||data.setCookie|| YES || 1.0 ||
+||events.cancel|| YES || 1.0 ||
 ||events.create||  || 1.0 ||
 ||events.edit||  || 1.0 ||
 ||events.get||  || 1.0 ||
