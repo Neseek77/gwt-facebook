@@ -14,6 +14,7 @@ import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbProfilePic.Size;
+import com.gwittit.client.ui.ProfilePicsPanel;
 
 /**
  * Showcase for method call <code>friends.getMutualFriends</code>
@@ -58,13 +59,9 @@ public class Friends_getMutualFriends extends Showcase {
 
 					public void onSuccess(List<Long> result) {
 						removeLoader ( mutualFriends );
-		
 						mutualFriends.add( new HTML ( "Number of mutual friends " + result.size() + " with " + new FbName ( uid ) ) );
-						for ( Long uid : result ) {
-							FbProfilePic pp = new FbProfilePic ( uid,Size.small);
-							mutualFriends.add( pp );
-						}
-						Xfbml.parse( mutualFriends );
+						ProfilePicsPanel p = new ProfilePicsPanel ( result );
+						mutualFriends.add ( p );
 					}
 					
 				});
