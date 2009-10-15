@@ -14,12 +14,12 @@
 ||admin.setAppProperties||  || 2.0 ||
 ||admin.setRestrictionInfo||  || 2.0 ||
 ||application.getPublicInfo|| YES || 1.0 || Unknown Method Error from Facebook|| 
-||auth.createToken   ||  ||  || Desktop Only ||
-||auth.expireSession ||  ||  || Desktop Only ||
-||auth.getSession    ||  ||  || Desktop Only ||
-||auth.promoteSession||  ||  || Desktop Only ||
-||auth.revokeAuthorization||  || || Desktop Only ||
-||auth.revokeExtendedPermission||  ||  || Desktop Only ||
+||auth.createToken   ||  || N || Desktop Only ||
+||auth.expireSession ||  || N || Desktop Only ||
+||auth.getSession    ||  || N || Desktop Only ||
+||auth.promoteSession||  || N || Desktop Only ||
+||auth.revokeAuthorization|| N || || Desktop Only ||
+||auth.revokeExtendedPermission||  || N || Desktop Only ||
 ||batch.run||  || 2.0 ||
 ||comments.add|| YES || 1.0 ||
 ||comments.get|| YES || 1.0 ||
