@@ -1,15 +1,20 @@
 package com.gwittit.client.example;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.example.EventSelector.EventSelectorHandler;
 import com.gwittit.client.facebook.FacebookApi.EventsGetMembersParams;
 import com.gwittit.client.facebook.entities.EventMembers;
+import com.gwittit.client.ui.ProfilePicsPanel;
 
 public class Events_getMembers extends Showcase {
 
@@ -47,15 +52,9 @@ public class Events_getMembers extends Showcase {
 
                     public void onSuccess(EventMembers result) {
                         removeLoader ( inner );
-                        inner.add ( new HTML ( "<h3>Attending: </h3>" ) );
-                        inner.add ( new HTML ( "" + result.getAttending ().length () ) ); 
-                        
-                        inner.add ( new HTML ( "<h3>Unsure</h3>" ) );
-                        inner.add ( new HTML ( "" + result.getUnsure ().length () ) );
-                        // TODO Auto-generated method stub
-                        
-                        inner.add ( new HTML ( "<h3>Not Replied</h3>" ) );
-                        inner.add ( new HTML ( "" + result.getNotReplied ().length () ) );
+                        addMembers ( inner, "Attending", result.getAttending () );
+                        addMembers ( inner, "Unsure", result.getUnsure () );
+                        addMembers ( inner, "Not Replied", result.getNotReplied () );
                     }
                     
                 });
@@ -66,9 +65,14 @@ public class Events_getMembers extends Showcase {
         
         outer.add ( eventSelector );
         outer.add ( inner );
-
         return outer;
+    }
+    
+    private void addMembers ( final VerticalPanel inner, final String header, final List<Long> uids ) {
+        inner.add ( new HTML ( "<h3>" + header + "</h3>" ) );
+        inner.add ( new HTML ( "" + uids.size () ) ); 
         
-        
+        ProfilePicsPanel ppp = new ProfilePicsPanel ( uids );
+        inner.add ( ppp );
     }
 }

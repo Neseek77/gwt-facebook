@@ -43,7 +43,16 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class FbProfilePic extends Widget {
 
-	public enum Size {thumb,small,normal,square}
+	public enum Size {
+	    /** 50px wide */
+	    thumb,
+	    /** 100 px wide */
+	    small,
+	    /** 200px wide */
+	    normal,
+	    /** 50px square */
+	    square
+    }
 	
 	public FbProfilePic () {
 		super.setElement(DOM.createElement("fb:profile-pic"));
