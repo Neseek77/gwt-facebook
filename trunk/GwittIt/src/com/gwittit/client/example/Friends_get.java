@@ -15,6 +15,7 @@ import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookApi.FriendsGetParams;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
+import com.gwittit.client.ui.ProfilePicsPanel;
 
 /**
  * Showcase for method call <code>friends.get</code>
@@ -47,11 +48,9 @@ public class Friends_get extends Showcase  {
 			}
 			public void onSuccess(List<Long> result) {
 				outer.remove( getLoader () );
-				for ( Long uid : result ) {
-					flow.add ( new HTML ( new FbName ( uid ) + ", " ));
-				}
-				outer.add ( flow );
-				Xfbml.parse( flow.getElement() );
+				
+				ProfilePicsPanel p = new ProfilePicsPanel ( result );
+				outer.add ( p );
 			}
 			
 		});

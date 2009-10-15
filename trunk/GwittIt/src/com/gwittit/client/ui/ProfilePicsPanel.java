@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -24,6 +25,8 @@ import com.gwittit.client.facebook.xfbml.FbProfilePic.Size;
  * <ul>
  *  <li>.gwittit-ProfilePicsPanel
  *  <li>.gwittit-ProfilePicsPanel-pics
+ *  <li>.gwittit-ProfilePicsPanel-scrollPanel
+ *  <li>.gwittit-ProfilePicsPanel-content
  * </ul>
  *
  */
@@ -65,8 +68,10 @@ public class ProfilePicsPanel extends Composite {
         displayProfilePics ();
         
         outer.add ( pics );
-        outer.add ( moreLink );
- 
+        
+        if ( uids.size () > limit ) {
+            outer.add ( moreLink );
+        }
         
         moreLink.addClickHandler ( new ClickHandler () {
             public void onClick(ClickEvent event) {
@@ -94,8 +99,9 @@ public class ProfilePicsPanel extends Composite {
         picsList.getElement ().setId ("gwittit-ProfilePicsPanel-content" );
         picsList.addStyleName ( "gwittit-ProfilePicsPanel-content" );
         
-        for ( Long uid : uids ) {
-    
+        
+        for ( int i = 0 ; i < uids.size () && i < 50; i++ ) {
+            Long uid = uids.get ( i );
             HorizontalPanel wrapper = new HorizontalPanel ();
             wrapper.setSpacing ( 10 );
             FbProfilePic profilePic = new FbProfilePic ( uid, Size.square );
@@ -104,6 +110,7 @@ public class ProfilePicsPanel extends Composite {
             wrapper.add ( name );
             picsList.add ( wrapper );
         }
+        picsList.add ( new HTML ( " [TODO: More Button here] ") );
         scrollPanel.add ( picsList );
         pop.setWidget ( scrollPanel );
         pop.center ();
@@ -114,7 +121,7 @@ public class ProfilePicsPanel extends Composite {
     
     private void displayProfilePics ( ) {
         
-        for ( int i = 0; i < limit; i++ ) {
+        for ( int i = 0; i < limit && i < uids.size (); i++ ) {
             Long uid = uids.get ( i );
             FbProfilePic profilePic = new FbProfilePic ( uid, Size.square );
             profilePic.setWidth ( "35px" );

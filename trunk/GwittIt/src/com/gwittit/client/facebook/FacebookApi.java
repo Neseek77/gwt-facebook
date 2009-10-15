@@ -49,6 +49,7 @@ import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
+import com.gwittit.client.facebook.entities.User;
 
 /**
  * The class wraps the Facebook Javascript API in GWT.
@@ -78,6 +79,10 @@ public class FacebookApi {
         final String C_SESSION_KEY = apiKey + "_session_key";
         return Cookies.getCookie ( C_SESSION_KEY );
 
+    }
+    
+    public String getLoggedInUser () {
+        return Cookies.getCookie ( apiKey + "_user" );
     }
 
     public void admin_banUsers(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -635,6 +640,20 @@ public class FacebookApi {
         friends_getGeneric ( "friends.get", p, callback );
     }
 
+    
+    /**
+     * A slightly different version of friends.get returning name and uid. 
+     * @see #friends_get(AsyncCallback) 
+     * @param callback list of users.
+     */
+    public void friends_getExtended ( final AsyncCallback<List<User>> callback ) {
+        JSONObject  p = getDefaultParams ();
+
+        String fql = "SELECT uid, name FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1=" + getLoggedInUser () + ") ";
+        p.put ( "query", new JSONString ( fql ) );
+        callMethodRetList ( "fql.query", p.getJavaScriptObject (), User.class, callback );
+    }
+
     /**
      * Returns the user IDs of the current user's Facebook friends who have
      * authorized the specific calling application or who have already connected
@@ -727,6 +746,7 @@ public class FacebookApi {
      */
     private void friends_getGeneric(String method, JavaScriptObject params, final AsyncCallback<List<Long>> callback) {
 
+        
         AsyncCallback<JavaScriptObject> ac = new AsyncCallback<JavaScriptObject> () {
 
             public void onFailure(Throwable caught) {
@@ -734,8 +754,12 @@ public class FacebookApi {
             }
 
             public void onSuccess(JavaScriptObject jso) {
-                JsArrayNumber jsArray = jso.cast ();
-                callback.onSuccess ( Util.convertNumberArray ( jsArray ) );
+                if ( "{}".equals ( new JSONObject ( jso ).toString ()  ) ) {
+                    callback.onSuccess ( new ArrayList () );
+                } else {
+                    JsArrayNumber jsArray = jso.cast ();
+                    callback.onSuccess ( Util.convertNumberArray ( jsArray ) );
+                }
             }
         };
         callMethod ( method, params, ac );

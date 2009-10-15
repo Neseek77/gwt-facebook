@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
+import com.gwittit.client.ui.ProfilePicsPanel;
 
 /**
  * Showcase for method call <code>friends.getAppUsers</code>
@@ -36,10 +37,7 @@ public class Friends_getAppUsers extends Showcase {
 			}
 			public void onSuccess(List<Long> result) {
 				removeLoader ( outer );
-				for ( Long uid : result ) {
-					outer.add ( new HTML ( uid + "/" + new FbName ( uid ).toString() ) );
-				}
-				Xfbml.parse( outer );
+				outer.add ( new ProfilePicsPanel ( result ) ) ;
 			}
 			
 		});

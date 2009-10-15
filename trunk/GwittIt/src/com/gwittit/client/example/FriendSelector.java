@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -17,6 +18,7 @@ import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookException;
+import com.gwittit.client.facebook.entities.User;
 import com.gwittit.client.ui.ErrorResponseUI;
 
 /**
@@ -26,7 +28,7 @@ import com.gwittit.client.ui.ErrorResponseUI;
  */
 public class FriendSelector extends Composite {
 
-	private VerticalPanel outer = new VerticalPanel ();
+	private HorizontalPanel outer = new HorizontalPanel ();
 	
 	interface FriendSelectionHandler {
 		void onSelected ( Long uid );
@@ -43,9 +45,10 @@ public class FriendSelector extends Composite {
 	 */
 	public FriendSelector () {
 		
+	    outer.setSpacing ( 10 );
 		outer.add ( loader );
 				
-		apiClient.friends_get( new AsyncCallback<List<Long>> () {
+		apiClient.friends_getExtended (  new AsyncCallback<List<User>> () {
 
 			public void onFailure(Throwable caught) {
 			    FacebookException fe = ( FacebookException ) caught;
@@ -54,14 +57,13 @@ public class FriendSelector extends Composite {
 			    ui.show ();
 			}
 
-			public void onSuccess(List<Long> result) {
+			public void onSuccess(List<User> result) {
 				
 				outer.remove( loader );
 			    final ListBox dropBox = new ListBox(false);
 			    dropBox.getElement().setId( "dropBox");
-				for ( Long uid : result ) {
-				
-					dropBox.addItem ( uid + "" );
+				for ( User user : result ) {
+					dropBox.addItem ( user.getName (), user.getUidString () );
 				}
 				
 				outer.clear ();
