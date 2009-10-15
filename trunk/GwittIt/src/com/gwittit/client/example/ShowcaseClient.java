@@ -148,8 +148,10 @@ public class ShowcaseClient extends Composite  {
 					Showcase example = createExample( clickedLink.getText() );
 					showcaseWrapper.clear();
 					
-					Anchor sourceLink = new Anchor ( "See Source Code" );
-
+					Anchor sourceLink = new Anchor();
+					sourceLink.setHTML ( "Browse Source: " + example.getClass ().getName () + ".java ");
+					sourceLink.addStyleName ( "sourceLink" );
+					
 					String repo = "http://code.google.com/p/gwt-facebook/source/browse/trunk/GwittIt/src/";
 					String className = (""+example.getClass().getName()).replace(".","/") + ".java";
 					
