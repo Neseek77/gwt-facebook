@@ -45,6 +45,8 @@ import com.gwittit.client.facebook.entities.EventInfo;
 import com.gwittit.client.facebook.entities.EventMembers;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
+import com.gwittit.client.facebook.entities.Group;
+import com.gwittit.client.facebook.entities.GroupMembers;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
@@ -440,17 +442,19 @@ public class FacebookApi {
      * creator and admin for the event.
      * </pre>
      * 
-     * @param eventInfo information about the event
-     * @param callback response to user
+     * @param eventInfo
+     *            information about the event
+     * @param callback
+     *            response to user
      * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Events.create">
      *      events.create </a>
-     *      
+     * 
      */
     public void events_create(EventInfo eventInfo, AsyncCallback<JavaScriptObject> callback) {
         JSONObject p = getDefaultParams ();
-        p.put ( "event_info", new JSONString ( eventInfo.createJsonString () ) ); 
+        p.put ( "event_info", new JSONString ( eventInfo.createJsonString () ) );
         callMethod ( "events.create", p.getJavaScriptObject (), callback );
     }
 
@@ -823,14 +827,52 @@ public class FacebookApi {
         callMethod ( "fql.query", p.getJavaScriptObject (), callback );
     }
 
-    public void groups_get(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    /**
+     * Valid params for method <code>groups.get</code>
+     */
+    public static enum GroupsGetParams {
+        uid,gids
     }
 
-    public void groups_getMembers(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
+    /**
+     * <pre>
+     * Returns all visible groups according to the filters specified. You can
+     * use this method to return all groups associated with a user, or query a
+     * specific set of groups by a list of GIDs.
+     * 
+     * If both the uid and gids parameters are provided, the method returns all
+     * groups in the set of gids with which the user is associated. If the gids
+     * parameter is omitted, the method returns all groups associated with the
+     * provided user.
+     * 
+     * However, if the uid parameter is omitted, the method returns all groups
+     * associated with the provided gids, regardless of any user relationship.
+     * 
+     * If both parameters are omitted, the method returns all groups of the
+     * session user.
+     * </pre>
+     * 
+     * 
+     * @param params
+     * @param callback
+     */
+    public void groups_get(Map<Enum<GroupsGetParams>, String> params, AsyncCallback<List<Group>> callback) {
+        JavaScriptObject p = getAllParams ( GroupsGetParams.values (), params );
+        callMethodRetList ( "groups.get", p, Group.class, callback );
+    }
 
+    
+    /**
+     * Valid params for method <code>groups.get</code>
+     */
+    public static enum GroupsGetMembersParams { gid }
+
+    /**
+     * Returns membership list data associated with a group. 
+     */
+    public void groups_getMembers(Map<Enum<GroupsGetMembersParams>, String> params, AsyncCallback<GroupMembers> callback) {
+        JavaScriptObject p = getAllParams ( GroupsGetMembersParams.values (), params );
+        callMethodRetObject ( "groups.getMembers", p, GroupMembers.class, callback );
     }
 
     public void intl_getTranslations(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1354,7 +1396,7 @@ public class FacebookApi {
      * Valid permissions
      */
     public enum Permission {
-        read_stream, publish_stream,create_event
+        read_stream, publish_stream, create_event
     };
 
     /**

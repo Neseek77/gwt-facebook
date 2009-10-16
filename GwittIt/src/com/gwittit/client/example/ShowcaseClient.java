@@ -62,7 +62,7 @@ public class ShowcaseClient extends Composite  {
 	final String feedMethods = "XFeed:feed_deactivateTemplateBundleByID,feed_getRegisteredTemplateBundleByID,feed_getRegisteredTemplateBundles,feed_publishTemplatizedAction,feed_publishUserAction,feed_registerTemplateBundle";
 	final String fqlMethods = "XFql:fql_multiquery,fql_query";
 	final String friendMethods = "Friends:friends_areFriends,friends_get,friends_getAppUsers,friends_getLists,friends_getMutualFriends";
-	final String groupMethods = "XGroups:groups_get,groups_getMembers";
+	final String groupMethods = "Groups:groups_get,Xgroups_getMembers";
 	final String intlMethods = "XIntl:intl_getTranslations,intl_uploadNativeStrings";
 	final String linkMethods = "XLinks:links_get,links_post";
 	final String messageMethods = "XMessage:liveMessage_send,message_getThreadsInFolder";
@@ -353,7 +353,7 @@ public class ShowcaseClient extends Composite  {
 		}
 	
 		else if ( "groups_get".equals ( m ) ) { 
-		    //  example = new Groups_get();
+		    showcase = new Groups_get();
 		}
 		else if ( "groups_getMembers".equals ( m ) ) { 
 		    //  example = new Groups_getMembers();
