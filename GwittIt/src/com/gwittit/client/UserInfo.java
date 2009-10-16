@@ -1,10 +1,9 @@
-package com.gwittit.client.facebook;
+package com.gwittit.client;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import com.google.gwt.user.client.Cookies;
-import com.gwittit.client.Config;
 
 
 public class UserInfo implements Serializable {
