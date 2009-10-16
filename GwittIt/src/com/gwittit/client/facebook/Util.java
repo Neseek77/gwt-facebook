@@ -7,7 +7,6 @@ import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.i18n.client.NumberFormat;
 
 public class Util {
-
     
     /**
      * Convert JsArrayNumber to List<Long>

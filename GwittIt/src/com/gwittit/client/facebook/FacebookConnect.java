@@ -13,6 +13,8 @@ import com.gwittit.client.facebook.events.EventHelper;
  * Class that wraps the facebook conncet API. Here you will find the javascripts
  * that requires the users interactions.
  * 
+ * TODO: This class needs a cleanup.
+ * 
  * @see http://wiki.developers.facebook.com/index.php/JS_API_T_FB.Connect
  */
 public class FacebookConnect {
@@ -22,43 +24,43 @@ public class FacebookConnect {
      * TODO: Fix
      * @param callback
      */
-    public static native void getConnectState ( AsyncCallback<ConnectState> callback )/*-{
-        
-        $wnd.FB_RequireFeatures(["Connect"],function() {
-            
-            alert ( $wnd.FB.Connect.get_status().result );
-            alert ( "is ready: " + $wnd.FB.Connect.get_status().get_isReady());
-            
-            if ( $wnd.FB.Connect.get_status().is_Ready() ) {
-                var status=$wnd.FB.Connect.get_status().result; 
-                    alert ( "status " + status );
-                    @com.gwittit.client.facebook.FacebookConnect::callbackConnectState(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,status+"");
-            } else {
-                    @com.gwittit.client.facebook.FacebookConnect::callbackConnectState(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,"1");
-                
-            }
-        });
-    }-*/;
-    
+//    public static native void getConnectState ( AsyncCallback<ConnectState> callback )/*-{
+//        
+//        $wnd.FB_RequireFeatures(["Connect"],function() {
+//            
+//            alert ( $wnd.FB.Connect.get_status().result );
+//            alert ( "is ready: " + $wnd.FB.Connect.get_status().get_isReady());
+//            
+//            if ( $wnd.FB.Connect.get_status().is_Ready() ) {
+//                var status=$wnd.FB.Connect.get_status().result; 
+//                    alert ( "status " + status );
+//                    @com.gwittit.client.facebook.FacebookConnect::callbackConnectState(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,status+"");
+//            } else {
+//                    @com.gwittit.client.facebook.FacebookConnect::callbackConnectState(Lcom/google/gwt/user/client/rpc/AsyncCallback;Ljava/lang/String;)(callback,"1");
+//                
+//            }
+//        });
+//    }-*/;
+//    
     
     /**
      * TODO: Fix
      * @param callback
      * @param state
      */
-    public static void callbackConnectState(AsyncCallback<ConnectState> callback, String state ) {
-
-        if ( state == null || "null".equals ( state )) {
-            callback.onSuccess ( ConnectState.userNotLoggedIn );
-            return ; 
-        }
-        
-        switch(new Integer ( state ) ) {
-            case 1: callback.onSuccess ( ConnectState.connected ); break;
-            case 2: callback.onSuccess ( ConnectState.userNotLoggedIn ); break;
-            case 3: callback.onSuccess (  ConnectState.appNotAuthorized ); break;
-        }
-    }
+//    public static void callbackConnectState(AsyncCallback<ConnectState> callback, String state ) {
+//
+//        if ( state == null || "null".equals ( state )) {
+//            callback.onSuccess ( ConnectState.userNotLoggedIn );
+//            return ; 
+//        }
+//        
+//        switch(new Integer ( state ) ) {
+//            case 1: callback.onSuccess ( ConnectState.connected ); break;
+//            case 2: callback.onSuccess ( ConnectState.userNotLoggedIn ); break;
+//            case 3: callback.onSuccess (  ConnectState.appNotAuthorized ); break;
+//        }
+//    }
     
     /**
      * Get current logged in users userid
