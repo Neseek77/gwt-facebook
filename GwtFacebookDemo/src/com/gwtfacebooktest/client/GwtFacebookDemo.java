@@ -41,7 +41,7 @@ public class GwtFacebookDemo implements EntryPoint {
     /**
      * TODO Change this to your application API key
      */
-    public static final String FB_API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
+    public static final String FB_API_KEY = "[INSERT API KEY HERE]";
 
     /*
      * All ui goes here
@@ -83,6 +83,11 @@ public class GwtFacebookDemo implements EntryPoint {
      */
     public void onModuleLoad() {
         
+        
+        if ( "[INSERT API KEY HERE]".equals ( FB_API_KEY ) ) {
+            Window.alert ( "You need to set correct api key in " + GwtFacebookDemo.class.getName () );
+            
+        }
         eventBus = new HandlerManager ( null );
         FacebookConnect.init ( FB_API_KEY, "xd_receiver.htm" , eventBus );
 
