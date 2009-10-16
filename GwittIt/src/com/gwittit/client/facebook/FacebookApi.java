@@ -54,7 +54,7 @@ import com.gwittit.client.facebook.entities.User;
 /**
  * The class wraps the Facebook Javascript API in GWT.
  * 
- * @see http://wiki.developers.facebook.com/index.php/API Facebook API
+ * See  http://wiki.developers.facebook.com/index.php/API Facebook API
  * 
  */
 public class FacebookApi {
@@ -129,12 +129,13 @@ public class FacebookApi {
     }
 
     /**
+     * <pre>
      * Returns public information for an application (as shown in the
      * application directory) by either application ID, API key, or canvas page
      * name. Returned fields include:
      * 
      * The params map takes the following parameters
-     * 
+     * </pre>
      * @param application_id
      *            int Application ID of the desired application. You must
      *            specify exactly one of application_id, application_api_key or
@@ -151,9 +152,7 @@ public class FacebookApi {
      * 
      * @param callback
      * 
-     * @see http 
-     *      ://wiki.developers.facebook.com/index.php/Application.getPublicInfo
-     *      ApplicationGetPublicInfo
+     * See  <a href="http://wiki.developers.facebook.com/index.php/Application.getPublicInfoApplicationGetPublicInfo">ApplicationPublicINfo</a>
      */
     public void application_getPublicInfo(Map<Enum<ApplicationPublicInfoParams>, String> params, AsyncCallback<ApplicationPublicInfo> callback) {
         JavaScriptObject p = getAllParams ( ApplicationPublicInfoParams.values (), params );
@@ -215,6 +214,7 @@ public class FacebookApi {
     }
 
     /**
+     * <pre>
      * This method adds a comment to an xid on behalf of a user. This
      * essentially works like stream.addComment and allows addition of comments
      * to an application's fb:comment and Comments Boxes.
@@ -226,7 +226,7 @@ public class FacebookApi {
      * comment, that user must grant your application the publish_stream
      * extended permission.
      * 
-     * required
+     * </pre>
      * 
      * @param xid
      *            string The xid of a particular Comments Box or fb:comments.
@@ -271,6 +271,8 @@ public class FacebookApi {
     }
 
     /**
+     * 
+     * <pre>
      * Note: Currently there is a bug in the facebook api, causing
      * <code>comments.get</code> to result with unknown method error.
      * 
@@ -281,6 +283,7 @@ public class FacebookApi {
      * You can specify only one XID with this call. If you want to retrieve
      * comments for multiple XIDs, run fql.query against the comment FQL table.
      * 
+     * </pre>
      * @param xid
      *            int The comment xid that you want to retrieve. For a Comments
      *            Box, you can determine the xid on the admin panel or in the
@@ -615,7 +618,7 @@ public class FacebookApi {
     }
 
     /**
-     * @see #friends_get(Map, AsyncCallback)
+     * See  #friends_get(Map, AsyncCallback)
      */
     public void friends_get(final AsyncCallback<List<Long>> callback) {
         friends_get ( null, callback );
@@ -643,7 +646,7 @@ public class FacebookApi {
     
     /**
      * A slightly different version of friends.get returning name and uid. 
-     * @see #friends_get(AsyncCallback) 
+     * See  #friends_get(AsyncCallback) 
      * @param callback list of users.
      */
     public void friends_getExtended ( final AsyncCallback<List<User>> callback ) {
@@ -774,7 +777,7 @@ public class FacebookApi {
      * 
      * @param query
      *            The query to perform, as described in the FQL documentation.
-     * @see http://wiki.developers.facebook.com/index.php/FQL FQL Documentation
+     * See  http://wiki.developers.facebook.com/index.php/FQL FQL Documentation
      */
     public void fql_query(String query, AsyncCallback<JavaScriptObject> callback) {
 
@@ -961,7 +964,7 @@ public class FacebookApi {
      *            notifications.getList API method. This is a comma-separated
      *            list.
      * 
-     * @see http://wiki.developers.facebook.com/index.php/Notifications.markRead
+     * See  http://wiki.developers.facebook.com/index.php/Notifications.markRead
      */
     public void notifications_markRead(final Map<Enum<NotificationsMarkReadParams>, String> params, final AsyncCallback<Boolean> callback) {
         JavaScriptObject p = getAllParams ( NotificationsMarkReadParams.values (), params );
@@ -995,12 +998,12 @@ public class FacebookApi {
      * is measured. Additionally, any notification that you send on behalf of a
      * user appears with that user's notifications as a "sent notification."
      * 
-     * @see http 
+     * See  http 
      *      ://wiki.developers.facebook.com/index.php/Allowed_FBML_and_HTML_Tags
      *      #Notifications:_Allowed_Tags Allowed Tags
-     * @see http://bit.ly/CpnkH How notifications should be used.
-     * @see http://bit.ly/10N3XP How spaminess is measured
-     * @see http://wiki.developers.facebook.com/index.php/Notifications.send
+     * See  http://bit.ly/CpnkH How notifications should be used.
+     * See  http://bit.ly/10N3XP How spaminess is measured
+     * See  http://wiki.developers.facebook.com/index.php/Notifications.send
      * 
      * @param to_ids
      *            array Comma-separated list of recipient IDs. These must be
@@ -1107,7 +1110,7 @@ public class FacebookApi {
     }
 
     /**
-     * @see #photos_getAlbums(Map, AsyncCallback)
+     * See  #photos_getAlbums(Map, AsyncCallback)
      */
     public void photos_getAlbums(final AsyncCallback<List<Album>> callback) {
         photos_getAlbums ( null, callback );
@@ -1269,9 +1272,9 @@ public class FacebookApi {
      *            when you call stream.get. All three parameters are optional.
      *            (Default value is false for all three keys.)
      * 
-     * @see com.gwittit.client.facebook.entities.Stream Stream
-     * @see http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
-     * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
+     * See  com.gwittit.client.facebook.entities.Stream Stream
+     * See  http://wiki.developers.facebook.com/index.php/Stream.get Stream.get
+     * See  http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
      *      Stream Table
      */
     public void stream_get(Map<Enum<StreamGetParams>, String> params, final AsyncCallback<List<Stream>> ac) {
@@ -1635,7 +1638,7 @@ public class FacebookApi {
      *            pass a user ID and that user has an active session with your
      *            application. Desktop applications must always pass a session
      *            key.
-     * @see com.gwittit.client.facebook.entities.StreamFilter StreamFilter
+     * See  com.gwittit.client.facebook.entities.StreamFilter StreamFilter
      */
     public void stream_getFilters(final Map<Enum<StreamGetFiltersParams>, String> params, final AsyncCallback<List<StreamFilter>> callback) {
         JavaScriptObject p = getAllParams ( StreamGetFiltersParams.values (), params );

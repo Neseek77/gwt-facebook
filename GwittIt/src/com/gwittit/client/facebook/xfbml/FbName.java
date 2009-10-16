@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Wrapper class for the fb:name tag.
  * 
- * @see http://wiki.developers.facebook.com/index.php/Fb:name
+ * See http://wiki.developers.facebook.com/index.php/Fb:name
  * 
  * CSS Configuration
  * <ul>

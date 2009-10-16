@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 
 /**
  * Prints the specified group name and formats it as a link to the group's page. 
- * @see http://wiki.developers.facebook.com/index.php/Fb:grouplink
+ * See http://wiki.developers.facebook.com/index.php/Fb:grouplink
  * 
  * CSS Configuration
  * <ul>

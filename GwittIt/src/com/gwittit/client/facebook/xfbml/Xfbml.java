@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
  * a specific widget.  This way you will get a smoother feeling when displaying
  * facebook photos and tags.
  * 
- * @see http://wiki.developers.facebook.com/index.php/JS_API_T_FB.XFBML.Host
+ *  http://wiki.developers.facebook.com/index.php/JS_API_T_FB.XFBML.Host XFBML Host
  */
 public class Xfbml {
 	
