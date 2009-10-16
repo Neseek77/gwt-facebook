@@ -3,7 +3,6 @@ package com.gwittit.client.facebook.entities;
 import java.util.Date;
 
 import com.google.gwt.json.client.JSONObject;
-import com.gwittit.client.example.Showcase;
 
 
 /**

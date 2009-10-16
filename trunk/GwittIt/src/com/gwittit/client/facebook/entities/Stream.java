@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.DebugLink;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;

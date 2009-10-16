@@ -24,7 +24,6 @@ import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
-import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.FacebookApi.NotificationsSendParams;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
