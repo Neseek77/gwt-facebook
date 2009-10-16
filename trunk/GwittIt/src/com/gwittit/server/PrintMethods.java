@@ -3,6 +3,7 @@ package com.gwittit.server;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
+import com.google.gwt.core.client.JsArrayNumber;
 import com.gwittit.client.facebook.entities.*;
 
 public class PrintMethods {
@@ -10,7 +11,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = EventMembers.class;
+	    Class c = GroupMembers.class;
 		
 		Field fields[] = c.getFields ();
 		
@@ -22,6 +23,10 @@ public class PrintMethods {
                 System.out.println ( "public final native String get" + methodName + "String() /*-{ return this." +  convertToCamelCase (f.getName()) + " + \"\"; }-*/;" );
                 System.out.println ( "public final Long get" + methodName + "() { return new Long ( get" + methodName + "String() ); }" );
 		        
+		    } else if ( f.getType() == JsArrayNumber.class ) {
+                System.out.println ( "public final native String get" + methodName + "Native() /*-{ return this." +  convertToCamelCase (f.getName()) + " + \"\"; }-*/;" );
+                System.out.println ( "public final List<Long> get" + methodName + "() { return Util.convertNumberArray ( get" + methodName + "Native() ); }" );
+
 		    } else {
 		        System.out.println ( "public final native " + f.getType ().getSimpleName ()  + " get" + methodName + "() /*-{ return this." +  convertToCamelCase (f.getName()) + "; }-*/;" );
 		    }
