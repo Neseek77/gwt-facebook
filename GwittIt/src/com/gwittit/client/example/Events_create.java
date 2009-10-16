@@ -18,12 +18,13 @@ public class Events_create extends Showcase {
         super ( "events.create" );
     }
     
-    
     /**
      * Create showcase widget
      */
     public Widget createWidget () {
         final VerticalPanel outer = new VerticalPanel ();
+        
+        // Ask facebook if current user has granted gwittit create_event permission.
         apiClient.users_hasAppPermission ( Permission.create_event, new AsyncCallback<Boolean> () {
 
             public void onFailure(Throwable caught) {
@@ -32,16 +33,19 @@ public class Events_create extends Showcase {
 
             public void onSuccess(Boolean canCreateEvent ) {
                 
+                // if user has granted permissions, show event editor
                 if ( canCreateEvent ) {
                     showEventEditor ( outer );
                 } else {
-                    FacebookConnect.showPermissionDialog ( Permission.create_event, new AsyncCallback<Boolean> () {
 
+                    // Ask user for permsission, and hopfully...
+                    FacebookConnect.showPermissionDialog ( Permission.create_event, new AsyncCallback<Boolean> () {
                         public void onFailure(Throwable caught) {
                             Events_create.this.handleFailure ( caught );
                         }
-
                         public void onSuccess(Boolean nowCanCreateEvent ) {
+                    
+                            // He granted us create_event permission
                             if ( nowCanCreateEvent ) {
                                 showEventEditor ( outer );
                             } else {
@@ -62,5 +66,4 @@ public class Events_create extends Showcase {
         final EventEditor eventEditor = new EventEditor (apiClient,  new EventInfo () );
         p.add ( eventEditor );
     }
-
 }
