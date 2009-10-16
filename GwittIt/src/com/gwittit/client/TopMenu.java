@@ -17,7 +17,6 @@ import com.gwittit.client.facebook.ConnectState;
 import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookConnectHandler;
-import com.gwittit.client.facebook.UserInfo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
 
