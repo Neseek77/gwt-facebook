@@ -6,9 +6,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
+import com.gwittit.client.ui.ProfilePicsPanel;
 
 /**
  * Showcase for method call <code>friends.getAppUsers</code>
