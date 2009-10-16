@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.gwittit.client.facebook.FacebookException;
 import com.gwittit.client.facebook.entities.ErrorResponse;
 import com.gwittit.client.facebook.entities.KeyValue;
 import com.gwittit.client.facebook.entities.UserData;
@@ -34,6 +35,11 @@ public class ErrorResponseUI extends DecoratedPopupPanel  {
 
     private Button closeButton = new Button ( "Okay");
     
+    
+    public ErrorResponseUI ( Throwable t ) {
+        this ( ((FacebookException)t).getErrorMessage () );
+    }
+
     /**
      * Create new UI error response
      * @param errorResponse original error response
