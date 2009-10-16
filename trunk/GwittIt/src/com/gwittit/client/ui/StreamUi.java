@@ -131,7 +131,6 @@ public class StreamUi extends Composite implements ClickHandler {
      * Create a default widget
      */
     public Widget createLikesWidget ( Likes likes ) {
-        ProfilePicsPanel picsPanel = null;
         VerticalPanel pnl = new VerticalPanel ();
         pnl.addStyleName("gwittit-Likes");
 
@@ -151,9 +150,7 @@ public class StreamUi extends Composite implements ClickHandler {
             HTML h = new HTML ( txt );
             pnl.add(h);
             
-            if ( picsPanel != null ) {
-                pnl.add ( picsPanel );
-            }
+         
             return pnl;
         }
         

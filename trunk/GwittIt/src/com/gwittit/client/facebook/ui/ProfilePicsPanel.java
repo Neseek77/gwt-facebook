@@ -1,4 +1,4 @@
-package com.gwittit.client.ui;
+package com.gwittit.client.facebook.ui;
 
 import java.util.List;
 

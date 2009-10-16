@@ -1,4 +1,4 @@
-package com.gwittit.client.ui;
+package com.gwittit.client.facebook.ui;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;

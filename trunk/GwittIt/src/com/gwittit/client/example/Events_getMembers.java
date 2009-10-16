@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.example.EventSelector.EventSelectorHandler;
 import com.gwittit.client.facebook.FacebookApi.EventsGetMembersParams;
 import com.gwittit.client.facebook.entities.EventMembers;
-import com.gwittit.client.ui.ProfilePicsPanel;
+import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 
 public class Events_getMembers extends Showcase {
 
