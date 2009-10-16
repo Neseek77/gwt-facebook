@@ -1,10 +1,7 @@
 package com.gwittit.client.example;
 
-import java.util.List;
-
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -14,7 +11,7 @@ import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookException;
-import com.gwittit.client.ui.ErrorResponseUI;
+import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
 /**
  * Core class for examples. 
