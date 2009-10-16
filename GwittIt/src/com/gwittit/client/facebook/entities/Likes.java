@@ -9,7 +9,6 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.ui.ProfilePicsPanel;
 
 /**
  * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
