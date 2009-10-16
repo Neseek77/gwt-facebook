@@ -1,48 +1,22 @@
 package com.gwittit.client.facebook.xfbml;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Wrapper class for the fb:name tag.
  * 
- * Style gwittit-FbName
  * @see http://wiki.developers.facebook.com/index.php/Fb:name
+ * 
+ * CSS Configuration
+ * <ul>
+ *  <li>.gwittit-FbName
+ * </ul>
+ * 
  *
  */
 public class FbName extends Widget {
-	
-	/*
-	private String uid;
-	
-	private boolean firstnameonly = false;
-	
-	private boolean linked = true;
-
-	private boolean lastnameonly = false;
-	
-	private boolean possessive = false;
-	
-	private boolean reflexive = false;
-	
-	private boolean shownetwork = false;
-	
-	private boolean useyou = true;
-	
-	private String ifcantsee = null;
-	
-	/*Capitalize the text if useyou==true and loggedinuser==uid. (Default value is false.)*/
-	/*
-	private Boolean capitalize = false;
-	
-	private String subjectid = null;
-	
-	*/
-	
 	
 	public FbName ( Long uid ) {
 		this( "" + uid );
@@ -51,11 +25,12 @@ public class FbName extends Widget {
 	public FbName ( String uid ) {
 		super.setElement( DOM.createElement ("fb:name") ); 
 		if ( uid == null || "".equals ( uid.trim() ) ) {
-			Window.alert( "FbName: uid null");
+		    throw new IllegalArgumentException ( "uid null" );
+		} else {
+    		super.addStyleName("FbName" );
+    		set( "uid", uid);
+    		addStyleName ( "gwittit-FbName");
 		}
-		super.addStyleName("FbName" );
-		set( "uid", uid);
-		addStyleName ( "gwittit-FbName");
 	}
 
 	public FbName ( Long uid, boolean linked ) {

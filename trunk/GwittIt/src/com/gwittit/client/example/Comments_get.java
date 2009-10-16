@@ -14,9 +14,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi.CommentsGetParams;
 import com.gwittit.client.facebook.FacebookApi.CommentsRemoveParams;
 import com.gwittit.client.facebook.entities.Comment;
+import com.gwittit.client.facebook.ui.CommentUi;
+import com.gwittit.client.facebook.ui.CommentUi.DeleteHandler;
 import com.gwittit.client.facebook.xfbml.Xfbml;
-import com.gwittit.client.ui.CommentUi;
-import com.gwittit.client.ui.CommentUi.DeleteHandler;
 
 /**
  * Showcase for method call <code>comments.get</code>

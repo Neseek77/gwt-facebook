@@ -19,7 +19,7 @@ import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookException;
 import com.gwittit.client.facebook.entities.User;
-import com.gwittit.client.ui.ErrorResponseUI;
+import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
 /**
  * Class that let the user select a friend. Used to make the examples a little

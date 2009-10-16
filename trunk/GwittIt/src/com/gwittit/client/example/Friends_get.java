@@ -13,9 +13,9 @@ import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookApi.FriendsGetParams;
+import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
-import com.gwittit.client.ui.ProfilePicsPanel;
 
 /**
  * Showcase for method call <code>friends.get</code>

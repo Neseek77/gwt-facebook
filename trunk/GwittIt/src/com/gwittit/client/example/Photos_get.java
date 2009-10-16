@@ -73,7 +73,7 @@ public class Photos_get extends Showcase {
 		resultWrapper.add( getLoader() );
 		
 		Map<Enum<PhotosGetParams>,String> params = new HashMap<Enum<PhotosGetParams>,String> ();
-		params.put( PhotosGetParams.uid, uid);
+		params.put( PhotosGetParams.subj_id, uid);
 
 		// Get photos from facebook
 		apiClient.photos_get(params, new AsyncCallback<List<Photo>> () {
@@ -85,11 +85,10 @@ public class Photos_get extends Showcase {
 			public void onSuccess(List<Photo> result) {
 				final FlowPanel photosPanel = new FlowPanel ();
 				
-				photosPanel.add ( new HTML ( "<h1> Photos of " + new FbName ( new Long ( uid ) ).toString() + "</h1> ") );
 				photosPanel.getElement().setId ( "photosPanel");
 				resultWrapper.clear ();
 				
-				resultWrapper.add ( new HTML ( "Photos size: " + result.size() ) );
+				resultWrapper.add ( new HTML ( "<h4>Photos size: " + result.size() + "</h4>" ) );
 				
 				for ( Photo p : result ) {
 					

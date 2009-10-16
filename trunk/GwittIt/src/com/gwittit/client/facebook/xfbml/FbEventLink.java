@@ -8,6 +8,10 @@ import com.google.gwt.user.client.ui.ComplexPanel;
  *
  * @see http://wiki.developers.facebook.com/index.php/Fb:eventlink
  *
+ *  CSS Configuration
+ *  <ul>
+ *      <li>.gwittit-FbEventLink
+ *  </ul>
  */
 public class FbEventLink extends ComplexPanel {
 	
@@ -18,6 +22,8 @@ public class FbEventLink extends ComplexPanel {
 	public FbEventLink ( Long eid ) {
 		super.setElement(DOM.createElement( "fb:eventlink" ) );
 		getElement().setAttribute("eid",eid+"");
+		
+		super.addStyleName ( "gwittit-FbEventLink" );
 	}
 
 	
