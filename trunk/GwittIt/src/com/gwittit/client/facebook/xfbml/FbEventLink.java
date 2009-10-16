@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 /**
  * Prints the specified event name and formats it as a link to the event's page. 
  *
- * @see http://wiki.developers.facebook.com/index.php/Fb:eventlink
+ * See http://wiki.developers.facebook.com/index.php/Fb:eventlink
  *
  *  CSS Configuration
  *  <ul>
