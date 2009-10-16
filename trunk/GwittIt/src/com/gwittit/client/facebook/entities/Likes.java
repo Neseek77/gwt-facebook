@@ -6,15 +6,15 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwittit.client.ui.ProfilePicsPanel;
 
 /**
  * @see http://wiki.developers.facebook.com/index.php/Stream_%28FQL%29
  * @author olamar72
- * TODO: Let this class extend JavaScriptObject
+ * TODO: This class needs a rewrite,  extend JavaScriptObject
  */
 public class Likes {
 
@@ -53,33 +53,7 @@ public class Likes {
 		
 	}
 
-	/**
-	 * Create a default widget. This should of course be customized.
-	 */
-	public Widget createWidget () {
-		SimplePanel pnl = new SimplePanel ();
-		pnl.addStyleName("gwittit-Likes");
 
-		String txt = null;
-		if ( isUserLikes() && getCountExcludeUser() == 0 ) {
-			txt = "You like this";
-		}
-
-		else if ( isUserLikes() && getCountExcludeUser() > 0 ) {
-			txt = "You and " + getCountExcludeUser() + " people likes this ";
-		}
-		else if ( getCount() > 0 ) {
-			txt = getCount() + " people likes this";
-		}
-
-		if ( txt != null ) {
-			HTML h = new HTML ( txt );
-			pnl.setWidget(h);
-			return pnl;
-		}
-		
-		return null;
-	}
 	
 	/**
 	 * Create a new instance, parse the json value

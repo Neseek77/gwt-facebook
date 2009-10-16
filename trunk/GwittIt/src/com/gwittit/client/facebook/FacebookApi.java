@@ -1828,7 +1828,7 @@ public class FacebookApi {
 
         callMethod ( method, params, new Callback<JavaScriptObject> ( callback ) {
             public void onSuccess(JavaScriptObject jso) {
-                T entity = jso.cast ();
+                T entity = (T)jso.cast ();
                 callback.onSuccess ( entity );
             }
         } );
