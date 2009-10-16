@@ -6,6 +6,11 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 /**
  * Prints the specified group name and formats it as a link to the group's page. 
  * @see http://wiki.developers.facebook.com/index.php/Fb:grouplink
+ * 
+ * CSS Configuration
+ * <ul>
+ *  <li>.gwittit-FbGroupLink
+ * </ul>
  */
 public class FbGroupLink extends ComplexPanel {
 
@@ -16,5 +21,6 @@ public class FbGroupLink extends ComplexPanel {
 	public FbGroupLink ( Long gid ) {
 		super.setElement( DOM.createElement("fb:grouplink") );
 		getElement().setAttribute("gid", gid+"");
+		addStyleName ( "gwittit-FbGroupLink" );
 	}
 }

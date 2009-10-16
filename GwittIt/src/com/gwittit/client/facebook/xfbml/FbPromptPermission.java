@@ -8,9 +8,10 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Renders fb:prompt-permission tag
  * 
- * Style gwittit-FbPromptPermission
- * 
- * @author ola
+ * CSS Configuration
+ * <ul>
+ *   <li>.gwittit-FbPromptPermission
+ * </ul>
  *
  */
 public class FbPromptPermission extends ComplexPanel {

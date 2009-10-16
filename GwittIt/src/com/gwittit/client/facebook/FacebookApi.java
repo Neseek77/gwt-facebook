@@ -1148,7 +1148,7 @@ public class FacebookApi {
      * Valid params for method <code>photos.get</code>
      */
     public enum PhotosGetParams {
-        uid, session_key, subj_id, aid, pids
+       subj_id, aid, pids
     }
 
     /**

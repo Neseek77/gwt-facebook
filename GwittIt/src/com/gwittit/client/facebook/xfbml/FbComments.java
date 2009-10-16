@@ -7,7 +7,11 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 /**
  * Generates a fb:comment tag
  * 
- * Style gwittit-FbComments
+ * CSS Configuration
+ * 
+ * <ul>
+ *  <li>gwittit-FbComments
+ * </ul>
  *
  */
 public class FbComments extends ComplexPanel {

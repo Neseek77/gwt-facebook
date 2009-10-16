@@ -9,6 +9,11 @@ import com.google.gwt.user.client.ui.ComplexPanel;
  * 
  * Note: If you have an IFrame application, you can render the Live Stream Box
  * in an <iframe> tag. See Live Stream Box for details.
+ * 
+ * CSS Configuration:
+ * <ul>
+ *  <li>gwittit-FbLiveStream
+ * </ul>
  */
 public class FbLiveStream extends ComplexPanel {
 

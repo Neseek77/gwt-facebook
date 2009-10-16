@@ -6,7 +6,10 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Renders a fb:photo tag.
  * 
- * Customizable with style "gwittit-FbPhoto"
+ * CSS Configuration
+ * <ul>
+ *  <li> .gwittit-FbPhoto
+ *  </ul>
  */
 public class FbPhoto extends Widget  {
 	

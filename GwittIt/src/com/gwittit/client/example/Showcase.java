@@ -14,7 +14,7 @@ import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookException;
-import com.gwittit.client.ui.ErrorResponseUI;
+import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
 /**
  * Core class for examples. 

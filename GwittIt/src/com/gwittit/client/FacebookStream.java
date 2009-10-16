@@ -20,8 +20,8 @@ import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookApi.StreamGetParams;
 import com.gwittit.client.facebook.entities.Stream;
+import com.gwittit.client.facebook.ui.StreamUi;
 import com.gwittit.client.facebook.xfbml.Xfbml;
-import com.gwittit.client.ui.StreamUi;
 
 /**
  * Display facebook stream

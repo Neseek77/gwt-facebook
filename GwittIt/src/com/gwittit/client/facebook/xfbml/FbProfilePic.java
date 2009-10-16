@@ -35,8 +35,11 @@ import com.google.gwt.user.client.ui.Widget;
  *            it returns the Facebook favicon image, which gets overlaid on top
  *            of the user's profile picture on a site.
  * 
- *            CSS gwittit-FbProfilePic
  * 
+ * CSS Configuration
+ * <ul>
+ *  <li>.gwittit-FbProfilePic
+ * </ul>
  * </pre>
  * @author ola
  * 

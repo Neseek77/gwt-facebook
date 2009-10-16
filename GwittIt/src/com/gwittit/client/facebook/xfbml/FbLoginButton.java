@@ -8,7 +8,10 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Renders a <fb:login> tag.
  * 
- * Style gwittit-FbLoginButton
+ * CSS Configuration
+ * <ul>
+ *  <li>gwittit-FbLoginButton
+ * </ul>
  */
 public class FbLoginButton extends Widget {
 
