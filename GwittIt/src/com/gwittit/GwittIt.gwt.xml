@@ -20,6 +20,6 @@
   <inherits name="com.google.gwt.user.Debug"/>
 
   <stylesheet src="../GwittIt.css"/>
-  <stylesheet src="../GwittItWidgets.css"/>
+  <stylesheet src="../GwtFacebook.css"/>
  
  </module>
