@@ -54,8 +54,8 @@
 ||friends.getAppUsers|| YES || 1.0 ||
 ||friends.getLists|| YES || 1.0 ||
 ||friends.getMutualFriends|| YES || 1.0 ||
-||groups.get||  ||
-||groups.getMembers||  ||
+||groups.get|| YES  || 1.0 ||
+||groups.getMembers|| YES || 1.0 ||
 ||intl.getTranslations||  ||
 ||intl.uploadNativeStrings||  ||
 ||links.get||  ||
