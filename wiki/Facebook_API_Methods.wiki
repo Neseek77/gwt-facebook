@@ -12,6 +12,7 @@ http://wiki.developers.facebook.com/index.php/API
 ----
 
 ||*Method*                  ||*Implemented* ||
+<wiki:comment>
 ||admin.banUsers   || NO  ||
 ||admin.unbanUsers || NO  ||
 ||admin.getAllocation || NO  || 
