@@ -12,6 +12,7 @@ http://wiki.developers.facebook.com/index.php/API
 ----
 
 ||*Method*                  ||*Implemented* || *JS* || *REST* ||
+<!--
 ||admin.banUsers   || NO  || NO || YES ||
 ||admin.unbanUsers || NO  || NO || YES ||
 ||admin.getAllocation || NO  || NO || YES ||
@@ -29,6 +30,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||auth.revokeAuthorization   || NO  || NO || YES ||
 ||auth.revokeExtendedPermission  || NO  || NO || YES ||
 ||batch.run||  ||
+-->
 ||comments.add|| YES || NO || YES ||
 ||comments.get|| YES || NO || YES ||
 ||comments.remove|| YES ||  NO || YES ||
