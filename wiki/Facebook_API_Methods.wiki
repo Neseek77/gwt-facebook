@@ -12,8 +12,8 @@ http://wiki.developers.facebook.com/index.php/API
 ----
 
 ||*Method*                  ||*Implemented*||*Version*|| JS || REST ||
-||admin.banUsers   || NO || || NO || YES ||
-||admin.unbanUsers || NO || || NO || YES ||
+||admin.banUsers   || (V) || || NO || YES ||
+||admin.unbanUsers || V || || NO || YES ||
 ||admin.getAllocation || NO || || NO || YES ||
 ||admin.getAppProperties || NO || || NO || YES ||
 ||admin.getBannedUsers|| NO || || NO || YES ||
