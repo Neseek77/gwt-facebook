@@ -28,21 +28,21 @@ http://wiki.developers.facebook.com/index.php/API
 ||auth.promoteSession   || NO || || NO || YES ||
 ||auth.revokeAuthorization   || NO || || NO || YES ||
 ||auth.revokeExtendedPermission  || NO || || NO || YES ||
-||batch.run||  || 2.0 ||
-||comments.add|| YES || 1.0 ||
-||comments.get|| YES || 1.0 ||
-||comments.remove|| YES || 1.0 ||
+||batch.run||  ||
+||comments.add|| YES || 
+||comments.get|| YES ||
+||comments.remove|| YES || 
 ||connect.getUnconnectedFriendsCount||  ||
 ||connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
-||data.getCookies|| YES || 1.0 ||
-||data.setCookie|| YES || 1.0 ||
-||events.cancel|| YES || 1.0 ||
-||events.create|| YES || 1.0 || UTC time must be tested ||
-||events.edit||  || 1.0 ||
-||events.get|| YES || 1.0 ||
-||events.getMembers|| YES || 1.0 ||
-||events.rsvp||  || 1.0 ||
+||data.getCookies|| YES ||
+||data.setCookie|| YES ||
+||events.cancel|| YES || 
+||events.create|| YES || 
+||events.edit||  || 
+||events.get|| YES || 
+||events.getMembers|| YES || 
+||events.rsvp||  ||
 ||fbml.deleteCustomTags||  ||
 ||fbml.getCustomTags||  ||
 ||fbml.refreshImgSrc||  ||
@@ -56,14 +56,14 @@ http://wiki.developers.facebook.com/index.php/API
 ||feed.publishUserAction||  ||
 ||feed.registerTemplateBundle||  ||
 ||fql.multiquery||  ||
-||fql.query|| YES || 1.0 ||
-||friends.areFriends|| YES || 1.0 ||
+||fql.query|| YES || 
+||friends.areFriends|| YES || 
 ||friends.get|| YES || 1.0 ||
-||friends.getAppUsers|| YES || 1.0 ||
-||friends.getLists|| YES || 1.0 ||
-||friends.getMutualFriends|| YES || 1.0 ||
-||groups.get|| YES  || 1.0 ||
-||groups.getMembers|| YES || 1.0 ||
+||friends.getAppUsers|| YES || 
+||friends.getLists|| YES || 
+||friends.getMutualFriends|| YES ||
+||groups.get|| YES  || 
+||groups.getMembers|| YES || 
 ||intl.getTranslations||  ||
 ||intl.uploadNativeStrings||  ||
 ||links.get||  ||
@@ -74,21 +74,21 @@ http://wiki.developers.facebook.com/index.php/API
 ||notes.delete||  ||
 ||notes.edit||  ||
 ||notes.get||  ||
-||notifications.get|| YES || 1.0 ||
-||notifications.getList|| YES || 1.0 ||
-||notifications.markRead|| YES || 1.0 ||
-||notifications.send|| YES || 1.0 ||
-||notifications.sendEmail||  || 1.0 ||
+||notifications.get|| YES || 
+||notifications.getList|| YES || 
+||notifications.markRead|| YES || 
+||notifications.send|| YES || 
+||notifications.sendEmail||  || 
 ||pages.getInfo||  ||
 ||pages.isAdmin||  ||
 ||pages.isAppAdded||  ||
 ||pages.isFan||  ||
-||photos.addTag||  || 2.0 ||
-||photos.createAlbum|| YES || 1.0 ||
-||photos.getTags||   || 1.0 ||
-||photos.upload||  || 1.0 ||
-||photos.getAlbums|| YES || 1.0 ||
-||photos.get|| YES || 1.0 ||
+||photos.addTag||  || 
+||photos.createAlbum|| YES ||
+||photos.getTags||   || 
+||photos.upload||  ||
+||photos.getAlbums|| YES || 
+||photos.get|| YES || 
 ||profile.getFBML||  ||
 ||profile.getInfo||  ||
 ||profile.getInfoOptions||  ||
@@ -97,23 +97,23 @@ http://wiki.developers.facebook.com/index.php/API
 ||profile.setInfoOptions||  ||
 ||sms.canSend||  ||
 ||sms.send||  ||
-||status.set|| YES || 1.0 ||
-||status.get|| YES || 1.0 ||
-||stream.addComment|| YES || 1.0 ||
-||stream.addLike|| YES || 1.0 ||
-||stream.get|| YES  || 1.0 ||
-||stream.getComments|| YES || 1.0 ||
-||stream.getFilters|| YES || 1.0 ||
+||status.set|| YES || 
+||status.get|| YES || 
+||stream.addComment|| YES ||
+||stream.addLike|| YES || 
+||stream.get|| YES  || 
+||stream.getComments|| YES ||
+||stream.getFilters|| YES || 
 ||stream.publish||  ||
-||stream.remove|| YES || 1.0 ||
-||stream.removeComment|| YES || 1.0 ||
-||stream.removeLike|| YES || 1.0 ||
+||stream.remove|| YES || 
+||stream.removeComment|| YES || 
+||stream.removeLike|| YES || 
 ||users.getInfo||  ||
 ||users.getLoggedInUser||  ||
 ||users.getStandardInfo||  ||
 ||users.hasAppPermission||  ||
 ||users.isAppUser||  ||
 ||users.isVerified||  ||
-||users.setStatus|| YES  || 1.0 ||
+||users.setStatus|| YES  ||
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
