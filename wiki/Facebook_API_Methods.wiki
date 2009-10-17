@@ -11,6 +11,7 @@ http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
 http://wiki.developers.facebook.com/index.php/API
 ----
 
+|| *Method* || *Implemented* ||
 
 <wiki:comment>
 ||admin.banUsers   || NO  ||
@@ -30,7 +31,6 @@ http://wiki.developers.facebook.com/index.php/API
 ||auth.revokeAuthorization   || NO  || 
 ||auth.revokeExtendedPermission  || NO  || 
 </wiki:comment>
-|| *Method* || *Implemented* ||
 ||batch.run||  ||
 ||comments.add|| YES || 
 ||comments.get|| YES || 
