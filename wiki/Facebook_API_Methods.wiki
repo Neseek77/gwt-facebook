@@ -11,23 +11,23 @@ http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
 http://wiki.developers.facebook.com/index.php/API
 ----
 
-||*Method*                  ||*Implemented*||*Version*|| Callable from Javascript API ||
-||admin.banUsers   || NO || || NO ||
-||admin.unbanUsers || NO || || NO ||
-||admin.getAllocation || NO || || NO ||
-||admin.getAppProperties || NO || || NO ||
-||admin.getBannedUsers|| NO || || NO ||
-||admin.getMetrics|| NO || || NO ||
-||admin.getRestrictionInfo|| NO || || NO |||
-||admin.setAppProperties || NO || || NO ||
-||admin.setRestrictionInfo || NO || || NO ||
-||application.getPublicInfo || NO || || NO || 
-||auth.createToken   || NO || || NO ||
-||auth.expireSession || NO || || NO ||
-||auth.getSession     || NO || || NO ||
-||auth.promoteSession   || NO || || NO ||
-||auth.revokeAuthorization   || NO || || NO ||
-||auth.revokeExtendedPermission  || NO || || NO ||
+||*Method*                  ||*Implemented*||*Version*|| JS || REST ||
+||admin.banUsers   || NO || || NO || YES ||
+||admin.unbanUsers || NO || || NO || YES ||
+||admin.getAllocation || NO || || NO || YES ||
+||admin.getAppProperties || NO || || NO || YES ||
+||admin.getBannedUsers|| NO || || NO || YES ||
+||admin.getMetrics|| NO || || NO || YES ||
+||admin.getRestrictionInfo|| NO || || NO ||| YES ||
+||admin.setAppProperties || NO || || NO || YES ||
+||admin.setRestrictionInfo || NO || || NO || YES ||
+||application.getPublicInfo || NO || || NO ||  YES ||
+||auth.createToken   || NO || || NO || YES ||
+||auth.expireSession || NO || || NO || YES ||
+||auth.getSession     || NO || || NO || YES ||
+||auth.promoteSession   || NO || || NO || YES ||
+||auth.revokeAuthorization   || NO || || NO || YES ||
+||auth.revokeExtendedPermission  || NO || || NO || YES ||
 ||batch.run||  || 2.0 ||
 ||comments.add|| YES || 1.0 ||
 ||comments.get|| YES || 1.0 ||
