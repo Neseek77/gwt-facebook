@@ -13,40 +13,40 @@ http://wiki.developers.facebook.com/index.php/API
 
 ||*Method*                  ||*Implemented* || *JS* || *REST* ||
 <wiki:comment>
-||admin.banUsers   || NO  || NO || YES ||
-||admin.unbanUsers || NO  || NO || YES ||
-||admin.getAllocation || NO  || NO || YES ||
-||admin.getAppProperties || NO  || NO || YES ||
-||admin.getBannedUsers|| NO ||  NO || YES ||
-||admin.getMetrics|| NO || NO || YES ||
-||admin.getRestrictionInfo|| NO  || NO ||| YES ||
-||admin.setAppProperties || NO  || NO || YES ||
-||admin.setRestrictionInfo || NO  || NO || YES ||
-||application.getPublicInfo || NO  || NO ||  YES ||
-||auth.createToken   || NO || NO || YES ||
-||auth.expireSession || NO ||  NO || YES ||
-||auth.getSession     || NO || NO || YES ||
-||auth.promoteSession   || NO || NO || YES ||
-||auth.revokeAuthorization   || NO  || NO || YES ||
-||auth.revokeExtendedPermission  || NO  || NO || YES ||
+||admin.banUsers   || NO  ||
+||admin.unbanUsers || NO  ||
+||admin.getAllocation || NO  || 
+||admin.getAppProperties || NO  || 
+||admin.getBannedUsers|| NO ||
+||admin.getMetrics|| NO ||
+|admin.getRestrictionInfo|| NO  ||
+||admin.setAppProperties || NO  ||
+||admin.setRestrictionInfo || NO  || 
+||application.getPublicInfo || NO  ||
+||auth.createToken   || NO ||
+||auth.expireSession || NO ||
+||auth.getSession     || NO ||
+||auth.promoteSession   || NO ||
+||auth.revokeAuthorization   || NO  || 
+||auth.revokeExtendedPermission  || NO  || 
 </wiki:comment>
 ||batch.run||  ||
-||comments.add|| YES || NO || YES ||
-||comments.get|| YES || NO || YES ||
-||comments.remove|| YES ||  NO || YES ||
+||comments.add|| YES || 
+||comments.get|| YES || 
+||comments.remove|| YES || 
 ||connect.getUnconnectedFriendsCount||  ||
 <wiki:comment>|
 |connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
 </wiki:comment>
-||data.getCookies|| YES || NO || YES ||
-||data.setCookie|| YES || NO || YES ||
-||events.cancel|| YES || NO || YES ||
-||events.create|| YES || YES || YES ||
-||events.edit||  || NO || YES ||
-||events.get|| YES || YES || YES ||
-||events.getMembers|| YES || YES || YES
-||events.rsvp||  || YES || YES
+||data.getCookies|| YES || 
+||data.setCookie|| YES || 
+||events.cancel|| YES ||
+||events.create|| YES || 
+||events.edit||  || NO || 
+||events.get|| YES || 
+||events.getMembers|| YES ||
+||events.rsvp||  || YES || 
 ||fbml.deleteCustomTags||  ||
 ||fbml.getCustomTags||  ||
 ||fbml.refreshImgSrc||  ||
@@ -111,15 +111,15 @@ http://wiki.developers.facebook.com/index.php/API
 ||stream.getComments|| YES ||
 ||stream.getFilters|| YES || 
 ||stream.publish||  ||
-||stream.remove|| YES || || NO || YES ||
-||stream.removeComment|| YES || NO || YES  ||
-||stream.removeLike|| YES || NO || YES ||
+||stream.remove|| YES || 
+||stream.removeComment|| YES ||
+||stream.removeLike|| YES || 
 ||users.getInfo||  || 
 ||users.getLoggedInUser||  ||
 ||users.getStandardInfo||  ||
 ||users.hasAppPermission||  ||
 ||users.isAppUser||  ||
 ||users.isVerified||  ||
-||users.setStatus|| YES  || YES || YES  ||
+||users.setStatus|| YES  || 
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
