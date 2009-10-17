@@ -29,9 +29,9 @@ http://wiki.developers.facebook.com/index.php/API
 ||auth.revokeAuthorization   || NO  || NO || YES ||
 ||auth.revokeExtendedPermission  || NO  || NO || YES ||
 ||batch.run||  ||
-||comments.add|| YES || 
-||comments.get|| YES ||
-||comments.remove|| YES || 
+||comments.add|| YES || NO || YES
+||comments.get|| YES || NO || YES
+||comments.remove|| YES ||  NO || YES
 ||connect.getUnconnectedFriendsCount||  ||
 ||connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
@@ -105,15 +105,15 @@ http://wiki.developers.facebook.com/index.php/API
 ||stream.getComments|| YES ||
 ||stream.getFilters|| YES || 
 ||stream.publish||  ||
-||stream.remove|| YES || 
-||stream.removeComment|| YES || 
-||stream.removeLike|| YES || 
+||stream.remove|| YES || || NO || YES
+||stream.removeComment|| YES || NO || YES
+||stream.removeLike|| YES || NO || YES
 ||users.getInfo||  ||
 ||users.getLoggedInUser||  ||
 ||users.getStandardInfo||  ||
 ||users.hasAppPermission||  ||
 ||users.isAppUser||  ||
 ||users.isVerified||  ||
-||users.setStatus|| YES  ||
+||users.setStatus|| YES  || YES || YES
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
