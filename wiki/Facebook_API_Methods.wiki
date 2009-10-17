@@ -79,7 +79,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||notes.create||  ||
 ||notes.delete||  ||
 ||notes.edit||  ||
-||notes.get||  ||
+||notes.get|| YES ||
 ||notifications.get|| YES || 
 ||notifications.getList|| YES || 
 ||notifications.markRead|| YES || 
