@@ -5,6 +5,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Window;
+import com.gwittit.client.facebook.Json;
 
 /*
  * Stream Comment
@@ -24,10 +25,10 @@ public class Comment extends JavaScriptObject {
 	 * The ID of the post in the stream. 
 	 */
 	public final native String getPostId() /*-{ return this.post_id; }-*/;
-	
-	/**
-	 * The user submitting a comment. 
-	 */
+
+    /**
+     * The user submitting a comment.
+     */
 	private final native String getFromIdString() /*-{ return this.fromid + ''; }-*/;
 
 	public final Long getFromId () {
@@ -36,7 +37,7 @@ public class Comment extends JavaScriptObject {
 
 	/**
 	 * A unix timestamp associated with the creation time of a comment. 
-	private Date time;
+	 * private Date time;
      */
 	//public final native Long getTime() /*-{ alert ( this.time);  return this.time; }-*/;
 
@@ -70,9 +71,8 @@ public class Comment extends JavaScriptObject {
 	 * @return Comment object
 	 */
 	public final static Comment createComment ( String xid, String comment ) {
-	    JSONObject j = new JSONObject ();
-	    j.put ( "xid", new JSONString ( xid ) );
-	    j.put ( "comment", new JSONString ( comment ) );
+	    Json j = Json.newInstance ();
+	    j.put ( "xid", xid ).put ( "comment", comment );
 	    return fromJson ( j.toString () );
 	}
 	
