@@ -35,26 +35,30 @@ http://wiki.developers.facebook.com/index.php/API
 ||comments.get|| YES || NO || YES ||
 ||comments.remove|| YES ||  NO || YES ||
 ||connect.getUnconnectedFriendsCount||  ||
-||connect.registerUsers||  ||
+<wiki:comment>|
+|connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
-||data.getCookies|| YES ||
-||data.setCookie|| YES ||
-||events.cancel|| YES || 
-||events.create|| YES || 
-||events.edit||  || 
-||events.get|| YES || 
-||events.getMembers|| YES || 
-||events.rsvp||  ||
+</wiki:comment>
+||data.getCookies|| YES || NO || YES ||
+||data.setCookie|| YES || NO || YES ||
+||events.cancel|| YES || NO || YES ||
+||events.create|| YES || YES || YES ||
+||events.edit||  || NO || YES ||
+||events.get|| YES || YES || YES ||
+||events.getMembers|| YES || YES || YES
+||events.rsvp||  || YES || YES
 ||fbml.deleteCustomTags||  ||
 ||fbml.getCustomTags||  ||
 ||fbml.refreshImgSrc||  ||
 ||fbml.refreshRefUrl||  ||
 ||fbml.registerCustomTags||  ||
 ||fbml.setRefHandle||  ||
+<wiki:comment>
 ||feed.deactivateTemplateBundleByID||  ||
 ||feed.getRegisteredTemplateBundleByID||  ||
 ||feed.getRegisteredTemplateBundles||  ||
 ||feed.publishTemplatizedAction||  ||
+</wiki:comment>
 ||feed.publishUserAction||  ||
 ||feed.registerTemplateBundle||  ||
 ||fql.multiquery||  ||
