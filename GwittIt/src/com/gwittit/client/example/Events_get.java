@@ -2,6 +2,8 @@ package com.gwittit.client.example;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -36,11 +38,60 @@ public class Events_get extends Showcase {
      */
     public Widget createWidget () {
         final VerticalPanel outer = new VerticalPanel ();
+        final VerticalPanel holder  = new VerticalPanel ();
+        final HorizontalPanel filter = new HorizontalPanel ();
+        
+        filter.setSpacing ( 10 );
+        
         outer.getElement ().setId ( "Events_get");
         outer.addStyleName ( "gwittit-Showcase-Events_get");
-        addLoader ( outer );
         
-        apiClient.events_get ( null, new AsyncCallback<List<Event>> () {
+        final ListBox listBox = new ListBox (false);
+        listBox.addItem ( "All");
+
+        for ( RsvpStatus rs : RsvpStatus.values() ) {
+            listBox.addItem ( rs.toString () );
+        }
+        
+        // Add dropdown filter
+        listBox.addChangeHandler ( new ChangeHandler() {
+            public void onChange(ChangeEvent event) {
+                int idx = listBox.getSelectedIndex ();
+                String value = listBox.getValue ( idx );
+                
+                if ( "All".equals ( value ) ) {
+                    renderEvents ( holder, null );
+                } else {
+                    renderEvents ( holder, RsvpStatus.valueOf ( value   ) );
+                }
+            }
+            
+        });
+            
+        filter.add ( new HTML ( "Filter By: " ) );
+        filter.add ( listBox );
+        
+        outer.add ( filter );
+        outer.add ( holder );
+        
+        renderEvents ( holder, null );
+        return outer;
+    }
+    
+    
+    /**
+     * Render events based on rsvpstatus 
+     */
+    public void renderEvents ( final VerticalPanel outer , RsvpStatus status ) {
+        
+        outer.clear ();
+        
+        addLoader ( outer );
+  
+        // Create a filter used in the query
+        Event eventFilter = Event.createFilter ( null, null, null, null, status  );
+        // Call facebook
+        apiClient.events_get ( eventFilter, new AsyncCallback<List<Event>> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
@@ -63,8 +114,9 @@ public class Events_get extends Showcase {
                 Xfbml.parse ( outer );
             }
         });
-        return outer;
+            
     }
+    
     
     /**
      * Let user respond to this event.
@@ -91,7 +143,6 @@ public class Events_get extends Showcase {
         
         
         go.addClickHandler ( new ClickHandler() {
-
             public void onClick(ClickEvent event) {
                 
                 final String status = listBox.getValue (  listBox.getSelectedIndex () );

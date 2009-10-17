@@ -1,19 +1,13 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.Config;
 import com.gwittit.client.UserInfo;
-import com.gwittit.client.facebook.ApiFactory;
-import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.FacebookApi.FriendsAreFriendsParams;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -37,11 +31,17 @@ public class Friends_areFriends extends Showcase {
 			final VerticalPanel result = new VerticalPanel ();
 			result.getElement().setId ( "friendsAreFriendsResult" );
 			
-			Map<Enum<FriendsAreFriendsParams>,String> params = new HashMap<Enum<FriendsAreFriendsParams>,String> ();
-			params.put ( FriendsAreFriendsParams.uids1, UserInfo.getUid()+",751836969,708775201");
-			params.put ( FriendsAreFriendsParams.uids2, "709281400,560635378,709281400");
+			List<Long> uids1 = new ArrayList<Long>();
+			uids1.add ( UserInfo.getUidLong () );
+			uids1.add ( new Long ( 751836969 ) );
+			uids1.add ( new Long ( 708775201 ) );
 			
-			apiClient.friends_areFriends(params, new AsyncCallback <List <FriendInfo>> () {
+			List<Long> uids2 = new ArrayList<Long> ();
+			uids2.add ( new Long ( 709281400 ) );
+			uids2.add ( new Long ( 560635378 ) );
+			uids2.add ( new Long ( 709281400 ) );
+			
+			apiClient.friends_areFriends(uids1, uids2, new AsyncCallback <List <FriendInfo>> () {
 				public void onFailure(Throwable caught) {
 				    handleFailure ( caught );
 				}

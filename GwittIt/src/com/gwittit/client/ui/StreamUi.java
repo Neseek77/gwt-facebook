@@ -27,10 +27,6 @@ import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookApi.Permission;
-import com.gwittit.client.facebook.FacebookApi.StreamAddCommentParams;
-import com.gwittit.client.facebook.FacebookApi.StreamGetCommentsParams;
-import com.gwittit.client.facebook.FacebookApi.StreamLikeParams;
-import com.gwittit.client.facebook.FacebookApi.StreamRemoveParams;
 import com.gwittit.client.facebook.entities.Attachment;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Comments;
@@ -262,12 +258,7 @@ public class StreamUi extends Composite implements ClickHandler {
 		commentBox.addClickHandler ( new ClickHandler () {
 
 			public void onClick(ClickEvent event) {
-								
-				Map<Enum<StreamAddCommentParams>,String> params = new HashMap<Enum<StreamAddCommentParams>,String> ();
-				params.put ( StreamAddCommentParams.post_id, stream.getPostId() );
-				params.put ( StreamAddCommentParams.comment, commentBox.getText() ); 
-				
-				apiClient.stream_addComment ( params, new AsyncCallback<JavaScriptObject> () {
+				apiClient.stream_addComment ( stream.getPostId (), commentBox.getText (), new AsyncCallback<JavaScriptObject> () {
 					public void onFailure(Throwable t) {
 						Window.alert ( "Failed to set comment" );
 					}
@@ -381,13 +372,10 @@ public class StreamUi extends Composite implements ClickHandler {
 
 		final Image load = new Image ( "loader.gif");
 		commentListPnl.add ( load );
-		Map<Enum<StreamGetCommentsParams>,String> params = new HashMap<Enum<StreamGetCommentsParams>, String> ();
-		params.put( StreamGetCommentsParams.post_id, stream.getPostId());
-	
-		apiClient.stream_getComments(params,  new AsyncCallback<List<Comment>> () {
+
+		// Call Facebook
+		apiClient.stream_getComments( stream.getPostId (),  new AsyncCallback<List<Comment>> () {
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			public void onSuccess(List<Comment> result) {
@@ -472,10 +460,8 @@ public class StreamUi extends Composite implements ClickHandler {
 	}
 
 	private void removeLike(final Stream stream, final Anchor clickedLink) {
-		Map<Enum<StreamLikeParams>, String> params = new HashMap<Enum<StreamLikeParams>, String>();
-		params.put(StreamLikeParams.post_id, stream.getPostId());
-		
-		apiClient.stream_removeLike(params, new AsyncCallback<JavaScriptObject>() {
+	
+		apiClient.stream_removeLike( stream.getPostId (), new AsyncCallback<JavaScriptObject>() {
 			public void onFailure(Throwable t) {
 				Window.alert("Failed to remove like");
 			}
@@ -487,10 +473,8 @@ public class StreamUi extends Composite implements ClickHandler {
 	}
 
 	private void addLike(final Stream stream, final Anchor clickedLink) {
-		Map<Enum<StreamLikeParams>, String> params = new HashMap<Enum<StreamLikeParams>, String>();
-		params.put( StreamLikeParams.post_id, stream.getPostId() );
 
-		apiClient.stream_addLike(params, new AsyncCallback<JavaScriptObject>() {
+		apiClient.stream_addLike( stream.getPostId(), new AsyncCallback<JavaScriptObject>() {
 			public void onFailure ( Throwable t ) {
 				Window.alert("Failed to add like");
 			}
@@ -507,11 +491,8 @@ public class StreamUi extends Composite implements ClickHandler {
 		if ( clicked == removeStreamLink ) {
 			inner.remove( removeStreamLink );
 			inner.add( loader );
-			
-			Map<Enum<StreamRemoveParams>,String> params = new HashMap<Enum<StreamRemoveParams>,String> ();
-			params.put( StreamRemoveParams.post_id, stream.getPostId() );
 		
-			apiClient.stream_remove(params, new AsyncCallback<JavaScriptObject> () {
+			apiClient.stream_remove( stream.getPostId (), new AsyncCallback<JavaScriptObject> () {
 				public void onFailure(Throwable caught) {
 					Window.alert( StreamUi.class + ": Failed " + caught );
 				}

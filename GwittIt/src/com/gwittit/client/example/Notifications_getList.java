@@ -1,8 +1,6 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -12,8 +10,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.facebook.FacebookApi.NotificationsGetListParams;
-import com.gwittit.client.facebook.FacebookApi.NotificationsMarkReadParams;
 import com.gwittit.client.facebook.entities.Notification;
 
 /**
@@ -34,11 +30,9 @@ public class Notifications_getList extends Showcase {
 		
 		addLoader ( outer );
 		
-		Map<Enum<NotificationsGetListParams>,String> params = new HashMap<Enum<NotificationsGetListParams>,String> ();
-		params.put(NotificationsGetListParams.include_read, "true");
 
 		// Get facebook data
-		apiClient.notifications_getList(params, new AsyncCallback<List<Notification>> () {
+		apiClient.notifications_getList( null, null, new AsyncCallback<List<Notification>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
@@ -81,11 +75,8 @@ public class Notifications_getList extends Showcase {
 	 */
 	private void markRead ( final Long nid ) {
 	
-		Map<Enum<NotificationsMarkReadParams>,String> params = new HashMap<Enum<NotificationsMarkReadParams>,String> ();
-		params.put( NotificationsMarkReadParams.notification_ids, nid+"");
-		
 		// Mark notification as read.
-		apiClient.notifications_markRead(params, new AsyncCallback<Boolean> () {
+		apiClient.notifications_markRead( nid, new AsyncCallback<Boolean> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}

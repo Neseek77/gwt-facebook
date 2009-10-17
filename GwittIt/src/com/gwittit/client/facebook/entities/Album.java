@@ -1,6 +1,9 @@
 package com.gwittit.client.facebook.entities;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.gwittit.client.facebook.Json;
 
 /**
  * Photo Album
@@ -8,6 +11,8 @@ import com.google.gwt.core.client.JavaScriptObject;
  */
 public class Album extends JavaScriptObject {
 	
+    public enum Visibility { friends, friends_of_friends, networks, everyone }
+    
     protected Album () { }
     
     /**
@@ -68,4 +73,19 @@ public class Album extends JavaScriptObject {
 	 */
 	public final native String getLink () /*-{ return this.link; }-*/;
 	
+	/**
+	 * name, location, description, visible    
+     *
+	 * @return
+	 */
+	public final static Album createAlbum ( String name, String location, String description, Visibility v  ) {
+	    Json j = Json.newInstance ();
+	    j.put ("name", name ).
+	      put ( "location", location ).
+	      put ( "description", description ).
+	      put ( "visibility",  v.toString ().replace ( "_", "-" ) ) ;
+	    return fromJson ( j.toString () );
+	}
+	
+	public static native Album fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
 }

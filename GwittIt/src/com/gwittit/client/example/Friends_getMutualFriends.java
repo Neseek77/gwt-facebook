@@ -1,15 +1,12 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.example.FriendSelector.FriendSelectionHandler;
-import com.gwittit.client.facebook.FacebookApi.FriendsGetMutualFriendsParams;
 import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 import com.gwittit.client.facebook.xfbml.FbName;
 
@@ -40,23 +37,19 @@ public class Friends_getMutualFriends extends Showcase {
 		fs.addFriendSelectionHandler(new FriendSelectionHandler () {
 
 			// Check if current logged in user has common friends with selected.
-			public void onSelected(final Long uid) {
+			public void onSelected( final Long targetUid ) {
 				
 				mutualFriends.clear();
 				addLoader ( mutualFriends);
 				
-				Map<Enum<FriendsGetMutualFriendsParams>,String> params =new HashMap<Enum<FriendsGetMutualFriendsParams>,String> ();
-				params.put( FriendsGetMutualFriendsParams.target_uid, "" + uid );
-				
-				apiClient.friends_getMutualFriends(params, new AsyncCallback<List<Long>> () {
-
+				// Call facebook
+				apiClient.friends_getMutualFriends( targetUid, new AsyncCallback<List<Long>> () {
 					public void onFailure(Throwable caught) {
 						handleFailure ( caught );
 					}
-
 					public void onSuccess(List<Long> result) {
 						removeLoader ( mutualFriends );
-						mutualFriends.add( new HTML ( "Number of mutual friends " + result.size() + " with " + new FbName ( uid ) ) );
+						mutualFriends.add( new HTML ( "Number of mutual friends " + result.size() + " with " + new FbName ( targetUid ) ) );
 						ProfilePicsPanel p = new ProfilePicsPanel ( result );
 						mutualFriends.add ( p );
 					}
