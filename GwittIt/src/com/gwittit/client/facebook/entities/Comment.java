@@ -21,6 +21,7 @@ public class Comment extends JavaScriptObject {
         return this.xid;
     }-*/;
 
+    
     /**
      * The ID of the post in the stream.
      */
@@ -28,6 +29,7 @@ public class Comment extends JavaScriptObject {
         return this.post_id;
     }-*/;
 
+    
     /**
      * The user submitting a comment.
      */
@@ -35,6 +37,10 @@ public class Comment extends JavaScriptObject {
         return this.fromid + '';
     }-*/;
 
+    
+    /**
+     * The user who added the comment.
+     */
     public final Long getFromId() {
         return new Long ( getFromIdString () );
     }
@@ -44,8 +50,9 @@ public class Comment extends JavaScriptObject {
      */
     // public final native Long getTime() /*-{ alert ( this.time); return
     // this.time; }-*/;
+
     /**
-     * The text of a comment.
+     * The text comment.
      */
     public final native String getText() /*-{
         return this.text;
