@@ -11,7 +11,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = GroupMembers.class;
+	    Class c = Note.class;
 		
 		Field fields[] = c.getFields ();
 		
