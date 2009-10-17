@@ -34,7 +34,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||comments.add|| YES || 
 ||comments.get|| YES || 
 ||comments.remove|| YES || 
-||connect.getUnconnectedFriendsCount||  ||
+||connect.getUnconnectedFriendsCount|| YES ||
 <wiki:comment>
 |connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
