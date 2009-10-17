@@ -29,6 +29,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
@@ -231,9 +232,11 @@ public class FacebookApi {
      * display a link allowing the user to invite their friends to connect as
      * well.
      * <p/>
-     * @see <a href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Connect_getUnconnectedFriendsCount">Connect_getUnconnectedFriendsCount</a>
+     * 
+     * @see <a
+     *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Connect_getUnconnectedFriendsCount">Connect_getUnconnectedFriendsCount</a>
      */
-    public void connect_getUnconnectedFriendsCount( AsyncCallback<Integer> callback ) {
+    public void connect_getUnconnectedFriendsCount(AsyncCallback<Integer> callback) {
         JavaScriptObject p = getDefaultParams ().getJavaScriptObject ();
         callMethodRetInteger ( "connect.getUnconnectedFriendsCount", p, callback );
     }
@@ -472,11 +475,28 @@ public class FacebookApi {
     }
 
     /**
-     * TODO: Implement
+     * Valid values for param rsvp_status <code>events.rsvp</code>
      */
-    public void events_rsvp(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
+    public static enum RsvpStatus {
+        attending, unsure, declined
+    }
 
+    /**
+     * Sets a user's RSVP status for an event. An application can set a user's
+     * RSVP status only if the following are all true:
+     * <ul>
+     *  <li>The application is an admin for the event. 
+     *  <li>The application has an active session for the user.
+     *  <li>The active user has granted the application the rsvp_event extended permission.
+     * </ul>
+     * 
+     * @see <a href="http://wiki.developers.facebook.com/index.php/Events.rsvp">Events.rsvp</a>
+     */
+    public void events_rsvp( Long eventId, RsvpStatus status, AsyncCallback<Boolean> callback) {
+        JSONObject o = getDefaultParams ();
+        o.put ( "eid", new JSONNumber ( eventId ) );
+        o.put ( "rsvp_status", new JSONString ( status.toString () ) );
+        callMethodRetBoolean ( "events.rsvp", o.getJavaScriptObject (), callback );
     }
 
     /**
@@ -1352,7 +1372,7 @@ public class FacebookApi {
      * Valid permissions
      */
     public enum Permission {
-        read_stream, publish_stream, create_event
+        read_stream, publish_stream, create_event,rsvp_event
     };
 
     /**
@@ -1880,11 +1900,9 @@ public class FacebookApi {
 
                 // Hackarond facebook bug, data.setCookie returns an empty
                 // object, should return 0 or 1.
-                if (method.startsWith ( "data" )) {
-                    if (new JSONObject ( response ).toString ().equals ( "{}" )) {
-                        callback.onSuccess ( true );
-                        return;
-                    }
+                if (new JSONObject ( response ).toString ().equals ( "{}" )) {
+                    callback.onSuccess ( true );
+                    return;
                 }
                 callback.onSuccess ( ("1".equals ( response.toString () ) || "true".equals ( response.toString () )) );
             }

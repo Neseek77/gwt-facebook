@@ -62,7 +62,7 @@ public class EventSelector extends Composite  {
                 for ( Event e : result ) {
                     GWT.log (  "adding " + e.getName (), null );
                     
-                    dropBox.addItem ( e.getName (), e.getEid () );
+                    dropBox.addItem ( e.getName (), e.getEidString() );
                 }
                 
                 outer.add ( dropBox );
