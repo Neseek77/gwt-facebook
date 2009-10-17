@@ -11,8 +11,8 @@ http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
 http://wiki.developers.facebook.com/index.php/API
 ----
 
-||*Method*                  ||*Implemented*||*Version*|| FB Javascript API ||
-||admin.banUsers  || NO || || NO ||
+||*Method*                  ||*Implemented*||*Version*|| Callable from Javascript API ||
+||admin.banUsers   || NO || || NO ||
 ||admin.unbanUsers || NO || || NO ||
 ||admin.getAllocation || NO || || NO ||
 ||admin.getAppProperties || NO || || NO ||
@@ -24,10 +24,10 @@ http://wiki.developers.facebook.com/index.php/API
 ||application.getPublicInfo || NO || || NO || 
 ||auth.createToken   || NO || || NO ||
 ||auth.expireSession || NO || || NO ||
-||auth.getSession    ||  || N || Desktop Only ||
-||auth.promoteSession||  || N || Desktop Only ||
-||auth.revokeAuthorization||  || N || Desktop Only ||
-||auth.revokeExtendedPermission||  || N || Desktop Only ||
+||auth.getSession     || NO || || NO ||
+||auth.promoteSession   || NO || || NO ||
+||auth.revokeAuthorization   || NO || || NO ||
+||auth.revokeExtendedPermission  || NO || || NO ||
 ||batch.run||  || 2.0 ||
 ||comments.add|| YES || 1.0 ||
 ||comments.get|| YES || 1.0 ||
