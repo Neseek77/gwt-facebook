@@ -30,7 +30,6 @@ import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookApi.Permission;
 import com.gwittit.client.facebook.FacebookApi.StatusSetParams;
-import com.gwittit.client.facebook.FacebookApi.StreamGetFiltersParams;
 import com.gwittit.client.facebook.entities.StreamFilter;
 
 
@@ -141,9 +140,8 @@ public class Frontpage  extends Composite implements ClickHandler {
 		final VerticalPanel menu = new VerticalPanel ();
 		menu.addStyleName("streamFilterMenu");
 
-		// Get all valid filter keys from facebook.
-		Map<Enum<StreamGetFiltersParams>, String> params = new HashMap<Enum<StreamGetFiltersParams>, String>();
-		apiClient.stream_getFilters(params, new AsyncCallback<List<StreamFilter>>() {
+		// Get all user filter keys from facebook.
+		apiClient.stream_getFilters( new AsyncCallback<List<StreamFilter>>() {
 
 			public void onFailure(Throwable caught) {
 				Window.alert(FacebookStream.class + ": Failure" + caught);

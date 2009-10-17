@@ -50,12 +50,10 @@ public class ShowcaseClient extends Composite  {
 	private HorizontalPanel inner = new HorizontalPanel ();
 	
 	// All methods, methods prefixed with X is ignored when creating the menu.
-	final String adminMethods = "XAdmin:admin_banUsers,admin_getAllocation,admin_getAppProperties,admin_getBannedUsers,admin_getMetrics,admin_getRestrictionInfo,admin_setAppProperties,admin_setRestrictionInfo,admin_unbanUsers";
-	final String applicationMethods = "Application:application_getPublicInfo";
 	final String authMethods = "XAuth:auth_createToken,auth_expireSession,auth_getSession,auth_promoteSession,auth_revokeAuthorization,auth_revokeExtendedPermission";
 	final String batchMethods = "XBatch:batch_run";
 	final String commentMethods = "Comments:comments_add,comments_get,Xcomments_remove";
-	final String connectMethods = "XConnect:connect_getUnconnectedFriendsCount,connect_registerUsers,connect_unregisterUsers";
+	final String connectMethods = "Connect:connect_getUnconnect...,Xconnect_registerUsers,Xconnect_unregisterUsers";
 	final String dataMethods = "Data:data_getCookies,data_setCookie";
 	final String eventMethods = "Events:Xevents_cancel,events_create,Xevents_edit,events_get,events_getMembers,Xevents_rsvp";
 	final String fbmlMethods = "XFBML:fbml_deleteCustomTags,fbml_getCustomTags,fbml_refreshImgSrc,fbml_refreshRefUrl,fbml_registerCustomTags,fbml_setRefHandle";
@@ -77,7 +75,7 @@ public class ShowcaseClient extends Composite  {
 	final String userMethods = "XUsers:users_getInfo,users_getLoggedInUser,users_getStandardInfo,users_hasAppPermission,users_isAppUser,users_isVerified,users_setStatus";
 	final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
 
-	final String[]menu = { adminMethods,applicationMethods,authMethods, batchMethods,commentMethods,connectMethods,dataMethods,eventMethods,
+	final String[]menu = { authMethods, batchMethods,commentMethods,connectMethods,dataMethods,eventMethods,
 			               fbmlMethods,feedMethods,fqlMethods,friendMethods,groupMethods,intlMethods,linkMethods,messageMethods,noteMethods,
 			               notificationMethods,pageMethods,photoMethods,profileMethods,smsMethods,statusMethods,streamMethods,userMethods,videoMethods};
 	
@@ -192,65 +190,8 @@ public class ShowcaseClient extends Composite  {
 		if ( "admin_banUsers".equals ( m ) ) { 
 		    //  example = new Admin_banUsers();
 		}
-		else if ( "admin_getAllocation".equals ( m ) ) { 
-		    //  example = new Admin_getAllocation();
-		}
-		else if ( "admin_getAppProperties".equals ( m ) ) { 
-		    //  example = new Admin_getAppProperties();
-		}
-		else if ( "admin_getBannedUsers".equals ( m ) ) { 
-		    //  example = new Admin_getBannedUsers();
-		}
-		else if ( "admin_getMetrics".equals ( m ) ) { 
-		    //  example = new Admin_getMetrics();
-		}
-		else if ( "admin_getRestrictionInfo".equals ( m ) ) { 
-		    //  example = new Admin_getRestrictionInfo();
-		}
-		else if ( "admin_setAppProperties".equals ( m ) ) { 
-		    //  example = new Admin_setAppProperties();
-		}
-		else if ( "admin_setRestrictionInfo".equals ( m ) ) { 
-		    //  example = new Admin_setRestrictionInfo();
-		}
-		else if ( "admin_unbanUsers".equals ( m ) ) { 
-		    //  example = new Admin_unbanUsers();
-		}
-		else if ( "application_getPublicInfo".equals ( m ) ) { 
-		    showcase = new Application_getPublicInfo();
-		}
-		else if ( "auth_createToken".equals ( m ) ) { 
-		    //  example = new Auth_createToken();
-		}
-		else if ( "auth_expireSession".equals ( m ) ) { 
-		    //  example = new Auth_expireSession();
-		}
-		else if ( "auth_getSession".equals ( m ) ) { 
-		    //  example = new Auth_getSession();
-		}
-		else if ( "auth_promoteSession".equals ( m ) ) { 
-		    //  example = new Auth_promoteSession();
-		}
-		else if ( "auth_revokeAuthorization".equals ( m ) ) { 
-		    //  example = new Auth_revokeAuthorization();
-		}
-		else if ( "auth_revokeExtendedPermission".equals ( m ) ) { 
-		    //  example = new Auth_revokeExtendedPermission();
-		}
 		else if ( "batch_run".equals ( m ) ) { 
 		    //  example = new Batch_run();
-		}
-		else if ( "callbackError".equals ( m ) ) { 
-		    //  example = new CallbackError();
-		}
-		else if ( "callbackSuccess".equals ( m ) ) { 
-		    //  example = new CallbackSuccess();
-		}
-		else if ( "callbackSuccessNumber".equals ( m ) ) { 
-		    //  example = new CallbackSuccessNumber();
-		}
-		else if ( "callbackSuccessString".equals ( m ) ) { 
-		    //  example = new CallbackSuccessString();
 		}
 		else if ( "comments_add".equals ( m ) ) { 
 		      showcase = new Comments_add();
@@ -261,8 +202,8 @@ public class ShowcaseClient extends Composite  {
 		else if ( "comments_remove".equals ( m ) ) { 
 		    //  example = new Comments_remove();
 		}
-		else if ( "connect_getUnconnectedFriendsCount".equals ( m ) ) { 
-		    //  example = new Connect_getUnconnectedFriendsCount();
+		else if ( "connect_getUnconnect...".equals ( m ) ) {
+		    showcase = new Connect_getUnconnectedFriendsCount();
 		}
 		else if ( "connect_registerUsers".equals ( m ) ) { 
 		    //  example = new Connect_registerUsers();
@@ -405,12 +346,6 @@ public class ShowcaseClient extends Composite  {
 		}
 		else if ( "notifications_sendEmail".equals ( m ) ) { 
 		    //  example = new Notifications_sendEmail();
-		}
-		else if ( "notify".equals ( m ) ) { 
-		    //  example = new Notify();
-		}
-		else if ( "notifyAll".equals ( m ) ) { 
-		    //  example = new NotifyAll();
 		}
 		else if ( "pages_getInfo".equals ( m ) ) { 
 		    //  example = new Pages_getInfo();

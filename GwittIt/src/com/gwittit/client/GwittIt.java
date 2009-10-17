@@ -13,7 +13,9 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -27,6 +29,7 @@ import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookApi.NotificationsSendParams;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
+import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -66,6 +69,7 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		History.addValueChangeHandler(this);
 
 		
+
 		
 		// Need this to catch the login event.
 		this.eventBus = new HandlerManager ( null );
