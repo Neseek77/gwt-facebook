@@ -11,9 +11,9 @@ http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
 http://wiki.developers.facebook.com/index.php/API
 ----
 
-||*Method*                  ||*Implemented*||*Version*|| JS || REST ||
-||admin.banUsers   || N || || NO || YES ||
-||admin.unbanUsers || N || || NO || YES ||
+||*Method*                  ||*Implemented* || *JS* || *REST* ||
+||admin.banUsers   || NO || || NO || YES ||
+||admin.unbanUsers || NO || || NO || YES ||
 ||admin.getAllocation || NO || || NO || YES ||
 ||admin.getAppProperties || NO || || NO || YES ||
 ||admin.getBannedUsers|| NO || || NO || YES ||
