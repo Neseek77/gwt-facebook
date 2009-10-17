@@ -11,7 +11,7 @@ http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
 http://wiki.developers.facebook.com/index.php/API
 ----
 
-||*Method*                  ||*Implemented* ||
+
 <wiki:comment>
 ||admin.banUsers   || NO  ||
 ||admin.unbanUsers || NO  ||
@@ -30,8 +30,8 @@ http://wiki.developers.facebook.com/index.php/API
 ||auth.revokeAuthorization   || NO  || 
 ||auth.revokeExtendedPermission  || NO  || 
 </wiki:comment>
+|| *Method* || *Implemented* ||
 ||batch.run||  ||
-
 ||comments.add|| YES || 
 ||comments.get|| YES || 
 ||comments.remove|| YES || 
@@ -40,92 +40,72 @@ http://wiki.developers.facebook.com/index.php/API
 |connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
 </wiki:comment>
-
 ||data.getCookies|| YES || 
 ||data.setCookie|| YES || 
-
 ||events.cancel|| YES ||
 ||events.create|| YES || 
 ||events.edit|| ||
 ||events.get|| YES || 
 ||events.getMembers|| YES ||
 ||events.rsvp||  ||
-
 ||fbml.deleteCustomTags||  ||
 ||fbml.getCustomTags||  ||
 ||fbml.refreshImgSrc||  ||
 ||fbml.refreshRefUrl||  ||
 ||fbml.registerCustomTags||  ||
 ||fbml.setRefHandle||  ||
-
 <wiki:comment>
 ||feed.deactivateTemplateBundleByID||  ||
 ||feed.getRegisteredTemplateBundleByID||  ||
 ||feed.getRegisteredTemplateBundles||  ||
 ||feed.publishTemplatizedAction||  ||
 </wiki:comment>
-
 ||feed.publishUserAction||  ||
 ||feed.registerTemplateBundle||  ||
-
 ||fql.multiquery||  ||
 ||fql.query|| YES || 
-
 ||friends.areFriends|| YES || 
 ||friends.get|| YES || 
 ||friends.getAppUsers|| YES || 
 ||friends.getLists|| YES || 
 ||friends.getMutualFriends|| YES ||
-
 ||groups.get|| YES  || 
 ||groups.getMembers|| YES || 
-
 ||intl.getTranslations||  ||
 ||intl.uploadNativeStrings||  ||
-
 ||links.get||  ||
 ||links.post||  ||
-
 ||liveMessage.send||  ||
-
 ||message.getThreadsInFolder||  ||
-
 ||notes.create||  ||
 ||notes.delete||  ||
 ||notes.edit||  ||
 ||notes.get||  ||
-
 ||notifications.get|| YES || 
 ||notifications.getList|| YES || 
 ||notifications.markRead|| YES || 
 ||notifications.send|| YES || 
 ||notifications.sendEmail||  || 
-
 ||pages.getInfo||  ||
 ||pages.isAdmin||  ||
 ||pages.isAppAdded||  ||
 ||pages.isFan||  ||
-
 ||photos.addTag||  || 
 ||photos.createAlbum|| YES ||
 ||photos.getTags||   || 
 ||photos.upload||  ||
 ||photos.getAlbums|| YES || 
 ||photos.get|| YES || 
-
 ||profile.getFBML||  ||
 ||profile.getInfo||  ||
 ||profile.getInfoOptions||  ||
 ||profile.setFBML||  ||
 ||profile_setInfo||  ||
 ||profile.setInfoOptions||  ||
-
 ||sms.canSend||  ||
 ||sms.send||  ||
-
 ||status.set|| YES || 
 ||status.get|| YES || 
-
 ||stream.addComment|| YES ||
 ||stream.addLike|| YES || 
 ||stream.get|| YES  || 
@@ -135,7 +115,6 @@ http://wiki.developers.facebook.com/index.php/API
 ||stream.remove|| YES || 
 ||stream.removeComment|| YES ||
 ||stream.removeLike|| YES || 
-
 ||users.getInfo||  || 
 ||users.getLoggedInUser||  ||
 ||users.getStandardInfo||  ||
@@ -143,6 +122,5 @@ http://wiki.developers.facebook.com/index.php/API
 ||users.isAppUser||  ||
 ||users.isVerified||  ||
 ||users.setStatus|| YES  || 
-
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
