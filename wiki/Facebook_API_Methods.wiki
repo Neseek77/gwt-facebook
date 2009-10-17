@@ -6,24 +6,21 @@ This is a mix of methods from the facebook javascript API and rest API.
 Some methods are only implemented in the REST Api, others only in the Javascript Api. Some are callable from javascript, others are not.
 
 ----
-
 See documentation: <br/>
 http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
-
 http://wiki.developers.facebook.com/index.php/API
+----
 
----- 
-
-||*Method*||*Implemented*||*Version*||*Info*||JavascriptAPI ||RestAPI||
-||admin.banUsers||  || 2.0 ||
-||admin.unbanUsers||  || 2.0 ||
-||admin.getAllocation||  || 2.0 ||
-||admin.getAppProperties||  || 2.0 ||
-||admin.getBannedUsers||  || 2.0 ||
-||admin.getMetrics||  || 2.0 ||
-||admin.getRestrictionInfo||  || 2.0 ||
-||admin.setAppProperties||  || 2.0 ||
-||admin.setRestrictionInfo||  || 2.0 ||
+||*Method*||*Implemented*||*Version*||*Info*||Javascript API ||Rest API||
+||admin.banUsers  || ||  ||   || NO || YES ||
+||admin.unbanUsers||  || || || NO || YES ||
+||admin.getAllocation||  ||  ||
+||admin.getAppProperties||  ||  ||
+||admin.getBannedUsers||  ||  ||
+||admin.getMetrics||  || ||
+||admin.getRestrictionInfo||  ||  ||
+||admin.setAppProperties||  ||  ||
+||admin.setRestrictionInfo||  ||  ||
 ||application.getPublicInfo|| YES || 1.0 || Unknown Method Error from Facebook|| 
 ||auth.createToken   ||  || N || Desktop Only ||
 ||auth.expireSession ||  || N || Desktop Only ||
