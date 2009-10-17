@@ -11,19 +11,19 @@ http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
 http://wiki.developers.facebook.com/index.php/API
 ----
 
-||*Method*||*Implemented*||*Version*||*Info*||Javascript API ||Rest API||
-||admin.banUsers  || ||  ||   || NO || YES ||
-||admin.unbanUsers||  || || || NO || YES ||
-||admin.getAllocation||  ||  ||
-||admin.getAppProperties||  ||  ||
-||admin.getBannedUsers||  ||  ||
-||admin.getMetrics||  || ||
-||admin.getRestrictionInfo||  ||  ||
-||admin.setAppProperties||  ||  ||
-||admin.setRestrictionInfo||  ||  ||
-||application.getPublicInfo|| YES || 1.0 || Unknown Method Error from Facebook|| 
-||auth.createToken   ||  || N || Desktop Only ||
-||auth.expireSession ||  || N || Desktop Only ||
+||*Method*                  ||*Implemented*||*Version*|| FB Javascript API ||
+||admin.banUsers  || NO || || NO ||
+||admin.unbanUsers || NO || || NO ||
+||admin.getAllocation || NO || || NO ||
+||admin.getAppProperties || NO || || NO ||
+||admin.getBannedUsers|| NO || || NO ||
+||admin.getMetrics|| NO || || NO ||
+||admin.getRestrictionInfo|| NO || || NO |||
+||admin.setAppProperties || NO || || NO ||
+||admin.setRestrictionInfo || NO || || NO ||
+||application.getPublicInfo || NO || || NO || 
+||auth.createToken   || NO || || NO ||
+||auth.expireSession || NO || || NO ||
 ||auth.getSession    ||  || N || Desktop Only ||
 ||auth.promoteSession||  || N || Desktop Only ||
 ||auth.revokeAuthorization||  || N || Desktop Only ||
