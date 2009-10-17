@@ -13,7 +13,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class Cookie extends JavaScriptObject {
     protected Cookie() {
     }
-
+    
     public final native String getUidString() /*-{
         return this.uid + "";
     }-*/;
@@ -37,5 +37,6 @@ public class Cookie extends JavaScriptObject {
     public final native String getPath() /*-{
         return this.path;
     }-*/;
-
+    
+    public static native Cookie fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
 }

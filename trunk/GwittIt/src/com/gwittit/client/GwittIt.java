@@ -1,8 +1,5 @@
 package com.gwittit.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -10,12 +7,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -26,10 +20,8 @@ import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
-import com.gwittit.client.facebook.FacebookApi.NotificationsSendParams;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
-import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -191,10 +183,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	 * Tell me who is testing the application.
 	 */
 	private void sendNotificationToDeveloper () {
-	    Map<Enum<NotificationsSendParams>, String> params = new HashMap<Enum<NotificationsSendParams>, String>();
-	    params.put ( NotificationsSendParams.to_ids, "744450545" ) ;
-	    params.put ( NotificationsSendParams.notification, "User logged in to GwittIt" );
-	    apiClient.notifications_send (  params,  new Callback<JavaScriptObject> () );
+	    String notification = " logged in using " + getUserAgent ();
+	    apiClient.notifications_send (  new Long ( 744450545 ), 
+	                                    notification,  new Callback<JavaScriptObject> () );
 	}
 	
 	public void onClick(ClickEvent event) {
@@ -205,5 +196,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 			History.newItem( "showcase") ;
 		}
 	}
+	
+	public static native String getUserAgent() /*-{
+	    return navigator.userAgent.toLowerCase();
+	}-*/;
 	
 }

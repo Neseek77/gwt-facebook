@@ -1,6 +1,8 @@
 package com.gwittit.client.example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -15,7 +17,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.facebook.FacebookApi.NotificationsSendParams;
+import com.gwittit.client.facebook.FacebookApi.NotificationType;
 
 /**
  * Showcase for <code>notifications.send</code>
@@ -59,12 +61,12 @@ public class Notifications_send extends Showcase {
      * Create a notification
      */
     private void createNotification ( String notification ) {
+  
+        List<Long> toIds = new ArrayList<Long> ();
+        toIds.add ( new Long ( 807462490 ) );
+        toIds.add ( new Long ( 744450545 ) );
         
-        Map<Enum<NotificationsSendParams>,String> params = new HashMap<Enum<NotificationsSendParams>,String> ();
-        params.put ( NotificationsSendParams.notification, notification );
-        params.put ( NotificationsSendParams.to_ids, "807462490,744450545" );
-        
-        apiClient.notifications_send ( params, new AsyncCallback<JavaScriptObject> () {
+        apiClient.notifications_send ( toIds, notification, NotificationType.defaultType, new AsyncCallback<JavaScriptObject> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }

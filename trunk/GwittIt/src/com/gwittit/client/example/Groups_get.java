@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.facebook.FacebookApi.GroupsGetMembersParams;
 import com.gwittit.client.facebook.entities.Group;
 import com.gwittit.client.facebook.entities.GroupMembers;
 import com.gwittit.client.facebook.ui.ProfilePicsPanel;
@@ -68,11 +67,8 @@ public class Groups_get extends Showcase {
     private void displayMembers ( final VerticalPanel membersWrapper, final Long gid ) {
 
         addLoader ( membersWrapper );
-        
-        Map<Enum<GroupsGetMembersParams>,String> params = new HashMap<Enum<GroupsGetMembersParams>,String> ();
-        params.put ( GroupsGetMembersParams.gid, ""+gid ); 
         // Get members in this group
-        apiClient.groups_getMembers ( params, new AsyncCallback<GroupMembers> () {
+        apiClient.groups_getMembers ( gid, new AsyncCallback<GroupMembers> () {
 
             public void onFailure(Throwable caught) {
                 Groups_get.this.handleFailure ( caught );

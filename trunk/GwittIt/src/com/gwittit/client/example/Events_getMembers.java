@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.example.EventSelector.EventSelectorHandler;
-import com.gwittit.client.facebook.FacebookApi.EventsGetMembersParams;
 import com.gwittit.client.facebook.entities.EventMembers;
 import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 
@@ -38,12 +37,10 @@ public class Events_getMembers extends Showcase {
 
                 inner.clear ();
                 
-                Map<Enum<EventsGetMembersParams>,String> params = new HashMap<Enum<EventsGetMembersParams>,String> ();
-                params.put ( EventsGetMembersParams.eid, ""+eid );
                 
                 addLoader ( inner );
                 // Get event members for selected event
-                apiClient.events_getMembers ( params, new AsyncCallback<EventMembers> () {
+                apiClient.events_getMembers ( eid, new AsyncCallback<EventMembers> () {
 
                     public void onFailure(Throwable caught) {
                         removeLoader ( inner );

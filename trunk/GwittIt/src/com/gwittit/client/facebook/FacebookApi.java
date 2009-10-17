@@ -2,24 +2,24 @@ package com.gwittit.client.facebook;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.  
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.  
  */
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +27,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayNumber;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
@@ -37,7 +35,6 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
-import com.gwittit.client.facebook.entities.ApplicationPublicInfo;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Cookie;
 import com.gwittit.client.facebook.entities.ErrorResponse;
@@ -92,12 +89,6 @@ public class FacebookApi {
         return Cookies.getCookie ( apiKey + "_user" );
     }
 
-    /**
-     * Valid params for method <code>comments.add</code>
-     */
-    public enum CommentsAddParams {
-        uid, xid, text, title, url, publish_to_stream
-    }
 
     /**
      * This method adds a comment to an xid on behalf of a user. This
@@ -138,16 +129,8 @@ public class FacebookApi {
      *      href="http://wiki.developers.facebook.com/index.php/Comments.add">Comments.add</a>
      * 
      */
-    public void comments_add(Map<Enum<CommentsAddParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( CommentsAddParams.values (), params );
-        callMethod ( "comments.add", p, callback );
-    }
-
-    /**
-     * Valid params for method <code>comments.get</code>
-     */
-    public enum CommentsGetParams {
-        uid, session_key, xid
+    public void comments_add( Comment comment , AsyncCallback<JavaScriptObject> callback) {
+        callMethod ( "comments.add", comment, callback );
     }
 
     /**
@@ -173,14 +156,14 @@ public class FacebookApi {
      *      href="http://wiki.developers.facebook.com/index.php/Comments.get">Facebook
      *      Comments.get</a>
      */
-    public void comments_get(Map<Enum<CommentsGetParams>, String> params, final AsyncCallback<List<Comment>> callback) {
+    public void comments_get(String xid, final AsyncCallback<List<Comment>> callback) {
         // Facebook Bug
         // JavaScriptObject p = getAllParams ( CommentsGetParams.values (),
         // params );
         // callMethodRetList ( "comments.get", p, Comment.class, callback );
 
         // JSONObject p = getDefaultParams ();
-        String fql = "select xid, text,fromid,time,id,username,reply_xid from comment where xid ='" + params.get ( CommentsGetParams.xid ) + "'";
+        String fql = "select xid, text,fromid,time,id,username,reply_xid from comment where xid ='" + xid + "'";
 
         // Call Facebook Method
         fql_query ( fql,
@@ -192,12 +175,6 @@ public class FacebookApi {
         } );
     }
 
-    /**
-     * Valid params for method <code>comments.remove</code>
-     */
-    public enum CommentsRemoveParams {
-        uid, session_key, xid, comment_id
-    }
 
     /**
      * This method removes a comment from an xid on behalf of a user (or not).
@@ -209,16 +186,18 @@ public class FacebookApi {
      * 
      * @param xid
      *            string The xid of a particular Comments Box or fb:comments.
-     * @param comment_id
+     * @param commentId
      *            string The comment_id, as returned by Comments.add or
      *            Comments.get, to be removed.
      * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Comments.remove">Comments.remove</a>
      */
-    public void comments_remove(Map<Enum<CommentsRemoveParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( CommentsRemoveParams.values (), params );
-        callMethod ( "comments.remove", p, callback );
+    public void comments_remove( String xid, String commentId, AsyncCallback<JavaScriptObject> callback) {
+        Json j = Json.newInstance(); 
+        j.put("xid",xid ).put ( "comment_id", commentId );
+       
+        callMethod ( "comments.remove", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -256,13 +235,6 @@ public class FacebookApi {
     }
 
     /**
-     * Valid params for method <code>data.getCookies</code>
-     */
-    public static enum DataGetCookiesParams {
-        uid, name
-    }
-
-    /**
      * This method returns all cookies for a given user and application.
      * <p/>
      * Cookies only apply to Web applications; they do not apply to desktop
@@ -280,16 +252,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Data.getCookies">Data.getCookies</a>
      */
-    public void data_getCookies(Map<Enum<DataGetCookiesParams>, String> params, AsyncCallback<List<Cookie>> callback) {
-        JavaScriptObject p = getAllParams ( DataGetCookiesParams.values (), params );
-        callMethodRetList ( "data.getCookies", p, Cookie.class, callback );
-    }
-
-    /**
-     * Valid params for the method <code>data.setCookie</code>
-     */
-    public static enum DataSetCookieParams {
-        uid, name, value, expires, path
+    public void data_getCookies( String name, AsyncCallback<List<Cookie>> callback) {
+        Json j = Json.newInstance ().put ( "name",name);
+        callMethodRetList ( "data.getCookies", j.getJavaScriptObject (), Cookie.class, callback );
     }
 
     /**
@@ -322,9 +287,8 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Data.setCookie">Data.setCookie</a>
      */
-    public void data_setCookie(Map<Enum<DataSetCookieParams>, String> params, AsyncCallback<Boolean> callback) {
-        JavaScriptObject p = getAllParams ( DataSetCookieParams.values (), params );
-        callMethodRetBoolean ( "data.setCookie", p, callback );
+    public void data_setCookie(Cookie c, AsyncCallback<Boolean> callback) {
+        callMethodRetBoolean ( "data.setCookie", c, callback );
     }
 
     public void events_cancel(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -361,21 +325,13 @@ public class FacebookApi {
      * 
      */
     public void events_create(EventInfo eventInfo, AsyncCallback<JavaScriptObject> callback) {
-        JSONObject p = getDefaultParams ();
-        p.put ( "event_info", new JSONString ( eventInfo.createJsonString () ) );
-        callMethod ( "events.create", p.getJavaScriptObject (), callback );
+        Json j = Json.newInstance ().put ( "event_info", eventInfo.createJsonString () );
+        callMethod ( "events.create", j.getJavaScriptObject (), callback );
     }
 
     public void events_edit(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         // TODO Auto-generated method stub
 
-    }
-
-    /**
-     * Valid parameters for method <code>events.get</code>
-     */
-    public static enum EventsGetParams {
-        uid, eids, start_time, end_time, rsvp_status
     }
 
     /**
@@ -438,17 +394,11 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Events_get">ApiClient.Events_Get</a>
      */
-    public void events_get(Map<Enum<EventsGetParams>, String> params, AsyncCallback<List<Event>> callback) {
-        JavaScriptObject p = getAllParams ( EventsGetParams.values (), params );
-        callMethodRetList ( "events.get", p, Event.class, callback );
+    public void events_get( Event eventFilter, AsyncCallback<List<Event>> callback) {
+        callMethodRetList ( "events.get", eventFilter, Event.class, callback );
     }
 
-    /**
-     * Valid params for method <code>events.getMembers</code>
-     */
-    public static enum EventsGetMembersParams {
-        eid
-    }
+
 
     /**
      * Returns membership list data associated with an event.
@@ -461,6 +411,7 @@ public class FacebookApi {
      * extended permission.
      * <p/>
      * 
+     * @param eid id of event
      * @param params
      *            map
      * @param callback
@@ -469,9 +420,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Events_getMembers">Events_getMembers</a>
      */
-    public void events_getMembers(Map<Enum<EventsGetMembersParams>, String> params, AsyncCallback<EventMembers> callback) {
-        JavaScriptObject p = getAllParams ( EventsGetMembersParams.values (), params );
-        callMethodRetObject ( "events.getMembers", p, EventMembers.class, callback );
+    public void events_getMembers( Long eid, AsyncCallback<EventMembers> callback) {
+        Json j = Json.newInstance ().put ( "eid", eid );
+        callMethodRetObject ( "events.getMembers", j.getJavaScriptObject (), EventMembers.class, callback );
     }
 
     /**
@@ -493,10 +444,9 @@ public class FacebookApi {
      * @see <a href="http://wiki.developers.facebook.com/index.php/Events.rsvp">Events.rsvp</a>
      */
     public void events_rsvp( Long eventId, RsvpStatus status, AsyncCallback<Boolean> callback) {
-        JSONObject o = getDefaultParams ();
-        o.put ( "eid", new JSONNumber ( eventId ) );
-        o.put ( "rsvp_status", new JSONString ( status.toString () ) );
-        callMethodRetBoolean ( "events.rsvp", o.getJavaScriptObject (), callback );
+        Json j = Json.newInstance ();
+        j.put ( "eid", eventId ).put ( "rsvp_status", status.toString () );
+        callMethodRetBoolean ( "events.rsvp", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -550,10 +500,7 @@ public class FacebookApi {
     /**
      * Valid params for method <code>feed.publishUserAction</code>
      */
-    public static enum FeedPublishUserActionParams {
-        template_bundle_id, template_data, target_ids, body_general, story_size, user_message, sequencer
-    }
-
+ 
     /**
      * Publishes a story on behalf of the user owning the session, using the
      * specified template bundle. This method can publish one line stories to
@@ -573,17 +520,10 @@ public class FacebookApi {
      *      Feed_publishUserAction</a>
      * 
      */
-    public void feed_publishUserAction(Map<Enum<FeedPublishUserActionParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( FeedPublishUserActionParams.values (), params );
-        callMethod ( "feed.publishUserAction", p, callback );
+    public void feed_publishUserAction( /* UserAction object */ AsyncCallback<JavaScriptObject> callback) {
+        Window.alert ( "Not implemented" );
     }
 
-    /**
-     * Valid params for method <code>friends.areFriends</code>
-     */
-    public enum FriendsAreFriendsParams {
-        uid, session_key, uids1, uids2
-    }
 
     /**
      * Returns whether or not two specified users are friends with each other.
@@ -600,17 +540,17 @@ public class FacebookApi {
      * @see <a
      *      hreF="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Friends_areFriends">Friends_areFriends</a>
      */
-    public void friends_areFriends(Map<Enum<FriendsAreFriendsParams>, String> params, final AsyncCallback<List<FriendInfo>> callback) {
-        JavaScriptObject p = getAllParams ( FriendsAreFriendsParams.values (), params );
-        callMethodRetList ( "friends.areFriends", p, FriendInfo.class, callback );
-    }
+    public void friends_areFriends(List<Long> uids1, List<Long> uids2, AsyncCallback<List<FriendInfo>> callback) {
 
-    /**
-     * Valid params for method <code>friends.get</code>
-     */
-    public enum FriendsGetParams {
-        uid, session_key, flid
+        if  ( uids1.size () != uids2.size () ) {
+            throw new IllegalArgumentException ( "uids1 and uids2 size must be equal" );
+        }        
+        Json j = Json.newInstance ();
+        j.put ( "uids1", uids1 ).put ( "uids2", uids2 );
+
+        callMethodRetList ( "friends.areFriends", j.getJavaScriptObject (), FriendInfo.class, callback );
     }
+    
 
     /**
      * See #friends_get(Map, AsyncCallback)
@@ -636,9 +576,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Friends_get">Friends_get</a>
      */
-    public void friends_get(Map<Enum<FriendsGetParams>, String> params, final AsyncCallback<List<Long>> callback) {
-        JavaScriptObject p = getAllParams ( FriendsGetParams.values (), params );
-        friends_getGeneric ( "friends.get", p, callback );
+    public void friends_get( Integer flid, final AsyncCallback<List<Long>> callback) {
+        Json j = Json.newInstance ().put ( "flid", flid );
+        friends_getGeneric ( "friends.get", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -692,13 +632,6 @@ public class FacebookApi {
     }
 
     /**
-     * Valid params for method <code>friends.getMutualFriends</code>
-     */
-    public enum FriendsGetMutualFriendsParams {
-        target_uid, session_key, source_uid
-    }
-
-    /**
      * Returns the Facebook user IDs of the mutual friends between the source
      * user and target user. For the source user, you can either specify the
      * source's user ID (the source_id) or use the session key of the logged-in
@@ -716,30 +649,13 @@ public class FacebookApi {
      * @param target_uid
      *            int The user ID of one of the target user whose mutual friends
      *            you want to retrieve. optional
-     * @param session_key
-     *            string The session key of the logged in user. The session key
-     *            is automatically included by our PHP client. If you don't pass
-     *            a session key, then you must pass a source_id. Desktop
-     *            applications must always include a session_key
-     * @param callback
-     *            string Name of a function to call. This is primarily to enable
-     *            cross-domain JavaScript requests using the <script> tag, also
-     *            known as JSONP, and works with both the XML and JSON formats.
-     *            The function will be called with the response passed as the
-     *            parameter.
-     * @param source_uid
-     *            int The user ID of the other user for which you are getting
-     *            mutual friends of. Defaults to the current session user.
-     *            Specify the source_uid when calling this method without a
-     *            session key.
      * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Friends.getMutualFriends">Friends_getMutualFriends</a>
      */
-    public void friends_getMutualFriends(Map<Enum<FriendsGetMutualFriendsParams>, String> params, AsyncCallback<List<Long>> callback) {
-        JavaScriptObject p = getAllParams ( FriendsGetMutualFriendsParams.values (), params );
-        friends_getGeneric ( "friends.getMutualFriends", p, callback );
-
+    public void friends_getMutualFriends( Long targetUid, AsyncCallback<List<Long>> callback) {
+        Json j = Json.newInstance ().put ( "target_uid",  targetUid );
+        friends_getGeneric ( "friends.getMutualFriends", j.getJavaScriptObject (), callback );
     }
 
     /*
@@ -748,14 +664,12 @@ public class FacebookApi {
     private void friends_getGeneric(String method, JavaScriptObject params, final AsyncCallback<List<Long>> callback) {
 
         AsyncCallback<JavaScriptObject> ac = new AsyncCallback<JavaScriptObject> () {
-
             public void onFailure(Throwable caught) {
                 callback.onFailure ( caught );
             }
-
             public void onSuccess(JavaScriptObject jso) {
                 if ("{}".equals ( new JSONObject ( jso ).toString () )) {
-                    callback.onSuccess ( new ArrayList () );
+                    callback.onSuccess ( Collections.EMPTY_LIST );
                 } else {
                     JsArrayNumber jsArray = jso.cast ();
                     callback.onSuccess ( Util.convertNumberArray ( jsArray ) );
@@ -781,20 +695,10 @@ public class FacebookApi {
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Fql_query">Fql_query</a>
      */
     public void fql_query(String query, AsyncCallback<JavaScriptObject> callback) {
-
-        Map<String, String> params = new HashMap<String, String> ();
-        params.put ( "query", query );
-        JSONObject p = getDefaultParams ();
-        copyParam ( p, params, "query" );
-        callMethod ( "fql.query", p.getJavaScriptObject (), callback );
+        Json j = Json.newInstance ().put ( "query", query );
+        callMethod ( "fql.query", j.getJavaScriptObject (), callback );
     }
 
-    /**
-     * Valid params for method <code>groups.get</code>
-     */
-    public static enum GroupsGetParams {
-        uid, gids
-    }
 
     /**
      * Returns all visible groups according to the filters specified. You can
@@ -811,33 +715,29 @@ public class FacebookApi {
      * <p/>
      * If both parameters are omitted, the method returns all groups of the
      * session user.
-     * 
-     * @param params
-     *            map
+     *
+     * @param gids to filter by
+     *
      * @param callback
      *            result
-     * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Groups_get">Groups_get</a>
      */
-    public void groups_get(Map<Enum<GroupsGetParams>, String> params, AsyncCallback<List<Group>> callback) {
-        JavaScriptObject p = getAllParams ( GroupsGetParams.values (), params );
-        callMethodRetList ( "groups.get", p, Group.class, callback );
-    }
-
-    /**
-     * Valid params for method <code>groups.get</code>
-     */
-    public static enum GroupsGetMembersParams {
-        gid
+    public void groups_get( List<Long> gids, AsyncCallback<List<Group>> callback) {
+        Json j = Json.newInstance ().put ( "gids", gids );
+        callMethodRetList ( "groups.get", j.getJavaScriptObject (), Group.class, callback );
     }
 
     /**
      * Returns membership list data associated with a group.
      */
-    public void groups_getMembers(Map<Enum<GroupsGetMembersParams>, String> params, AsyncCallback<GroupMembers> callback) {
-        JavaScriptObject p = getAllParams ( GroupsGetMembersParams.values (), params );
-        callMethodRetObject ( "groups.getMembers", p, GroupMembers.class, callback );
+    public void groups_getMembers( Long gid , AsyncCallback<GroupMembers> callback) {
+        
+        if ( gid == null ) {
+            throw new IllegalArgumentException ( "gid cannot be null" );
+        }
+        Json j = Json.newInstance ().put ( "gid", gid );
+        callMethodRetObject ( "groups.getMembers", j.getJavaScriptObject (), GroupMembers.class, callback );
     }
 
     /**
@@ -940,12 +840,6 @@ public class FacebookApi {
         callMethod ( "notifications.get", p.getJavaScriptObject (), internCallback );
     }
 
-    /**
-     * Valid params for method <code>notifications.getList</code>
-     */
-    public enum NotificationsGetListParams {
-        session_key, start_time, include_read
-    }
 
     /**
      * This method gets all the current session user's notifications, as well as
@@ -953,10 +847,6 @@ public class FacebookApi {
      * wrapper around the notification and application FQL tables; you can
      * achieve more fine-grained control by using those two FQL tables in
      * conjunction with the fql.multiquery API call.
-     * 
-     * Applications must pass a valid session key.
-     * 
-     * optional
      * 
      * @param start_time
      *            time Indicates the earliest time to return a notification.
@@ -968,10 +858,9 @@ public class FacebookApi {
      *            already been read. By default, notifications a user has read
      *            are not included.
      */
-    public void notifications_getList(Map<Enum<NotificationsGetListParams>, String> params, final AsyncCallback<List<Notification>> callback) {
+    public void notifications_getList( Long startTime, Boolean includeRead, final AsyncCallback<List<Notification>> callback) {
 
-        JavaScriptObject p = getAllParams ( NotificationsGetListParams.values (), params );
-
+        Json j = Json.newInstance ().put ( "start_time",startTime ).put ( "include_read", includeRead );
         AsyncCallback<JavaScriptObject> internCallback = new AsyncCallback<JavaScriptObject> () {
 
             public void onFailure(Throwable caught) {
@@ -991,16 +880,19 @@ public class FacebookApi {
             }
 
         };
-        callMethod ( "notifications.getList", p, internCallback );
+        callMethod ( "notifications.getList", j.getJavaScriptObject (), internCallback );
     }
 
     /**
-     * Valid parameters for method notifications.markRead
+     * Wraps the same method that takes a list of notification ids as parameter
+     * @see #notifications_markRead(List, AsyncCallback)
      */
-    public enum NotificationsMarkReadParams {
-        notification_ids
+    public void notifications_markRead( Long notificationId, final AsyncCallback<Boolean> callback) {
+        List<Long> ids = new ArrayList<Long> ();
+        ids.add ( notificationId );
+        notifications_markRead ( ids, callback );
     }
-
+    
     /**
      * 
      * This method marks one or more notifications as read. You return the
@@ -1010,11 +902,6 @@ public class FacebookApi {
      * Applications must pass a valid session key, and can only mark the
      * notifications of the current session user.
      * 
-     * 
-     * @param session_key
-     *            string The session key of the logged in user. The session key
-     *            is automatically included by our PHP client. Applications must
-     *            pass a valid session key.
      * @param notification_ids
      *            array The IDs of the notifications to mark as read, as
      *            retrieved via the notification FQL table or the
@@ -1025,18 +912,29 @@ public class FacebookApi {
      *            http://wiki.developers.facebook.com/index.php/Notifications
      *            .markRead
      */
-    public void notifications_markRead(final Map<Enum<NotificationsMarkReadParams>, String> params, final AsyncCallback<Boolean> callback) {
-        JavaScriptObject p = getAllParams ( NotificationsMarkReadParams.values (), params );
-        callMethodRetBoolean ( "notifications.markRead", p, callback );
+    public void notifications_markRead( List<Long> notificationIds, final AsyncCallback<Boolean> callback) {
+        Json j = Json.newInstance ().put ( "notification_ids", notificationIds );
+        callMethodRetBoolean ( "notifications.markRead", j.getJavaScriptObject (), callback );
     }
+    
+    
+    /**
+     * Wraps the same method but less parameters
+     * 
+     * @see #notifications_send(List, String, NotificationType, AsyncCallback)
+     */
+    public void notifications_send ( Long uid, String notification, AsyncCallback<JavaScriptObject> callback  ) {
+        List<Long> uids = new ArrayList<Long> ();
+        uids.add ( uid );
+        notifications_send ( uids, notification, NotificationType.defaultType, callback );
+    }
+    
 
     /**
-     * Valid params for <code>notifications.send</code>
+     * Valid notificationTypes
      */
-    public enum NotificationsSendParams {
-        to_ids, notification, type
-    }
-
+    public static enum NotificationType { defaultType, user_to_user, app_to_user }
+    
     /**
      * Sends a notification to a set of users. Notifications are items sent by
      * an application to a user's notifications page in response to some sort of
@@ -1058,8 +956,8 @@ public class FacebookApi {
      * user appears with that user's notifications as a "sent notification."
      * <p/>
      * 
-     * @param to_ids
-     *            array Comma-separated list of recipient IDs. These must be
+     * @param toIds
+     *            Comma-separated list of recipient IDs. These must be
      *            either friends of the logged-in user or people who have added
      *            your application. To send a notification to the current
      *            logged-in user without a name prepended to the message, set
@@ -1067,7 +965,7 @@ public class FacebookApi {
      *            user IDs the array, otherwise you run the risk of your call
      *            timing out during processing.
      * @param notification
-     *            string The content of the notification. The notification uses
+     *            The content of the notification. The notification uses
      *            a stripped down version of FBML and HTML, allowing only text
      *            and links (see the list of allowed tags). The notification can
      *            contain up to 2,000 characters.
@@ -1080,9 +978,10 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Notifications.send">Notifications.send</a>
      */
-    public void notifications_send(Map<Enum<NotificationsSendParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( NotificationsSendParams.values (), params );
-        callMethod ( "notifications.send", p, callback );
+    public void notifications_send( List<Long> toIds, String notification, NotificationType type, AsyncCallback<JavaScriptObject> callback) {
+        Json j = Json.newInstance ().put ( "to_ids", toIds ).put ( "notification", notification );
+        j.put ( "type", type.toString () );
+        callMethod ( "notifications.send", j.getJavaScriptObject (), callback );
 
     }
 
@@ -1117,13 +1016,6 @@ public class FacebookApi {
     }
 
     /**
-     * Valid params for method photos.createAlbum
-     */
-    public enum PhotosCreateAlbumParams {
-        name, location, description, visible, uid
-    }
-
-    /**
      * Creates and returns a new album owned by the specified user or the
      * current session user. See photo uploads for a description of the upload
      * workflow. The only storable values returned from this call are aid and
@@ -1146,34 +1038,20 @@ public class FacebookApi {
      * @param visible
      *            string Visibility of the album. One of friends,
      *            friends-of-friends, networks, everyone.
-     * @param uid
-     *            int The user ID of the user for whom you are creating the
-     *            album. If this parameter is not specified, then it defaults to
-     *            the session user. Note: This parameter applies only to Web
-     *            applications and is required by them only if the session_key
-     *            is not specified. Facebook ignores this parameter if it is
-     *            passed by a desktop application.
      * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Photos_createAlbum">Photos_createAlbum</a>
      */
-    public void photos_createAlbum(Map<Enum<PhotosCreateAlbumParams>, String> params, final AsyncCallback<Album> callback) {
-        JavaScriptObject p = getAllParams ( PhotosCreateAlbumParams.values (), params );
-        callMethodRetObject ( "photos.createAlbum", p, Album.class, callback );
+    public void photos_createAlbum( Album album, final AsyncCallback<Album> callback) {
+        callMethodRetObject ( "photos.createAlbum", album, Album.class, callback );
     }
 
     /**
-     * Valid params for method <code>photos.getAlbums</code>
-     */
-    public enum PhotosGetAlbumsParams {
-        uid, session_key, aids
-    }
-
-    /**
+     * Get current users albums
      * See #photos_getAlbums(Map, AsyncCallback)
      */
     public void photos_getAlbums(final AsyncCallback<List<Album>> callback) {
-        photos_getAlbums ( null, callback );
+        photos_getAlbums ( null, null, callback );
     }
 
     /**
@@ -1195,28 +1073,30 @@ public class FacebookApi {
      * You cannot store the values returned from this call.
      * 
      * @param uid
-     *            int Return albums created by this user. You must specify
+     *            Return albums created by this user. You must specify
      *            either uid or aids. The uid parameter has no default value.
      * @param aids
-     *            array Return albums with aids in this list. This is a
+     *            Return albums with aids in this list. This is a
      *            comma-separated list of aids. You must specify either uid or
      *            aids. The aids parameter has no default value.
      * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Photos_getAlbums">Photos_getAlbums</a>
      */
-    public void photos_getAlbums(final Map<Enum<PhotosGetAlbumsParams>, String> params, final AsyncCallback<List<Album>> callback) {
-        JavaScriptObject p = getAllParams ( PhotosGetAlbumsParams.values (), params );
-        callMethodRetList ( "photos.getAlbums", p, Album.class, callback );
+    public void photos_getAlbums( Long uid, List<Long> aids, final AsyncCallback<List<Album>> callback) {
+        Json j = Json.newInstance ().put ( "uid", uid ).put ( "aids", aids );
+        callMethodRetList ( "photos.getAlbums", j.getJavaScriptObject (), Album.class, callback );
     }
 
+ 
     /**
-     * Valid params for method <code>photos.get</code>
+     * Returns all visible photos of subject.
+     * @see #photos_get(Long, Long, List, AsyncCallback) 
      */
-    public enum PhotosGetParams {
-        subj_id, aid, pids
+    public void photos_get ( Long subjId, final AsyncCallback<List<Photo>> callback ) {
+        photos_get ( subjId, null, null , callback );
     }
-
+    
     /**
      * Returns all visible photos according to the filters specified. You can
      * use this method to find all photos that are:
@@ -1225,7 +1105,7 @@ public class FacebookApi {
      * Contained within the album specified by aid Included in the list of
      * photos specified by pids Any combination of these three criteria
      * 
-     * @param subj_id
+     * @param subjId
      *            int Filter by photos tagged with this user. You must specify
      *            at least one of subj_id, aid or pids. The subj_id parameter
      *            has no default value, but if you pass one, it must be the
@@ -1242,9 +1122,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Photos_get">Photos_get</a>
      */
-    public void photos_get(final Map<Enum<PhotosGetParams>, String> params, final AsyncCallback<List<Photo>> callback) {
-        JavaScriptObject p = getAllParams ( PhotosGetParams.values (), params );
-        callMethodRetList ( "photos.get", p, Photo.class, callback );
+    public void photos_get( Long subjId, Long aid, List<Long> pids, final AsyncCallback<List<Photo>> callback) {
+        Json j = Json.newInstance ().put ( "subj_id", subjId ).put ( "aid", aid ).put ( "pids", pids );
+        callMethodRetList ( "photos.get", j.getJavaScriptObject (), Photo.class, callback );
     }
 
     public void photos_getTags(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1281,6 +1161,7 @@ public class FacebookApi {
 
     /**
      * Valid params for <code>stream.get</code>
+     * @deprecated Will soon be outdated.
      */
     public enum StreamGetParams {
         uid, session_key, viewer_id, source_ids, start_time, end_time, limit, filter_key, metadata
@@ -1414,15 +1295,14 @@ public class FacebookApi {
     public void users_hasAppPermission(Permission permission, final AsyncCallback<Boolean> callback) {
         GWT.log ( "users_hasAppPermission: " + permission.toString (), null );
 
-        JSONObject p = getDefaultParams ();
-        p.put ( "ext_perm", new JSONString ( permission.toString () ) );
+        Json j = Json.newInstance ().put ( "ext_perm", permission.toString () );
 
         Callback<JavaScriptObject> nativeCallback = new Callback<JavaScriptObject> ( callback ) {
             public void onSuccess(JavaScriptObject jso) {
                 callback.onSuccess ( "1".equals ( jso.toString () ) );
             }
         };
-        callMethod ( "users.hasAppPermission", p.getJavaScriptObject (), nativeCallback );
+        callMethod ( "users.hasAppPermission", j.getJavaScriptObject (), nativeCallback );
     }
 
     public void sms_canSend(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1433,13 +1313,16 @@ public class FacebookApi {
         Window.alert ( "not implemented" );
     }
 
-    /**
-     * Valid params for method <code>status.set</code>
-     */
-    public enum StatusSetParams {
-        uid, session_key, status
-    }
 
+    /**
+     * Updates current user's status.
+     * 
+     * @see #status_set(Long, String, AsyncCallback)
+     */
+    public void status_set ( String status, AsyncCallback<JavaScriptObject> callback ) {
+        status_set ( null, status, callback );
+    }
+    
     /**
      * Updates a user's Facebook status through your application. Before your
      * application can set a user's status, the user must grant it the
@@ -1463,16 +1346,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Users_setStatus">Users_setStatus</a>
      */
-    public void status_set(Map<Enum<StatusSetParams>, String> params, AsyncCallback<JavaScriptObject> c) {
-        JavaScriptObject p = getAllParams ( StatusSetParams.values (), params );
-        callMethod ( "users.setStatus", p, c );
-    }
-
-    /**
-     * Valid params to method <code>status.get</code>
-     */
-    public enum StatusGetParams {
-        uid, session_key, limit
+    public void status_set( Long uid, String status, AsyncCallback<JavaScriptObject> callback ) {
+        Json j = Json.newInstance ().put ( "uid", uid ).put ( "status", status  );
+        callMethod ( "users.setStatus", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -1494,10 +1370,7 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Status.get">Status.get</a>
      */
-    public void status_get(Map<Enum<StatusGetParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-
-        String uid = params.get ( "uid" );
-
+    public void status_get(Long uid, Integer limit, AsyncCallback<JavaScriptObject> callback) {
         if (uid == null) {
             Window.alert ( "Error: status_get called without uid" );
             throw new IllegalArgumentException ( "status_get called without uid" );
@@ -1510,13 +1383,6 @@ public class FacebookApi {
          * params.getJavaScriptObject(), callback );
          */
         fql_query ( "SELECT message FROM status WHERE uid=" + uid + " LIMIT 1", callback );
-    }
-
-    /**
-     * Valid params for method <code>stream.addComment</code>
-     */
-    public enum StreamAddCommentParams {
-        uid, session_key, post_id, comment
     }
 
     /**
@@ -1535,15 +1401,6 @@ public class FacebookApi {
      * In order for your application to allow a user to add a comment, that user
      * must grant your application the publish_stream extended permission.
      * 
-     * @param uid
-     *            string The user ID of the user adding the comment. If this
-     *            parameter is not specified, then it defaults to the session
-     *            user. Note: This parameter applies only to Web applications
-     *            and is required by them only if the session_key is not
-     *            specified. Facebook ignores this parameter if it is passed by
-     *            a desktop application.
-     * 
-     *            required
      * @param post_id
      *            string The ID for the post to which you're adding the comment.
      * @param comment
@@ -1558,18 +1415,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Stream.addComment">Stream.addComment</a>
      */
-    public void stream_addComment(Map<Enum<StreamAddCommentParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( StreamAddCommentParams.values (), params );
-        callMethod ( "stream.addComment", p, callback );
-    }
-
-    /**
-     * Valid params for <code>stream.addLike</code> and
-     * <code>stream.removeLike</code>
-     * 
-     */
-    public enum StreamLikeParams {
-        post_id
+    public void stream_addComment( String postId, String comment, AsyncCallback<JavaScriptObject> callback) {
+        Json j = Json.newInstance ().put ( "post_id", postId ).put ( "comment", comment );
+        callMethod ( "stream.addComment", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -1601,9 +1449,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Stream.addLike">Stream.addLike</a>
      */
-    public void stream_addLike(Map<Enum<StreamLikeParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( StreamLikeParams.values (), params );
-        callMethod ( "stream.addLike", p, callback );
+    public void stream_addLike( String postId, AsyncCallback<JavaScriptObject> callback) {
+        Json j = Json.newInstance ().put ( "post_id", postId );
+        callMethod ( "stream.addLike", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -1616,36 +1464,21 @@ public class FacebookApi {
      * In order to remove a Like from a post, the user must grant your
      * application the publish_stream extended permission.
      * 
-     * @param uid
-     *            string The user ID of the user who liked the post. If this
-     *            parameter is not specified, then it defaults to the session
-     *            user. Note: This parameter applies only to Web applications
-     *            and is required by them only if the session_key is not
-     *            specified. Facebook ignores this parameter if it is passed by
-     *            a desktop application.
      * @param post_id
      *            string The ID of the post.
-     * 
-     * 
-     * @param params
-     *            map
+     *
      * @param callback
      *            result
      * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Stream.removeLike">Stream.removeLike</a>
      */
-    public void stream_removeLike(Map<Enum<StreamLikeParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( StreamLikeParams.values (), params );
-        callMethod ( "stream.removeLike", p, callback );
+    public void stream_removeLike( String postId, AsyncCallback<JavaScriptObject> callback) {
+        Json j = Json.newInstance ().put ( "post_id", postId );
+        callMethod ( "stream.removeLike", j.getJavaScriptObject (), callback );
     }
 
-    /**
-     * Valid params for method <code>stream.getComments</code>
-     */
-    public enum StreamGetCommentsParams {
-        post_id
-    }
+
 
     /**
      * This method returns all comments associated with a post in a user's
@@ -1665,9 +1498,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Stream.getComments">Stream.getComments</a>
      */
-    public void stream_getComments(final Map<Enum<StreamGetCommentsParams>, String> params, final AsyncCallback<List<Comment>> callback) {
-        JavaScriptObject p = getAllParams ( StreamGetCommentsParams.values (), params );
-        callMethodRetList ( "stream.getComments", p, Comment.class, callback );
+    public void stream_getComments( String postId, final AsyncCallback<List<Comment>> callback) {
+        Json j = Json.newInstance ().put ( "post_id", postId );
+        callMethodRetList ( "stream.getComments", j.getJavaScriptObject (), Comment.class, callback );
     }
 
     /**
@@ -1685,13 +1518,6 @@ public class FacebookApi {
 
     public void stream_publish(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         Window.alert ( "stream.publish: Not Implemented" );
-    }
-
-    /**
-     * Valid params for <code>stream.remove</code>
-     */
-    public enum StreamRemoveParams {
-        post_id
     }
 
     /**
@@ -1718,16 +1544,9 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Stream.remove">Stream.remove</a>
      */
-    public void stream_remove(Map<Enum<StreamRemoveParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( StreamRemoveParams.values (), params );
-        callMethod ( "stream.remove", p, callback );
-    }
-
-    /**
-     * Valid params for method <code>stream.removeComment</code>
-     */
-    public enum StreamRemoveCommentParams {
-        uid, comment_id
+    public void stream_remove(String postId, AsyncCallback<JavaScriptObject> callback) {
+        Json j = Json.newInstance ().put ( "post_id", postId );
+        callMethod ( "stream.remove", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -1745,15 +1564,15 @@ public class FacebookApi {
      * In order to remove a comment, the user must grant your application the
      * publish_stream extended permission.
      * 
-     * @param comment_id
+     * @param comment
      *            string The ID for the comment you want to remove.
      * 
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Stream.removeComment">Stream.removeComment</a>
      */
-    public void stream_removeComment(Map<Enum<StreamRemoveCommentParams>, String> params, AsyncCallback<JavaScriptObject> callback) {
-        JavaScriptObject p = getAllParams ( StreamRemoveCommentParams.values (), params );
-        callMethod ( "stream.removeComment", p, callback );
+    public void stream_removeComment( final String commentId, final AsyncCallback<JavaScriptObject> callback) {
+        Json j = Json.newInstance ().put ( "comment_id", commentId );
+        callMethod ( "stream.removeComment", j.getJavaScriptObject (), callback );
     }
 
     public void users_getInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1802,7 +1621,7 @@ public class FacebookApi {
     /*
      * Another wrapper. Use this to get all parameters in one line.
      */
-    public <T extends Enum<T>> JavaScriptObject getAllParams(final Enum<T>[] enumValues, final Map<Enum<T>, String> params) {
+    private <T extends Enum<T>> JavaScriptObject getAllParams(final Enum<T>[] enumValues, final Map<Enum<T>, String> params) {
 
         JSONObject allParams = getDefaultParams ();
         copyAllParams ( allParams, enumValues, params );

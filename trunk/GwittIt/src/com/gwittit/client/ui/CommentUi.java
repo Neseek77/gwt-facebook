@@ -1,7 +1,5 @@
 package com.gwittit.client.ui;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,7 +14,6 @@ import com.gwittit.client.Config;
 import com.gwittit.client.UserInfo;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.FacebookApi.StreamRemoveCommentParams;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
@@ -85,11 +82,7 @@ public class CommentUi extends Composite implements ClickHandler {
 		if ( deleteHandler != null ) {
 			deleteHandler.onDelete(id);
 		} else {
-			Map<Enum<StreamRemoveCommentParams>,String> params = new HashMap<Enum<StreamRemoveCommentParams>,String> ();
-			params.put( StreamRemoveCommentParams.comment_id,  ""+ comment.getId() );
-			
-			
-			apiClient.stream_removeComment(params, new AsyncCallback<JavaScriptObject> () {
+			apiClient.stream_removeComment(comment.getId(), new AsyncCallback<JavaScriptObject> () {
 				public void onFailure(Throwable caught) {
 				}
 				public void onSuccess(JavaScriptObject result) {

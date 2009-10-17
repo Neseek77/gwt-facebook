@@ -15,6 +15,7 @@ import com.google.gwt.user.client.Window;
  * more effective.
  * @author ola
  *
+ *@deprecated User com.gwittit.client.facebook.Json
  */
 public class JsonUtil {
 	

@@ -29,7 +29,6 @@ import com.gwittit.client.events.DefaultEventHandler;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookApi.Permission;
-import com.gwittit.client.facebook.FacebookApi.StatusSetParams;
 import com.gwittit.client.facebook.entities.StreamFilter;
 
 
@@ -251,13 +250,9 @@ public class Frontpage  extends Composite implements ClickHandler {
 	 *Set status 
 	 */
 	private void statusSet  () {
-		
-		Map<Enum<StatusSetParams>,String> params = new HashMap<Enum<StatusSetParams>,String> ();
-		params.put(StatusSetParams.uid, inputTextArea.getValue() );
-		params.put(StatusSetParams.status, inputTextArea.getValue() );
-
+	
 		// Set facebook status
-		api.status_set( params, new AsyncCallback<JavaScriptObject> () {
+		api.status_set( inputTextArea.getValue (), new AsyncCallback<JavaScriptObject> () {
 			public void onFailure ( Throwable t ) {
 				Window.alert ( "Failed " );
 			}

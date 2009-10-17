@@ -1,7 +1,5 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -14,9 +12,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.facebook.FacebookApi.PhotosCreateAlbumParams;
 import com.gwittit.client.facebook.entities.Album;
-import com.gwittit.client.facebook.entities.Photo;
+import com.gwittit.client.facebook.entities.Album.Visibility;
 
 
 /**
@@ -45,7 +42,7 @@ public class Photos_createAlbum extends Showcase {
 		final Button createButton = new Button ( "Create Album" );
 		final ListBox visiList = new ListBox (false);
 		visiList.addItem ( "friends");
-		visiList.addItem ( "friends-of-friends");
+		visiList.addItem ( "friends_of_friends");
 		visiList.addItem ( "networks");
 		visiList.addItem ( "everyone") ;
 
@@ -69,13 +66,8 @@ public class Photos_createAlbum extends Showcase {
 	}
 	
 	private void createAlbum ( final String name, final String visible ) {
-
-		// Set params 
-		Map<Enum<PhotosCreateAlbumParams>,String> params = new HashMap<Enum<PhotosCreateAlbumParams>,String> ();
-		params.put( PhotosCreateAlbumParams.name, name);
-		params.put( PhotosCreateAlbumParams.visible, visible );
-		
-		apiClient.photos_createAlbum(params, new AsyncCallback<Album> () {
+		Album album = Album.createAlbum ( name, null, null, Visibility.valueOf ( visible ) );
+		apiClient.photos_createAlbum( album, new AsyncCallback<Album> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}

@@ -8,7 +8,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.facebook.FacebookApi.FriendsGetParams;
 import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 
 /**
@@ -33,9 +32,8 @@ public class Friends_get extends Showcase  {
 		flow.setWidth( "500px");
 		flow.getElement().setId( "friendsget");
 		
-		Map<Enum<FriendsGetParams>,String> params = new HashMap<Enum<FriendsGetParams>,String> ();
 		// Call facebook
-		apiClient.friends_get(params, new AsyncCallback<List<Long>> () {
+		apiClient.friends_get( new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );

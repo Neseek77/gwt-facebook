@@ -1,27 +1,15 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.Config;
 import com.gwittit.client.example.FriendSelector.FriendSelectionHandler;
-import com.gwittit.client.facebook.ApiFactory;
-import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.FacebookApi.PhotosGetParams;
 import com.gwittit.client.facebook.entities.Photo;
-import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
@@ -57,7 +45,7 @@ public class Photos_get extends Showcase {
 		fs.addFriendSelectionHandler(new FriendSelectionHandler () {
 
 			public void onSelected(Long uid) {
-				displayPhotos(uid+"");
+				displayPhotos(uid);
 			}
 			
 		});
@@ -69,14 +57,12 @@ public class Photos_get extends Showcase {
 	/*
 	 * Display photos of selected user 
 	 */
-	private void displayPhotos ( final String uid ) {
+	private void displayPhotos ( final Long subjId ) {
 		resultWrapper.add( getLoader() );
 		
-		Map<Enum<PhotosGetParams>,String> params = new HashMap<Enum<PhotosGetParams>,String> ();
-		params.put( PhotosGetParams.subj_id, uid);
 
 		// Get photos from facebook
-		apiClient.photos_get(params, new AsyncCallback<List<Photo>> () {
+		apiClient.photos_get(subjId, new AsyncCallback<List<Photo>> () {
 
 			public void onFailure(Throwable caught) {
 			    handleFailure ( caught );
