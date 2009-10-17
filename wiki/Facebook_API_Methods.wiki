@@ -2,8 +2,14 @@
 
 = This list shows methods implemented in gwt-facebook lib =
 
+This is a mix of methods from the facebook javascript API and rest API.
+Some methods are only implemented in the REST Api, others only in the Javascript Api. Some are callable from javascript, others are not.
 
-|| *Method* || *Implemented* || *Planned Version* || *Info* ||
+http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient
+http://wiki.developers.facebook.com/index.php/API
+
+
+||*Method*||*Implemented*||*Version*||*Info*||JavascriptAPI ||RestAPI||
 ||admin.banUsers||  || 2.0 ||
 ||admin.unbanUsers||  || 2.0 ||
 ||admin.getAllocation||  || 2.0 ||
