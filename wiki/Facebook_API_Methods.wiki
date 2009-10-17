@@ -46,7 +46,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||events.edit|| ||
 ||events.get|| YES || 
 ||events.getMembers|| YES ||
-||events.rsvp||  ||
+||events.rsvp|| YES  ||
 ||fbml.deleteCustomTags||  ||
 ||fbml.getCustomTags||  ||
 ||fbml.refreshImgSrc||  ||
