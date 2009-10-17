@@ -46,7 +46,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||events.edit|| ||
 ||events.get|| YES || 
 ||events.getMembers|| YES ||
-||events.rsvp||  || YES
+||events.rsvp||  ||
 ||fbml.deleteCustomTags||  ||
 ||fbml.getCustomTags||  ||
 ||fbml.refreshImgSrc||  ||
@@ -59,7 +59,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||feed.getRegisteredTemplateBundles||  ||
 ||feed.publishTemplatizedAction||  ||
 </wiki:comment>
-<wiki:comment>
+
 ||feed.publishUserAction||  ||
 ||feed.registerTemplateBundle||  ||
 ||fql.multiquery||  ||
@@ -125,4 +125,3 @@ http://wiki.developers.facebook.com/index.php/API
 ||users.setStatus|| YES  || 
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
-</wiki:comment>
