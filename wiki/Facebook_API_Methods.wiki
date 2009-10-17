@@ -105,15 +105,15 @@ http://wiki.developers.facebook.com/index.php/API
 ||stream.getComments|| YES ||
 ||stream.getFilters|| YES || 
 ||stream.publish||  ||
-||stream.remove|| YES || || NO || YES
-||stream.removeComment|| YES || NO || YES
-||stream.removeLike|| YES || NO || YES
-||users.getInfo||  ||
+||stream.remove|| YES || || NO || YES ||
+||stream.removeComment|| YES || NO || YES  ||
+||stream.removeLike|| YES || NO || YES ||
+||users.getInfo||  || 
 ||users.getLoggedInUser||  ||
 ||users.getStandardInfo||  ||
 ||users.hasAppPermission||  ||
 ||users.isAppUser||  ||
 ||users.isVerified||  ||
-||users.setStatus|| YES  || YES || YES
+||users.setStatus|| YES  || YES || YES  ||
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
