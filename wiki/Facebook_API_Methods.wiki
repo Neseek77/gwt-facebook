@@ -29,9 +29,9 @@ http://wiki.developers.facebook.com/index.php/API
 ||auth.revokeAuthorization   || NO  || NO || YES ||
 ||auth.revokeExtendedPermission  || NO  || NO || YES ||
 ||batch.run||  ||
-||comments.add|| YES || NO || YES
-||comments.get|| YES || NO || YES
-||comments.remove|| YES ||  NO || YES
+||comments.add|| YES || NO || YES ||
+||comments.get|| YES || NO || YES ||
+||comments.remove|| YES ||  NO || YES ||
 ||connect.getUnconnectedFriendsCount||  ||
 ||connect.registerUsers||  ||
 ||connect.unregisterUsers||  ||
