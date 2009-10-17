@@ -72,6 +72,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||groups.getMembers|| YES || 
 ||intl.getTranslations||  ||
 ||intl.uploadNativeStrings||  ||
+<wiki:comment>
 ||links.get||  ||
 ||links.post||  ||
 ||liveMessage.send||  ||
@@ -123,3 +124,4 @@ http://wiki.developers.facebook.com/index.php/API
 ||users.setStatus|| YES  || 
 ||video.getUploadLimits||  ||
 ||video.upload||  ||
+</wiki:comment>
