@@ -43,7 +43,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||data.setCookie|| YES || 
 ||events.cancel|| YES ||
 ||events.create|| YES || 
-||events.edit||  || NO || 
+||events.edit|| ||
 ||events.get|| YES || 
 ||events.getMembers|| YES ||
 ||events.rsvp||  || YES || 
