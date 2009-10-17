@@ -1,6 +1,7 @@
 package com.gwittit.client.facebook;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -21,9 +22,16 @@ public class Callback<T> implements AsyncCallback<T> {
     
     public void onFailure(Throwable caught) {
         
+        if ( caught instanceof FacebookException ) {
+            FacebookException e = (FacebookException)caught;
+            // Do something here
+        }
+        
         if ( callback != null ) {
             callback.onFailure ( caught );
         } else {
+            
+          
             GWT.log ( "" + caught, null );
         }
     }
