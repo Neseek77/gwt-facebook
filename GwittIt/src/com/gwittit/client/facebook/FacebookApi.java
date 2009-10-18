@@ -38,7 +38,7 @@ import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Cookie;
 import com.gwittit.client.facebook.entities.ErrorResponse;
-import com.gwittit.client.facebook.entities.Event;
+import com.gwittit.client.facebook.entities.EventInfo;
 import com.gwittit.client.facebook.entities.EventInfo;
 import com.gwittit.client.facebook.entities.EventMembers;
 import com.gwittit.client.facebook.entities.FriendInfo;
@@ -70,39 +70,40 @@ public class FacebookApi {
      * Creates a new api
      */
     protected FacebookApi() {
-       // loadApi();
+        // loadApi();
     }
-    
+
     /**
      * Check if session is valid
-     * @param sessionRecord to check
+     * 
+     * @param sessionRecord
+     *            to check
      * @return true if session is valid
      */
-    public static native boolean sessionIsExpired ( SessionRecord sessionRecord ) /*-{
+    public static native boolean sessionIsExpired(SessionRecord sessionRecord) /*-{
         return $wnd.FB.ApiClient.sessionIsExpired ( sessionRecord );
     }-*/;
 
-    
     /**
      * Return if the session is valid
+     * 
      * @return true if session is valid
      */
-    public boolean isSessionValid () {
-       // return getLoggedInUser () != null;
+    public boolean isSessionValid() {
+        // return getLoggedInUser () != null;
         SessionRecord sr = getSessionRecord ();
-        if ( sr == null ) {
+        if (sr == null) {
             return false;
         }
         return !sessionIsExpired ( sr );
     }
 
     /**
-     * Get api key 
+     * Get api key
      */
-    public native String getApiKey () /*-{
+    public native String getApiKey() /*-{
         return  $wnd.FB.Facebook.apiClient.get_apiKey();
     }-*/;
-
 
     /**
      * Get session record
@@ -110,16 +111,16 @@ public class FacebookApi {
     public native SessionRecord getSessionRecord() /*-{
         return $wnd.FB.Facebook.apiClient.get_session();
     }-*/;
-    
-    
+
     /**
      * Get uid of current logged in user
+     * 
      * @return uid of user
      */
     public Long getLoggedInUser() {
-        
-        SessionRecord sr = getSessionRecord();
-        if ( sr != null ) {
+
+        SessionRecord sr = getSessionRecord ();
+        if (sr != null) {
             return sr.getUid ();
         }
         return null;
@@ -325,9 +326,29 @@ public class FacebookApi {
         callMethodRetBoolean ( "data.setCookie", c, callback );
     }
 
-    public void events_cancel(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    /**
+     * Cancels an event. The application must be an admin of the event. An
+     * application is the admin of an event if the application created the event
+     * on behalf of a user (with that user's active session) or if it is the
+     * creator of the event itself (that is, the event was created without an
+     * active user session).
+     * <p/>
+     * This method does not require a session key. However if you call this
+     * method without an active user session, then your application can cancel
+     * an event only if it is the event creator.
+     * 
+     * @param eid
+     *            event id
+     * @param cancelMessage
+     *            The message sent explaining why the event was canceled. You
+     *            can pass an empty string if you don't want to provide an
+     *            explanation.
+     * @param callback
+     *            true if event was successfully cancelled
+     */
+    public void events_cancel(Long eid, String cancelMessage, AsyncCallback<Boolean> callback) {
+        Json j = Json.newInstance ().put ( "eid", eid ).put ( "cancel_message", cancelMessage );
+        callMethodRetBoolean ( "events.cancel", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -359,13 +380,30 @@ public class FacebookApi {
      * 
      */
     public void events_create(EventInfo eventInfo, AsyncCallback<JavaScriptObject> callback) {
-        Json j = Json.newInstance ().put ( "event_info", eventInfo.createJsonString () );
+        Json j = Json.newInstance ().put ( "event_info",  new JSONObject ( eventInfo ).toString () );        
         callMethod ( "events.create", j.getJavaScriptObject (), callback );
     }
 
-    public void events_edit(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    /**
+     * Edits the details of an existing event. The application must be an admin
+     * of the event. An application is the admin of an event if the application
+     * created the event on behalf of a user (with that user's active session)
+     * or if it is the creator of the event itself (that is, the event was
+     * created without an active user session).
+     * <p/>
+     * This method does not require a session key. However if you call this
+     * method without an active user session, then your application can edit an
+     * event only if it is the event creator.
+     * 
+     * @param eid eventid 
+     * @param eventInfo updated info
+     * @param callback boolean if succeeded
+     * 
+     * @see <a href="http://wiki.developers.facebook.com/index.php/Events.edit">Event.edit</a>
+     */
+    public void events_edit(Long eid, EventInfo event, AsyncCallback<Boolean> callback) {
+        Json j = Json.newInstance ().put ( "eid", eid ).put ( "event_info", new JSONObject ( event ).toString () );
+        callMethodRetBoolean ( "events.edit", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -428,8 +466,8 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Events_get">ApiClient.Events_Get</a>
      */
-    public void events_get(Event eventFilter, AsyncCallback<List<Event>> callback) {
-        callMethodRetList ( "events.get", eventFilter, Event.class, callback );
+    public void events_get(EventInfo eventFilter, AsyncCallback<List<EventInfo>> callback) {
+        callMethodRetList ( "events.get", eventFilter, EventInfo.class, callback );
     }
 
     /**
@@ -817,7 +855,8 @@ public class FacebookApi {
      * can write a note through your application, the user must grant your
      * application the create_note extended permission.
      * 
-     * @param note to be created
+     * @param note
+     *            to be created
      */
     public void notes_create(Note note, AsyncCallback<Long> callback) {
         callMethodRetLong ( "notes.create", note, callback );

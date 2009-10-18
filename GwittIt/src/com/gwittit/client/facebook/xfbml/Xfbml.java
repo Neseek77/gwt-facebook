@@ -31,7 +31,7 @@ public class Xfbml {
      *  Start parse the DOM tree to search for XFBML tags and render them. This will be invoked automatically unless FB.XFBML.Host.autoParseDomTree is set to false. 
 	 */
 	public static void parse ( final Element element) {
-
+	    
 		DeferredCommand.addCommand( new Command () {
 			public void execute() {
 				if ( element != null && element.getId() != null ) {

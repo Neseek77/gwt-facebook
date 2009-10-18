@@ -27,17 +27,12 @@ public class Notifications_getList extends Showcase {
 	@Override
 	public Widget createWidget () {
 		final VerticalPanel outer = new VerticalPanel ();
-		
 		addLoader ( outer );
-		
-
 		// Get facebook data
 		apiClient.notifications_getList( null, null, new AsyncCallback<List<Notification>> () {
-
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
-
 			public void onSuccess( List<Notification> result ) {
 				removeLoader ( outer );
 				
@@ -81,7 +76,9 @@ public class Notifications_getList extends Showcase {
 				handleFailure ( caught );
 			}
 			public void onSuccess(Boolean result) {
-				Window.alert ( "Mared notification with id " + nid + " as read" );
+			    if ( ! result ) {
+			        Window.alert ( "Failed to mark notification ");
+			    }
 			}
 		});
 	}

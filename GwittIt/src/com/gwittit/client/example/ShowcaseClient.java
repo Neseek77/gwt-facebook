@@ -72,12 +72,11 @@ public class ShowcaseClient extends Composite  {
 	public ShowcaseClient () {
 
 	    outer.getElement().setId( "ShowcaseClient" );
+	    showcaseWrapper.getElement ().setId ( "ShowcaseWrapper" );
 		inner.setSpacing ( 10 );
 		showcaseWrapper.setWidth( "700px");
 		showcaseWrapper.addStyleName("showcaseWrapper");
 		treeMenu.addStyleName("treeMenu");
-		
-		outer.add ( new HTML ( "<h1>Showcase of gwt-facebook </h1>" ) );
 		
 		FbName name = new FbName ( apiClient.getApiKey () );
 		name.setUseyou ( false );
@@ -97,8 +96,9 @@ public class ShowcaseClient extends Composite  {
 		inner.add (  decorate ( showcaseWrapper ) );
 		
 		outer.add ( inner );
-		Xfbml.parse ( showcaseWrapper );
 		initWidget ( outer );
+		
+		Xfbml.parse ( outer );
 	}
 	
 	/*

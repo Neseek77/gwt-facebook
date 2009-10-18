@@ -1,24 +1,8 @@
 package com.gwittit.client;
 
-import java.util.List;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
@@ -28,8 +12,6 @@ import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.events.LoginEvent;
 import com.gwittit.client.facebook.events.LoginHandler;
-import com.gwittit.client.facebook.ui.ProfilePicsPanel;
-import com.gwittit.client.facebook.xfbml.FbLoginButton;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -37,6 +19,8 @@ import com.gwittit.client.facebook.xfbml.FbLoginButton;
 public class GwittIt implements EntryPoint {
 
     //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+    
+    // My Localhost
     public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
     // Where we hold everything
@@ -63,11 +47,8 @@ public class GwittIt implements EntryPoint {
         // First do init stuff.
         FacebookConnect.init ( API_KEY, "/xd_receiver.htm", eventBus );
 
-
         // Need this to catch the login event.
-
         this.topMenu = new TopMenu ( eventBus );
-        this.loginWidget = new LoginBox ( eventBus );
         // Get login events and rerender whatever its necessary
         listenToLogin ();
 
@@ -79,6 +60,7 @@ public class GwittIt implements EntryPoint {
         if (apiClient.isSessionValid ()) {
             renderWhenConnected ();
         } else {
+            this.loginWidget = new LoginBox ( eventBus );
             outer.add ( loginWidget );
         }
 
