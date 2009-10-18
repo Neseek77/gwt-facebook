@@ -778,9 +778,14 @@ public class FacebookApi {
     }
 
     /**
-     * TODO: Implement
+     * Lets a user write a Facebook note through your application. Before a user
+     * can write a note through your application, the user must grant your
+     * application the create_note extended permission.
+     * 
+     * @param note to be created
      */
-    public void notes_create(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
+    public void notes_create(Note note, AsyncCallback<Long> callback) {
+        callMethodRetLong ( "notes.create", note, callback );
     }
 
     /**
@@ -803,7 +808,8 @@ public class FacebookApi {
      * since that's the only session you have. If you want data for other users,
      * make an FQL query (fql.query) on the note (FQL) table.
      * 
-     * @see <a href="http://wiki.developers.facebook.com/index.php/Notes.get">Notes.get</a>
+     * @see <a
+     *      href="http://wiki.developers.facebook.com/index.php/Notes.get">Notes.get</a>
      */
     public void notes_get(Long uid, AsyncCallback<List<Note>> callback) {
         String fql = "SELECT note_id,title,content,created_time,updated_time FROM note WHERE uid=" + uid;
@@ -933,14 +939,14 @@ public class FacebookApi {
     public void notifications_send(Long uid, String notification, AsyncCallback<JavaScriptObject> callback) {
         List<Long> uids = new ArrayList<Long> ();
         uids.add ( uid );
-        notifications_send ( uids, notification, NotificationType.defaultType, callback );
+        notifications_send ( uids, notification, NotificationType.user_to_user, callback );
     }
 
     /**
      * Valid notificationTypes
      */
     public static enum NotificationType {
-        defaultType, user_to_user, app_to_user
+        user_to_user, app_to_user
     }
 
     /**
@@ -987,7 +993,8 @@ public class FacebookApi {
      *      href="http://wiki.developers.facebook.com/index.php/Notifications.send">Notifications.send</a>
      */
     public void notifications_send(List<Long> toIds, String notification, NotificationType type, AsyncCallback<JavaScriptObject> callback) {
-        Json j = Json.newInstance ().put ( "to_ids", toIds ).put ( "notification", notification );
+        Json j = Json.newInstance ().put ( "to_ids", toIds );
+        j.put ( "notification", notification );
         j.put ( "type", type.toString () );
         callMethod ( "notifications.send", j.getJavaScriptObject (), callback );
 
@@ -1261,7 +1268,7 @@ public class FacebookApi {
      * Valid permissions
      */
     public enum Permission {
-        read_stream, publish_stream, create_event, rsvp_event
+        read_stream, publish_stream, create_event, rsvp_event, create_note
     };
 
     /**
