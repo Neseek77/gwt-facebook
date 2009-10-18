@@ -11,6 +11,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.gwittit.client.events.AppEvents;
 import com.gwittit.client.events.DefaultEventHandler;
+import com.gwittit.client.facebook.ApiFactory;
+import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
@@ -25,6 +27,7 @@ public class TopMenu extends Composite {
 	
 	private HandlerManager eventBus ;
 	
+	private FacebookApi apiClient = ApiFactory.getInstance ();
 	
 	public TopMenu ( HandlerManager eventBus ) {
 		
@@ -39,7 +42,7 @@ public class TopMenu extends Composite {
 		outer.add ( loginInfo );
 
 		
-		if ( UserInfo.isLoggedIn () ) {
+		if ( apiClient.isSessionValid () ) {
             renderLoginInfo(); 
 		}
 		initWidget ( outer );
@@ -50,10 +53,11 @@ public class TopMenu extends Composite {
 
 		loginInfo.clear();
 		
-		FbName fbName = new FbName ( UserInfo.getUidLong(), false );
+		Long uid = apiClient.getLoggedInUser ();
+		FbName fbName = new FbName ( uid, false );
 		fbName.setUseyou(false);
 
-		FbProfilePic pic = new FbProfilePic ( UserInfo.getUidLong(), FbProfilePic.Size.square );
+		FbProfilePic pic = new FbProfilePic ( uid, FbProfilePic.Size.square );
 		pic.setSize("15px", "15px");
 		
 		GWT.log ( "TopMenu: render " + fbName.toString(), null );

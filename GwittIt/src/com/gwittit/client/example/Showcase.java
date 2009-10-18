@@ -1,6 +1,5 @@
 package com.gwittit.client.example;
 
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -8,10 +7,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookException;
 import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
@@ -24,7 +21,7 @@ public  class Showcase extends Composite {
 	
 	private VerticalPanel outer = new VerticalPanel ();
 	
-	protected FacebookApi apiClient = ApiFactory.newApiClient( Config.API_KEY);
+	protected FacebookApi apiClient = ApiFactory.getInstance();
 	
 	/**
 	 * Create new object

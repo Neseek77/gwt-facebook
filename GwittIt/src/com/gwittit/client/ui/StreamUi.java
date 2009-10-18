@@ -1,14 +1,11 @@
 package com.gwittit.client.ui;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -21,8 +18,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.Config;
-import com.gwittit.client.UserInfo;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
@@ -83,7 +78,7 @@ public class StreamUi extends Composite implements ClickHandler {
 	private Image loader = new Image ( "/loader.gif");
 
 	// Facebook Apio
-	private FacebookApi apiClient = ApiFactory.newApiClient(Config.API_KEY);
+	private FacebookApi apiClient = ApiFactory.getInstance();
 
 	// Stream that this UI object wraps
 	private Stream stream;
@@ -116,7 +111,7 @@ public class StreamUi extends Composite implements ClickHandler {
 		
 		renderUI ();
 		
-		if ( stream.getSourceId().equals(UserInfo.getUidLong() ) ) {
+		if ( stream.getSourceId().equals(apiClient.getLoggedInUser () ) ) {
 			inner.add( removeStreamLink );
 		}
 		

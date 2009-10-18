@@ -1,44 +1,23 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.Config;
-import com.gwittit.client.UserInfo;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.entities.FriendInfo;
-import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.xfbml.FbName;
-import com.gwittit.client.facebook.xfbml.FbPhoto;
-import com.gwittit.client.facebook.xfbml.FbProfilePic;
 import com.gwittit.client.facebook.xfbml.Xfbml;
-import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
 
 /**
@@ -72,7 +51,7 @@ public class ShowcaseClient extends Composite  {
 	final String smsMethods = "XSMS:sms_canSend,sms_send";
 	final String statusMethods = "XStatus:status_get,status_set";
 	final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,Xstream_publish,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
-	final String userMethods = "XUsers:users_getInfo,users_getLoggedInUser,users_getStandardInfo,users_hasAppPermission,users_isAppUser,users_isVerified,users_setStatus";
+	final String userMethods = "Users:Xusers_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
 	final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
 
 	final String[]menu = { authMethods, batchMethods,commentMethods,connectMethods,dataMethods,eventMethods,
@@ -85,6 +64,8 @@ public class ShowcaseClient extends Composite  {
 
 	final  Tree treeMenu = createMenu ();
 
+	final FacebookApi apiClient = ApiFactory.getInstance ();
+	
 	/**
 	 * Create showcase client.
 	 */
@@ -98,7 +79,7 @@ public class ShowcaseClient extends Composite  {
 		
 		outer.add ( new HTML ( "<h1>Showcase of gwt-facebook </h1>" ) );
 		
-		FbName name = new FbName ( UserInfo.getUidLong () );
+		FbName name = new FbName ( apiClient.getApiKey () );
 		name.setUseyou ( false );
 		name.setLinked ( false );
 		
@@ -143,24 +124,31 @@ public class ShowcaseClient extends Composite  {
 				TreeItem clickedLink =(TreeItem) event.getSelectedItem();
 				
 				if ( clickedLink.getChildCount() == 0 ) {
-					Showcase example = createExample( clickedLink.getText() );
-					showcaseWrapper.clear();
-					
-					Anchor sourceLink = new Anchor();
-					sourceLink.setHTML ( "Browse Source: " + example.getClass ().getName () + ".java ");
-					sourceLink.addStyleName ( "sourceLink" );
-					
-					String repo = "http://code.google.com/p/gwt-facebook/source/browse/trunk/GwittIt/src/";
-					String className = (""+example.getClass().getName()).replace(".","/") + ".java";
-					
-					sourceLink.setHref( repo + className );
-					sourceLink.setTarget( "_blank" );
-					
-					showcaseWrapper.add( sourceLink );
-					showcaseWrapper.add( new HTML ( "<h2> Method: " + example.getHeader () + "</h2>" ) );
-					showcaseWrapper.add( new HTML ( "<h3>" + example.getDescription() + "</h3>" ) ) ;
-					showcaseWrapper.add( new HTML ( "<hr/>" ) );
-					showcaseWrapper.add( example );
+				    
+				    if ( !apiClient.isSessionValid () ) {
+				        Window.alert ( "Your session has expired" );
+				        showcaseWrapper.clear ();
+				        
+				    } else {
+    					Showcase example = createExample( clickedLink.getText() );
+    					showcaseWrapper.clear();
+    					
+    					Anchor sourceLink = new Anchor();
+    					sourceLink.setHTML ( "Browse Source: " + example.getClass ().getName () + ".java ");
+    					sourceLink.addStyleName ( "sourceLink" );
+    					
+    					String repo = "http://code.google.com/p/gwt-facebook/source/browse/trunk/GwittIt/src/";
+    					String className = (""+example.getClass().getName()).replace(".","/") + ".java";
+    					
+    					sourceLink.setHref( repo + className );
+    					sourceLink.setTarget( "_blank" );
+    					
+    					showcaseWrapper.add( sourceLink );
+    					showcaseWrapper.add( new HTML ( "<h2> Method: " + example.getHeader () + "</h2>" ) );
+    					showcaseWrapper.add( new HTML ( "<h3>" + example.getDescription() + "</h3>" ) ) ;
+    					showcaseWrapper.add( new HTML ( "<hr/>" ) );
+    					showcaseWrapper.add( example );
+    				    }
 				}
 			}
 			
@@ -441,7 +429,7 @@ public class ShowcaseClient extends Composite  {
 		    //  example = new Users_getInfo();
 		}
 		else if ( "users_getLoggedInUser".equals ( m ) ) { 
-		    //  example = new Users_getLoggedInUser();
+		    showcase = new Users_getLoggedInUser();
 		}
 		else if ( "users_getStandardInfo".equals ( m ) ) { 
 		    //  example = new Users_getStandardInfo();

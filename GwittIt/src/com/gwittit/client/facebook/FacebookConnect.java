@@ -226,6 +226,8 @@ public class FacebookConnect {
 		defineJsCallbackFunction ( loginCallback );
 	}
 
+	
+	
 	/**
 	 * Tell facebook where to find xdreceiver.htm
 	 * 
@@ -234,11 +236,8 @@ public class FacebookConnect {
 	 */
 	public static native void setupXdReceiver(String apiKey, String xdReceiver )/*-{
 		    $wnd.FB_RequireFeatures(["Connect"], function() { 
-    		   // $wnd.FB.init(apiKey, xdReceiver, {"ifUserConnected":onConnected, "ifUserNotConnected":onNotConnected});
-            
-            $wnd.FB.init(apiKey, xdReceiver);
-          
-		    });
+                $wnd.FB.init(apiKey, xdReceiver);
+   	    });
 	}-*/;
 
 	/**

@@ -7,7 +7,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwittit.client.UserInfo;
 import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
@@ -32,7 +31,7 @@ public class Friends_areFriends extends Showcase {
 			result.getElement().setId ( "friendsAreFriendsResult" );
 			
 			List<Long> uids1 = new ArrayList<Long>();
-			uids1.add ( UserInfo.getUidLong () );
+			uids1.add ( apiClient.getLoggedInUser () );
 			uids1.add ( new Long ( 751836969 ) );
 			uids1.add ( new Long ( 708775201 ) );
 			
