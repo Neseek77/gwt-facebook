@@ -20,12 +20,19 @@ public class Json {
         this.o = o;
     }
     
+    public Json  ( JavaScriptObject o ) {
+        this ( new JSONObject ( o ) );
+    }
     
     public static Json newInstance () {
         Json j = new Json ( new JSONObject () );
         return j;
     }
     
+    public Json remove ( String name ) {
+        o.put ( name , null );
+        return this;
+    }
     public Json put ( String name, Boolean value ) {
         if ( value != null ) {
             o.put ( name, new JSONNumber ( value ? 1 : 0 ) );

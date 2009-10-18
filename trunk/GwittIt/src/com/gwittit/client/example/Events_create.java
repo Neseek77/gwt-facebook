@@ -63,7 +63,7 @@ public class Events_create extends Showcase {
     }
     
     private void showEventEditor ( VerticalPanel p ) {
-        final EventEditor eventEditor = new EventEditor (apiClient,  new EventInfo () );
+        final EventEditor eventEditor = new EventEditor ();
         p.add ( eventEditor );
     }
 }

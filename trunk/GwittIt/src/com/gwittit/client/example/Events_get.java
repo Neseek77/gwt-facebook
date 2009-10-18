@@ -1,13 +1,16 @@
 package com.gwittit.client.example;
 
+import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.benchmarks.client.Category;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -18,9 +21,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookConnect;
+import com.gwittit.client.facebook.Json;
 import com.gwittit.client.facebook.FacebookApi.Permission;
 import com.gwittit.client.facebook.FacebookApi.RsvpStatus;
-import com.gwittit.client.facebook.entities.Event;
+import com.gwittit.client.facebook.entities.EventInfo;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
@@ -44,7 +48,7 @@ public class Events_get extends Showcase {
         filter.setSpacing ( 10 );
         
         outer.getElement ().setId ( "Events_get");
-        outer.addStyleName ( "gwittit-Showcase-Events_get");
+        outer.addStyleName ( "gwittit-Events_get");
         
         final ListBox listBox = new ListBox (false);
         listBox.addItem ( "All");
@@ -84,31 +88,40 @@ public class Events_get extends Showcase {
      */
     public void renderEvents ( final VerticalPanel outer , RsvpStatus status ) {
         
-        outer.clear ();
-        
+        outer.clear ();        
         addLoader ( outer );
   
         // Create a filter used in the query
-        Event eventFilter = Event.createFilter ( null, null, null, null, status  );
+        EventInfo eventFilter = EventInfo.createEventInfo ( null, null, null, null, status  );
+      
         // Call facebook
-        apiClient.events_get ( eventFilter, new AsyncCallback<List<Event>> () {
+        apiClient.events_get ( eventFilter, new AsyncCallback<List<EventInfo>> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
-            public void onSuccess(List<Event> events) {
+            public void onSuccess(List<EventInfo> events) {
                 removeLoader ( outer );
-                for ( Event e : events ) {
+            
+                for ( EventInfo e : events ) {
+                
+                    VerticalPanel eventItemHolder = new VerticalPanel ();
+                    eventItemHolder.addStyleName ( "eventItemHolder" );
+                    HorizontalPanel eventHeader = new HorizontalPanel ();
                     
-                    HorizontalPanel h = new HorizontalPanel ();
-                    h.addStyleName ( "event" );
                     if ( e.getPic_small () != null ) {
                         Image image = new Image ( e.getPic_small () );
-                        h.add ( image );
+                        eventHeader.add ( image );
                     }
-                    h.add ( new HTML ( "<h4>" + e.getName () +"</h4>" ) ); 
-                    outer.add ( h );
-                    outer.add ( new HTML ( "From " + new FbName ( e.getCreator () ) ) );
-                    addRsvp ( outer, e );
+                    Date d = new Date ( e.getStartTime () );
+                    eventHeader.add ( new HTML ( "<h2> Name: " + e.getName () +" at " + d + "</h2>" ) ); 
+                    eventItemHolder.add ( eventHeader );
+                    
+                    eventItemHolder.add ( new HTML ( "From " + new FbName ( e.getCreator () ) ) );
+                    addRsvp ( eventItemHolder, e );
+                    addCancel (eventItemHolder, e );
+                    addEditEvent ( eventItemHolder, e );
+                    
+                    outer.add ( eventItemHolder );
                 }
                 
                 Xfbml.parse ( outer );
@@ -117,11 +130,73 @@ public class Events_get extends Showcase {
             
     }
     
+    /**
+     * Let user cancel this event.
+     */
+    public void addCancel ( final VerticalPanel outer, final EventInfo e ) {
+        Anchor cancelLink = new Anchor ( "Cancel Event" );
+        outer.add ( cancelLink );
+        
+        cancelLink.addClickHandler ( new ClickHandler () {
+
+            public void onClick(ClickEvent event) {
+                apiClient.events_cancel ( e.getEid (), "Cancelled by Gwittit", new AsyncCallback<Boolean> () {
+
+                    public void onFailure(Throwable caught) {
+                        Events_get.this.handleFailure ( caught );
+                    }
+
+                    public void onSuccess(Boolean ok) {
+                        outer.add ( new HTML ( "Cancelled event " ) );
+                    }
+                    
+                });
+            }
+            
+        });
+    }
+    
+    /*
+     * 
+     */
+    public void addEditEvent ( final VerticalPanel outer, final EventInfo e) {
+        
+        Anchor editLink = new Anchor ( "Edit Event" );
+        outer.add ( editLink );
+
+        Json j = Json.newInstance ();
+        j.put ( "name", e.getName () + " Updated " );
+//        j.put ( "category", 1 );
+//        j.put ( "subcategory", 1 );
+//        j.put ( "start_time", new Date().getTime() );
+//        j.put ( "end_time", new Date().getTime() );
+//        j.put ( "location", "location" );
+//        j.put (  "host", "host" );
+//        j.put ( "city", "Palo Alto, CA" );
+         
+        final EventInfo updateEvent = EventInfo.fromJson ( j.toString () );
+        editLink.addClickHandler ( new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                addLoader ( outer );
+                apiClient.events_edit ( e.getEid (), updateEvent, new AsyncCallback<Boolean> (){
+                    public void onFailure(Throwable caught) {
+                        Events_get.this.handleFailure ( caught );
+                    }
+                    public void onSuccess(Boolean result) {
+                        removeLoader ( outer );
+                        Window.alert ( "alert " + result );
+                    }
+                    
+                });
+            }
+        });
+        
+    }
     
     /**
      * Let user respond to this event.
      */
-    public void addRsvp ( VerticalPanel outer, final Event e  ) {
+    public void addRsvp ( VerticalPanel outer, final EventInfo e  ) {
 
         final Button go = new Button ( "Go");
         final HorizontalPanel h = new HorizontalPanel ();

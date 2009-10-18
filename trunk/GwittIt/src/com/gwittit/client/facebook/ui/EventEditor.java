@@ -1,6 +1,8 @@
 package com.gwittit.client.facebook.ui;
 
 
+import java.util.Date;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -16,7 +18,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
+import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
+import com.gwittit.client.facebook.Json;
 import com.gwittit.client.facebook.entities.EventInfo;
 
 
@@ -51,38 +55,26 @@ public class EventEditor extends Composite {
     private final TextBox nameText = new TextBox();
     private final ListBox categoryListBox = new ListBox ( false );
     private final ListBox subCategoriesListBox = new ListBox ( false );
-    
-    private final DatePicker startTimePicker = new DatePicker ();
-    //private final DatePicker endTimePicker = new DatePicker ();
-    
+
     private final TextBox hostText = new TextBox();
     private final TextBox locationText = new TextBox();
     private final TextBox cityText = new TextBox ();
     
     private final Button createEventButton = new Button ( "Create Event" );
     
-    private FacebookApi apiClient = null;
+    private FacebookApi apiClient = ApiFactory.getInstance ();
     
-    public EventEditor ( final FacebookApi apiClient, EventInfo eventInfo ) {
+    public EventEditor ( ) {
         
-        this.apiClient = apiClient;
         
         outer.addStyleName ( "gwittit-EventEditor" );
         outer.setSpacing ( 10 );
-        
-        
-        if ( eventInfo == null ) {
-            eventInfo = new EventInfo();
-        } else {
-            this.eventInfo = eventInfo;
-        }
-        
+
         initFields ();
         
         outer.add ( createLabelAndInput ( "Name", nameText ) );
         outer.add ( createLabelAndInput ( "Category", categoryListBox ) ) ;
         outer.add ( createLabelAndInput ( "SubCategory", subCategoriesListBox ) );
-        outer.add ( createLabelAndInput ( "EventStarts", startTimePicker ) );
         // outer.add ( createLabelAndInput ( "EventEnds" , endTimePicker ) );
         outer.add ( createLabelAndInput ( "Host", hostText ) ) ;
         outer.add ( createLabelAndInput ( "Location", locationText ) ) ;
@@ -104,27 +96,26 @@ public class EventEditor extends Composite {
      * Save event to facebook
      */
     private void saveOrUpdate () {
+
+        Json jEvent = Json.newInstance ();
         
-        eventInfo.setName ( nameText.getValue () );
-        eventInfo.setHost ( hostText.getValue () );
-        eventInfo.setLocation ( locationText.getValue() );
-        eventInfo.setCity ( cityText.getValue () );
+        jEvent.put ( "name", nameText.getValue () );
+        jEvent.put ( "host", hostText.getValue () ); 
+        jEvent.put ( "location", locationText.getValue() );
+        jEvent.put ("city", cityText.getValue () );
   
         // Save Category
         Integer selectedCategory = new Integer ( categoryListBox.getValue ( categoryListBox.getSelectedIndex () ) );
         Integer selectedSubCategory = new Integer ( subCategoriesListBox.getValue ( subCategoriesListBox.getSelectedIndex ()  ) );
-        eventInfo.setCategory ( EventInfo.Category.values ()[selectedCategory-1] );
-        eventInfo.setSubcategory ( EventInfo.SubCategory.values ()[selectedSubCategory-1] );
+        
+        jEvent.put ( "category" , EventInfo.Category.values ()[selectedCategory-1].toString () );
+        jEvent.put ( "subcategory",  EventInfo.SubCategory.values ()[selectedSubCategory-1].toString () );
 
-        // Save date
-        if ( startTimePicker.getValue () == null ) {
-            Window.alert ( "You need to select start date ");
-            return;
-        }
-
-        eventInfo.setStartTime ( startTimePicker.getValue().getTime () );
-        eventInfo.setEndTime ( startTimePicker.getValue ().getTime () );
-
+        jEvent.put ( "start_time", new Date ().getTime () + new Long ( "9999999999" ) );
+        jEvent.put ( "end_time", new Date().getTime() + new Long ( "9999999999999"));
+        
+        
+        EventInfo eventInfo = EventInfo.fromJson ( jEvent.toString () );
         outer.add ( loader );
 
         // Create the event.

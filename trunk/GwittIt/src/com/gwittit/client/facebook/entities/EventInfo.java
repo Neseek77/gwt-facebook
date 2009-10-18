@@ -1,17 +1,19 @@
 package com.gwittit.client.facebook.entities;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
+import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Window;
+import com.gwittit.client.facebook.Json;
+import com.gwittit.client.facebook.FacebookApi.RsvpStatus;
 
 /**
- * EventInfo passed to method <code>events.create</code>
- * @see <a href="http://wiki.developers.facebook.com/index.php/Events.create"> events.create  </a> 
+ * Class that describes an event from facebook.
+ * 
+ * @see http://wiki.developers.facebook.com/index.php/Events.get EventsGet
  */
-public class EventInfo {
-
+public class EventInfo extends JavaScriptObject {
+    
     static enum PrivacyType {OPEN,CLOSED,SECRET }
 
     /** Valid Categories */
@@ -36,169 +38,141 @@ public class EventInfo {
         }
     }
 
-    /** Rquired Fields */
-    private String name;
-    private Category category = Category.Causes;
-    private SubCategory subcategory = SubCategory.Birthday_Party;
-    
-    private String host;
-    private String location;
-    private String city;
-    private Long startTime;
-    private Long endTime;
-    
-    /** Optional Fields */
-    private String street;
-    private String phone;
-    private String email;
-    private Long pageId;
-    private String description;
-    private PrivacyType privacyType;
-    private String tagline ;
-    
-    /**
-     * Get javascript objects so it can be sent to facebook
-     */
-    public String createJsonString () {
-       return getAsJsonObject().toString ();
+    protected EventInfo() {
     }
 
     /**
-     * Return this object as JSON, this will eventually be passed as argument to the
-     * <code>events.create</code> method
+     * @return eid as String ( this is returned as String from facebook )
      */
-    public JSONObject getAsJsonObject () {
-        
-        JSONObject j = new JSONObject ();
-        j.put ( "name", new JSONString ( name ) );
-        
-        j.put ( "category", new JSONNumber ( category.getId () ) );
-        j.put ( "subcategory", new JSONNumber( subcategory.getId() ) );
+    public final native String getEidString() /*-{
+        return this.eid + "";
+    }-*/;
+
+    public final Long getEid() {
+        return new Long ( getEidString() );
+    }
+
+    public final native String getName() /*-{
+        return this.name;
+    }-*/;
+
+    public final native String getTagline() /*-{
+        return this.tagline;
+    }-*/;
+
+    public final native String getNidString() /*-{
+        return this.nid + "";
+    }-*/;
+
+    public final Long getNid() {
+        return new Long ( getNidString () );
+    }
+
+    public final native String getPic() /*-{
+        return this.pic;
+    }-*/;
+
+    public final native String getPic_big() /*-{
+        return this.pic_big;
+    }-*/;
+
+    public final native String getPic_small() /*-{
+        return this.pic_small;
+    }-*/;
+
+    public final native String getHost() /*-{
+        return this.host;
+    }-*/;
+
+    public final native String getDescription() /*-{
+        return this.description;
+    }-*/;
+
+    public final native String getEventType() /*-{
+        return this.event_type;
+    }-*/;
+
+    public final native String getEventSubType() /*-{
+        return this.event_sub_type;
+    }-*/;
+
+    public final native String getStartTimeString() /*-{
+        return this.start_time + "";
+    }-*/;
+
+    public final Long getStartTime() {
+        return new Long ( getStartTimeString () );
+    }
+
+    public final native String getEndTimeString() /*-{
+        return this.end_time + "";
+    }-*/;
+
+    public final Long getEndTime() {
+        return new Long ( getEndTimeString () );
+    }
+
+    public final native String getCreatorString() /*-{
+        return this.creator + "";
+    }-*/;
+
+    public final Long getCreator() {
+        return new Long ( getCreatorString () );
+    }
+
+    public final native String getUpdateTimeString() /*-{
+        return this.update_time + "";
+    }-*/;
+
+    public final Long getUpdateTime() {
+        return new Long ( getUpdateTimeString () );
+    }
+
+    public final native String getLocation() /*-{
+        return this.location;
+    }-*/;
+    
+    public final native JavaScriptObject getVeneu() /*-{
+        return this.veneu;
+    }-*/;
+
+    /**
+     * Create filter to be used in event query. Null values will be ignored
+     * @param uid
+     *            int Filter by events associated with a user with this uid.
+     * @param eids
+     *            array Filter by this list of event IDs. This is a
+     *            comma-separated list of event IDs.
+     * @param start_time
+     *            int Filter with this UTC as lower bound. A missing or zero
+     *            parameter indicates no lower bound.
+     * @param end_time
+     *            int Filter with this UTC as upper bound. A missing or zero
+     *            parameter indicates no upper bound.
+     * @param rsvp_status
+     *            string Filter by this RSVP status. The RSVP status should be
+     *            one of the following strings:
+     * @return events that can be used as filter
+     */
+    public final static EventInfo createEventInfo ( Long uid, List<Long> eids, Long startTime, Long endTime , RsvpStatus status  ) {
+    
+        Json j = Json.newInstance ();
+        j.put ( "uid", uid ).put ( "eids", eids ).put ( "start_time", startTime ).put ( "end_time", endTime );
+        j.put ( "rsvp_status", status != null ? status.toString () : null );
+        return fromJson ( j.toString () );
+    }
      
-        // Put in Category and SubCategory
-        j.put ( "host", new JSONString ( host ) );
-        j.put ( "location", new JSONString ( location ) );
-        j.put ( "city", new JSONString ( city ) );
-        
-        putLong ( j, "start_time", getStartTime() );
-        putLong ( j, "end_time", getEndTime () );
+    /**
+     * Create a empty filter
+     * @return
+     */
+    public final static EventInfo createFilterEmpty () {
+        Json j = Json.newInstance ();
+        return fromJson ( j.toString () );
+    }
+    
+    public static native EventInfo fromJson(String jsonString) /*-{
+        return eval('(' + jsonString + ')');
+    }-*/;
 
-        // Optional 
-        putString ( j, "street", getStreet() );
-        putString ( j, "phone", getPhone() );
-        putString ( j, "email", getEmail() );
-        putLong (j, "page_id", getPageId() );
-        putString ( j, "description", getDescription() );
-        if ( privacyType != null )  {
-            putString ( j, "privacy_type", privacyType.toString() );
-        }
-        putString (j, "tagline", getTagline() );
-        return j;
-    }
-    
-    private void putString ( JSONObject j, String name, String value ) {
-    
-        if ( value == null ) {return ; }
-        j.put ( name, new JSONString ( value ) ) ;
-    }
-    
-    private void putLong  ( JSONObject j, String name, Long  value ) {
-        if ( value == null) {return; }
-        j.put ( name, new JSONNumber ( value ) );
-        
-    }
-    
-    public PrivacyType getPrivacyType() {
-        return privacyType;
-    }
-    public void setPrivacyType(PrivacyType privacyType) {
-        this.privacyType = privacyType;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }    
-    public Category getCategory() {
-        return category;
-    }
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-    public SubCategory getSubcategory() {
-        return subcategory;
-    }
-    public void setSubcategory(SubCategory subcategory) {
-        this.subcategory = subcategory;
-    }
-    public String getHost() {
-        return host;
-    }
-    public void setHost(String host) {
-        this.host = host;
-    }
-    public String getLocation() {
-        return location;
-    }
-    public void setLocation(String location) {
-        this.location = location;
-    }
-    public String getCity() {
-        return city;
-    }
-    public void setCity(String city) {
-        this.city = city;
-    }
-    public Long getStartTime() {
-        return startTime;
-    }
-    public void setStartTime(Long startTime) {
-        this.startTime = startTime;
-    }
-    public Long getEndTime() {
-        return endTime;
-    }
-    public void setEndTime(Long endTime) {
-        this.endTime = endTime;
-    }
-    public String getStreet() {
-        return street;
-    }
-    public void setStreet(String street) {
-        this.street = street;
-    }
-    public String getPhone() {
-        return phone;
-    }
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public Long getPageId() {
-        return pageId;
-    }
-    public void setPageId(Long pageId) {
-        this.pageId = pageId;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public String getTagline() {
-        return tagline;
-    }
-    public void setTagline(String tagline) {
-        this.tagline = tagline;
-    }
-    
-
-    
 }

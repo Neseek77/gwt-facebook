@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
-import com.gwittit.client.facebook.entities.Event;
+import com.gwittit.client.facebook.entities.EventInfo;
 
 
 /**
@@ -46,18 +46,18 @@ public class EventSelector extends Composite  {
         outer.add ( new HTML ( "Select Event: " ) );
         outer.add ( loader );
         
-        apiClient.events_get ( null, new AsyncCallback<List<Event>> (){
+        apiClient.events_get ( null, new AsyncCallback<List<EventInfo>> (){
 
             public void onFailure(Throwable caught) {
                 outer.add ( new HTML ( "Failed get events..." ) );
             }
 
-            public void onSuccess(List<Event> result) {
+            public void onSuccess(List<EventInfo> result) {
                 
                 outer.remove (  loader  );
                 final ListBox dropBox = new ListBox(false);
                 
-                for ( Event e : result ) {
+                for ( EventInfo e : result ) {
                     GWT.log (  "adding " + e.getName (), null );
                     
                     dropBox.addItem ( e.getName (), e.getEidString() );
