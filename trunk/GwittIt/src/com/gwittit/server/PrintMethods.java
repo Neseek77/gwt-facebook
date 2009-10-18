@@ -11,7 +11,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = Note.class;
+	    Class c = SessionRecord.class;
 		
 		Field fields[] = c.getFields ();
 		

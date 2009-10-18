@@ -1,8 +1,6 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -13,8 +11,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.gwittit.client.Config;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookException;
@@ -34,7 +30,7 @@ public class FriendSelector extends Composite {
 		void onSelected ( Long uid );
 	}
 
-	private FacebookApi apiClient = ApiFactory.newApiClient(Config.API_KEY);
+	private FacebookApi apiClient = ApiFactory.getInstance();
 
 	private FriendSelectionHandler friendSelection;
 	

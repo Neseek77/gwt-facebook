@@ -7,9 +7,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -45,26 +48,45 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 	final Anchor showcaseLink = new Anchor ( "Showcase");
 		
 	// Create the api once and for all
-	private FacebookApi apiClient = ApiFactory.newApiClient( Config.API_KEY );
+	private FacebookApi apiClient = ApiFactory.getInstance();
 	
 	// Fire event to the app
-	private HandlerManager eventBus;
+	private HandlerManager eventBus = new HandlerManager ( null );
+
 	
 	// Display Login Dialog
 	private LoginBox loginWidget;
 	
+	public void oxxnModuleLoad () {
+	        this.eventBus = new HandlerManager ( null );
+
+	       FacebookConnect.init( Config.API_KEY, "/xd_receiver.htm", eventBus );
+	       
+           Window.alert ( "GwittIt.java:  isSessionValid " + apiClient.isSessionValid ());
+
+           Button b = new Button ("Test Method") ;
+           outer.add ( b );
+           b.addClickHandler ( new ClickHandler () {
+            public void onClick(ClickEvent event) {
+                Window.alert ( "GwittIt.java:  apiClient.getSessionRecord:  " + apiClient.getSessionRecord () );
+            }
+               
+           });
+           RootPanel.get().add ( outer );
+    
+	}
 	/**
 	 * Demonstrates how to use the facebook api. 
 	 */
 	public void onModuleLoad() {
-	
+	    
+	    // First do init stuff.
+	    FacebookConnect.init( Config.API_KEY, "/xd_receiver.htm", eventBus );
+
 		History.addValueChangeHandler(this);
-
-		
-
 		
 		// Need this to catch the login event.
-		this.eventBus = new HandlerManager ( null );
+
 		this.topMenu = new TopMenu ( eventBus );
 		this.loginWidget = new LoginBox ( eventBus );
 
@@ -82,10 +104,9 @@ public class GwittIt implements EntryPoint, ClickHandler, ValueChangeHandler<Str
 		// This is all you need to initialize Facebook Connect:
 		// Setup xd_receiever and create a callback for login.
 		// See http://wiki.developers.facebook.com/index.php/Cross-domain_communication_channel for documentation
-		FacebookConnect.init( Config.API_KEY, "/xd_receiver.htm", eventBus );
 		
 		
-		if ( UserInfo.isLoggedIn () ) {
+		if ( apiClient.isSessionValid () ) {
             renderWhenConnected();
 		} else {
 		    outer.add ( loginWidget );

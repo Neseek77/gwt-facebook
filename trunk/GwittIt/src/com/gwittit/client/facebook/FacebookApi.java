@@ -49,6 +49,7 @@ import com.gwittit.client.facebook.entities.Note;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
+import com.gwittit.client.facebook.entities.SessionRecord;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
 import com.gwittit.client.facebook.entities.User;
@@ -64,30 +65,64 @@ import com.gwittit.client.facebook.entities.User;
  */
 public class FacebookApi {
 
-    /**
-     * Api Key used for calling methods.
-     */
-    private String apiKey;
-
     // ---------------- Public Methods ---------------------
     /**
      * Creates a new api
      */
-    protected FacebookApi(String apiKey) {
-        this.apiKey = apiKey;
+    protected FacebookApi() {
+       // loadApi();
+    }
+    
+    /**
+     * Check if session is valid
+     * @param sessionRecord to check
+     * @return true if session is valid
+     */
+    public static native boolean sessionIsExpired ( SessionRecord sessionRecord ) /*-{
+        return $wnd.FB.ApiClient.sessionIsExpired ( sessionRecord );
+    }-*/;
+
+    
+    /**
+     * Return if the session is valid
+     * @return true if session is valid
+     */
+    public boolean isSessionValid () {
+       // return getLoggedInUser () != null;
+        SessionRecord sr = getSessionRecord ();
+        if ( sr == null ) {
+            return false;
+        }
+        return !sessionIsExpired ( sr );
     }
 
     /**
-     * Get the cached session key from cookie.
+     * Get api key 
      */
-    public String getSessionKey() {
-        final String C_SESSION_KEY = apiKey + "_session_key";
-        return Cookies.getCookie ( C_SESSION_KEY );
+    public native String getApiKey () /*-{
+        return  $wnd.FB.Facebook.apiClient.get_apiKey();
+    }-*/;
 
-    }
 
-    public String getLoggedInUser() {
-        return Cookies.getCookie ( apiKey + "_user" );
+    /**
+     * Get session record
+     */
+    public native SessionRecord getSessionRecord() /*-{
+        return $wnd.FB.Facebook.apiClient.get_session();
+    }-*/;
+    
+    
+    /**
+     * Get uid of current logged in user
+     * @return uid of user
+     */
+    public Long getLoggedInUser() {
+        
+        SessionRecord sr = getSessionRecord();
+        if ( sr != null ) {
+            return sr.getUid ();
+        }
+        return null;
     }
 
     /**
@@ -1603,7 +1638,7 @@ public class FacebookApi {
      */
     public void users_getLoggedInUser(AsyncCallback<Long> callback) {
         JavaScriptObject p = getDefaultParams ().getJavaScriptObject ();
-        callMethodRetLong ( "Users.getLoggedInUser", p, callback );
+        callMethodRetLong ( "users.getLoggedInUser", p, callback );
     }
 
     public void users_getStandardInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1644,11 +1679,7 @@ public class FacebookApi {
      * Get jsonobject with api_key parameter
      */
     private JSONObject getDefaultParams() {
-        if (apiKey == null) {
-            Window.alert ( "api_key==null" );
-        }
         JSONObject obj = new JSONObject ();
-        obj.put ( "api_key", new JSONString ( apiKey ) );
         return obj;
     }
 

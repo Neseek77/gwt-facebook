@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.gwittit.client.Config;
-import com.gwittit.client.UserInfo;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.entities.Comment;
@@ -40,7 +39,7 @@ public class CommentUi extends Composite implements ClickHandler {
 	
 	private Anchor deleteCommentLink = new Anchor ( "- delete comment -" );
 	
-	private FacebookApi apiClient = ApiFactory.newApiClient( Config.API_KEY );
+	private FacebookApi apiClient = ApiFactory.getInstance ();
 	
 	private DeleteHandler deleteHandler;
 	
@@ -65,7 +64,7 @@ public class CommentUi extends Composite implements ClickHandler {
 		outer.add ( html );
 
 		wrapper.add ( outer );
-		if ( comment.getFromId().equals ( UserInfo.getUidLong() ) ) {
+		if ( comment.getFromId().equals ( apiClient.getLoggedInUser () ) ) {
 			wrapper.add ( deleteCommentLink );
 		}
 		initWidget ( wrapper );

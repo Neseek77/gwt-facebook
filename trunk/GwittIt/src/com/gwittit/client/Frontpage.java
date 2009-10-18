@@ -56,7 +56,7 @@ public class Frontpage  extends Composite implements ClickHandler {
 	private HTML statusHtml = new HTML ( "<h3>Set your facebook status</h3>");
 	
 	// Facebook Connect
-	private FacebookApi api = ApiFactory.newApiClient(Config.API_KEY);
+	private FacebookApi api = ApiFactory.getInstance ();
 		
 	// EventBus
 	private HandlerManager eventBus ;

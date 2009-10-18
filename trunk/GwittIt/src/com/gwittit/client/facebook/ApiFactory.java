@@ -11,13 +11,14 @@ public class ApiFactory {
 	
 	private static FacebookApi apiClient;
 	
+	
 	/**
 	 * Create facebook api client
 	 */
-	public static FacebookApi newApiClient ( String apiKey ) {
+	public static FacebookApi getInstance () {
 		
 		if ( apiClient == null ) {
-			apiClient = new FacebookApi ( apiKey );
+			apiClient = new FacebookApi ();
 		} 
 		return apiClient;
 	}

@@ -30,7 +30,7 @@ public class EventSelector extends Composite  {
     
     private final HorizontalPanel outer = new HorizontalPanel();
     
-    private FacebookApi apiClient = ApiFactory.newApiClient(Config.API_KEY);
+    private FacebookApi apiClient = ApiFactory.getInstance();
 
     private Button selectButton = new Button ( " Go ");
     
