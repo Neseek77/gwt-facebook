@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<project name="sampleProject" basedir="." default="jar">
+    <property name="src" value="src"/>
+    <property name="output" value="build"/>
+    <property name="version" value="1.0-BETA5" /> 
+	
+	<target name="javadoc" >
+
+		<mkdir dir="gwt-facebook-javadoc-${version}" />
+		
+			<javadoc destdir="war/javadoc/">
+				<sourcepath path="src"  />
+				<package name="com.gwittit.client.facebook.*"/>				
+					<classpath refid="java">
+				</classpath>
+				
+			
+		</javadoc>
+	</target>
+
+		<target name="compile" depends="create">
+        <javac destdir="${output}">  
+            <src path="${src}"/>     
+            <classpath refid="java"/>
+        	<include name="com/gwittit/client/facebook/**"></include>
+    	    	
+        </javac>
+    </target>
+
+
+    <target name="copyFiles" >
+    	
+    	<mkdir dir="${output}/com/gwittit/public/"/>
+    	
+    	<copy todir="${output}/com/gwittit/client/facebook/">
+    		<fileset dir="src/com/gwittit/client/facebook/">
+    			<include name="**/*.java"/>
+    		</fileset>
+    	</copy>
+ 	    	<copy file="GwtFacebook.gwt.xml" todir="${output}/com/gwittit" />
+	    	<copy file="war/GwtFacebook.css" todir="${output}/com/gwittit/public/" />
+	</target>
+ 
+	<target name="jar" depends="compile,copyFiles">
+        <jar destfile="gwt-facebook-${version}.jar"> 
+		<fileset dir="${output}"/>
+        </jar>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="${output}"/>
+    </target>
+
+    <target name="create" depends="clean">
+        <mkdir dir="${output}"/>
+    </target>
+
+    <path id="java">
+        <fileset dir="war/WEB-INF/lib">
+            <include name="*.jar"/>
+        </fileset>
+
+    	<fileset dir="/Users/ola/Documents/Source/gwt-mac-1.7.0/" >
+    		<include name="*.jar" />
+    	</fileset>
+    		
+    </path>
+</project>
