@@ -7,7 +7,6 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.gwittit.client.facebook.events.EventHelper;
 
 /**
  * Class that wraps the facebook conncet API. Here you will find the javascripts
