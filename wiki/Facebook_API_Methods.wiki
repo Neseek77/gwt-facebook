@@ -118,7 +118,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||stream.removeComment|| YES ||
 ||stream.removeLike|| YES || 
 ||users.getInfo||  || 
-||users.getLoggedInUser||  ||
+||users.getLoggedInUser|| YES ||
 ||users.getStandardInfo||  ||
 ||users.hasAppPermission||  ||
 ||users.isAppUser||  ||
