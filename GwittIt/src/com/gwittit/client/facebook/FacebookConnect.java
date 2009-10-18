@@ -19,7 +19,7 @@ import com.gwittit.client.facebook.events.EventHelper;
  */
 public class FacebookConnect {
 
- 
+    
     /**
      * TODO: Fix
      * @param callback
@@ -183,8 +183,8 @@ public class FacebookConnect {
 	 * @param eventBus
 	 *            Fire events.
 	 */
-	public static void init ( String apiKey, final HandlerManager eventBus ) {
-		init(apiKey, "/xd_receiver.htm", eventBus );
+	public static void init ( String apiKey, final LoginCallback callback ) {
+		init(apiKey, "/xd_receiver.htm" , callback );
 	}
 
 	/**
@@ -195,11 +195,7 @@ public class FacebookConnect {
 	 * @param eventBus
 	 *            application event bus, fire loginEvent.
 	 */
-	public static void init ( String apiKey, String xdReceiver, final HandlerManager eventBus ) {
-
-		if (eventBus == null) {
-			throw new IllegalArgumentException("eventBus null");
-		}
+	public static void init ( String apiKey, String xdReceiver, final LoginCallback callback ) {
 
 		if (apiKey == null) {
 			throw new IllegalArgumentException("apiKey null");
@@ -210,20 +206,8 @@ public class FacebookConnect {
 		}
 
 		// Create a local callback to deal with login.
-		AsyncCallback<JSONValue> loginCallback = new AsyncCallback<JSONValue>() {
-
-			public void onFailure(Throwable t) {
-				Window.alert("Error occured on login : " + t);
-			}
-
-			public void onSuccess(JSONValue o) {
-				EventHelper.fireLoginEvent(eventBus);
-			}
-
-		};
-
 		setupXdReceiver ( apiKey, xdReceiver );
-		defineJsCallbackFunction ( loginCallback );
+		defineJsCallbackFunction ( callback );
 	}
 
 	
@@ -246,19 +230,16 @@ public class FacebookConnect {
 	 * 
 	 * @param callback
 	 */
-	private static native void defineJsCallbackFunction (AsyncCallback<JSONValue> callback) /*-{
+	private static native void defineJsCallbackFunction ( LoginCallback callback) /*-{
 		$wnd.facebookConnectLogin = function() {
-		    @com.gwittit.client.facebook.FacebookConnect::onSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;)(callback);
+		    @com.gwittit.client.facebook.FacebookConnect::onLoginProxy(Lcom/gwittit/client/facebook/LoginCallback;)(callback);
 		};
 	}-*/;
 
 	/**
 	 * Called when a user successfully logs in.
 	 */
-	public static void onSuccess(AsyncCallback<JSONValue> callback) {
-		if (callback == null) {
-			throw new IllegalArgumentException("callback null");
-		}
-		callback.onSuccess(null);
+	public static void onLoginProxy( LoginCallback callback) {
+		callback.onLogin();
 	}
 }
