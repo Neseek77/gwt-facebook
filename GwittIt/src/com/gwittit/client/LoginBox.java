@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.facebook.FacebookConnect;
-import com.gwittit.client.facebook.events.EventHelper;
+import com.gwittit.client.facebook.LoginCallback;
 import com.gwittit.client.facebook.xfbml.FbLoginButton;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
@@ -31,7 +31,12 @@ public class LoginBox extends Composite {
 	
 	private Anchor loginLink = new Anchor ( "don't see a button? Click here to login");
 	
-	public LoginBox ( final HandlerManager eventBus ) {
+	private LoginCallback loginCallback;
+	
+	public void addLoginCallback ( LoginCallback loginCallback ) {
+	    this.loginCallback = loginCallback;
+	}
+	public LoginBox () {
 		
 	    outer.getElement ().setId ( "OuterRouter");
 		// Login with the javascript api. GWT client doesnt render the fb:login-button
@@ -41,7 +46,9 @@ public class LoginBox extends Composite {
 					public void onFailure(Throwable caught) {
 					}
 					public void onSuccess(Boolean result) {
-						EventHelper.fireLoginEvent(eventBus);
+					    if ( loginCallback != null ) {
+					        loginCallback.onLogin ();
+					    }
 					}
 				}
 			);

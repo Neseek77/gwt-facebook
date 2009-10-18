@@ -157,22 +157,15 @@ public class Events_get extends Showcase {
     }
     
     /*
-     * 
+     *  Test events.edit ( currently not working )
      */
     public void addEditEvent ( final VerticalPanel outer, final EventInfo e) {
         
         Anchor editLink = new Anchor ( "Edit Event" );
         outer.add ( editLink );
-
         Json j = Json.newInstance ();
         j.put ( "name", e.getName () + " Updated " );
-//        j.put ( "category", 1 );
-//        j.put ( "subcategory", 1 );
-//        j.put ( "start_time", new Date().getTime() );
-//        j.put ( "end_time", new Date().getTime() );
-//        j.put ( "location", "location" );
-//        j.put (  "host", "host" );
-//        j.put ( "city", "Palo Alto, CA" );
+
          
         final EventInfo updateEvent = EventInfo.fromJson ( j.toString () );
         editLink.addClickHandler ( new ClickHandler() {
@@ -180,6 +173,7 @@ public class Events_get extends Showcase {
                 addLoader ( outer );
                 apiClient.events_edit ( e.getEid (), updateEvent, new AsyncCallback<Boolean> (){
                     public void onFailure(Throwable caught) {
+                        removeLoader ( outer );
                         Events_get.this.handleFailure ( caught );
                     }
                     public void onSuccess(Boolean result) {
@@ -269,6 +263,7 @@ public class Events_get extends Showcase {
              ajaxLoaderPanel.setWidget ( Events_get.this.getLoader () );
                     apiClient.events_rsvp ( eventId, status, new AsyncCallback<Boolean> () {
                         public void onFailure(Throwable caught) {
+                           
                             Events_get.this.handleFailure ( caught );
                         }
                         public void onSuccess(Boolean result) {

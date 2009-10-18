@@ -17,11 +17,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.xfbml.FbName;
+import com.gwittit.client.facebook.xfbml.FbProfilePic;
 import com.gwittit.client.facebook.xfbml.Xfbml;
-
+import com.gwittit.client.facebook.xfbml.FbProfilePic.Size;
 
 /**
  * This class wraps showcases and adds a treemenu for navigation.
+ * 
  */
 public class ShowcaseClient extends Composite  {
 
@@ -60,10 +62,13 @@ public class ShowcaseClient extends Composite  {
 	
 	final VerticalPanel showcaseWrapper = new VerticalPanel ();
 	
+	// Animated loader
 	final Image loader = new Image ( "/loader.gif" );
 
+	// Menu on the left
 	final  Tree treeMenu = createMenu ();
 
+	// Api Client
 	final FacebookApi apiClient = ApiFactory.getInstance ();
 	
 	/**
@@ -78,13 +83,16 @@ public class ShowcaseClient extends Composite  {
 		showcaseWrapper.addStyleName("showcaseWrapper");
 		treeMenu.addStyleName("treeMenu");
 		
-		FbName name = new FbName ( apiClient.getApiKey () );
+		FbName name = new FbName ( apiClient.getLoggedInUser () );
 		name.setUseyou ( false );
 		name.setLinked ( false );
-		
-		showcaseWrapper.add ( new HTML ( "<h3>Welcome, " + name + "</h3>" ) );
-		showcaseWrapper.add( new HTML ( "To start, click the menu on the left" ) );
-		
+
+		// Welcome user in a nice way by showing a picture 
+		HorizontalPanel welcomePnl = new HorizontalPanel ();
+		welcomePnl.setSpacing ( 10 );
+		welcomePnl.add (  new  HTML ( "<h4>Welcome, " + name + "</h4> To start, click the menu on the left " ) );
+		welcomePnl.add ( new FbProfilePic ( apiClient.getLoggedInUser (), Size.thumb ) );
+		showcaseWrapper.add ( welcomePnl );
 		
 		VerticalPanel treeMenuWrapper = new VerticalPanel ();
 		treeMenuWrapper.addStyleName ( "treeMenuWrapper");
@@ -96,9 +104,10 @@ public class ShowcaseClient extends Composite  {
 		inner.add (  decorate ( showcaseWrapper ) );
 		
 		outer.add ( inner );
+		Xfbml.parse ( outer );
+		    
 		initWidget ( outer );
 		
-		Xfbml.parse ( outer );
 	}
 	
 	/*
