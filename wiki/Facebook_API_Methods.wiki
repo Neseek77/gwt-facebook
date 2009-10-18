@@ -12,9 +12,9 @@ http://wiki.developers.facebook.com/index.php/API
 ----
 
 || *Method* || *Implemented* ||
-|| FB ApiClient sessionIsExpired|| YES ||
-|| String get_apiKey  || YES ||
-|| SessionRecord get_session || YES ||
+|| sessionIsExpired|| YES ||
+|| get_apiKey  || YES ||
+|| get_session || YES ||
 <wiki:comment>
 ||admin.banUsers   || NO  ||
 ||admin.unbanUsers || NO  ||
