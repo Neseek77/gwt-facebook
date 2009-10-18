@@ -60,7 +60,7 @@ public class Comments_add extends Showcase  {
 					public void onSuccess(JavaScriptObject result) {
 						removeLoader ( outer );
 						text.setValue(null);
-						responseWrapper.add( new HTML (""+ new JSONObject( result )) );
+						responseWrapper.add( new HTML (" Thanks :-)" ) );
 					}
 					
 					

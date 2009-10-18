@@ -1,20 +1,16 @@
 package com.gwittit.client.example;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi.NotificationType;
@@ -49,7 +45,7 @@ public class Notifications_send extends Showcase {
         
         submit.addClickHandler ( new ClickHandler () {
             public void onClick(ClickEvent event) {
-                createNotification ( notificationText.getValue () );
+                createNotification ( outer, notificationText.getValue () );
             }
             
         });
@@ -60,19 +56,19 @@ public class Notifications_send extends Showcase {
     /*
      * Create a notification
      */
-    private void createNotification ( String notification ) {
+    private void createNotification ( final VerticalPanel outer, String notification ) {
   
         List<Long> toIds = new ArrayList<Long> ();
         toIds.add ( new Long ( 807462490 ) );
         toIds.add ( new Long ( 744450545 ) );
         
-        apiClient.notifications_send ( toIds, notification, NotificationType.defaultType, new AsyncCallback<JavaScriptObject> () {
+        apiClient.notifications_send ( toIds, notification, NotificationType.user_to_user, new AsyncCallback<JavaScriptObject> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
             public void onSuccess(JavaScriptObject result) {
-                Window.alert ( "success" );
                 notificationText.setValue ( null );
+                outer.add ( new HTML (  "Sent notification , thank you " ) );
             }
             
         });
