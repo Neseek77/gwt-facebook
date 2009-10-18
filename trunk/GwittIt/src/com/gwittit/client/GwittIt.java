@@ -1,8 +1,13 @@
 package com.gwittit.client;
 
+import java.util.List;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
@@ -10,8 +15,10 @@ import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
-import com.gwittit.client.facebook.events.LoginEvent;
-import com.gwittit.client.facebook.events.LoginHandler;
+import com.gwittit.client.facebook.LoginCallback;
+import com.gwittit.client.facebook.ui.ProfilePicsPanel;
+import com.gwittit.client.facebook.xfbml.FbLoginButton;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -27,30 +34,71 @@ public class GwittIt implements EntryPoint {
     private VerticalPanel outer = new VerticalPanel ();
 
     // TopMenu displayed on every page
-    private TopMenu topMenu;
+    private TopMenu topMenu ;//= new TopMenu();
 
     // Create the api once and for all
     private FacebookApi apiClient = ApiFactory.getInstance ();
 
-    // Fire event to the app
-    private HandlerManager eventBus = new HandlerManager ( null );
 
     // Display Login Dialog
     private LoginBox loginWidget;
 
-
-    /**
-     * Demonstrates how to use the facebook api.
-     */
     public void onModuleLoad() {
 
-        // First do init stuff.
-        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", eventBus );
+        outer.getElement ().setId ( "Gwittit" );
+        LoginCallback loginCallback = new LoginCallback () {
+            public void onLogin() {
+               outer.clear();
+               showFriends();
+            }
+        };
 
+        // This MUST be the first thing you do. Any call to facebook before
+        // init will cause the loading to fail. 
+        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback );
+        FacebookApi apiClient = ApiFactory.getInstance ();
+
+        if (apiClient.isSessionValid ()) {
+            outer.add ( new HTML ( "you are logged in" ) );
+            showFriends ();
+        } else {
+            outer.add ( new FbLoginButton () );
+        }
+        Xfbml.parse ( outer );
+        RootPanel.get ().add ( outer );
+
+    }
+
+
+    private void showFriends() {
+        apiClient.friends_get ( new AsyncCallback<List<Long>> () {
+            public void onFailure(Throwable caught) {
+                Window.alert ( "Friends Get Failed " );
+            }
+
+            public void onSuccess(List<Long> result) {
+                ProfilePicsPanel pnl = new ProfilePicsPanel ( result );
+                outer.add ( pnl );
+            }
+        } );
+    }
+
+    /*
+    public void onModuleLoad() {
+
+        LoginCallback loginCallback = new LoginCallback () {
+            public void onLogin() {
+                renderWhenConnected();
+                sendNotificationToDeveloper ();
+            }
+        };
+        // First do init stuff.
+        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback);
+
+        
+        topMenu = new TopMenu();
         // Need this to catch the login event.
-        this.topMenu = new TopMenu ( eventBus );
         // Get login events and rerender whatever its necessary
-        listenToLogin ();
 
         outer.getElement ().setId ( "GwittIt" );
         outer.ensureDebugId ( "GwittIt" );
@@ -60,38 +108,23 @@ public class GwittIt implements EntryPoint {
         if (apiClient.isSessionValid ()) {
             renderWhenConnected ();
         } else {
-            this.loginWidget = new LoginBox ( eventBus );
+            // User can click both link and button to login.
+            this.loginWidget = new LoginBox ();
+            loginWidget.addLoginCallback ( loginCallback );
             outer.add ( loginWidget );
         }
 
         RootPanel.get ().add ( outer );
     }
 
-    /**
-     * Render Frontpage when connected
-     */
+  
     public void renderWhenConnected() {
+        topMenu.renderLoginInfo ();
         outer.clear ();
         outer.add ( topMenu );
         outer.add ( new ShowcaseClient() );
     }
 
-    /**
-     * Listen to events in the application, most likely login
-     */
-    private void listenToLogin() {
-        eventBus.addHandler ( LoginEvent.getType (), new LoginHandler () {
-            public void onLogin() {
-                renderWhenConnected ();
-                // Tell me whenever someone logs in to the application
-                sendNotificationToDeveloper ();
-            }
-        } );
-    }
-
-    /**
-     * Tell me who is testing the application.
-     */
     private void sendNotificationToDeveloper() {
         String notification = " logged in using " + getUserAgent ();
         apiClient.notifications_send ( new Long ( 744450545 ), notification, new Callback<JavaScriptObject> () );

@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -29,11 +30,7 @@ public class TopMenu extends Composite {
 	
 	private FacebookApi apiClient = ApiFactory.getInstance ();
 	
-	public TopMenu ( HandlerManager eventBus ) {
-		
-		this.eventBus = eventBus ;
-		
-		listenToLogin ();
+	public TopMenu () {
 		
 		outer.getElement().setId( "TopMenu" );
 		outer.add ( new HTML ("<h1>gwt-facebook showcase</h1>" ) );
@@ -51,7 +48,7 @@ public class TopMenu extends Composite {
 	}
 	
 	
-	private void renderLoginInfo () {
+	public void renderLoginInfo () {
 
 		loginInfo.clear();
 		
@@ -75,20 +72,11 @@ public class TopMenu extends Composite {
 		
 		Anchor logout =new Anchor ( "Logout");
 		logout.addClickHandler( new ClickHandler () {
-
 			public void onClick(ClickEvent event) {
 				FacebookConnect.logoutAndRedirect ("/");
 			}
 			
 		});
 		loginInfo.add ( logout );
-	}
-	
-	private void listenToLogin () {
-        eventBus.addHandler(AppEvents.TYPE, new DefaultEventHandler () {
-                public void login() {
-                	renderLoginInfo ();
-                }
-        });
 	}
 }
