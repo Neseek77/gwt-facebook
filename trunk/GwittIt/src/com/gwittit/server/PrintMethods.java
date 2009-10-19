@@ -11,7 +11,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = MessageThread.class;
+	    Class c = MailboxFolder.class;
 		
 		Field fields[] = c.getFields ();
 		
