@@ -57,7 +57,7 @@ public class Message_getThreadsInFolder extends Showcase {
         
         permissionDialog.addPermissionHandler ( new PermissionHandler() {
             public void onPermissionChange(Boolean granted) {
-                printMailboxFolders( mailFolders, folderContent );
+                renderMailboxFolders( mailFolders, folderContent );
             }
             
         });
@@ -73,7 +73,7 @@ public class Message_getThreadsInFolder extends Showcase {
     /**
      * Print a list with users mail folders
      */
-    private void printMailboxFolders ( final HorizontalPanel mailFolders, final VerticalPanel folderContent ) {
+    private void renderMailboxFolders ( final HorizontalPanel mailFolders, final VerticalPanel folderContent ) {
 
         mailFolders.add ( new HTML ( "Go to folder: " ) );
         
