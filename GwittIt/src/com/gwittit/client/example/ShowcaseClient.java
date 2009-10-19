@@ -44,7 +44,7 @@ public class ShowcaseClient extends Composite  {
 	final String groupMethods = "Groups:groups_get,Xgroups_getMembers";
 	final String intlMethods = "XIntl:intl_getTranslations,intl_uploadNativeStrings";
 	final String linkMethods = "XLinks:links_get,links_post";
-	final String messageMethods = "XMessage:liveMessage_send,message_getThreadsInFolder";
+	final String messageMethods = "Message:XliveMessage_send,message_getThreadsInFolder";
 	final String noteMethods = "Notes:notes_create,Xnotes_delete,Xnotes_edit,notes_get";
 	final String notificationMethods = "Notification:notifications_get,notifications_getList,Xnotifications_markRead,notifications_send,Xnotifications_sendEmail";
 	final String pageMethods = "XPages:pages_getInfo,pages_isAdmin,pages_isAppAdded,pages_isFan";
@@ -315,7 +315,7 @@ public class ShowcaseClient extends Composite  {
 		    //  example = new LiveMessage_send();
 		}
 		else if ( "message_getThreadsInFolder".equals ( m ) ) { 
-		    //  example = new Message_getThreadsInFolder();
+		    showcase = new Message_getThreadsInFolder();
 		}
 		else if ( "notes_create".equals ( m ) ) { 
 		    showcase = new Notes_create();

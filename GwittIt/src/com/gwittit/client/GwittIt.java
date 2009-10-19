@@ -43,47 +43,48 @@ public class GwittIt implements EntryPoint {
     // Display Login Dialog
     private LoginBox loginWidget;
 
-    public void onModuleLoad() {
+//    public void onModuleLoad() {
+//
+//        outer.getElement ().setId ( "Gwittit" );
+//        LoginCallback loginCallback = new LoginCallback () {
+//            public void onLogin() {
+//               outer.clear();
+//               showFriends();
+//            }
+//        };
+//
+//        // This MUST be the first thing you do. Any call to facebook before
+//        // init will cause the loading to fail. 
+//        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback );
+//        FacebookApi apiClient = ApiFactory.getInstance ();
+//
+//        if (apiClient.isSessionValid ()) {
+//            outer.add ( new HTML ( "you are logged in" ) );
+//            showFriends ();
+//        } else {
+//            outer.add ( new HTML ( "Run in Firefox/Safari to see button" ) );
+//            outer.add ( new FbLoginButton () );
+//        }
+//        Xfbml.parse ( outer );
+//        RootPanel.get ().add ( outer );
+//
+//    }
+//
+//
+//    private void showFriends() {
+//        apiClient.friends_get ( new AsyncCallback<List<Long>> () {
+//            public void onFailure(Throwable caught) {
+//                Window.alert ( "Friends Get Failed " );
+//            }
+//
+//            public void onSuccess(List<Long> result) {
+//                ProfilePicsPanel pnl = new ProfilePicsPanel ( result );
+//                outer.add ( pnl );
+//            }
+//        } );
+//    }
 
-        outer.getElement ().setId ( "Gwittit" );
-        LoginCallback loginCallback = new LoginCallback () {
-            public void onLogin() {
-               outer.clear();
-               showFriends();
-            }
-        };
-
-        // This MUST be the first thing you do. Any call to facebook before
-        // init will cause the loading to fail. 
-        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback );
-        FacebookApi apiClient = ApiFactory.getInstance ();
-
-        if (apiClient.isSessionValid ()) {
-            outer.add ( new HTML ( "you are logged in" ) );
-            showFriends ();
-        } else {
-            outer.add ( new FbLoginButton () );
-        }
-        Xfbml.parse ( outer );
-        RootPanel.get ().add ( outer );
-
-    }
-
-
-    private void showFriends() {
-        apiClient.friends_get ( new AsyncCallback<List<Long>> () {
-            public void onFailure(Throwable caught) {
-                Window.alert ( "Friends Get Failed " );
-            }
-
-            public void onSuccess(List<Long> result) {
-                ProfilePicsPanel pnl = new ProfilePicsPanel ( result );
-                outer.add ( pnl );
-            }
-        } );
-    }
-
-    /*
+  
     public void onModuleLoad() {
 
         LoginCallback loginCallback = new LoginCallback () {

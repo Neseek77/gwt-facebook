@@ -34,7 +34,11 @@ public class Notes_create extends Showcase {
         final Button saveButton = new Button ( "Save Note ");
 
         final PermissionDialog permissionDialog = 
-            new PermissionDialog ( apiClient, Permission.create_note, createPermissionHandler ( permissionHolder, saveButton ) );;
+            new PermissionDialog ();
+        
+        permissionDialog.addPermissionHandler ( createPermissionHandler ( permissionHolder, saveButton ) );;
+        permissionDialog.checkPermission ( Permission.create_note );
+        
         // Need this here so we can enable when user granted permission
         saveButton.setEnabled ( false );
         
