@@ -45,6 +45,7 @@ import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
 import com.gwittit.client.facebook.entities.Group;
 import com.gwittit.client.facebook.entities.GroupMembers;
+import com.gwittit.client.facebook.entities.MessageThread;
 import com.gwittit.client.facebook.entities.Note;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
@@ -385,7 +386,7 @@ public class FacebookApi {
      * 
      */
     public void events_create(EventInfo eventInfo, AsyncCallback<JavaScriptObject> callback) {
-        Json j = Json.newInstance ().put ( "event_info",  new JSONObject ( eventInfo ).toString () );        
+        Json j = Json.newInstance ().put ( "event_info", new JSONObject ( eventInfo ).toString () );
         callMethod ( "events.create", j.getJavaScriptObject (), callback );
     }
 
@@ -400,11 +401,15 @@ public class FacebookApi {
      * method without an active user session, then your application can edit an
      * event only if it is the event creator.
      * 
-     * @param eid eventid 
-     * @param eventInfo updated info
-     * @param callback boolean if succeeded
+     * @param eid
+     *            eventid
+     * @param eventInfo
+     *            updated info
+     * @param callback
+     *            boolean if succeeded
      * 
-     * @see <a href="http://wiki.developers.facebook.com/index.php/Events.edit">Event.edit</a>
+     * @see <a
+     *      href="http://wiki.developers.facebook.com/index.php/Events.edit">Event.edit</a>
      */
     public void events_edit(Long eid, EventInfo event, AsyncCallback<Boolean> callback) {
         Json j = Json.newInstance ().put ( "eid", eid ).put ( "event_info", new JSONObject ( event ).toString () );
@@ -848,11 +853,42 @@ public class FacebookApi {
     }
 
     /**
-     * TODO: Implement
+     * Returns all of a user's messages and threads from the Inbox. The user
+     * needs to grant the calling application the read_mailbox extended
+     * permission.
+     * 
+     * <p/>
+     * 
+     * This method is a wrapper around the thread and message FQL tables; you
+     * can achieve more fine-grained control by using those two FQL tables in
+     * conjunction with the fql.multiquery API call.
+     * 
+     * Applications must pass a valid session key or a user ID.
+     * 
+     * @param folderId
+     *            The ID of the folder you want to return. The ID can be one of:
+     *            0 (for Inbox), 1 (for Outbox), or 4 (for Updates).
+     * @param includeRead
+     *            Indicates whether to include notifications that have already
+     *            been read. By default, notifications a user has read are not
+     *            included.
+     * @param limit
+     *            Indicates the number of threads to return.
+     * @param offset
+     *            Indicates how many threads to skip from the most recent
+     *            thread.
+     *            
+     * @see <a href="http://wiki.developers.facebook.com/index.php/Message.getThreadsInFolder">Message.getThreadsInFolder</a>
      */
-    public void message_getThreadsInFolder(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+    public void message_getThreadsInFolder( Integer folderId,  
+                                            Boolean includeRead, 
+                                            Integer limit, 
+                                            Integer offset , AsyncCallback<List<MessageThread>> callback) {
+        Json j = Json.newInstance ().put ( "folder_id", folderId).put ( "include_read", includeRead );
+        j.put ( "limit", limit );
+        j.put ( "offset", offset );
+        
+        callMethodRetList ( "message.getThreadsInFolder", j.getJavaScriptObject (), MessageThread.class, callback );
     }
 
     /**
@@ -1347,7 +1383,7 @@ public class FacebookApi {
      * Valid permissions
      */
     public enum Permission {
-        read_stream, publish_stream, create_event, rsvp_event, create_note
+        read_stream, publish_stream, create_event, rsvp_event, create_note, read_mailbox
     };
 
     /**

@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookApi.Permission;
@@ -25,31 +26,31 @@ public class PermissionDialog extends Composite {
     
     private PermissionHandler handler  = null;
     
-    private FacebookApi apiClient;
+    private FacebookApi apiClient = ApiFactory.getInstance ();
     
     private HTML loader = new HTML ( "Checking permission");
+ 
+    
     /**
      * Create a new PermissionDialog
-     * 
-     * @param apiClient Facebook Api inject
-     * @param permission to get
-     * @param handler to execute callback
-     * 
      */
-    public PermissionDialog ( FacebookApi apiClient, final Permission permission, final PermissionHandler handler ) {
+    public PermissionDialog () {
         
-        this.apiClient = apiClient;
-        this.handler = handler;
-        
-        // First check if user has the permission.
-        
+        initWidget ( outer );
+    }
+    
+    
+    public void checkPermission ( final Permission permission ) {
+        outer.clear ();
         outer.add ( loader );
+        
+        // Check if user has the right permission. If not show permission dialog
+        // and return if user granted us given permission.
         apiClient.users_hasAppPermission ( permission, new AsyncCallback<Boolean> () {
-
+            
             public void onFailure(Throwable caught) {
                 new ErrorResponseUI ( caught ).center ();
             }
-
             public void onSuccess(Boolean hasPermission) {
                 outer.remove ( loader );
                 if ( hasPermission ) {
@@ -60,15 +61,13 @@ public class PermissionDialog extends Composite {
             }
             
         });
-        
-    
-        initWidget ( outer );
     }
-    
-    
+
     private Widget createShowPermissionUI ( final Permission permission ) {
         
-        Anchor a = new Anchor ( "Grant this application " + permission.toString () + " permission " );
+        Anchor a = new Anchor ();
+        a.setHTML ("<h3>Grant this application " + permission.toString () + " permission</h3>" );
+        a.addStyleName ( "clickable" );
         
         a.addClickHandler ( new ClickHandler () {
 
