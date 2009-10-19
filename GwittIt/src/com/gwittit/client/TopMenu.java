@@ -30,8 +30,6 @@ public class TopMenu extends Composite {
 	public TopMenu () {
 		
 		outer.getElement().setId( "TopMenu" );
-		outer.add ( new HTML ("<h1>gwt-facebook showcase</h1>" ) );
-		
 		loginInfo.addStyleName( "loginInfo" );
 		
 		outer.add ( new HTML ( "&nbsp;" ) );

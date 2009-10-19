@@ -9,8 +9,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi.Permission;
@@ -41,65 +43,70 @@ public class Message_getThreadsInFolder extends Showcase {
     public Widget createWidget () {
      
         final VerticalPanel outer = new VerticalPanel ();
-        outer.getElement ().setId ( "gwittit-Message_getThreadsInFolder" );
+        outer.addStyleName ( "gwittit-Message_getThreadsInFolder" );
     
-        final VerticalPanel mailboxPnl = new VerticalPanel ();
+        // List mail folders.
+        final HorizontalPanel mailFolders = new HorizontalPanel ();
+        mailFolders.addStyleName ( "mailFolders" );
         
-        final Button testMethodBtn = new Button ( "Get Messages" );
+        // Add mail folder content here
+        final VerticalPanel folderContent = new VerticalPanel ();
+        
         // Disable button until we know that the user granted us read_mailbox permission
-        testMethodBtn.setEnabled ( false );
         final PermissionDialog permissionDialog = new PermissionDialog ();
         
         permissionDialog.addPermissionHandler ( new PermissionHandler() {
             public void onPermissionChange(Boolean granted) {
-                testMethodBtn.setEnabled ( true );
-                printMailboxFolders( mailboxPnl );
+                printMailboxFolders( mailFolders, folderContent );
             }
             
         });
 
         outer.add ( permissionDialog );
-        outer.add ( mailboxPnl );
-        outer.add ( testMethodBtn );
-
+        outer.add ( mailFolders );
+        outer.add ( folderContent );
         // Check if user can read mailbox
         permissionDialog.checkPermission ( Permission.read_mailbox );
-        testMethodBtn.addClickHandler ( new ClickHandler () {
-            public void onClick(ClickEvent event) {
-                testMethod( outer );
-            }
-        });
         return outer;
     }
     
-    private void printMailboxFolders ( final VerticalPanel addToContent ) {
+    /**
+     * Print a list with users mail folders
+     */
+    private void printMailboxFolders ( final HorizontalPanel mailFolders, final VerticalPanel folderContent ) {
+
+        mailFolders.add ( new HTML ( "Go to folder: " ) );
         
-        // Get mailboxes
+        // Get mailboxes, inbox output etc
         apiClient.message_getMailBoxFolders ( new AsyncCallback<List<MailboxFolder>> () {
-
             public void onFailure(Throwable caught) {
-                // TODO Auto-generated method stub
-                
+                handleFailure ( caught );
             }
-
             public void onSuccess(List<MailboxFolder> result) {
-                for ( MailboxFolder mf : result ) {
-                    
-                    addToContent.add ( new HTML ( "Mailbox: " + mf.getName () + ", id: " 
-                                                              + mf.getFolderId () + ", Unread: " + mf.getUnreadCount () ) );
+                for ( final MailboxFolder mf : result ) {
+                    Anchor a = new Anchor ( mf.getName () + (mf.getUnreadCount() > 0 ?  "(" + mf.getUnreadCount () + ")" : "" ) );
+                    a.addClickHandler ( new ClickHandler() {
+                        public void onClick(ClickEvent event) {
+                            renderMessages ( folderContent, mf.getFolderId () );
+                        }
+                        
+                    });
+                    mailFolders.add ( a );
                 }
             }
-            
         });
-        
     }
+
     /**
      * Test the method, display raw output
      */
-    private void testMethod ( final VerticalPanel addToContent ) {
+    private void renderMessages ( final VerticalPanel addToContent, Integer folderId ) {
+        
+        addToContent.clear ();
         
         addLoader ( addToContent );
-        apiClient.message_getThreadsInFolder ( 0, null, null, null, new AsyncCallback<List<MessageThread>> () {
+        // Render users messages filtered by folder id.
+        apiClient.message_getThreadsInFolder ( folderId, null, null, null, new AsyncCallback<List<MessageThread>> () {
 
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
