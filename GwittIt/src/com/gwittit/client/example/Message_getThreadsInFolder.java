@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi.Permission;
+import com.gwittit.client.facebook.entities.MailboxFolder;
 import com.gwittit.client.facebook.entities.Message;
 import com.gwittit.client.facebook.entities.MessageThread;
 import com.gwittit.client.facebook.ui.PermissionDialog;
@@ -41,6 +42,8 @@ public class Message_getThreadsInFolder extends Showcase {
      
         final VerticalPanel outer = new VerticalPanel ();
         outer.getElement ().setId ( "gwittit-Message_getThreadsInFolder" );
+    
+        final VerticalPanel mailboxPnl = new VerticalPanel ();
         
         final Button testMethodBtn = new Button ( "Get Messages" );
         // Disable button until we know that the user granted us read_mailbox permission
@@ -50,11 +53,13 @@ public class Message_getThreadsInFolder extends Showcase {
         permissionDialog.addPermissionHandler ( new PermissionHandler() {
             public void onPermissionChange(Boolean granted) {
                 testMethodBtn.setEnabled ( true );
+                printMailboxFolders( mailboxPnl );
             }
             
         });
 
         outer.add ( permissionDialog );
+        outer.add ( mailboxPnl );
         outer.add ( testMethodBtn );
 
         // Check if user can read mailbox
@@ -67,6 +72,27 @@ public class Message_getThreadsInFolder extends Showcase {
         return outer;
     }
     
+    private void printMailboxFolders ( final VerticalPanel addToContent ) {
+        
+        // Get mailboxes
+        apiClient.message_getMailBoxFolders ( new AsyncCallback<List<MailboxFolder>> () {
+
+            public void onFailure(Throwable caught) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            public void onSuccess(List<MailboxFolder> result) {
+                for ( MailboxFolder mf : result ) {
+                    
+                    addToContent.add ( new HTML ( "Mailbox: " + mf.getName () + ", id: " 
+                                                              + mf.getFolderId () + ", Unread: " + mf.getUnreadCount () ) );
+                }
+            }
+            
+        });
+        
+    }
     /**
      * Test the method, display raw output
      */
@@ -86,6 +112,7 @@ public class Message_getThreadsInFolder extends Showcase {
                     mtPnl.addStyleName ( "messageThread" );
                     String header = " From " + new FbName ( mt.getSnippetAuthorString () );
                     header += "<br>" + mt.getSnippet ();
+                    header += "<br/>ThreadId: " + mt.getThreadId ();
                     header += "<br/>Messages in thread: " + mt.getMessageCountString ();
                     header += "<br/>Unread: " + mt.getUnread ();
                     HTML html = new HTML ( header );

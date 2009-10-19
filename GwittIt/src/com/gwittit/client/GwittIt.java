@@ -1,13 +1,7 @@
 package com.gwittit.client;
 
-import java.util.List;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
@@ -16,16 +10,13 @@ import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.LoginCallback;
-import com.gwittit.client.facebook.ui.ProfilePicsPanel;
-import com.gwittit.client.facebook.xfbml.FbLoginButton;
-import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class GwittIt implements EntryPoint {
 
-    //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+   // public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
     
     // My Localhost
     public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";

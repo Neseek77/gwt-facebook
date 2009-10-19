@@ -45,6 +45,7 @@ import com.gwittit.client.facebook.entities.FriendInfo;
 import com.gwittit.client.facebook.entities.FriendList;
 import com.gwittit.client.facebook.entities.Group;
 import com.gwittit.client.facebook.entities.GroupMembers;
+import com.gwittit.client.facebook.entities.MailboxFolder;
 import com.gwittit.client.facebook.entities.MessageThread;
 import com.gwittit.client.facebook.entities.Note;
 import com.gwittit.client.facebook.entities.Notification;
@@ -852,6 +853,17 @@ public class FacebookApi {
     public void liveMessage_send(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
     }
 
+    
+    /**
+     * Get current users mailboxes
+     */
+    public void message_getMailBoxFolders ( AsyncCallback<List<MailboxFolder>> callback ) {
+        Json j = Json.newInstance ();
+        String fql = "SELECT folder_id, name, unread_count FROM mailbox_folder WHERE 1";
+        j.put ( "query", fql );
+        callMethodRetList ( "fql.query", j.getJavaScriptObject (), MailboxFolder.class, callback );
+    }
+    
     /**
      * Returns all of a user's messages and threads from the Inbox. The user
      * needs to grant the calling application the read_mailbox extended
@@ -863,7 +875,7 @@ public class FacebookApi {
      * can achieve more fine-grained control by using those two FQL tables in
      * conjunction with the fql.multiquery API call.
      * 
-     * Applications must pass a valid session key or a user ID.
+     * Applications must pass a valid session key or a user ID.@
      * 
      * @param folderId
      *            The ID of the folder you want to return. The ID can be one of:
