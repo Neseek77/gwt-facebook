@@ -42,6 +42,7 @@ public class PermissionDialog extends Composite {
     
     public void checkPermission ( final Permission permission ) {
         outer.clear ();
+        loader.setHTML ( "Checking " + permission.toString () + " permission " );
         outer.add ( loader );
         
         // Check if user has the right permission. If not show permission dialog
@@ -76,7 +77,6 @@ public class PermissionDialog extends Composite {
                   public void onFailure(Throwable caught) {
                         new ErrorResponseUI ( caught ).center ();
                     }
-
                     public void onSuccess(Boolean result) {
                         if ( handler != null ) {
                             handler.onPermissionChange ( result );

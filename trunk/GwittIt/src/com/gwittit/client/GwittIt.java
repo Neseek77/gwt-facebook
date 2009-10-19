@@ -86,7 +86,6 @@ public class GwittIt implements EntryPoint {
         };
         // First do init stuff.
         FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback);
-
         
         topMenu = new TopMenu();
         // Need this to catch the login event.
