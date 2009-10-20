@@ -11,7 +11,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = Comments.class;
+	    Class c = Stream.class;
 		
 		Field fields[] = c.getFields ();
 		

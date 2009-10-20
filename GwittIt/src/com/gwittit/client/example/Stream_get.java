@@ -91,8 +91,8 @@ public class Stream_get extends Showcase {
         menu.add ( new HTML ( "<b> Choose Stream : </b> " ) );
 
         menu.add ( postsLink );
-        menu.add ( profilesLink );
         menu.add ( albumsLink );
+        menu.add ( profilesLink );
         
         // Click posts link
         postsLink.addClickHandler ( new ClickHandler() {
@@ -123,7 +123,7 @@ public class Stream_get extends Showcase {
         // Start loading
         addLoader ( streamBody);
         // Get stream from facebook.
-        apiClient.stream_get(null, new AsyncCallback<Stream> () {
+        apiClient.stream_get(new AsyncCallback<Stream> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
