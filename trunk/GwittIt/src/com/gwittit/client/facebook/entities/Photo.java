@@ -3,8 +3,9 @@ package com.gwittit.client.facebook.entities;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
- * Represents a photo object
- * @author ola
+ * Facebook Photo
+ * 
+ * @author olamar72
  */
 public class Photo extends JavaScriptObject {
 

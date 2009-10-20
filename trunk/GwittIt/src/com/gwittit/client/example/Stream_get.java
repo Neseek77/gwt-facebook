@@ -8,6 +8,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -22,6 +23,7 @@ import com.gwittit.client.facebook.entities.Comments;
 import com.gwittit.client.facebook.entities.Likes;
 import com.gwittit.client.facebook.entities.Media;
 import com.gwittit.client.facebook.entities.Post;
+import com.gwittit.client.facebook.entities.Profile;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.Media.Type;
 import com.gwittit.client.facebook.ui.PermissionDialog;
@@ -76,7 +78,7 @@ public class Stream_get extends Showcase {
 	/**
 	 * Render when user granted us permission to read stream
 	 */
-	void renderMainContent ( VerticalPanel addContentToPnl ) {
+	void renderMainContent ( final VerticalPanel addContentToPnl ) {
 	    final VerticalPanel streamBody = new VerticalPanel ();
         final HorizontalPanel menu = new HorizontalPanel ();
 
@@ -105,7 +107,7 @@ public class Stream_get extends Showcase {
         profilesLink.addClickHandler ( new ClickHandler() {
             public void onClick(ClickEvent event) {
                 streamBody.clear ();
-                streamBody.add ( asJson ( "Profiles", stream.getProfiles () ) );
+                renderProfiles ( streamBody, stream.getProfiles () );
             }
         });
         
@@ -116,7 +118,6 @@ public class Stream_get extends Showcase {
             } 
         }) ;
         
-        addContentToPnl.add ( menu );
         addContentToPnl.add ( streamBody );
 
         
@@ -129,6 +130,7 @@ public class Stream_get extends Showcase {
             }
             public void onSuccess(Stream result) {
                 stream = result;
+                addContentToPnl.insert ( menu, 0 );
                 removeLoader ( streamBody );
                 renderPosts ( streamBody, result.getPosts () );
                 Xfbml.parse ( streamBody );
@@ -145,20 +147,43 @@ public class Stream_get extends Showcase {
 	    
 	    VerticalPanel p = new VerticalPanel ();
 	    p.getElement ().setId ( "Albums" );
-	    
 	    p.add ( new HTML ( "<h3>Albums in Stream</h3>" ) );
 	    
 	    for (Album a : Util.iterate ( albums ) ) {
-	        
 	        p.add ( new HTML ( "<h4>" + a.getName () + "</h4>" ) );
-	        
 	        if ( a.hasCover () ) {
-	            p.add ( new HTML (" AlbumCover: " ) ) ;
+	            p.add ( new HTML (" CoverPid:  " + a.getCoverPid () ) ) ;
+	            
+	            Window.alert ( new FbPhoto ( a.getCoverPid (), FbPhoto.Size.small) + "" );
 	            p.add ( new FbPhoto ( a.getCoverPid () , FbPhoto.Size.small ) ) ;
 	        }
 	    }
 	    addContentToPnl.add ( p );
 	    Xfbml.parse ( p );
+	    
+	}
+	
+	/**
+	 * Render profiles in the stream
+	 */
+	void renderProfiles ( VerticalPanel addContentToPnl, JsArray<Profile> profiles) {
+	
+	    addContentToPnl.clear ();
+	    
+	    addContentToPnl.add ( new HTML ( "<h3>Profiles in Strea</h3>" ) );
+	    for ( Profile p : Util.iterate ( profiles ) ) {
+	        
+	        // Split pic on the left, name on the right
+	        FlowPanel tmp = new FlowPanel();
+	        tmp.addStyleName ( "profiles fbColorLight rounded addSpace" );
+	        tmp.add ( new Image ( p.getPicSquare () ) );
+	        // Link to profile
+	        Anchor a = new Anchor ( p.getName () );
+	        a.addStyleName ( "postContent" );
+	        a.setHref ( p.getUrl () );
+	        tmp.add ( a  );
+	        addContentToPnl.add ( tmp );
+	    }
 	    
 	}
 	

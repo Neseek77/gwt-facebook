@@ -1,11 +1,10 @@
 package com.gwittit.client.facebook.entities;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArray;
 
 
 /**
- * Stream Post
+ * Facebook tream Post (A post that appears in the newsfeed)
  * 
  * @author olamar72
  */

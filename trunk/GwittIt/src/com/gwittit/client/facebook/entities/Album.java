@@ -1,8 +1,6 @@
 package com.gwittit.client.facebook.entities;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.gwittit.client.facebook.Json;
 
 /**
@@ -23,18 +21,13 @@ public class Album extends JavaScriptObject {
 	/**
 	 * @return cover pid as string
 	 */
-	public final native String getCoverPidString () /*-{ return this.cover_pid +""; }-*/;
-	
-	/**
-	 * @return cover pid as long
-	 */
-	public final Long getCoverPid() { return new Long ( getCoverPidString() ); };
+	public final native String getCoverPid () /*-{ return this.cover_pid; }-*/;
 	
 	/**
 	 * @return convenient function to test if the album has cover
 	 */
 	public final boolean hasCover () {
-	    return getCoverPid().compareTo ( new Long(0 ) )!= 0;
+	    return getCoverPid() != null;
 	}
 	
 	/**

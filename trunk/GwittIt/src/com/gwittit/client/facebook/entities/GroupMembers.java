@@ -3,12 +3,11 @@ package com.gwittit.client.facebook.entities;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.core.client.JsArrayString;
 import com.gwittit.client.facebook.Util;
 
 /**
- * Membership list data associated with a group. 
+ * Members of a group
  */
 public class GroupMembers extends JavaScriptObject {
     protected GroupMembers() {}

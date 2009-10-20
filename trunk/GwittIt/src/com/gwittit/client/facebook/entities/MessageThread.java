@@ -8,13 +8,12 @@ import com.google.gwt.core.client.JsArrayNumber;
 import com.gwittit.client.facebook.Util;
 
 /**
- * Wraps a list of messages.
+ * Facebook Message Thread, this holds messages in a specific thread.
+ * 
+ * @author olamar72
  */
 public class MessageThread extends JavaScriptObject {
 
-    /**
-     * This must be protected.
-     */
     protected MessageThread() {
     }
 

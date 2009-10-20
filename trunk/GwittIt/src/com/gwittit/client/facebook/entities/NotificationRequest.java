@@ -11,7 +11,7 @@ import com.google.gwt.user.client.Window;
 
 
 /**
- * Returns information on outstanding Facebook notifications for current session user. 
+ * Facebook Notification Request
  * 
  * @see http://wiki.developers.facebook.com/index.php/Notifications.get
  * @author ola
