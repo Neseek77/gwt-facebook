@@ -1300,65 +1300,7 @@ public class FacebookApi {
         Window.alert ( "not implemented" );
     }
 
-    /**
-     * Valid params for <code>stream.get</code>
-     * 
-     * @deprecated Will soon be outdated.
-     */
-    public enum StreamGetParams {
-        uid, session_key, viewer_id, source_ids, start_time, end_time, limit, filter_key, metadata
-    }
 
-    /**
-     * This method returns a list of Stream objects that contains the stream
-     * from the perspective of a specific viewer -- a user or a Facebook Page.
-     * 
-     * The hashmap takes the following arguments:
-     * 
-     * @param viewer_id
-     *            int The user ID for whom you are fetching stream data. You can
-     *            pass 0 for this parameter to retrieve publicly viewable
-     *            information. However, desktop applications must always specify
-     *            a viewer as well as a session key. (Default value is the
-     *            current session user.)
-     * @param source_ids
-     *            array An array containing all the stream data for the user
-     *            profiles and Pages connected to the viewer_id. You can filter
-     *            the stream to include posts by the IDs you specify here.
-     *            (Default value is all connections of the viewer.)
-     * @param start_time
-     *            time The earliest time (in Unix time) for which to retrieve
-     *            posts from the stream. The start_time uses the updated_time
-     *            field in the stream (FQL) table as the baseline for
-     *            determining the earliest time for which to get the stream.
-     *            (Default value is 1 day ago.)
-     * @param end_time
-     *            time The latest time (in Unix time) for which to retrieve
-     *            posts from the stream. The end_time uses the updated_time
-     *            field in the stream (FQL) table as the baseline for
-     *            determining the latest time for which to get the stream.
-     *            (Default value is now.)
-     * @param limit
-     *            int A 32-bit int representing the total number of posts to
-     *            return. (Default value is 30 posts.)
-     * @param filter_key
-     *            string A filter associated with the user. Filters get returned
-     *            by stream.getFilters or the stream_filter FQL table. To filter
-     *            for stream posts from your application, look for a filter with
-     *            a filter_key set to app_YOUR_APPLICATION_ID.
-     * @param metadata
-     *            array A JSON-encoded array in which you can specify one or
-     *            more of 'albums', 'profiles', and 'photo_tags' to request the
-     *            user's aid, id (user ID or Page ID), and pid (respectively)
-     *            when you call stream.get. All three parameters are optional.
-     *            (Default value is false for all three keys.)
-     * 
-     * @see <a
-     *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.stream_get">stream_get</a>
-     */
-    public void stream_get( Stream streamFilter, final AsyncCallback<Stream> callback ) {
-        callMethodRetObject ( "stream.get", streamFilter, Stream.class, callback );
-    }
   
     /**
      * Valid permissions
@@ -1424,6 +1366,87 @@ public class FacebookApi {
         Window.alert ( "not implemented" );
     }
 
+    /**
+     * This method returns a list of Stream objects that contains the stream
+     * from the perspective of a specific viewer -- a user or a Facebook Page.
+     * 
+     * The hashmap takes the following arguments:
+     * 
+     * @param viewer_id
+     *            int The user ID for whom you are fetching stream data. You can
+     *            pass 0 for this parameter to retrieve publicly viewable
+     *            information. However, desktop applications must always specify
+     *            a viewer as well as a session key. (Default value is the
+     *            current session user.)
+     * @param source_ids
+     *            array An array containing all the stream data for the user
+     *            profiles and Pages connected to the viewer_id. You can filter
+     *            the stream to include posts by the IDs you specify here.
+     *            (Default value is all connections of the viewer.)
+     * @param start_time
+     *            time The earliest time (in Unix time) for which to retrieve
+     *            posts from the stream. The start_time uses the updated_time
+     *            field in the stream (FQL) table as the baseline for
+     *            determining the earliest time for which to get the stream.
+     *            (Default value is 1 day ago.)
+     * @param end_time
+     *            time The latest time (in Unix time) for which to retrieve
+     *            posts from the stream. The end_time uses the updated_time
+     *            field in the stream (FQL) table as the baseline for
+     *            determining the latest time for which to get the stream.
+     *            (Default value is now.)
+     * @param limit
+     *            int A 32-bit int representing the total number of posts to
+     *            return. (Default value is 30 posts.)
+     * @param filter_key
+     *            string A filter associated with the user. Filters get returned
+     *            by stream.getFilters or the stream_filter FQL table. To filter
+     *            for stream posts from your application, look for a filter with
+     *            a filter_key set to app_YOUR_APPLICATION_ID.
+     * @param metadata
+     *            array A JSON-encoded array in which you can specify one or
+     *            more of 'albums', 'profiles', and 'photo_tags' to request the
+     *            user's aid, id (user ID or Page ID), and pid (respectively)
+     *            when you call stream.get. All three parameters are optional.
+     *            (Default value is false for all three keys.)
+     * 
+     * @see <a
+     *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.stream_get">stream_get</a>
+     */
+    public void stream_get( Long viewerId, 
+                            List<Long> sourceIds, 
+                            Long startTime, 
+                            Long endTime, 
+                            Integer limit,
+                            String filterKey,
+                            List<String> metadata,
+                            final AsyncCallback<Stream> callback ) {
+        
+        Json j = Json.newInstance ();
+        j.put ( "viewer_id", viewerId ).put ( "source_ids", sourceIds ).put ( "start_time", startTime );
+        j.put ( "end_time", endTime ).put ( "filter_key", filterKey ).puts ( "metadata", metadata );
+        callMethodRetObject ( "stream.get", j.getJavaScriptObject (), Stream.class, callback );
+    }
+
+    /**
+     * Wraps the more complex method with less parameters.
+     * @see #stream_get(Long, List, Long, Long, Integer, String, List, AsyncCallback)
+     */
+    public void stream_get( final AsyncCallback<Stream> callback ) {
+        callMethodRetObject ( "stream.get", getDefaultParams ().getJavaScriptObject (), Stream.class, callback );
+    }
+
+    
+    /**
+     * Wraps the more complex method. Filter stream by filter key.
+     * @see #stream_getFilters(AsyncCallback)
+     * @param filterKey to filter by
+     * @param callback 
+     */
+    public void stream_get ( String filterKey, final AsyncCallback<Stream> callback ) {
+        stream_get ( null, null, null , null ,null, filterKey, null, callback );
+    }
+    
     /**
      * Updates current user's status.
      * 

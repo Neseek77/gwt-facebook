@@ -1,7 +1,10 @@
 package com.gwittit.client.facebook.entities;
 
+import java.util.List;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayNumber;
 
 
 
@@ -13,6 +16,8 @@ import com.google.gwt.core.client.JsArray;
 public class Stream extends JavaScriptObject {
 	
     protected Stream () {}
+    
+    
     
     public final native JsArray<Post> getPosts() /*-{ return this.posts; }-*/;
     public final native JavaScriptObject getProfiles() /*-{ return this.profiles; }-*/;

@@ -3,6 +3,7 @@ package com.gwittit.client.facebook;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -39,6 +40,7 @@ public class Json {
         }
         return this;
     }
+    
     public  Json put (String name, String value ) {
         if ( value != null ) {
             o.put ( name,new JSONString ( value ) );
@@ -60,6 +62,18 @@ public class Json {
         return this;
     }
 
+    public Json puts ( String name, List<String> value ) {
+        if ( value != null ) {
+            JSONArray a = new JSONArray();
+            
+            for ( int i = 0 ; i < value.size (); i ++ ) {
+                a.set ( i, new JSONString ( value.get ( i ) ) );
+            }
+            o.put ( name, a );
+        }
+        return this;
+    }
+    
     public Json  put ( String name, List<Long> value ) {
         if ( value != null ) {
             o.put ( name,  Util.toJSONString ( value ) );
