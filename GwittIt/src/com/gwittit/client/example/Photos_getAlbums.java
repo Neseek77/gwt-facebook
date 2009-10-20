@@ -49,7 +49,7 @@ public class Photos_getAlbums extends Showcase {
 					String html ="<h2>Name: " + a.getName() + ", Description: " + a.getDescription() + "</h2>";
 					outer.add ( new HTML ( html ) );
 					if ( a.hasCover () ) {
-					    outer.add ( new FbPhoto ( a.getCoverPidString() , Size.small ) );
+					    outer.add ( new FbPhoto ( a.getCoverPid() , Size.small ) );
 					}
 				}
 				Xfbml.parse(outer);

@@ -17,16 +17,6 @@ public class FbPhoto extends Widget  {
 	
 	public enum Size {normal,thumb,small};
 	
-	public FbPhoto ( Long pid ) {
-		this ( "" + pid );
-	}
-	
-	public FbPhoto ( Long pid, Size size ) {
-		this ( pid );
-		
-		getElement().setAttribute( "size", size.toString() );
-	}
-	
 	public FbPhoto ( String pid, Size size ) {
 	    this ( pid );
 	    getElement ().setAttribute ( "size", size.toString () );
@@ -36,10 +26,6 @@ public class FbPhoto extends Widget  {
 		super.setElement( DOM.createElement ("fb:photo") ); 
 		addStyleName ( "gwittit-FbPhoto");
 		getElement().setAttribute("pid", pid );
-	}
-	
-	public void setPid ( String pid ) {
-		getElement().setAttribute("pid", pid);
 	}
 	
 	

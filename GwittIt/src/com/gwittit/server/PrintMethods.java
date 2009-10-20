@@ -11,7 +11,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = Stream.class;
+	    Class c = Profile.class;
 		
 		Field fields[] = c.getFields ();
 		

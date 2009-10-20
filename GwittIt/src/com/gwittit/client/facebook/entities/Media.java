@@ -1,21 +1,13 @@
 package com.gwittit.client.facebook.entities;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONObject;
-
-
-/*
- * {"post_id":"6095759876_135917779876", "viewer_id":744450545, "source_id":6095759876, "type":236, "app_id":2347471856, "attribution":null, "actor_id":6095759876, "target_id":null, "message":"", "attachment":{"media":{}, "name":"Keri Herman drops Edit.", "href":"http://www.facebook.com/note.php?note_id=270087345051", "description":"Keri Herman shows her prowess on jumps and represents Breckenridge to the fullest.", "properties":{}, "icon":"http://b.static.ak.fbcdn.net/rsrc.php/z7NSY/hash/ajh5dbgz.gif", "fb_object_type":"", "fb_object_id":""}, "app_data":{}, "action_links":null, "comments":{"can_remove":false, "can_post":true, "count":0, "comment_list":{}}, "likes":{"href":"http://www.connect.facebook.com/social_graph.php?node_id=270087345051&class=LikeManager", "count":2, "sample":[1651063774], "friends":{}, "user_likes":false, "can_like":true}, "privacy":{"value":"NOT_EVERYONE"}, "updated_time":1253721968, "created_time":1253721968, "tagged_ids":{}, "is_hidden":false, "filter_key":"", "permalink":"http://www.facebook.com/note.php?note_id=270087345051&comments"}
- */
-
-
-
-
 
 
 /**
- * See http://wiki.developers.facebook.com/index.php/Attachment_%28Streams%29
- * TODO: Let this class extend JavaScriptObject
+ * Facebook Media
+ * 
+ * @see <a href="http://wiki.developers.facebook.com/index.php/Attachment_%28Streams%29">Attachments</a>
+ * @author olamar72
  */
 public class Media extends JavaScriptObject {
 	

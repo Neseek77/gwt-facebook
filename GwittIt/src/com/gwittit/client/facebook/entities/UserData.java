@@ -4,7 +4,9 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 
 /**
- * Wraps userdata object from facebook
+ * Userdata , obtained from an ErrorResponse.
+ * 
+ * @author olamar72
  */
 public class UserData extends JavaScriptObject {
 

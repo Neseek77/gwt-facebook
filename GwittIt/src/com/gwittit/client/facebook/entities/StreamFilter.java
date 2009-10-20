@@ -3,9 +3,10 @@ package com.gwittit.client.facebook.entities;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
- * Represents a stream filter.
+ * Facebook Stream Filter. Use this to filter stream
  * 
- * @see http://wiki.developers.facebook.com/index.php/Stream_filter_%28FQL%29
+ * @see <a href="http://wiki.developers.facebook.com/index.php/Stream_filter_%28FQL%29"> Stream Filter </a>
+ * @author olamar72
  */
 public class StreamFilter extends JavaScriptObject {
 

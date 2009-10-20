@@ -31,14 +31,12 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.Album;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Cookie;
 import com.gwittit.client.facebook.entities.ErrorResponse;
-import com.gwittit.client.facebook.entities.EventInfo;
 import com.gwittit.client.facebook.entities.EventInfo;
 import com.gwittit.client.facebook.entities.EventMembers;
 import com.gwittit.client.facebook.entities.FriendInfo;
@@ -1781,16 +1779,6 @@ public class FacebookApi {
             if (propValue != null) {
                 jo.put ( e.toString (), new JSONString ( propValue ) );
             }
-        }
-    }
-
-    /*
-     * Copy param
-     */
-    private void copyParam(JSONObject obj, Map<String, String> params, String key) {
-        if (params.get ( key ) != null) {
-            obj.put ( key, new JSONString ( params.get ( key ) ) );
-            params.remove ( key );
         }
     }
 
