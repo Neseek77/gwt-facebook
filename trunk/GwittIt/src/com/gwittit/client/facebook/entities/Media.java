@@ -1,11 +1,7 @@
 package com.gwittit.client.facebook.entities;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 
 /*
@@ -21,9 +17,16 @@ import com.google.gwt.user.client.ui.Widget;
  * See http://wiki.developers.facebook.com/index.php/Attachment_%28Streams%29
  * TODO: Let this class extend JavaScriptObject
  */
-public class Media {
+public class Media extends JavaScriptObject {
 	
-     public enum Type {photo,link,video,flash,mp3};
+    protected Media () {
+        
+    }
+    
+    public enum Type {photo,link,video,flash,mp3};
+    public final Type getTypeEnum () {
+        return Type.valueOf ( getType() );
+    }
 
 	/**
 	 * You can include rich media in the attachment for a post into a user's
@@ -31,7 +34,7 @@ public class Media {
 	 * following: image, flash, mp3, or video; these media types render photos,
 	 * Flash objects, music, and video, respectively.
 	 */
-	private String type;
+    public final native String getType() /*-{ return this.type; }-*/;
 
 	/**
 	 * The image media type is part an array which itself contains an array of
@@ -39,109 +42,30 @@ public class Media {
 	 * key, which maps to the photo URL, and an href key, which maps to the URL
 	 * where a user should be taken if he or she clicks the photo.
 	 */
-	private String src;
+    public final native String getSrc() /*-{ return this.src; }-*/;
 
 	/**
 	 * Image alt/ preview link
 	 */
-	private String alt;
+    public final native String getAlt() /*-{ return this.alt; }-*/;
 	
-	private String href;
+    public final native String getHref() /*-{ return this.href; }-*/;
 
 	/**
 	 * Shich is the URL of the Flash object to be rendered.
 	 */
-	private String swfsrc;
-
-	private String imgsrc;
-
-	private Video video;
-	
-	public Media () {
-		
-	}
-	
+    public final native String getSwfsrc() /*-{ return this.swfsrc; }-*/;
+   	
+    public final native String getImgsrc() /*-{ return this.imgsrc; }-*/;
+   
+    /**
+     * Video Object
+     */
+    public final native Video getVideo() /*-{ return this.video; }-*/;
 
 	
-	public Media ( JSONObject o ) {
-		type = JsonUtil.getString(o, "type");
-		src = JsonUtil.getString(o, "src");
-		href = JsonUtil.getString(o, "href");
-		alt = JsonUtil.getString(o, "alt");
-		if ( Type.valueOf(type) == Type.video ) {
-			video = Video.fromJson ( o.get("video").toString () );
-		} 
-		GWT.log( Media.class + ": Parse media of type " + type , null);
-		
-	}
-	
-	public Type getTypeEnum () {
-		return Type.valueOf( type );
-	}
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getSrc() {
-		return src;
-	}
-
-	public void setSrc(String src) {
-		this.src = src;
-	}
-
-	public String getHref() {
-		return href;
-	}
-
-	public void setHref(String href) {
-		this.href = href;
-	}
-
-	public String getSwfsrc() {
-		return swfsrc;
-	}
-
-	public void setSwfsrc(String swfsrc) {
-		this.swfsrc = swfsrc;
-	}
-
-	public String getImgsrc() {
-		return imgsrc;
-	}
-
-	public void setImgsrc(String imgsrc) {
-		this.imgsrc = imgsrc;
-	}
-
-
-
-	public Video getVideo() {
-		return video;
-	}
-
-
-
-	public void setVideo(Video video) {
-		this.video = video;
-	}
-
-
-
-	public String getAlt() {
-		return alt;
-	}
-
-
-
-	public void setAlt(String alt) {
-		this.alt = alt;
-	}
-	
-	
+    public final String stringify() {
+        return "Type:"  + getType();
+    }
 	
 }

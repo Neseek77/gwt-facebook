@@ -11,7 +11,7 @@ public class PrintMethods {
     
 	public static void main ( String[] args ) {
 		
-	    Class c = MailboxFolder.class;
+	    Class c = Comments.class;
 		
 		Field fields[] = c.getFields ();
 		
@@ -41,7 +41,6 @@ public class PrintMethods {
 	private static String convertToCamelCase(String cn) {
 
 	    Pattern p =  Pattern.compile ( "[A-Z]");
-	    
 	    StringBuilder tmp = new StringBuilder();
 
 	    for ( int i = 0 ; i < cn.length (); i++ ) {
@@ -54,7 +53,6 @@ public class PrintMethods {
 	            tmp.append ( cn.charAt ( i ) );
 	        }
 	    }
-	    
 	    return tmp.toString ();
     }
 

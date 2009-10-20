@@ -1,46 +1,17 @@
 package com.gwittit.client.facebook.entities;
 
-import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * Indicates if this stream has comments
- *  
- * TODO: Let this class extend JavaScriptObject
  */
-public class Comments {
+public class Comments extends JavaScriptObject {
 
-	int count = 0;
-	boolean canRemove;
-    boolean canPost;
-
-	public Comments () {
-	}
-	
-	public Comments ( JSONValue o ) {
-		if ( o.isObject() != null ) {
-			count = JsonUtil.getInt(o.isObject(), "count" );
-			canRemove = JsonUtil.getBoolean(o.isObject(), "can_remove" );
-			canPost = JsonUtil.getBoolean(o.isObject(), "can_post" );
-		}
-	}
-	public int getCount() {
-		return count;
-	}
-	public void setCount(int count) {
-		this.count = count;
-	}
-	public boolean isCanRemove() {
-		return canRemove;
-	}
-	public void setCanRemove(boolean canRemove) {
-		this.canRemove = canRemove;
-	}
-	public boolean isCanPost() {
-		return canPost;
-	}
-	public void setCanPost(boolean canPost) {
-		this.canPost = canPost;
-	}
-	
-	
+    protected Comments() {}
+  
+    final native String getCountString() /*-{ return this.count + ""; }-*/;
+    public final Integer getCount() { return new Integer ( getCountString() ); }
+    public final native Boolean getCanRemove() /*-{ return this.can_remove; }-*/;
+    public final native Boolean getCanPost() /*-{ return this.can_post; }-*/;
+    public static native Comments fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
 }

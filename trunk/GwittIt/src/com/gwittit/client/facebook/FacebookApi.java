@@ -1356,41 +1356,10 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.stream_get">stream_get</a>
      */
-    public void stream_get(Map<Enum<StreamGetParams>, String> params, final AsyncCallback<List<Stream>> ac) {
-
-        final String lp = "FacebookApiImpl#stream_get:";
-        GWT.log ( lp + " called", null );
-
-        JavaScriptObject p = getAllParams ( StreamGetParams.values (), params );
-
-        // Create native callback and parse response.
-        final AsyncCallback<JavaScriptObject> c = new AsyncCallback<JavaScriptObject> () {
-
-            public void onSuccess(JavaScriptObject js) {
-                GWT.log ( FacebookApi.class + ": stream.get got response", null );
-                List<Stream> result = new ArrayList<Stream> ();
-
-                JSONObject jv = new JSONObject ( js );
-                JSONValue value = jv.isObject ().get ( "posts" );
-                JSONArray array = value.isArray ();
-
-                for (int i = 0; array != null && i < array.size (); i++) {
-                    JSONValue v = array.get ( i );
-                    JSONObject o = v.isObject ();
-                    Stream stream = new Stream ( o );
-                    result.add ( stream );
-                }
-                GWT.log ( FacebookApi.class + ": result size = " + result.size (), null );
-                ac.onSuccess ( result );
-            }
-
-            public void onFailure(Throwable caught) {
-                ac.onFailure ( null );
-            }
-        };
-        callMethod ( "stream.get", p, c );
+    public void stream_get( Stream streamFilter, final AsyncCallback<Stream> callback ) {
+        callMethodRetObject ( "stream.get", streamFilter, Stream.class, callback );
     }
-
+  
     /**
      * Valid permissions
      */

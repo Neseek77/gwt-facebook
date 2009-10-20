@@ -3,6 +3,8 @@ package com.gwittit.client.facebook;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayNumber;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -52,5 +54,14 @@ public class Util {
     
     public static JSONString toJSONString ( List<Long> longs ) {
         return new JSONString ( toJSONArray ( longs ).toString () );
+    }
+    
+    public static <T extends JavaScriptObject> List<T> iterate ( JsArray<T> array ) {
+        List<T> iterateList = new ArrayList<T> ();
+        
+        for ( int i = 0 ; i < array.length (); i++ ) {
+            iterateList.add ( array.get ( i ) );
+        }
+        return iterateList;
     }
 }
