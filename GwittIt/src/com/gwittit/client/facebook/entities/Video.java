@@ -23,4 +23,9 @@ public class Video extends JavaScriptObject  {
     
     public static native Video fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
 
+    public final String stringify() {
+        return new JSONObject ( this ).toString ();
+ 
+    }
+
 }
