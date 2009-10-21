@@ -14,19 +14,28 @@ public class Stream extends JavaScriptObject {
     protected Stream() {
     }
 
+    /**
+     * Get posts in stream
+     * @return list of posts
+     */
     public final native JsArray<Post> getPosts() /*-{
         return this.posts;
     }-*/;
 
+    /**
+     * Get profiles in stream
+     * @return profiles in stream
+     */
     public final native JsArray<Profile> getProfiles() /*-{
         return this.profiles;
     }-*/;
 
+    /**
+     * Get album updates in stream
+     * @return list of albums
+     */
     public final native JsArray<Album> getAlbums() /*-{
         return this.albums;
     }-*/;
 
-    public static native Stream fromJson(String jsonString) /*-{
-        return eval('(' + jsonString + ')');
-    }-*/;
 }
