@@ -146,15 +146,13 @@ public class Stream_get extends Showcase {
 	    addContentToPnl.clear ();
 	    
 	    VerticalPanel p = new VerticalPanel ();
-	    p.getElement ().setId ( "Albums" );
+	    p.getElement ().setId ( "ProfilAlbums" );
 	    p.add ( new HTML ( "<h3>Albums in Stream</h3>" ) );
 	    
 	    for (Album a : Util.iterate ( albums ) ) {
 	        p.add ( new HTML ( "<h4>" + a.getName () + "</h4>" ) );
 	        if ( a.hasCover () ) {
 	            p.add ( new HTML (" CoverPid:  " + a.getCoverPid () ) ) ;
-	            
-	            Window.alert ( new FbPhoto ( a.getCoverPid (), FbPhoto.Size.small) + "" );
 	            p.add ( new FbPhoto ( a.getCoverPid () , FbPhoto.Size.small ) ) ;
 	        }
 	    }
