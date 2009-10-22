@@ -2,8 +2,9 @@
 <project name="sampleProject" basedir="." default="jar">
     <property name="src" value="src"/>
     <property name="output" value="build"/>
-    <property name="version" value="1.0-BETA5" /> 
-	
+    <property name="version" value="1.0-BETA6" /> 
+    <property name="gwtinstall" value="/Users/ola/Documents/Source/gwt-mac-1.7.0/" />
+
 	<target name="javadoc" >
 
 		<mkdir dir="gwt-facebook-javadoc-${version}" />
@@ -61,7 +62,7 @@
             <include name="*.jar"/>
         </fileset>
 
-    	<fileset dir="/Users/ola/Documents/Source/gwt-mac-1.7.0/" >
+    	<fileset dir="${gwtinstall}" >
     		<include name="*.jar" />
     	</fileset>
     		
