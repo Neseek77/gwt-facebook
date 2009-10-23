@@ -3,6 +3,7 @@ package com.gwittit.client.facebook;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayNumber;
@@ -24,11 +25,15 @@ public class Util {
     public static List<Long> convertNumberArray(JsArrayNumber jsArray) {
         List<Long> result = new ArrayList<Long> ();
 
-        for (int i = 0; i < jsArray.length (); i++) {
-            NumberFormat fmt = NumberFormat.getFormat ( "0" );
-            double friendIdDbl = jsArray.get ( i );
-            Long l = Long.parseLong ( fmt.format ( friendIdDbl ) );
-            result.add ( l );
+        try {
+            for (int i = 0; i < jsArray.length (); i++) {
+                NumberFormat fmt = NumberFormat.getFormat ( "0" );
+                double friendIdDbl = jsArray.get ( i );
+                Long l = Long.parseLong ( fmt.format ( friendIdDbl ) );
+                result.add ( l );
+            }
+        } catch ( Exception e ) {
+            GWT.log ( "Failed to convert String array", e);
         }
         return result;
 
@@ -37,13 +42,23 @@ public class Util {
     public static List<Long> convertStringArray(JsArrayString jsArray) {
         List<Long> result = new ArrayList<Long> ();
 
-        for (int i = 0; i < jsArray.length (); i++) {
-            result.add ( new Long ( jsArray.get ( i ) ) );
+        try {
+            for (int i = 0; i < jsArray.length (); i++) {
+                result.add ( new Long ( jsArray.get ( i ) ) );
+            }
+        } catch ( Exception e ) {
+            GWT.log ( "Failed to convert String array " , e );
+            
         }
         return result;
 
     }
 
+    /**
+     * Convert 
+     * @param longs
+     * @return
+     */
     public static JSONArray toJSONArray (List<Long> longs) {
         JSONArray ja = new JSONArray ();
         for (int i = 0; i < longs.size (); i++) {
@@ -52,15 +67,29 @@ public class Util {
         return ja;
     }
     
+    /**
+     * Convert list of long values to json array. 
+     */
     public static JSONString toJSONString ( List<Long> longs ) {
         return new JSONString ( toJSONArray ( longs ).toString () );
     }
     
+    /**
+     * Method for iterating a JsArray<T> array
+     * @param <T>
+     * @param array
+     * @return
+     */
     public static <T extends JavaScriptObject> List<T> iterate ( JsArray<T> array ) {
         List<T> iterateList = new ArrayList<T> ();
         
-        for ( int i = 0 ; i < array.length (); i++ ) {
-            iterateList.add ( array.get ( i ) );
+        try {
+            for ( int i = 0 ; i < array.length (); i++ ) {
+                iterateList.add ( array.get ( i ) );
+            }
+                
+        } catch ( Exception e ) {
+            GWT.log (" Failed to iterate JsArray"  + array, e );
         }
         return iterateList;
     }
