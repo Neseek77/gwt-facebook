@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project name="sampleProject" basedir="." default="jar">
+    <property file="build.properties" />
     <property name="src" value="src"/>
     <property name="output" value="build"/>
     <property name="version" value="1.0-BETA6" /> 
-    <property name="gwtinstall" value="/Users/ola/Documents/Source/gwt-mac-1.7.0/" />
 
 	<target name="javadoc" >
 
