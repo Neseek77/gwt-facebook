@@ -119,7 +119,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||stream.removeLike|| YES || 
 ||users.getInfo||  || 
 ||users.getLoggedInUser|| YES ||
-||users.getStandardInfo||  ||
+||users.getStandardInfo||  || Secure Method ||
 ||users.hasAppPermission||  ||
 ||users.isAppUser||  ||
 ||users.isVerified||  ||
