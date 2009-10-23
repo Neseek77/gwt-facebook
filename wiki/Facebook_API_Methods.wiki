@@ -78,7 +78,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||links.get||  ||
 ||links.post||  ||
 ||liveMessage.send||  ||
-||message.getThreadsInFolder|| YES || getAttachment is currently a native JavaScriptObject ||
+||message.getThreadsInFolder|| YES ||||
 ||notes.create||  ||
 ||notes.delete||  ||
 ||notes.edit||  ||
