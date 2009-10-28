@@ -79,7 +79,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||links.post||  ||
 ||liveMessage.send||  ||
 ||message.getThreadsInFolder|| YES ||||
-||notes.create||  ||
+||notes.create|| YES ||
 ||notes.delete||  ||
 ||notes.edit||  ||
 ||notes.get|| YES ||
