@@ -10,15 +10,5 @@
     <welcome-file>GwittIt.html</welcome-file>
   </welcome-file-list>
   
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.gwittit.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/gwittit/greet</url-pattern>
-  </servlet-mapping>
 
 </web-app>
