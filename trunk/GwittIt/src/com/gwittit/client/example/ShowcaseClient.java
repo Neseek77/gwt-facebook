@@ -52,7 +52,7 @@ public class ShowcaseClient extends Composite  {
 	final String profileMethods = "XProfile:profile_getFBML,profile_getInfo,profile_getInfoOptions,profile_setFBML,profile_setInfo,profile_setInfoOptions";
 	final String smsMethods = "XSMS:sms_canSend,sms_send";
 	final String statusMethods = "XStatus:status_get,status_set";
-	final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,Xstream_publish,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
+	final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,stream_publish,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
 	final String userMethods = "Users:Xusers_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
 	final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
 
@@ -420,7 +420,7 @@ public class ShowcaseClient extends Composite  {
 		    //  example = new Stream_getFilters();
 		}
 		else if ( "stream_publish".equals ( m ) ) { 
-		    //  example = new Stream_publish();
+		     showcase = new Stream_publish();
 		}
 		else if ( "stream_remove".equals ( m ) ) { 
 		    //  example = new Stream_remove();

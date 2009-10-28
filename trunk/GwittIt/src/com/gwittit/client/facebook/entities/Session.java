@@ -2,50 +2,22 @@ package com.gwittit.client.facebook.entities;
 
 import java.util.Date;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 
 /**
- * @deprecated only used in desktop apps.
+ * @deprecated doesnt make sense in javascript.
  */
-public class Session {
+public class Session extends JavaScriptObject {
 
-    private String sessionKey;
+    protected Session() {}
     
-    private Long uid;
-    
-    private Date expires;
-
-    public Session ( JSONObject o ) {
-        sessionKey = JsonUtil.getString ( o, "session_key" );
-        uid = JsonUtil.getLong ( o, "uid" );
-        expires = JsonUtil.getDate (o , "expires" );
-    }
-    
-    public String getSessionKey() {
-        return sessionKey;
-    }
-
-    public void setSessionKey(String sessionKey) {
-        this.sessionKey = sessionKey;
-    }
-
-    public Long getUid() {
-        return uid;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
-
-    public Date getExpires() {
-        return expires;
-    }
-
-    public void setExpires(Date expires) {
-        this.expires = expires;
-    }
-    
-    
+    public final native String getSessionKey() /*-{ return this.session_key; }-*/;
+    public final native String getUidString() /*-{ return this.uid + ""; }-*/;
+    public final Long getUid() { return new Long ( getUidString() ); }
+    public final native String getExpiresString() /*-{ return this.expires + ""; }-*/;
+    public final Long getExpires() { return new Long ( getExpiresString() ); }
+    public static native Session fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
     
     
 }

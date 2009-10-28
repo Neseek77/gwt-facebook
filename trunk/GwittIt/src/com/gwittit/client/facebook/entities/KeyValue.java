@@ -1,6 +1,7 @@
 package com.gwittit.client.facebook.entities;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.gwittit.client.facebook.Json;
 
 
 /**
@@ -19,4 +20,11 @@ public class KeyValue extends JavaScriptObject {
         return this.value;
     }-*/;
 
+    public final KeyValue newInstance ( String key, String value ) {
+        Json j = new Json().put( key, value);
+        return fromJson ( j.toString () );
+    }
+    
+    public static native KeyValue fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
+    
 }

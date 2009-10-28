@@ -25,6 +25,11 @@ public class Json {
         this ( new JSONObject ( o ) );
     }
     
+    
+    public Json () {
+        this ( new JSONObject () );
+    }
+    
     public static Json newInstance () {
         Json j = new Json ( new JSONObject () );
         return j;
@@ -62,6 +67,35 @@ public class Json {
         return this;
     }
 
+    
+    public <T extends JavaScriptObject> Json putlist ( String name, List<T> ts ) {
+        
+        if ( ts == null ) {
+            return null;
+        }
+     
+        JSONArray a = new JSONArray();
+
+        for ( int i = 0 ; i < ts.size (); i++ ) {
+            JavaScriptObject j = (JavaScriptObject)ts.get(i);
+            a.set ( i, new JSONObject ( j ) ) ;
+        }
+        o.put ( name, a );
+        return this;
+    }
+    
+    public <T extends JavaScriptObject> Json put ( String name, T t ) {
+        
+        if ( t == null ) {
+            return this;
+        }
+        
+        JavaScriptObject j = (JavaScriptObject)t;
+        JSONObject o = new JSONObject ( j );
+        o.put ( name, o );
+        return this;
+    }
+    
     public Json puts ( String name, List<String> value ) {
         if ( value != null ) {
             JSONArray a = new JSONArray();

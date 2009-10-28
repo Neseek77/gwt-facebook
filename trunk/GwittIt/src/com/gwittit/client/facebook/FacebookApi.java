@@ -33,7 +33,9 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwittit.client.facebook.entities.ActionLink;
 import com.gwittit.client.facebook.entities.Album;
+import com.gwittit.client.facebook.entities.Attachment;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.entities.Cookie;
 import com.gwittit.client.facebook.entities.ErrorResponse;
@@ -49,10 +51,12 @@ import com.gwittit.client.facebook.entities.Note;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
+import com.gwittit.client.facebook.entities.Session;
 import com.gwittit.client.facebook.entities.SessionRecord;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
 import com.gwittit.client.facebook.entities.User;
+import com.gwittit.client.facebook.entities.UserStandardInfo;
 
 /**
  * This is the main object for using the Facebook REST API in GWT.
@@ -851,17 +855,16 @@ public class FacebookApi {
     public void liveMessage_send(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
     }
 
-    
     /**
      * Get current users mailboxes
      */
-    public void message_getMailBoxFolders ( AsyncCallback<List<MailboxFolder>> callback ) {
+    public void message_getMailBoxFolders(AsyncCallback<List<MailboxFolder>> callback) {
         Json j = Json.newInstance ();
         String fql = "SELECT folder_id, name, unread_count FROM mailbox_folder WHERE 1";
         j.put ( "query", fql );
         callMethodRetList ( "fql.query", j.getJavaScriptObject (), MailboxFolder.class, callback );
     }
-    
+
     /**
      * Returns all of a user's messages and threads from the Inbox. The user
      * needs to grant the calling application the read_mailbox extended
@@ -887,17 +890,19 @@ public class FacebookApi {
      * @param offset
      *            Indicates how many threads to skip from the most recent
      *            thread.
-     *            
-     * @see <a href="http://wiki.developers.facebook.com/index.php/Message.getThreadsInFolder">Message.getThreadsInFolder</a>
+     * 
+     * @see <a
+     *      href="http://wiki.developers.facebook.com/index.php/Message.getThreadsInFolder">Message.getThreadsInFolder</a>
      */
-    public void message_getThreadsInFolder( Integer folderId,  
-                                            Boolean includeRead, 
-                                            Integer limit, 
-                                            Integer offset , AsyncCallback<List<MessageThread>> callback) {
-        Json j = Json.newInstance ().put ( "folder_id", folderId).put ( "include_read", includeRead );
+    public void message_getThreadsInFolder(Integer folderId,
+                                           Boolean includeRead,
+                                           Integer limit,
+                                           Integer offset,
+                                           AsyncCallback<List<MessageThread>> callback) {
+        Json j = Json.newInstance ().put ( "folder_id", folderId ).put ( "include_read", includeRead );
         j.put ( "limit", limit );
         j.put ( "offset", offset );
-        
+
         callMethodRetList ( "message.getThreadsInFolder", j.getJavaScriptObject (), MessageThread.class, callback );
     }
 
@@ -1298,8 +1303,6 @@ public class FacebookApi {
         Window.alert ( "not implemented" );
     }
 
-
-  
     /**
      * Valid permissions
      */
@@ -1411,15 +1414,15 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.stream_get">stream_get</a>
      */
-    public void stream_get( Long viewerId, 
-                            List<Long> sourceIds, 
-                            Long startTime, 
-                            Long endTime, 
-                            Integer limit,
-                            String filterKey,
-                            List<String> metadata,
-                            final AsyncCallback<Stream> callback ) {
-        
+    public void stream_get(Long viewerId,
+                           List<Long> sourceIds,
+                           Long startTime,
+                           Long endTime,
+                           Integer limit,
+                           String filterKey,
+                           List<String> metadata,
+                           final AsyncCallback<Stream> callback) {
+
         Json j = Json.newInstance ();
         j.put ( "viewer_id", viewerId ).put ( "source_ids", sourceIds ).put ( "start_time", startTime );
         j.put ( "end_time", endTime ).put ( "filter_key", filterKey ).puts ( "metadata", metadata );
@@ -1428,23 +1431,26 @@ public class FacebookApi {
 
     /**
      * Wraps the more complex method with less parameters.
-     * @see #stream_get(Long, List, Long, Long, Integer, String, List, AsyncCallback)
+     * 
+     * @see #stream_get(Long, List, Long, Long, Integer, String, List,
+     *      AsyncCallback)
      */
-    public void stream_get( final AsyncCallback<Stream> callback ) {
+    public void stream_get(final AsyncCallback<Stream> callback) {
         callMethodRetObject ( "stream.get", getDefaultParams ().getJavaScriptObject (), Stream.class, callback );
     }
 
-    
     /**
      * Wraps the more complex method. Filter stream by filter key.
+     * 
      * @see #stream_getFilters(AsyncCallback)
-     * @param filterKey to filter by
-     * @param callback 
+     * @param filterKey
+     *            to filter by
+     * @param callback
      */
-    public void stream_get ( String filterKey, final AsyncCallback<Stream> callback ) {
-        stream_get ( null, null, null , null ,null, filterKey, null, callback );
+    public void stream_get(String filterKey, final AsyncCallback<Stream> callback) {
+        stream_get ( null, null, null, null, null, filterKey, null, callback );
     }
-    
+
     /**
      * Updates current user's status.
      * 
@@ -1645,8 +1651,110 @@ public class FacebookApi {
         callMethodRetList ( "stream.getFilters", p, StreamFilter.class, callback );
     }
 
-    public void stream_publish(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "stream.publish: Not Implemented" );
+    /**
+     * This method publishes a post into the stream on the Wall of a user or a
+     * Facebook Page, group or event connected to the user. By default, this
+     * call publishes to the current session user's Wall, but if you specify a
+     * user ID, Facebook Page ID, group ID, or event ID as the target_id, then
+     * the post appears on the Wall of the target, and not the user posting the
+     * item.
+     * 
+     * The post also appears in the streams (News Feeds) of any user connected
+     * to the target of the post.
+     * 
+     * This method works in two ways. You can use it to publish:
+     * 
+     * As a Feed form, which is the default behavior for this method. Keep the
+     * auto_publish parameter set to the default, false, so the Feed form
+     * appears. You do not need the publish_stream permission, nor does the user
+     * have to be connected to your site, to publish in this manner. If the user
+     * isn't logged in to Facebook when you make this call, a login dialog
+     * appears, followed by a dialog with the post data. Your users can add
+     * their own message to the post.
+     * 
+     * Directly to a user's or Page's stream, without prompting the user. Before
+     * your application can publish directly to the stream, the user or Page
+     * must grant your application the publish_stream extended permission. If
+     * the user previously granted your application the permission to publish
+     * short stories into the News Feed automatically, then you don't need to
+     * prompt for this permission in order to call this method. Make sure you
+     * set the auto_publish parameter to true.
+     * 
+     * This method takes similar parameters to stream.publish. The main
+     * difference between calling this function and calling stream.publish is
+     * that if the user hasn't granted your application the publish_stream
+     * extended permission, or if the auto_publish parameter is set to false
+     * (the default), a Feed form appears, asking the user to confirm the post
+     * before publishing.
+     * 
+     * To provide rich content like MP3 audio, Flash, or an image, you can
+     * supply a predefined object called attachment. Facebook formats the
+     * attachment into the post. The attachment is described in Attachment
+     * (Streams).
+     * 
+     * Its recommended to use the FacebookConnect method. It will automatically
+     * prompt the user for permission.
+     * 
+     * @see {@link FacebookConnect#stream_publish(String, Attachment, List, String, String, Boolean, String, AsyncCallback)}
+     * @param userMessage
+     *            The message the user enters for the post at the time of
+     *            publication. Although this can be used to set a default for
+     *            the stream publish form user message text field, this is
+     *            against policy. user_message should only be set to a
+     *            user-entered message (for example, a comment or text the user
+     *            entered into an earlier form with the understanding that it
+     *            would be published here)
+     * 
+     * @param attachment
+     *            A dictionary object containing the text of the post, relevant
+     *            links, a media type (image, video, mp3, flash), as well as any
+     *            other key/value pairs you may want to add. See Attachment
+     *            (Streams) for more details. Note: If you want to use this call
+     *            to update a user's status, don't pass an attachment; the
+     *            content of the user_message parameter will become the user's
+     *            new status and will appear at the top of the user's profile.
+     * @param actionLinks
+     *            A dictionary of action link objects, containing the link text
+     *            and a hyperlink.
+     * @param userMessagePrompt
+     *            Text you provide the user as a prompt to specify a
+     *            user_message. This appears above the box where the user enters
+     *            a custom message. For example, "What's on your mind?"
+     * @param autoPublish
+     *            Indicates whether to automatically publish to the user's
+     *            stream without displaying a Feed form to the user. If the user
+     *            has granted your application the publish_stream extended
+     *            permission and this parameter is set to true, the post is
+     *            published automatically. (Default value is false.)
+     * @param actorId
+     *            Allows the logged in user to publish on a Facebook Page's
+     *            behalf if the user is an admin of the Page. If specified,
+     *            actor_id indicates the ID of the Page that will publish the
+     *            post. If the user publishes the post, the post will appear on
+     *            the Page's Wall as if the Page has posted it. (Default value
+     *            is null.)
+     * @param callback
+     */
+    public void stream_publish(String userMessage,
+                               Attachment attachment,
+                               List<ActionLink> actionLinks,
+                               String targetId,
+                               String userMessagePrompt,
+                               Boolean autoPublish,
+                               String actorId,
+                               AsyncCallback<JavaScriptObject> callback) {
+        
+        
+
+        Json j = new Json ();
+        j.put ( "user_message", userMessage );
+        j.put ( "attachment", attachment );
+        j.putlist ( "action_links", actionLinks );
+        j.put ( "user_message_prompt", userMessagePrompt );
+        j.put ( "auto_publish", autoPublish );
+        j.put ( "actor_id", actorId );
+
+        callMethod ( "stream.publish", j.getJavaScriptObject (), callback );
     }
 
     /**
@@ -1723,8 +1831,36 @@ public class FacebookApi {
         callMethodRetLong ( "users.getLoggedInUser", p, callback );
     }
 
-    public void users_getStandardInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
+    /**
+     * Returns an array of user-specific information...
+     * 
+     * @see #users_getStandardInfo(List, AsyncCallback)
+     * 
+     * @param callback
+     *            result
+     */
+    public void users_getStandardInfo(AsyncCallback<UserStandardInfo> callback) {
+        users_getStandardInfo ( null, callback );
+    }
+
+    /**
+     * Returns an array of user-specific information for use by the application
+     * itself. Make this call on behalf of your application when you need
+     * analytic information only. Don't display this information to any users.
+     * If you need to display information to other users, call users.getInfo.
+     * 
+     * @{link 
+     *        http://wiki.developers.facebook.com/index.php/Users.getStandardInfo
+     *        }
+     * 
+     * @param params
+     *            userFilter to limit fields returned. Default is all.
+     * @param callback
+     *            result
+     */
+    public void users_getStandardInfo(List<String> filter, AsyncCallback<UserStandardInfo> callback) {
+        Json j = new Json ().puts ( "filter", filter );
+        callMethodRetObject ( "users.getStandardInfo", j.getJavaScriptObject (), UserStandardInfo.class, callback );
     }
 
     public void users_isAppUser(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1883,7 +2019,8 @@ public class FacebookApi {
      * Call Facebook method and execute callback method. This methods needs to
      * check the response from facebook. Sometimes facebook returns object,
      * sometimes primitivies. If a primitive is returned, wrap it in a new
-     * object so it can be converted to JavaScriptObject
+     * object so it can be converted to JavaScriptObject.Any object that extends
+     * JavaScriptObject can be passed directly to this function.
      */
     private native void callMethod(final String method, final JavaScriptObject params, final AsyncCallback<JavaScriptObject> callback) /*-{
         var app=this;
