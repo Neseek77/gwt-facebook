@@ -1,6 +1,7 @@
 package com.gwittit.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -16,10 +17,10 @@ import com.gwittit.client.facebook.LoginCallback;
  */
 public class GwittIt implements EntryPoint {
 
-    public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+    //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
     
     // My Localhost
-    // public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
+    public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
     // Where we hold everything
     private VerticalPanel outer = new VerticalPanel ();
@@ -28,54 +29,14 @@ public class GwittIt implements EntryPoint {
     private TopMenu topMenu ;//= new TopMenu();
 
     // Create the api once and for all
-    private FacebookApi apiClient = ApiFactory.getInstance ();
-
+    private FacebookApi apiClient = GWT.create ( FacebookApi.class );
 
     // Display Login Dialog
-    private LoginBox loginWidget;
+    private LoginBox loginBoxPanel;
 
-//    public void onModuleLoad() {
-//
-//        outer.getElement ().setId ( "Gwittit" );
-//        LoginCallback loginCallback = new LoginCallback () {
-//            public void onLogin() {
-//               outer.clear();
-//               showFriends();
-//            }
-//        };
-//
-//        // This MUST be the first thing you do. Any call to facebook before
-//        // init will cause the loading to fail. 
-//        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback );
-//        FacebookApi apiClient = ApiFactory.getInstance ();
-//
-//        if (apiClient.isSessionValid ()) {
-//            outer.add ( new HTML ( "you are logged in" ) );
-//            showFriends ();
-//        } else {
-//            outer.add ( new HTML ( "Run in Firefox/Safari to see button" ) );
-//            outer.add ( new FbLoginButton () );
-//        }
-//        Xfbml.parse ( outer );
-//        RootPanel.get ().add ( outer );
-//
-//    }
-//
-//
-//    private void showFriends() {
-//        apiClient.friends_get ( new AsyncCallback<List<Long>> () {
-//            public void onFailure(Throwable caught) {
-//                Window.alert ( "Friends Get Failed " );
-//            }
-//
-//            public void onSuccess(List<Long> result) {
-//                ProfilePicsPanel pnl = new ProfilePicsPanel ( result );
-//                outer.add ( pnl );
-//            }
-//        } );
-//    }
-
-  
+    /**
+     * Load application
+     */
     public void onModuleLoad() {
 
         LoginCallback loginCallback = new LoginCallback () {
@@ -100,9 +61,9 @@ public class GwittIt implements EntryPoint {
             renderWhenConnected ();
         } else {
             // User can click both link and button to login.
-            this.loginWidget = new LoginBox ();
-            loginWidget.addLoginCallback ( loginCallback );
-            outer.add ( loginWidget );
+            this.loginBoxPanel = new LoginBox ();
+            loginBoxPanel.addLoginCallback ( loginCallback );
+            outer.add ( loginBoxPanel );
         }
 
         RootPanel.get ().add ( outer );

@@ -1,5 +1,6 @@
 package com.gwittit.client.example;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -196,6 +197,8 @@ public class Stream_get extends Showcase {
 	  
 	    for ( Post post : Util.iterate ( posts ) )  {
 	     
+	            
+	        GWT.log ( "Render: " + new JSONObject ( post ).toString () , null );
 	        final VerticalPanel postContentPnl = new VerticalPanel ();
 	        postContentPnl.addStyleName ( "postContent" );
 	        postContentPnl.add ( new HTML ( new FbName ( post.getActorId () ) + " " + post.getMessage () ) );
@@ -233,6 +236,8 @@ public class Stream_get extends Showcase {
 
         HorizontalPanel thumbs = new HorizontalPanel ();
         thumbs.setSpacing ( 10 );
+        
+        JavaScriptObject jso = attachment.getMedia ();
         
 	    for ( Media m : Util.iterate ( attachment.getMedia () ) ) {
 	        p.add ( new HTML ( "<b>MediaContent:</b> " + m.stringify () ) );
