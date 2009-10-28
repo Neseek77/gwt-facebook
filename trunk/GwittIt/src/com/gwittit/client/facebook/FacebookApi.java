@@ -1733,6 +1733,8 @@ public class FacebookApi {
      *            post. If the user publishes the post, the post will appear on
      *            the Page's Wall as if the Page has posted it. (Default value
      *            is null.)
+     *            
+     * @param showDialog true to show dialog to the user.
      * @param callback
      */
     public void stream_publish(String userMessage,
@@ -1742,6 +1744,7 @@ public class FacebookApi {
                                String userMessagePrompt,
                                Boolean autoPublish,
                                String actorId,
+                               boolean showDialog,
                                AsyncCallback<JavaScriptObject> callback) {
         
         
@@ -1753,8 +1756,13 @@ public class FacebookApi {
         j.put ( "user_message_prompt", userMessagePrompt );
         j.put ( "auto_publish", autoPublish );
         j.put ( "actor_id", actorId );
+        j.put ( "target_id", targetId );
 
-        callMethod ( "stream.publish", j.getJavaScriptObject (), callback );
+        if ( showDialog ) {
+            FacebookConnect.stream_publish ( userMessage, attachment, actionLinks, targetId, userMessagePrompt, autoPublish, actorId, callback );
+        } else {
+            callMethod ( "stream.publish", j.getJavaScriptObject (), callback );
+        }
     }
 
     /**
