@@ -113,7 +113,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||stream.get|| YES  || 
 ||stream.getComments|| YES ||
 ||stream.getFilters|| YES || 
-||stream.publish||  ||
+||stream.publish|| YES || Both api and connect function ||
 ||stream.remove|| YES || 
 ||stream.removeComment|| YES ||
 ||stream.removeLike|| YES || 
