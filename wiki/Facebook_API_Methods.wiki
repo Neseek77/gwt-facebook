@@ -62,7 +62,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||feed.getRegisteredTemplateBundles||  ||
 ||feed.publishTemplatizedAction||  ||
 </wiki:comment>
-||feed.publishUserAction||  ||
+||feed.publishUserAction||  || deprecated ||
 ||feed.registerTemplateBundle||  ||
 ||fql.multiquery||  ||
 ||fql.query|| YES || 
