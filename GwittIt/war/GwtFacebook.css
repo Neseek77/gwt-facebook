@@ -17,6 +17,11 @@
 	background: #ffebe8;
 	margin: 10px;
 	padding: 10px;
+	color: #808080;
+}
+
+.gwittit-ErrorResponse .gwt-HTML {
+	color: #808080;
 }
 
 .gwittit-ErrorResponse .closeButton {
