@@ -26,6 +26,7 @@ import com.gwittit.client.facebook.entities.ActionLink;
  */
 public class Stream_publish extends Showcase {
 
+    final static String defaultUserMessage = "Testing gwt-facebook, a library for developing facebook apps with GWT";
     /*
      * Render callback
      */
@@ -38,36 +39,41 @@ public class Stream_publish extends Showcase {
             handleFailure ( caught );
         }
         public void onSuccess(JavaScriptObject result) {
-            addTo.add ( new HTML ( "Result: " + result.toString () ) );
+            addTo.add ( new HTML ( "Published stream , postId is: " + result.toString () ) );
         }
     }
     
-    /*
-     * User clicks publish
+
+    /**
+     * When user clicks publish stream button
      */
-    private class FullStreamHandler implements ClickHandler {
+    private class PublishStreamClick implements ClickHandler {
 
         private Panel addTo;
+        private boolean showDialog;
         
-        public FullStreamHandler ( Panel addTo ) {
+        public PublishStreamClick ( Panel addTo, boolean showDialog ) {
             this.addTo = addTo;
+            this.showDialog = showDialog;
         }
+
         public void onClick(ClickEvent event) {
             List<ActionLink> links = new ArrayList<ActionLink> ();
             links.add ( ActionLink.newInstance ( "Go to Gwittit", "http://gwittit.appspot.com" ) ); 
             links.add ( ActionLink.newInstance ( "Go to GWT", "http://code.google.com/webtoolkit/" ) );
             
-            FacebookConnect.stream_publish ("Testing gwt-facebook, a library for developing facebook apps with GWT",
+            apiClient.stream_publish (defaultUserMessage,
                                         null, 
                                         links, 
                                         null, 
                                         "Say hi to the developer?", 
                                         false, 
                                         null, 
+                                        showDialog,
                                         new MyCallback ( addTo ) );
         }
-        
     };
+    
     
     /**
      * New Showcase
@@ -85,16 +91,31 @@ public class Stream_publish extends Showcase {
         final VerticalPanel vPanel = new VerticalPanel();
         vPanel.setStyleName ( "gwittit-Stream_publish" );
         
-        final HorizontalPanel hPanel = new HorizontalPanel ();
-        hPanel.setSpacing ( 10 );
-        final Button publishButton = new Button ( "Display Publish Stream");
+        VerticalPanel innerPanel = new VerticalPanel ();
+        innerPanel.setStyleName ( "innerPanel" );
+        innerPanel.setSpacing ( 10 );
+        
+        final Button publishButton = new Button ( "PublishStream #1");
         final Label helpText = new Label ( "This will display a dialogue where you can publish stream to your wall" );
         
-        hPanel.add ( publishButton );
-        hPanel.add ( helpText );
+        final Button publishButton2 = new Button ( "PublishStream #2" );
+        final HTML helpText2 = new HTML ( "This will publish a stream with the text <b>" + defaultUserMessage + "</b> ( publish_stream must be granted )" );
+   
         
-        vPanel.add ( hPanel );
-        publishButton.addClickHandler ( new FullStreamHandler( vPanel ) );
+        innerPanel.add ( publishButton );
+        innerPanel.add ( helpText );
+        vPanel.add ( innerPanel );
+        publishButton.addClickHandler  ( new PublishStreamClick ( innerPanel, true ) );
+
+        innerPanel = new VerticalPanel ();
+        innerPanel.setSpacing ( 10);
+        innerPanel.setStyleName ( "innerPanel" );
+
+        innerPanel.add ( publishButton2 );
+        innerPanel.add ( helpText2 );
+        vPanel.add ( innerPanel );
+        
+        publishButton2.addClickHandler ( new PublishStreamClick ( innerPanel, false ) );
         
         return vPanel;
     }
