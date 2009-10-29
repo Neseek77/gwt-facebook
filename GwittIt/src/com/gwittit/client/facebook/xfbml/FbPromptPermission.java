@@ -20,7 +20,16 @@ public class FbPromptPermission extends Widget {
      * Prompt user for permission, one or many permissions at a time.
      */
     public FbPromptPermission ( String text, Permission... permission) {
+        
+        if ( text == null ) {
+            throw new IllegalArgumentException ( "text null" );
+        }
+        if ( permission == null ) {
+            throw new IllegalArgumentException ( "permission null" );
+        }
+        
         super.setElement ( DOM.createElement("fb:prompt-permission" ) ) ;
+        super.addStyleName ( "gwittit-FbPromptPermission" );
         getElement().setAttribute ( "perms", permString(permission) );
         DOM.setInnerText ( getElement() , text );
     }
