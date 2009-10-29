@@ -55,10 +55,10 @@ public class ShowcaseClient extends Composite  {
 	final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,stream_publish,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
 	final String userMethods = "Users:Xusers_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
 	final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
-
+	final String xfbml = " XFBML:various";
 	final String[]menu = { authMethods, batchMethods,commentMethods,connectMethods,dataMethods,eventMethods,
 			               fbmlMethods,feedMethods,fqlMethods,friendMethods,groupMethods,intlMethods,linkMethods,messageMethods,noteMethods,
-			               notificationMethods,pageMethods,photoMethods,profileMethods,smsMethods,statusMethods,streamMethods,userMethods,videoMethods};
+			               notificationMethods,pageMethods,photoMethods,profileMethods,smsMethods,statusMethods,streamMethods,userMethods,videoMethods, xfbml};
 	
 	final VerticalPanel showcaseWrapper = new VerticalPanel ();
 	
@@ -460,6 +460,8 @@ public class ShowcaseClient extends Composite  {
 		}
 		else if ( "video_upload".equals ( m ) ) { 
 		    //  example = new Video_upload();
+		} else if ( "various".equals ( m ) ) {
+		    showcase = new XFBMLShowcase ();
 		}
 			return showcase;
 	}
