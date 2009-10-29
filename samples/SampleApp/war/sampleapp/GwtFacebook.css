@@ -1,0 +1,50 @@
+
+/*    
+     Css Style of the gwittit widgets 
+
+
+      A widget should have the following naming convention : 
+      .gwittit-[ClassName]-[internPanel]
+      
+      Ex:
+      
+      CommentBox.java => .gwittit-CommentBox 
+      
+*/
+
+.gwittit-ErrorResponse {
+	border: 1px solid #dd3c10;
+	background: #ffebe8;
+	margin: 10px;
+	padding: 10px;
+	color: #808080;
+}
+
+.gwittit-ErrorResponse .gwt-HTML {
+	color: #808080;
+}
+
+.gwittit-ErrorResponse .closeButton {
+	margin-top: 40px;	
+	float: right;
+}
+
+.gwittit-ErrorResponse ul {
+	margin-left: 20px;
+}
+
+/* :gwittit-ProfilePicsPanel */
+.gwittit-ProfilePicsPanel-pics .gwittit-FbProfilePic {
+	margin: 3px;
+}
+
+/* :gwittit-ProfilePicsPopup= */
+.gwittit-ProfilePicsPopup-content {
+	width: 100%;
+	background: white;
+	padding: 20px;
+}
+
+.gwittit-ProfilePicsPopup-moreButton {
+	width: 100%;
+}
