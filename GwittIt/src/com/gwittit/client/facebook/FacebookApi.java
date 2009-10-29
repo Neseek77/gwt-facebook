@@ -85,13 +85,18 @@ public class FacebookApi {
      * @return true if session is valid
      */
     public static native boolean sessionIsExpired(SessionRecord sessionRecord) /*-{
-        return $wnd.FB.ApiClient.sessionIsExpired ( sessionRecord );
+        if ( sessionRecord == null ) {
+            return true;
+        } else {
+            return $wnd.FB.ApiClient.sessionIsExpired (sessionRecord );    
+        }   
     }-*/;
 
     /**
      * Return if the session is valid
      * 
      * @return true if session is valid
+     * @deprecated this method is not working when gwt-facebook is included as a lib.
      */
     public boolean isSessionValid() {
         // return getLoggedInUser () != null;
@@ -114,11 +119,13 @@ public class FacebookApi {
      */
     public native SessionRecord getSessionRecord() /*-{
         try{
-            return $wnd.FB.Facebook.apiClient.get_session();
+            $wnd.FB.ensureInit(function(){
+                return $wnd.FB.Facebook.apiClient.get_session();
+            });
         } catch ( ex ) {
-            alert ( "Debug: Exception while loading FB.apiClient ");
-            return null;
-        }
+            alert ( "Debug: Exception while loading FB.apiClient " + ex );
+       }
+   
     }-*/;
 
     /**
@@ -1749,18 +1756,18 @@ public class FacebookApi {
         
         
 
-        Json j = new Json ();
-        j.put ( "user_message", userMessage );
-        j.put ( "attachment", attachment );
-        j.putlist ( "action_links", actionLinks );
-        j.put ( "user_message_prompt", userMessagePrompt );
-        j.put ( "auto_publish", autoPublish );
-        j.put ( "actor_id", actorId );
-        j.put ( "target_id", targetId );
 
         if ( showDialog ) {
             FacebookConnect.stream_publish ( userMessage, attachment, actionLinks, targetId, userMessagePrompt, autoPublish, actorId, callback );
         } else {
+            Json j = new Json ();
+            j.put ( "user_message", userMessage );
+            j.put ( "attachment", attachment );
+            j.putlist ( "action_links", actionLinks );
+            j.put ( "user_message_prompt", userMessagePrompt );
+            j.put ( "auto_publish", autoPublish );
+            j.put ( "actor_id", actorId );
+            j.put ( "target_id", targetId );
             callMethod ( "stream.publish", j.getJavaScriptObject (), callback );
         }
     }
