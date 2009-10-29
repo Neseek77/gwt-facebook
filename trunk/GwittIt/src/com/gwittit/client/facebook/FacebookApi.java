@@ -1312,7 +1312,8 @@ public class FacebookApi {
      * Valid permissions
      */
     public enum Permission {
-        read_stream, publish_stream, create_event, rsvp_event, create_note, read_mailbox
+        email, read_stream, publish_stream, offline_access, status_update, photo_upload, create_event, rsvp_event, sms, video_upload, create_note, share_item,
+        read_mailbox
     };
 
     /**
