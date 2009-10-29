@@ -3,6 +3,8 @@ package com.gwittit.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
@@ -11,14 +13,26 @@ import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.LoginCallback;
+import com.gwittit.client.facebook.FacebookApi.Permission;
+import com.gwittit.client.facebook.entities.SessionRecord;
+import com.gwittit.client.facebook.xfbml.FbPromptPermission;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class GwittIt implements EntryPoint {
 
-    //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+    private class MyLoginCallback implements LoginCallback  {
+        public void onLogin() {
+            renderWhenConnected();
+            sendNotificationToDeveloper ();            
+        }
+        
+    };
     
+    //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+   
     // My Localhost
     public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
@@ -34,43 +48,58 @@ public class GwittIt implements EntryPoint {
     // Display Login Dialog
     private LoginBox loginBoxPanel;
 
+    // Used to render when logged in.
+    private LoginCallback loginCallback ;
     /**
      * Load application
      */
     public void onModuleLoad() {
 
-        LoginCallback loginCallback = new LoginCallback () {
-            public void onLogin() {
-                renderWhenConnected();
-                sendNotificationToDeveloper ();
-            }
-        };
+        loginCallback = new MyLoginCallback();
+        
         // First do init stuff.
         FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback);
         
-        topMenu = new TopMenu();
         // Need this to catch the login event.
         // Get login events and rerender whatever its necessary
 
         outer.getElement ().setId ( "GwittIt" );
         outer.ensureDebugId ( "GwittIt" );
 
-        outer.add ( topMenu );
-
-        if (apiClient.isSessionValid ()) {
-            renderWhenConnected ();
-        } else {
-            // User can click both link and button to login.
-            this.loginBoxPanel = new LoginBox ();
-            loginBoxPanel.addLoginCallback ( loginCallback );
-            outer.add ( loginBoxPanel );
-        }
-
+        ensureInitAndRender ();
+     
+        Xfbml.parse ( outer );
+        
         RootPanel.get ().add ( outer );
     }
 
+    /**
+     * Check for valid session
+     */
+    public native void ensureInitAndRender () /*-{
+       var foo=this;
+       $wnd.FB.ensureInit(function(){
+            foo.@com.gwittit.client.GwittIt::afterInit(Lcom/gwittit/client/facebook/entities/SessionRecord;)($wnd.FB.Facebook.apiClient.get_session());
+       });
+    
+    }-*/;
+    
+    /**
+     * Execute when session is ready
+     */
+    public void afterInit ( SessionRecord sr ) {
+        if ( !FacebookApi.sessionIsExpired ( sr ) ) {
+            renderWhenConnected();
+        } else {
+            this.loginBoxPanel = new LoginBox ();
+            loginBoxPanel.addLoginCallback ( loginCallback );
+            outer.add ( loginBoxPanel );        
+       }
+    }
+       
   
     public void renderWhenConnected() {
+        topMenu = new TopMenu();
         topMenu.renderLoginInfo ();
         outer.clear ();
         outer.add ( topMenu );
@@ -85,5 +114,6 @@ public class GwittIt implements EntryPoint {
     public static native String getUserAgent() /*-{
         return navigator.userAgent.toLowerCase();
     }-*/;
+
 
 }

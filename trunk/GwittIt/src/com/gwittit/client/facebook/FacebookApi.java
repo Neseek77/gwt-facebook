@@ -119,9 +119,7 @@ public class FacebookApi {
      */
     public native SessionRecord getSessionRecord() /*-{
         try{
-            $wnd.FB.ensureInit(function(){
-                return $wnd.FB.Facebook.apiClient.get_session();
-            });
+            return $wnd.FB.Facebook.apiClient.get_session();
         } catch ( ex ) {
             alert ( "Debug: Exception while loading FB.apiClient " + ex );
        }
