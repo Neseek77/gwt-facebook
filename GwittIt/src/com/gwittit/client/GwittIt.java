@@ -3,19 +3,14 @@ package com.gwittit.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
-import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.Callback;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.LoginCallback;
-import com.gwittit.client.facebook.FacebookApi.Permission;
 import com.gwittit.client.facebook.entities.SessionRecord;
-import com.gwittit.client.facebook.xfbml.FbPromptPermission;
 import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
@@ -31,7 +26,7 @@ public class GwittIt implements EntryPoint {
         
     };
     
-    //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+   // public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
    
     // My Localhost
     public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
@@ -74,7 +69,7 @@ public class GwittIt implements EntryPoint {
     }
 
     /**
-     * Check for valid session
+     * Ensure that the connect lib is loaded before start using it.
      */
     public native void ensureInitAndRender () /*-{
        var foo=this;
@@ -85,7 +80,7 @@ public class GwittIt implements EntryPoint {
     }-*/;
     
     /**
-     * Execute when session is ready
+     * Check for a valid session once the connect lib is succesfully loaded.
      */
     public void afterInit ( SessionRecord sr ) {
         if ( !FacebookApi.sessionIsExpired ( sr ) ) {
