@@ -256,6 +256,24 @@ public class FacebookConnect {
         }, false );
     }-*/;
 
+    
+    /**
+     * Call init with default xd receiver and no callback
+     * @param apiKey
+     */
+    public static void init ( String apiKey ) {
+        init ( apiKey, "/xd_receiver.htm", null );
+    }
+
+
+    /**
+     * Call init with apiKey and xdReceiver without callback
+     * @param apiKey
+     * @param xdReceiver
+     */
+    public static void init ( String apiKey, String xdReceiver ) {
+        init ( apiKey, xdReceiver, null );
+    }
 
     /**
      * XdReceiver defaults to /xd_receiver.htm
@@ -321,14 +339,15 @@ public class FacebookConnect {
      * Called when a user successfully logs in.
      */
     public static void onLoginProxy(LoginCallback callback) {
-        callback.onLogin ();
+        if ( callback != null ) {
+            callback.onLogin ();
+        }
     }
     
     /*
      * Callback
      */
     static void callbackError(AsyncCallback<JavaScriptObject> callback, JavaScriptObject jso) {
-        Window.alert ( "CallbackError" );
         ErrorResponse er = jso.cast ();
         callback.onFailure ( new FacebookException ( er ) );
     }

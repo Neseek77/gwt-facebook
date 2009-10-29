@@ -96,7 +96,7 @@ public class Stream_publish extends Showcase {
         innerPanel.setSpacing ( 10 );
         
         final Button publishButton = new Button ( "PublishStream #1");
-        final Label helpText = new Label ( "This will display a dialogue where you can publish stream to your wall" );
+        final Label helpText = new Label ( "This will display a dialog where you can publish stream to your wall" );
         
         final Button publishButton2 = new Button ( "PublishStream #2" );
         final HTML helpText2 = new HTML ( "This will publish a stream with the text <b>" + defaultUserMessage + "</b> ( publish_stream must be granted )" );
