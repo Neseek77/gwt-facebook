@@ -14,7 +14,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 public class XFBMLShowcase extends Showcase {
 
     public XFBMLShowcase () {
-        super ( "Various Widgets" );
+        super ( "Various XFBML tags" );
     }
   
     /**
