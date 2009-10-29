@@ -102,7 +102,7 @@ public class SampleApp implements EntryPoint {
     }
 
     /**
-     * Check for valid session
+     * Ensure connect lib is loaded before using it.
      */
     public native void ensureInitAndRender () /*-{
        var foo=this;
@@ -113,7 +113,7 @@ public class SampleApp implements EntryPoint {
     }-*/;
     
     /**
-     * Execute when session is ready
+     * Execute when connect lib has been initialized
      */
     public void afterInit ( SessionRecord sr ) {
         
