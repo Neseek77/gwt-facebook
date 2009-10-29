@@ -3,7 +3,7 @@
     <property file="build.properties" />
     <property name="src" value="src"/>
     <property name="output" value="build"/>
-    <property name="version" value="1.0-BETA6" /> 
+    <property name="version" value="1.0-BETA8" /> 
 
 	<target name="javadoc" >
 
@@ -38,7 +38,7 @@
     			<include name="**/*.java"/>
     		</fileset>
     	</copy>
- 	    	<copy file="GwtFacebook.gwt.xml" todir="${output}/com/gwittit" />
+ 	    	<copy file="GwtFacebookBuildOnly.gwt.xml" tofile="${output}/com/gwittit/GwtFacebook.gwt.xml" />
 	    	<copy file="war/GwtFacebook.css" todir="${output}/com/gwittit/public/" />
 	</target>
  
