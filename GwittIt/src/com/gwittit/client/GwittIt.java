@@ -26,10 +26,10 @@ public class GwittIt implements EntryPoint {
         
     };
     
-   // public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+    public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
    
     // My Localhost
-    public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
+    // public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
     // Where we hold everything
     private VerticalPanel outer = new VerticalPanel ();
