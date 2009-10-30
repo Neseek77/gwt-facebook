@@ -10,6 +10,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.ActionLink;
 import com.gwittit.client.facebook.entities.Attachment;
 import com.gwittit.client.facebook.entities.ErrorResponse;
+import com.gwittit.client.facebook.xfbml.FbPromptPermission;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Class that wraps the facebook conncet API. Here you will find the javascripts
@@ -214,7 +216,8 @@ public class FacebookConnect {
     }-*/;
 
     /**
-     * Show permission dialog to user.
+     * Show permission dialog to user. You might want to use FbPromptPermission instead
+     * {@link FbPromptPermission}
      */
     public static void showPermissionDialog(final FacebookApi.Permission permission, final AsyncCallback<Boolean> callback) {
 

@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
@@ -49,6 +50,11 @@ public class GwittIt implements EntryPoint {
      */
     private LoginCallback loginCallback ;
 
+    /*
+     * Display load message while we wait for connect status...
+     */
+    private HTML waitingText = new HTML ( "Waiting for facebook connect status...");
+    
     /**
      * Fired when we know users status
      */
@@ -57,6 +63,7 @@ public class GwittIt implements EntryPoint {
             Window.alert ( "Failed to get status:"  + caught );
         }
         public void onSuccess(ConnectState result) {
+            outer.remove ( waitingText );
             if ( result == ConnectState.connected ) {
                 renderWhenConnected ();
             } else {
@@ -82,9 +89,12 @@ public class GwittIt implements EntryPoint {
     public void onModuleLoad() {
 
         loginCallback = new MyLoginCallback();
+        topMenu = new TopMenu();
+
         outer.getElement ().setId ( "GwittIt" );
         outer.ensureDebugId ( "GwittIt" );
-        
+        waitingText.getElement ().setAttribute ( "style", "color: white; font-weight: bold" );
+        outer.add ( waitingText );
         /*
          *  Set up Facebook Connect
          */
@@ -105,7 +115,6 @@ public class GwittIt implements EntryPoint {
      * Render when user is connected
      */
     public void renderWhenConnected() {
-        topMenu = new TopMenu();
         topMenu.renderLoginInfo ();
         outer.clear ();
         outer.add ( topMenu );
@@ -118,6 +127,7 @@ public class GwittIt implements EntryPoint {
     public void renderWhenNotConnected () {
         this.loginBoxPanel = new LoginBox ();
         loginBoxPanel.addLoginCallback ( loginCallback );
+        outer.add ( topMenu );
         outer.add ( loginBoxPanel );        
     }
 

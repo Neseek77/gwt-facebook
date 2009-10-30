@@ -96,7 +96,6 @@ public class FacebookApi {
      * Return if the session is valid
      * 
      * @return true if session is valid
-     * @deprecated this method is not working when gwt-facebook is included as a lib.
      */
     public boolean isSessionValid() {
         // return getLoggedInUser () != null;
