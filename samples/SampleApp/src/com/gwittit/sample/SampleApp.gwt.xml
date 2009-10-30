@@ -17,4 +17,6 @@
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.gwittit.sample.client.SampleApp'/>
+  
+  <stylesheet src="../SampleApp.css"/>
 </module>
