@@ -35,10 +35,6 @@ public class TopMenu extends Composite {
 		outer.add ( new HTML ( "&nbsp;" ) );
 		outer.add ( loginInfo );
 
-		
-		if ( apiClient.isSessionValid () ) {
-            renderLoginInfo(); 
-		}
 		initWidget ( outer );
 	}
 	
