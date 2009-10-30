@@ -2,11 +2,8 @@ package com.gwittit.client.facebook;
 
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -18,12 +15,47 @@ import com.gwittit.client.facebook.entities.ErrorResponse;
  * Class that wraps the facebook conncet API. Here you will find the javascripts
  * that requires the users interactions.
  * 
- * TODO: This class NEEDS a cleanup.
- * 
  * @see http://wiki.developers.facebook.com/index.php/JS_API_T_FB.Connect
  */
 public class FacebookConnect {
 
+    /**
+     * Wait for connect state, then fire callback.
+     * 
+     * @param callback to fire when we have connect status
+     * 
+     * @see <a href="http://wiki.developers.facebook.com/index.php/Detecting_Connect_Status"> Detecting Connect Status </a>
+     */
+    public static native void waitUntilStatusReady ( AsyncCallback<ConnectState> callback )/*-{
+    
+        var cs;
+        $wnd.FB.ensureInit(function() { 
+            $wnd.FB.Connect.get_status().waitUntilReady( function( status ) { 
+        
+                switch ( status ) {
+                    case $wnd.FB.ConnectState.appNotAuthorized: 
+                        cs=@com.gwittit.client.facebook.ConnectState::appNotAuthorized;
+                    break;
+                    case $wnd.FB.ConnectState.connected : 
+                        cs=@com.gwittit.client.facebook.ConnectState::connected;
+                    break;
+                    case $wnd.FB.ConnectState.userNotLoggedIn: 
+                        cs=@com.gwittit.client.facebook.ConnectState::userNotLoggedIn;
+                    break;
+                }
+                @com.gwittit.client.facebook.FacebookConnect::waitUntilReadySuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/gwittit/client/facebook/ConnectState;)(callback,cs);
+            })
+        });
+  
+    }-*/;
+    
+    /**
+     * Fire callback when we have connect state
+     */
+    static void waitUntilReadySuccess ( AsyncCallback<ConnectState> callback, ConnectState connectState ) {
+        callback.onSuccess ( connectState );
+    }
+    
     /**
      * This method publishes a post into the stream on the Wall of a user or a
      * Facebook Page, group or event connected to the user. By default, this
@@ -148,7 +180,6 @@ public class FacebookConnect {
 
         $wnd.FB.Connect.streamPublish ( userMessage, attachment, actionLinks, targetId, userMessagePrompt, 
         function (postId, exception){
-            
             if ( typeof ( postId ) == 'string' && postId != "null" ) {
                 var result = new String ( postId );
                 @com.gwittit.client.facebook.FacebookConnect::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);

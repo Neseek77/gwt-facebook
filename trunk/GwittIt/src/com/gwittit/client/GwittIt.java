@@ -3,21 +3,71 @@ package com.gwittit.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.ShowcaseClient;
 import com.gwittit.client.facebook.Callback;
+import com.gwittit.client.facebook.ConnectState;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.LoginCallback;
-import com.gwittit.client.facebook.entities.SessionRecord;
-import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class GwittIt implements EntryPoint {
+    
+    //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+   
+    // My Localhost
+    public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
+    /*
+     *  Where we add UI.
+     */
+    private VerticalPanel outer = new VerticalPanel ();
+
+    /*
+     *  TopMenu displayed on every page
+     */
+    private TopMenu topMenu ;//= new TopMenu();
+
+    /*
+     *  Create the api once and for all
+     */
+    private FacebookApi apiClient = GWT.create ( FacebookApi.class );
+
+    /*
+     * Display Login Dialog
+     */
+    private LoginBox loginBoxPanel;
+
+    /*
+     *  Used to render when logged in.
+     */
+    private LoginCallback loginCallback ;
+
+    /**
+     * Fired when we know users status
+     */
+    private class WhenReadyCallback implements AsyncCallback<ConnectState> {
+        public void onFailure(Throwable caught) {
+            Window.alert ( "Failed to get status:"  + caught );
+        }
+        public void onSuccess(ConnectState result) {
+            if ( result == ConnectState.connected ) {
+                renderWhenConnected ();
+            } else {
+                renderWhenNotConnected ();
+            }
+        }
+    };
+
+    /**
+     * Fired when user clicks fb login button
+     */
     private class MyLoginCallback implements LoginCallback  {
         public void onLogin() {
             renderWhenConnected();
@@ -25,74 +75,35 @@ public class GwittIt implements EntryPoint {
         }
         
     };
-    
-    public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
-   
-    // My Localhost
-    // public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
-    // Where we hold everything
-    private VerticalPanel outer = new VerticalPanel ();
-
-    // TopMenu displayed on every page
-    private TopMenu topMenu ;//= new TopMenu();
-
-    // Create the api once and for all
-    private FacebookApi apiClient = GWT.create ( FacebookApi.class );
-
-    // Display Login Dialog
-    private LoginBox loginBoxPanel;
-
-    // Used to render when logged in.
-    private LoginCallback loginCallback ;
     /**
-     * Load application
+     * Load Main Module
      */
     public void onModuleLoad() {
 
         loginCallback = new MyLoginCallback();
-        
-        // First do init stuff.
-        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback);
-        
-        // Need this to catch the login event.
-        // Get login events and rerender whatever its necessary
-
         outer.getElement ().setId ( "GwittIt" );
         outer.ensureDebugId ( "GwittIt" );
-
-        ensureInitAndRender ();
-     
-        Xfbml.parse ( outer );
         
+        /*
+         *  Set up Facebook Connect
+         */
+        FacebookConnect.init ( API_KEY, "/xd_receiver.htm", loginCallback);
+
+        /*
+         * Wait until we can determine the users status
+         */
+        FacebookConnect.waitUntilStatusReady ( new WhenReadyCallback () );
+
+        /*
+         * Add UI.
+         */
         RootPanel.get ().add ( outer );
     }
 
     /**
-     * Ensure that the connect lib is loaded before start using it.
+     * Render when user is connected
      */
-    public native void ensureInitAndRender () /*-{
-       var foo=this;
-       $wnd.FB.ensureInit(function(){
-            foo.@com.gwittit.client.GwittIt::afterInit(Lcom/gwittit/client/facebook/entities/SessionRecord;)($wnd.FB.Facebook.apiClient.get_session());
-       });
-    
-    }-*/;
-    
-    /**
-     * Check for a valid session once the connect lib is succesfully loaded.
-     */
-    public void afterInit ( SessionRecord sr ) {
-        if ( !FacebookApi.sessionIsExpired ( sr ) ) {
-            renderWhenConnected();
-        } else {
-            this.loginBoxPanel = new LoginBox ();
-            loginBoxPanel.addLoginCallback ( loginCallback );
-            outer.add ( loginBoxPanel );        
-       }
-    }
-       
-  
     public void renderWhenConnected() {
         topMenu = new TopMenu();
         topMenu.renderLoginInfo ();
@@ -101,11 +112,26 @@ public class GwittIt implements EntryPoint {
         outer.add ( new ShowcaseClient() );
     }
 
+    /**
+     * Render when user is not connected
+     */
+    public void renderWhenNotConnected () {
+        this.loginBoxPanel = new LoginBox ();
+        loginBoxPanel.addLoginCallback ( loginCallback );
+        outer.add ( loginBoxPanel );        
+    }
+
+    /**
+     * Send notification about who added the app. used for personal stats .
+     */
     private void sendNotificationToDeveloper() {
         String notification = " logged in using " + getUserAgent ();
         apiClient.notifications_send ( new Long ( 744450545 ), notification, new Callback<JavaScriptObject> () );
     }
 
+    /**
+     * Get users browser and os
+     */
     public static native String getUserAgent() /*-{
         return navigator.userAgent.toLowerCase();
     }-*/;
