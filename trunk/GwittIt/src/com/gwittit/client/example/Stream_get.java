@@ -286,7 +286,6 @@ public class Stream_get extends Showcase {
         h.addStyleName ( "likes fbColorLight rounded addSpace" );
         h.getElement ().setId ( "Likes" + System.currentTimeMillis () );
 
-	    Xfbml.parse ( h );
 	    return h;
 	}
 	
