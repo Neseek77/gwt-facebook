@@ -150,7 +150,7 @@ public class SampleApp implements EntryPoint {
      * Get list of friends
      */
     public void getFriends() {
-        apiClient.friends_get ( new FriendsGetCallback() );
+        apiClient.friendsGet ( new FriendsGetCallback() );
     }
 
     /**
