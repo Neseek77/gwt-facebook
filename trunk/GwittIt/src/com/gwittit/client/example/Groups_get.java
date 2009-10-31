@@ -33,7 +33,7 @@ public class Groups_get extends Showcase {
         
         addLoader ( outer );
         
-        apiClient.groups_get ( null, new AsyncCallback<List<Group>> () {
+        apiClient.groupsGet ( null, new AsyncCallback<List<Group>> () {
             public void onFailure(Throwable caught) {
                 removeLoader ( outer );
                 handleFailure ( caught );
@@ -68,7 +68,7 @@ public class Groups_get extends Showcase {
 
         addLoader ( membersWrapper );
         // Get members in this group
-        apiClient.groups_getMembers ( gid, new AsyncCallback<GroupMembers> () {
+        apiClient.groupsGetMembers ( gid, new AsyncCallback<GroupMembers> () {
 
             public void onFailure(Throwable caught) {
                 Groups_get.this.handleFailure ( caught );

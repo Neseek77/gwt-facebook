@@ -29,7 +29,7 @@ public class Notifications_getList extends Showcase {
 		final VerticalPanel outer = new VerticalPanel ();
 		addLoader ( outer );
 		// Get facebook data
-		apiClient.notifications_getList( null, null, new AsyncCallback<List<Notification>> () {
+		apiClient.notificationsGetList( null, null, new AsyncCallback<List<Notification>> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}
@@ -71,7 +71,7 @@ public class Notifications_getList extends Showcase {
 	private void markRead ( final Long nid ) {
 	
 		// Mark notification as read.
-		apiClient.notifications_markRead( nid, new AsyncCallback<Boolean> () {
+		apiClient.notificationsMarkRead( nid, new AsyncCallback<Boolean> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}

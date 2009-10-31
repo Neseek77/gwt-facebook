@@ -78,7 +78,7 @@ public class Message_getThreadsInFolder extends Showcase {
         mailFolders.add ( new HTML ( "Go to folder: " ) );
         
         // Get mailboxes, inbox output etc
-        apiClient.message_getMailBoxFolders ( new AsyncCallback<List<MailboxFolder>> () {
+        apiClient.messageGetMailBoxFolders ( new AsyncCallback<List<MailboxFolder>> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
@@ -106,7 +106,7 @@ public class Message_getThreadsInFolder extends Showcase {
         
         addLoader ( addToContent );
         // Render users messages filtered by folder id.
-        apiClient.message_getThreadsInFolder ( folderId, null, null, null, new AsyncCallback<List<MessageThread>> () {
+        apiClient.messageGetThreadsInFolder ( folderId, null, null, null, new AsyncCallback<List<MessageThread>> () {
 
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );

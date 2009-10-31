@@ -47,7 +47,7 @@ public class PermissionDialog extends Composite {
         
         // Check if user has the right permission. If not show permission dialog
         // and return if user granted us given permission.
-        apiClient.users_hasAppPermission ( permission, new AsyncCallback<Boolean> () {
+        apiClient.usersHasAppPermission ( permission, new AsyncCallback<Boolean> () {
             
             public void onFailure(Throwable caught) {
                 new ErrorResponseUI ( caught ).center ();

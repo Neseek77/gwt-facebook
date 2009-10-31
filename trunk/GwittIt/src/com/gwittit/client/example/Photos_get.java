@@ -62,7 +62,7 @@ public class Photos_get extends Showcase {
 		
 
 		// Get photos from facebook
-		apiClient.photos_get(subjId, new AsyncCallback<List<Photo>> () {
+		apiClient.photosGet(subjId, new AsyncCallback<List<Photo>> () {
 
 			public void onFailure(Throwable caught) {
 			    handleFailure ( caught );

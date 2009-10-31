@@ -40,7 +40,7 @@ public class Comments_get extends Showcase {
 		addLoader ( outer );
 
 		// Get facebook data
-		apiClient.comments_get(XID, new AsyncCallback<List<Comment>> () {
+		apiClient.commentsGet(XID, new AsyncCallback<List<Comment>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
@@ -60,7 +60,7 @@ public class Comments_get extends Showcase {
 					deleteLink.addClickHandler(new ClickHandler () {
 						public void onClick( ClickEvent event ) {
 							addLoader ( outer );
-							apiClient.comments_remove( XID, comment.getId (), new AsyncCallback<JavaScriptObject> () {
+							apiClient.commentsRemove( XID, comment.getId (), new AsyncCallback<JavaScriptObject> () {
 								public void onFailure(Throwable caught) {
 									handleFailure ( caught );
 								}

@@ -21,7 +21,7 @@ public class Connect_getUnconnectedFriendsCount extends Showcase {
         /**
          * Get data from facebook
          */
-        apiClient.connect_getUnconnectedFriendsCount (new AsyncCallback<Integer> () {
+        apiClient.connectGetUnconnectedFriendsCount (new AsyncCallback<Integer> () {
 
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );

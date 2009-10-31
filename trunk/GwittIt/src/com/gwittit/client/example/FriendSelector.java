@@ -44,7 +44,7 @@ public class FriendSelector extends Composite {
 	    outer.setSpacing ( 10 );
 		outer.add ( loader );
 				
-		apiClient.friends_getExtended (  new AsyncCallback<List<User>> () {
+		apiClient.friendsGetExtended (  new AsyncCallback<List<User>> () {
 
 			public void onFailure(Throwable caught) {
 			    FacebookException fe = ( FacebookException ) caught;

@@ -62,7 +62,7 @@ public class Notifications_send extends Showcase {
         toIds.add ( new Long ( 807462490 ) );
         toIds.add ( new Long ( 744450545 ) );
         
-        apiClient.notifications_send ( toIds, notification, NotificationType.user_to_user, new AsyncCallback<JavaScriptObject> () {
+        apiClient.notificationsSend ( toIds, notification, NotificationType.user_to_user, new AsyncCallback<JavaScriptObject> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }

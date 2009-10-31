@@ -32,7 +32,7 @@ public class Friends_getLists extends Showcase {
 
 		
 		// Call facebook
-		apiClient.friends_getLists( new AsyncCallback<List<FriendList>> () {
+		apiClient.friendsGetLists( new AsyncCallback<List<FriendList>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );

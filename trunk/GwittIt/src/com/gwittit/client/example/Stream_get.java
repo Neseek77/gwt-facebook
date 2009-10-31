@@ -125,7 +125,7 @@ public class Stream_get extends Showcase {
         // Start loading
         addLoader ( streamBody);
         // Get stream from facebook.
-        apiClient.stream_get(new AsyncCallback<Stream> () {
+        apiClient.streamGet(new AsyncCallback<Stream> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }

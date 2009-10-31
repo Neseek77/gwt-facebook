@@ -35,7 +35,7 @@ public class Photos_getAlbums extends Showcase {
 		outer.getElement().setId( "ShowPhotosGetAlbums");
 		
 		// Call facebook
-		apiClient.photos_getAlbums(new AsyncCallback<List<Album>> () {
+		apiClient.photosGetAlbums(new AsyncCallback<List<Album>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );

@@ -25,7 +25,7 @@ public class Events_create extends Showcase {
         final VerticalPanel outer = new VerticalPanel ();
         
         // Ask facebook if current user has granted gwittit create_event permission.
-        apiClient.users_hasAppPermission ( Permission.create_event, new AsyncCallback<Boolean> () {
+        apiClient.usersHasAppPermission ( Permission.create_event, new AsyncCallback<Boolean> () {
 
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );

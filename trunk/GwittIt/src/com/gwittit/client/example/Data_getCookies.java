@@ -24,7 +24,7 @@ public class Data_getCookies extends Showcase {
         final VerticalPanel outer = new VerticalPanel ();
         addLoader ( outer );
         
-        apiClient.data_getCookies ( null, new AsyncCallback<List<Cookie>> () {
+        apiClient.dataGetCookies ( null, new AsyncCallback<List<Cookie>> () {
 
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );

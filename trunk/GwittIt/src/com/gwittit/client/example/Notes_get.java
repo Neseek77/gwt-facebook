@@ -29,7 +29,7 @@ public class Notes_get extends Showcase {
             public void onSelected(Long uid) {
                 notesHolder.clear ();
                 addLoader ( notesHolder  );
-                apiClient.notes_get ( uid, new AsyncCallback<List<Note>> () {
+                apiClient.notesGet ( uid, new AsyncCallback<List<Note>> () {
                     public void onFailure(Throwable caught) {
                        Notes_get.this.handleFailure ( caught ); 
                     }

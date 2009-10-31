@@ -57,6 +57,13 @@ public class FacebookConnect {
     static void waitUntilReadySuccess ( AsyncCallback<ConnectState> callback, ConnectState connectState ) {
         callback.onSuccess ( connectState );
     }
+
+    /**
+     * Prompt user to update his or her status
+     */
+    public static native void streamPublish () /*-{
+        $wnd.FB.Connect.streamPublish();
+    }-*/;
     
     /**
      * This method publishes a post into the stream on the Wall of a user or a
@@ -146,7 +153,7 @@ public class FacebookConnect {
      *            is null.)
      * @param callback
      */
-    public static void stream_publish(String userMessage,
+    public static void streamPublish(String userMessage,
                                       Attachment attachment,
                                       List<ActionLink> actionLinks,
                                       String targetId,
@@ -164,13 +171,13 @@ public class FacebookConnect {
         j.put ( "auto_publish", autoPublish );
         j.put ( "actor_id", actorId );
 
-        stream_publish_native ( j.getJavaScriptObject (), callback );
+        streamPublishNative ( j.getJavaScriptObject (), callback );
     }
 
     /*
      * Do actuall call to facebook.
      */
-    private static native void stream_publish_native(JavaScriptObject params, AsyncCallback<JavaScriptObject> callback) /*-{
+    private static native void streamPublishNative(JavaScriptObject params, AsyncCallback<JavaScriptObject> callback) /*-{
       
         var userMessage = params["user_message"];
         var attachment = params["attachment"];

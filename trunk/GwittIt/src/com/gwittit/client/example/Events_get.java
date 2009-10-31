@@ -95,7 +95,7 @@ public class Events_get extends Showcase {
         EventInfo eventFilter = EventInfo.createEventInfo ( null, null, null, null, status  );
       
         // Call facebook
-        apiClient.events_get ( eventFilter, new AsyncCallback<List<EventInfo>> () {
+        apiClient.eventsGet ( eventFilter, new AsyncCallback<List<EventInfo>> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
@@ -140,7 +140,7 @@ public class Events_get extends Showcase {
         cancelLink.addClickHandler ( new ClickHandler () {
 
             public void onClick(ClickEvent event) {
-                apiClient.events_cancel ( e.getEid (), "Cancelled by Gwittit", new AsyncCallback<Boolean> () {
+                apiClient.eventsCancel ( e.getEid (), "Cancelled by Gwittit", new AsyncCallback<Boolean> () {
 
                     public void onFailure(Throwable caught) {
                         Events_get.this.handleFailure ( caught );
@@ -171,7 +171,7 @@ public class Events_get extends Showcase {
         editLink.addClickHandler ( new ClickHandler() {
             public void onClick(ClickEvent event) {
                 addLoader ( outer );
-                apiClient.events_edit ( e.getEid (), updateEvent, new AsyncCallback<Boolean> (){
+                apiClient.eventsEdit ( e.getEid (), updateEvent, new AsyncCallback<Boolean> (){
                     public void onFailure(Throwable caught) {
                         removeLoader ( outer );
                         Events_get.this.handleFailure ( caught );
@@ -218,7 +218,7 @@ public class Events_get extends Showcase {
                 final RsvpStatus rsvpStatus = RsvpStatus.valueOf ( status );
                 
                 ajaxLoaderPanel.setWidget ( new HTML ( "Checking permission..." ) );
-                apiClient.users_hasAppPermission ( Permission.rsvp_event, new Callback<Boolean>() {
+                apiClient.usersHasAppPermission ( Permission.rsvp_event, new Callback<Boolean>() {
 
                     @Override
                     public void onSuccess(Boolean hasPermission ) {
@@ -261,7 +261,7 @@ public class Events_get extends Showcase {
         
          // First ask for permission.
              ajaxLoaderPanel.setWidget ( Events_get.this.getLoader () );
-                    apiClient.events_rsvp ( eventId, status, new AsyncCallback<Boolean> () {
+                    apiClient.eventsRsvp ( eventId, status, new AsyncCallback<Boolean> () {
                         public void onFailure(Throwable caught) {
                            
                             Events_get.this.handleFailure ( caught );

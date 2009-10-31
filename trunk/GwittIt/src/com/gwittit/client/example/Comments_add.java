@@ -50,7 +50,7 @@ public class Comments_add extends Showcase  {
 				addLoader ( outer );
 				
 				Comment comment = Comment.createComment ( "comments_test", text.getValue () );
-				apiClient.comments_add (comment, new AsyncCallback<JavaScriptObject> () {
+				apiClient.commentsAdd (comment, new AsyncCallback<JavaScriptObject> () {
 
 					public void onFailure(Throwable caught) {
 						handleFailure ( caught );

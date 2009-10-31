@@ -73,7 +73,7 @@ public class Data_setCookie extends Showcase {
         
         Cookie cookie = Cookie.fromJson ( o.toString () );
         
-        apiClient.data_setCookie ( cookie, new AsyncCallback<Boolean> () {
+        apiClient.dataSetCookie ( cookie, new AsyncCallback<Boolean> () {
 
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );

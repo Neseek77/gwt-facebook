@@ -30,7 +30,7 @@ public class Users_getLoggedInUser extends Showcase {
         addLoader ( outer );
         
         
-        apiClient.users_getLoggedInUser ( new AsyncCallback<Long> () {
+        apiClient.usersGetLoggedInUser ( new AsyncCallback<Long> () {
             public void onFailure(Throwable caught) {
                 handleFailure ( caught );
             }
