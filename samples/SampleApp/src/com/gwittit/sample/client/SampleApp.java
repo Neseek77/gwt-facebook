@@ -161,6 +161,9 @@ public class SampleApp implements EntryPoint {
         ppp.getElement ().setId ( "FriendsGet" );
         mainPanel.add ( new HTML ( "Your Friends: ") ) ;
         mainPanel.add ( ppp );
+        
+        // *** This is cruicial ***
+        // *** Tell facebook to render element, looking for id "FriendsGet" ***
         Xfbml.parse ( ppp );
     }
 }
