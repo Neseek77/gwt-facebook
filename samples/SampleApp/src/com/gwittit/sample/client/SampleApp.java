@@ -58,7 +58,7 @@ public class SampleApp implements EntryPoint {
     /**
      *  Executed login when user clicks loginlink
      */
-    private class LoginClick implements ClickHandler {
+    private class LoginClickHandler implements ClickHandler {
         public void onClick(ClickEvent event) {
             FacebookConnect.requireSession ( new AsyncCallback<Boolean> () {
                 public void onFailure(Throwable caught) {
@@ -74,7 +74,7 @@ public class SampleApp implements EntryPoint {
     /**
      * Fired when connect state is ready
      */
-    private class WhenReady implements AsyncCallback<ConnectState> {
+    private class WhenReadyCallback implements AsyncCallback<ConnectState> {
         public void onFailure(Throwable caught) {
             Window.alert ( "Failed to get facebook connect status, hit reload" );
         }
@@ -91,7 +91,7 @@ public class SampleApp implements EntryPoint {
     /**
      * Executed when user logs out
      */
-    private class LogoutClick implements ClickHandler {
+    private class LogoutClickHandler implements ClickHandler {
         public void onClick(ClickEvent event) {
             FacebookConnect.logoutAndRedirect ( "/" );
         }
@@ -113,15 +113,15 @@ public class SampleApp implements EntryPoint {
      * Load app.
      */
     public void onModuleLoad() {
-        loginLink.addClickHandler ( new LoginClick ()  );
-        logoutLink.addClickHandler ( new LogoutClick()  );
+        loginLink.addClickHandler ( new LoginClickHandler ()  );
+        logoutLink.addClickHandler ( new LogoutClickHandler()  );
 
         mainPanel.add ( waitingText );
         
         // Initialize Facebook Connect
         FacebookConnect.init ( API_KEY );
         // Wait until we can determine status, then render rest of the app.
-        FacebookConnect.waitUntilStatusReady ( new WhenReady() );
+        FacebookConnect.waitUntilStatusReady ( new WhenReadyCallback() );
         
         outer.add ( header );
         outer.add ( mainPanel );
@@ -163,7 +163,4 @@ public class SampleApp implements EntryPoint {
         mainPanel.add ( ppp );
         Xfbml.parse ( ppp );
     }
-
-
-
 }
