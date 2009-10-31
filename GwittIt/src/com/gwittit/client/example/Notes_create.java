@@ -91,7 +91,7 @@ public class Notes_create extends Showcase {
 
             public void onClick(ClickEvent event) {
                 Note note = Note.createNote ( title.getValue (), content.getValue () );
-                apiClient.notes_create ( note, new AsyncCallback<Long> () {
+                apiClient.notesCreate ( note, new AsyncCallback<Long> () {
 
                     public void onFailure(Throwable caught) {
                         Notes_create.this.handleFailure ( caught );

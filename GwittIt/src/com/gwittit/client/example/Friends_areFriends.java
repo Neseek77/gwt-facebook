@@ -40,7 +40,7 @@ public class Friends_areFriends extends Showcase {
 			uids2.add ( new Long ( 560635378 ) );
 			uids2.add ( new Long ( 709281400 ) );
 			
-			apiClient.friends_areFriends(uids1, uids2, new AsyncCallback <List <FriendInfo>> () {
+			apiClient.friendsAreFriends(uids1, uids2, new AsyncCallback <List <FriendInfo>> () {
 				public void onFailure(Throwable caught) {
 				    handleFailure ( caught );
 				}

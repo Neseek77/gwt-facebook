@@ -119,7 +119,7 @@ public class EventEditor extends Composite {
         outer.add ( loader );
 
         // Create the event.
-        apiClient.events_create ( eventInfo, new AsyncCallback<JavaScriptObject>() {
+        apiClient.eventsCreate ( eventInfo, new AsyncCallback<JavaScriptObject>() {
             public void onFailure(Throwable caught) {
                 outer.remove ( loader );
                 ErrorResponseUI errorResponse = new ErrorResponseUI ( caught );

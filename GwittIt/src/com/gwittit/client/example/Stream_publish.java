@@ -43,6 +43,11 @@ public class Stream_publish extends Showcase {
         }
     }
     
+    public class PublishStreamSimpleHandler implements ClickHandler {
+        public void onClick(ClickEvent event) {
+            FacebookConnect.streamPublish ();
+        }
+    }
 
     /**
      * When user clicks publish stream button
@@ -62,7 +67,7 @@ public class Stream_publish extends Showcase {
             links.add ( ActionLink.newInstance ( "Go to Gwittit", "http://gwittit.appspot.com" ) ); 
             links.add ( ActionLink.newInstance ( "Go to GWT", "http://code.google.com/webtoolkit/" ) );
             
-            apiClient.stream_publish (defaultUserMessage,
+            apiClient.streamPublish (defaultUserMessage,
                                         null, 
                                         links, 
                                         null, 
@@ -100,7 +105,9 @@ public class Stream_publish extends Showcase {
         
         final Button publishButton2 = new Button ( "PublishStream #2" );
         final HTML helpText2 = new HTML ( "This will publish a stream with the text <b>" + defaultUserMessage + "</b> ( publish_stream must be granted )" );
-   
+
+        final Button publishButton3 = new Button ( "PublisStream #3" );
+        final HTML helpText3 = new HTML ( "This will prompt user to update his or her status" );
         
         innerPanel.add ( publishButton );
         innerPanel.add ( helpText );
@@ -114,9 +121,17 @@ public class Stream_publish extends Showcase {
         innerPanel.add ( publishButton2 );
         innerPanel.add ( helpText2 );
         vPanel.add ( innerPanel );
-        
         publishButton2.addClickHandler ( new PublishStreamClick ( innerPanel, false ) );
+
         
+        innerPanel = new VerticalPanel ();
+        innerPanel.setStyleName ( "innerPanel" );
+
+        innerPanel.add ( publishButton3 );
+        innerPanel.add ( helpText3 );
+        innerPanel.setSpacing ( 10 );
+        vPanel.add ( innerPanel );
+        publishButton3.addClickHandler ( new PublishStreamSimpleHandler () );
         return vPanel;
     }
 }

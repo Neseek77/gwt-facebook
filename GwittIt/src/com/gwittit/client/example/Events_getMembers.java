@@ -40,7 +40,7 @@ public class Events_getMembers extends Showcase {
                 
                 addLoader ( inner );
                 // Get event members for selected event
-                apiClient.events_getMembers ( eid, new AsyncCallback<EventMembers> () {
+                apiClient.eventsGetMembers ( eid, new AsyncCallback<EventMembers> () {
 
                     public void onFailure(Throwable caught) {
                         removeLoader ( inner );

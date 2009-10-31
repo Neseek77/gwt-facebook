@@ -27,7 +27,7 @@ public class Friends_getAppUsers extends Showcase {
 		outer.getElement().setId( "Friends_getAppUsers" );
 		addLoader ( outer );
 				
-		apiClient.friends_getAppUsers( new AsyncCallback<List<Long>> () {
+		apiClient.friendsGetAppUsers( new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );

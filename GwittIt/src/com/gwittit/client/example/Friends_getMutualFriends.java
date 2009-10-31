@@ -43,7 +43,7 @@ public class Friends_getMutualFriends extends Showcase {
 				addLoader ( mutualFriends);
 				
 				// Call facebook
-				apiClient.friends_getMutualFriends( targetUid, new AsyncCallback<List<Long>> () {
+				apiClient.friendsGetMutualFriends( targetUid, new AsyncCallback<List<Long>> () {
 					public void onFailure(Throwable caught) {
 						handleFailure ( caught );
 					}

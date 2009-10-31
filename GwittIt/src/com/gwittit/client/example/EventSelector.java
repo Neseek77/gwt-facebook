@@ -46,7 +46,7 @@ public class EventSelector extends Composite  {
         outer.add ( new HTML ( "Select Event: " ) );
         outer.add ( loader );
         
-        apiClient.events_get ( null, new AsyncCallback<List<EventInfo>> (){
+        apiClient.eventsGet ( null, new AsyncCallback<List<EventInfo>> (){
 
             public void onFailure(Throwable caught) {
                 outer.add ( new HTML ( "Failed get events..." ) );

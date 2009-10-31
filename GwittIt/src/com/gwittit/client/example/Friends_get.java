@@ -33,7 +33,7 @@ public class Friends_get extends Showcase  {
 		flow.getElement().setId( "friendsget");
 		
 		// Call facebook
-		apiClient.friends_get( new AsyncCallback<List<Long>> () {
+		apiClient.friendsGet( new AsyncCallback<List<Long>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );

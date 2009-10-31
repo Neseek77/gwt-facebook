@@ -67,7 +67,7 @@ public class Photos_createAlbum extends Showcase {
 	
 	private void createAlbum ( final String name, final String visible ) {
 		Album album = Album.createAlbum ( name, null, null, Visibility.valueOf ( visible ) );
-		apiClient.photos_createAlbum( album, new AsyncCallback<Album> () {
+		apiClient.photosCreateAlbum( album, new AsyncCallback<Album> () {
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
 			}

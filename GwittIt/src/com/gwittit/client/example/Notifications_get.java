@@ -42,7 +42,7 @@ public class Notifications_get extends Showcase {
 		addLoader(outer);
 		
 		// Get facebook data
-		apiClient.notifications_get(new AsyncCallback<List<NotificationRequest>> () {
+		apiClient.notificationsGet(new AsyncCallback<List<NotificationRequest>> () {
 
 			public void onFailure(Throwable caught) {
 				handleFailure ( caught );
