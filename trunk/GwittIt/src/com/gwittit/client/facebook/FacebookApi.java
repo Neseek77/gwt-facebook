@@ -89,7 +89,7 @@ public class FacebookApi {
             return true;
         } else {
             return $wnd.FB.ApiClient.sessionIsExpired (sessionRecord );    
-        }   
+        }
     }-*/;
 
     /**
@@ -121,8 +121,7 @@ public class FacebookApi {
             return $wnd.FB.Facebook.apiClient.get_session();
         } catch ( ex ) {
             alert ( "Debug: Exception while loading FB.apiClient " + ex );
-       }
-   
+        }
     }-*/;
 
     /**
@@ -899,10 +898,10 @@ public class FacebookApi {
      *      href="http://wiki.developers.facebook.com/index.php/Message.getThreadsInFolder">Message.getThreadsInFolder</a>
      */
     public void messageGetThreadsInFolder(Integer folderId,
-                                           Boolean includeRead,
-                                           Integer limit,
-                                           Integer offset,
-                                           AsyncCallback<List<MessageThread>> callback) {
+                                          Boolean includeRead,
+                                          Integer limit,
+                                          Integer offset,
+                                          AsyncCallback<List<MessageThread>> callback) {
         Json j = Json.newInstance ().put ( "folder_id", folderId ).put ( "include_read", includeRead );
         j.put ( "limit", limit );
         j.put ( "offset", offset );
@@ -923,9 +922,13 @@ public class FacebookApi {
     }
 
     /**
-     * TODO: Implement
+     * Lets a user delete a Facebook note that was written through your
+     * application. Before a user can delete the note, the user must grant your
+     * application the create_note extended permission.
      */
-    public void notesDelete(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
+    public void notesDelete(Long noteId, AsyncCallback<Boolean> callback) {
+        JavaScriptObject p = new Json ().put ( "note_id", noteId ).getJavaScriptObject ();
+        callMethodRetBoolean ( "notes.delete", p, callback );
     }
 
     /**
@@ -1279,42 +1282,58 @@ public class FacebookApi {
         Window.alert ( "not implemented" );
     }
 
-    public void photosUpload(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
+    /**
+     * Uploads a photo owned by the specified user or the current session user
+     * and returns the new photo. See photo uploads for a description of the
+     * upload workflow. The only storable values returned from this call are
+     * pid, aid, and owner. All applications can upload photos with a "pending"
+     * state, which means that the photos must be approved by the user before
+     * they are visible on the site. Photos uploaded by applications with the
+     * photo_upload extended permission are visible immediately.
+     * 
+     * @see <a href="http://wiki.developers.facebook.com/index.php/Photos.upload"> Photos.upload </a>
+     * @param aid The album ID of the destination album. The aid cannot be longer than 50 characters. 
+     * @param caption  The caption of the photo. 
+     * @param callback with photo created
+     */
+    public void photosUpload(String aid, String caption, AsyncCallback<Photo> callback) {
+        Json j = new Json();
+        j.put ( "data", "asldkjasdlfkjasdflkjasd f sadlkjasdlfkj " );
+        
+        callMethodRetObject ( "photos.upload", j.getJavaScriptObject (), Photo.class, callback );
     }
 
     /*
-    public void profile_getFBML(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
+     * public void profile_getFBML(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void profile_getInfo(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void profile_getInfoOptions(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void profile_setFBML(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void profile_setInfo(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void profile_setInfoOptions(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     */
 
-    public void profile_getInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void profile_getInfoOptions(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void profile_setFBML(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void profile_setInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void profile_setInfoOptions(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-    */
-    
     /**
      * Valid permissions
      */
     public enum Permission {
-        email, read_stream, publish_stream, offline_access, status_update, photo_upload, create_event, rsvp_event, sms, video_upload, create_note, share_item,
-        read_mailbox
+        email, read_stream, publish_stream, offline_access, status_update, photo_upload, create_event, rsvp_event, sms, video_upload, create_note, share_item, read_mailbox
     };
 
     /**
@@ -1366,8 +1385,24 @@ public class FacebookApi {
         callMethod ( "users.hasAppPermission", j.getJavaScriptObject (), nativeCallback );
     }
 
-    public void smsCanSend(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
+    /**
+     * This method is used to determine whether a user has enabled SMS for the
+     * application. Requires an active session, and is recommended only as a
+     * basis for design in terms of disabling certain elements or options that
+     * are conditional on this capability.
+     * 
+     * @param uid
+     *            of user, defaults to current user
+     * @param callback
+     *            returns 0 on success, or an error code
+     * 
+     * @see <a
+     *      href="http://wiki.developers.facebook.com/index.php/Sms.canSend">Sms.canSend
+     *      </a>
+     */
+    public void smsCanSend(Long uid, AsyncCallback<Integer> callback) {
+        Json j = new Json ().put ( "uid", uid );
+        callMethodRetInteger ( "sms.canSend", j.getJavaScriptObject (), callback );
     }
 
     public void smsSend(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1422,13 +1457,13 @@ public class FacebookApi {
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.stream_get">stream_get</a>
      */
     public void streamGet(Long viewerId,
-                           List<Long> sourceIds,
-                           Long startTime,
-                           Long endTime,
-                           Integer limit,
-                           String filterKey,
-                           List<String> metadata,
-                           final AsyncCallback<Stream> callback) {
+                          List<Long> sourceIds,
+                          Long startTime,
+                          Long endTime,
+                          Integer limit,
+                          String filterKey,
+                          List<String> metadata,
+                          final AsyncCallback<Stream> callback) {
 
         Json j = Json.newInstance ();
         j.put ( "viewer_id", viewerId ).put ( "source_ids", sourceIds ).put ( "start_time", startTime );
@@ -1740,24 +1775,22 @@ public class FacebookApi {
      *            post. If the user publishes the post, the post will appear on
      *            the Page's Wall as if the Page has posted it. (Default value
      *            is null.)
-     *            
-     * @param showDialog true to show dialog to the user.
+     * 
+     * @param showDialog
+     *            true to show dialog to the user.
      * @param callback
      */
     public void streamPublish(String userMessage,
-                               Attachment attachment,
-                               List<ActionLink> actionLinks,
-                               String targetId,
-                               String userMessagePrompt,
-                               Boolean autoPublish,
-                               String actorId,
-                               boolean showDialog,
-                               AsyncCallback<JavaScriptObject> callback) {
-        
-        
+                              Attachment attachment,
+                              List<ActionLink> actionLinks,
+                              String targetId,
+                              String userMessagePrompt,
+                              Boolean autoPublish,
+                              String actorId,
+                              boolean showDialog,
+                              AsyncCallback<JavaScriptObject> callback) {
 
-
-        if ( showDialog ) {
+        if (showDialog) {
             FacebookConnect.streamPublish ( userMessage, attachment, actionLinks, targetId, userMessagePrompt, autoPublish, actorId, callback );
         } else {
             Json j = new Json ();
@@ -1879,26 +1912,26 @@ public class FacebookApi {
     }
 
     /*
-    public void users_isAppUser(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void users_isVerified(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void users_setStatus(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void video_getUploadLimits(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-
-    public void video_upload(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        Window.alert ( "not implemented" );
-    }
-    */
+     * public void usersIsAppUser(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void usersIsVerified(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void usersSetStatus(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void videoGetUploadLimits(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     * 
+     * public void videoUpload(Map<String, String> params,
+     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * "not implemented" ); }
+     */
     /*
      * Another wrapper. Use this to get all parameters in one line.
      */
