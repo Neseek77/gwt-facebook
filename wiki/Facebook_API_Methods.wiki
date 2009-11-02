@@ -105,7 +105,7 @@ http://wiki.developers.facebook.com/index.php/API
 ||profile_setInfo||  ||
 ||profile.setInfoOptions||  ||
 ||sms.canSend||  || Returns unknown method, serverside? ||
-||sms.send||  || Returns unknown method, severside? || 
+||sms.send||  || Returns unknown method, serverside? || 
 ||status.set|| YES || 
 ||status.get|| YES || 
 ||stream.addComment|| YES ||
