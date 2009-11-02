@@ -11,7 +11,7 @@ http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
 http://wiki.developers.facebook.com/index.php/API<br/><br/>
 
 API methods that requires application secret must be implemented on the server
-side:
+side:<br/>
 http://wiki.developers.facebook.com/index.php/Session_Secret_and_API_Methods
 ----
 
