@@ -73,7 +73,7 @@ public class GwittIt implements EntryPoint {
     /**
      * Fired when we know users status
      */
-    private class WhenReadyCallback implements AsyncCallback<ConnectState> {
+    private class RenderAppWhenReadyCallback implements AsyncCallback<ConnectState> {
         public void onFailure(Throwable caught) {
             Window.alert ( "Failed to get status:"  + caught );
         }
@@ -119,7 +119,7 @@ public class GwittIt implements EntryPoint {
         /*
          * Wait until we can determine the users status
          */
-        FacebookConnect.waitUntilStatusReady ( new WhenReadyCallback () );
+        FacebookConnect.waitUntilStatusReady ( new RenderAppWhenReadyCallback () );
 
         /*
          * Add UI.
