@@ -50,7 +50,7 @@ public class ShowcaseClient extends Composite  {
 	final String pageMethods = "XPages:pages_getInfo,pages_isAdmin,pages_isAppAdded,pages_isFan";
 	final String photoMethods = "Photos:Xphotos_addTag,photos_createAlbum,photos_get,photos_getAlbums,Xphotos_getTags,Xphotos_upload";
 	final String profileMethods = "XProfile:profile_getFBML,profile_getInfo,profile_getInfoOptions,profile_setFBML,profile_setInfo,profile_setInfoOptions";
-	final String smsMethods = "XSMS:sms_canSend,sms_send";
+	final String smsMethods = "XSMS:Xsms_canSend,sms_send";
 	final String statusMethods = "XStatus:status_get,status_set";
 	final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,stream_publish,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
 	final String userMethods = "Users:Xusers_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
@@ -396,7 +396,7 @@ public class ShowcaseClient extends Composite  {
 		    //  example = new Sms_canSend();
 		}
 		else if ( "sms_send".equals ( m ) ) { 
-		    //  example = new Sms_send();
+		    showcase = new Sms_send();
 		}
 		else if ( "status_get".equals ( m ) ) { 
 		    //  example = new Status_get();

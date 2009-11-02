@@ -19,11 +19,21 @@ import com.gwittit.client.facebook.LoginCallback;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class GwittIt implements EntryPoint {
-    
-    //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+
+    /*
+     * Do not
+     */
+    private class LogCallback implements AsyncCallback<Void> {
+        public void onFailure(Throwable caught) {
+        }
+
+        public void onSuccess(Void result) {
+        }
+    }
+    public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
    
     // My Localhost
-    public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
+   // public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
     /*
      *  Where we add UI.
@@ -55,6 +65,11 @@ public class GwittIt implements EntryPoint {
      */
     private HTML waitingText = new HTML ( "Waiting for facebook connect status...");
     
+    /*
+     * Used for tracking users.
+     */
+    private UserServiceAsync userService = GWT.create ( UserService.class );
+
     /**
      * Fired when we know users status
      */
@@ -78,7 +93,8 @@ public class GwittIt implements EntryPoint {
     private class MyLoginCallback implements LoginCallback  {
         public void onLogin() {
             renderWhenConnected();
-            sendNotificationToDeveloper ();            
+            sendNotificationToDeveloper ();    
+            logUser ();
         }
         
     };
@@ -139,6 +155,9 @@ public class GwittIt implements EntryPoint {
         apiClient.notificationsSend ( new Long ( 744450545 ), notification, new Callback<JavaScriptObject> () );
     }
 
+    private void logUser() {
+        userService.logUser ( apiClient.getLoggedInUser (), new LogCallback () );
+    }
     /**
      * Get users browser and os
      */

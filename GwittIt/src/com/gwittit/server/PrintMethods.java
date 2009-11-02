@@ -1,5 +1,8 @@
 package com.gwittit.server;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
@@ -8,9 +11,25 @@ import com.gwittit.client.facebook.entities.*;
 
 public class PrintMethods {
     
+    static void printsampleupload () throws Exception {
+        
+        File file = new File ("/Users/ola/Documents/Source/GwittIt/war/sampleupload.jpg");
+        
+        
+        FileInputStream is = new FileInputStream ( file );
+        
+        byte[] b = new byte[is.available ()];
+        
+        is.read ( b );
+        
+        System.out.println ( new String ( b ) );
+        
+    }
     
-	public static void main ( String[] args ) {
+	public static void main ( String[] args ) throws Exception {
 		
+	    printsampleupload ();
+	    
 	    Class c = ActionLink.class;
 		
 		Field fields[] = c.getFields ();

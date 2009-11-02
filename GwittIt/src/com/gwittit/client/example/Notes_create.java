@@ -2,10 +2,13 @@ package com.gwittit.client.example;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -21,6 +24,37 @@ import com.gwittit.client.facebook.ui.PermissionDialog.PermissionHandler;
  */
 public class Notes_create extends Showcase {
 
+    private VerticalPanel outer = new VerticalPanel ();
+
+    /**
+     * Delete note callback
+     */
+    private class DeleteNoteCallback implements AsyncCallback<Boolean> {
+        public void onFailure(Throwable caught) {
+            handleFailure ( caught );
+        }
+
+        public void onSuccess(Boolean result) {
+            outer.add ( new Label ( "Note deleted" ) );
+        }
+        
+    }
+    
+    /**
+     * Delete note
+     */
+    private class DeleteNoteClickHandler implements ClickHandler {
+
+        private Long noteId;
+        
+        public DeleteNoteClickHandler ( Long noteId ) {
+            this.noteId = noteId;
+        }
+        public void onClick(ClickEvent event) {
+            deleteNote(noteId);            
+        }
+        
+    }
     
     public Notes_create () {
         super ( "notes.create" );
@@ -28,13 +62,13 @@ public class Notes_create extends Showcase {
 
     @Override
     public Widget createWidget() {
-
-        final VerticalPanel outer = new VerticalPanel ();
+        
+        outer = new VerticalPanel ();
+        
         final HorizontalPanel permissionHolder = new HorizontalPanel();
         final Button saveButton = new Button ( "Save Note ");
 
-        final PermissionDialog permissionDialog = 
-            new PermissionDialog ();
+        final PermissionDialog permissionDialog = new PermissionDialog ();
         
         permissionDialog.addPermissionHandler ( createPermissionHandler ( permissionHolder, saveButton ) );;
         permissionDialog.checkPermission ( Permission.create_note );
@@ -54,6 +88,9 @@ public class Notes_create extends Showcase {
         return outer;
     }
     
+    private void deleteNote ( Long noteId ) {
+        apiClient.notesDelete ( noteId, new DeleteNoteCallback() );
+    }
     
     /**
      * Create permission holder callback
@@ -98,6 +135,11 @@ public class Notes_create extends Showcase {
                     }
                     public void onSuccess(Long noteId) {
                         p.add ( new HTML ( "Added note with id " + noteId ) );
+                        
+                        Anchor deleteNoteLink = new Anchor ( "Delete");
+                        deleteNoteLink.addClickHandler ( new DeleteNoteClickHandler ( noteId ) );
+                        p.add ( deleteNoteLink );
+                        
                     }
                 });
             }
@@ -106,6 +148,7 @@ public class Notes_create extends Showcase {
         return p;
         
     }
+    
     
     private HorizontalPanel createInput ( String lbl, Widget w ) {
         
