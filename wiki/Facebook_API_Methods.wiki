@@ -104,8 +104,8 @@ http://wiki.developers.facebook.com/index.php/API
 ||profile.setFBML||  ||
 ||profile_setInfo||  ||
 ||profile.setInfoOptions||  ||
-||sms.canSend||  ||
-||sms.send||  ||
+||sms.canSend||  || Returns unknown method, serverside? ||
+||sms.send||  || Returns unknown method, severside? || 
 ||status.set|| YES || 
 ||status.get|| YES || 
 ||stream.addComment|| YES ||
