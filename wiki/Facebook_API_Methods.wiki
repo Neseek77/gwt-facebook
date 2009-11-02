@@ -8,7 +8,11 @@ Some methods are only implemented in the REST Api, others only in the Javascript
 ----
 See documentation: <br/>
 http://wiki.developers.facebook.com/index.php/JS_API_T_FB.ApiClient <br/>
-http://wiki.developers.facebook.com/index.php/API
+http://wiki.developers.facebook.com/index.php/API<br/><br/>
+
+API methods that requires application secret must be implemented on the server
+side:
+http://wiki.developers.facebook.com/index.php/Session_Secret_and_API_Methods
 ----
 
 || *Method* || *Implemented* ||
