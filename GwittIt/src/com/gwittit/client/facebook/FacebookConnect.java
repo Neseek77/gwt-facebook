@@ -24,16 +24,18 @@ public class FacebookConnect {
     /**
      * Wait for connect state, then fire callback.
      * 
-     * @param callback to fire when we have connect status
+     * @param callback
+     *            to fire when we have connect status
      * 
-     * @see <a href="http://wiki.developers.facebook.com/index.php/Detecting_Connect_Status"> Detecting Connect Status </a>
+     * @see <a
+     *      href="http://wiki.developers.facebook.com/index.php/Detecting_Connect_Status">
+     *      Detecting Connect Status </a>
      */
-    public static native void waitUntilStatusReady ( AsyncCallback<ConnectState> callback )/*-{
-    
+    public static native void waitUntilStatusReady(AsyncCallback<ConnectState> callback)/*-{
         var cs;
         $wnd.FB.ensureInit(function() { 
             $wnd.FB.Connect.get_status().waitUntilReady( function( status ) { 
-        
+
                 switch ( status ) {
                     case $wnd.FB.ConnectState.appNotAuthorized: 
                         cs=@com.gwittit.client.facebook.ConnectState::appNotAuthorized;
@@ -48,23 +50,22 @@ public class FacebookConnect {
                 @com.gwittit.client.facebook.FacebookConnect::waitUntilReadySuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/gwittit/client/facebook/ConnectState;)(callback,cs);
             })
         });
-  
     }-*/;
-    
+
     /**
      * Fire callback when we have connect state
      */
-    static void waitUntilReadySuccess ( AsyncCallback<ConnectState> callback, ConnectState connectState ) {
+    static void waitUntilReadySuccess(AsyncCallback<ConnectState> callback, ConnectState connectState) {
         callback.onSuccess ( connectState );
     }
 
     /**
      * Prompt user to update his or her status
      */
-    public static native void streamPublish () /*-{
+    public static native void streamPublish() /*-{
         $wnd.FB.Connect.streamPublish();
     }-*/;
-    
+
     /**
      * This method publishes a post into the stream on the Wall of a user or a
      * Facebook Page, group or event connected to the user. By default, this
@@ -154,13 +155,13 @@ public class FacebookConnect {
      * @param callback
      */
     public static void streamPublish(String userMessage,
-                                      Attachment attachment,
-                                      List<ActionLink> actionLinks,
-                                      String targetId,
-                                      String userMessagePrompt,
-                                      Boolean autoPublish,
-                                      String actorId,
-                                      AsyncCallback<JavaScriptObject> callback) {
+                                     Attachment attachment,
+                                     List<ActionLink> actionLinks,
+                                     String targetId,
+                                     String userMessagePrompt,
+                                     Boolean autoPublish,
+                                     String actorId,
+                                     AsyncCallback<JavaScriptObject> callback) {
 
         Json j = new Json ();
         j.put ( "user_message", userMessage );
@@ -178,7 +179,6 @@ public class FacebookConnect {
      * Do actuall call to facebook.
      */
     private static native void streamPublishNative(JavaScriptObject params, AsyncCallback<JavaScriptObject> callback) /*-{
-      
         var userMessage = params["user_message"];
         var attachment = params["attachment"];
         var actionLinks = params["action_links"];
@@ -223,43 +223,40 @@ public class FacebookConnect {
     }-*/;
 
     /**
-     * Show permission dialog to user. You might want to use FbPromptPermission instead
-     * {@link FbPromptPermission}
+     * Show permission dialog to user. You might want to use FbPromptPermission
+     * instead {@link FbPromptPermission}
      */
     public static void showPermissionDialog(final FacebookApi.Permission permission, final AsyncCallback<Boolean> callback) {
 
         /*
-         * Callback used when user is asked for a permission.  The response is a string that equals
-         * the permission we ask for.
+         * Callback used when user is asked for a permission. The response is a
+         * string that equals the permission we ask for.
          */
-        AsyncCallback<JSONValue> permissionCallback = new AsyncCallback<JSONValue> () {
+        AsyncCallback<JavaScriptObject> permissionCallback = new AsyncCallback<JavaScriptObject> () {
 
             public void onFailure(Throwable t) {
                 Window.alert ( FacebookConnect.class + ": showPermissionDialog failed " + t );
             }
-            public void onSuccess(JSONValue o) {
-                if (o.isString () == null) {
-                    callback.onSuccess ( false );
-                } else {
-                    String res = o.isString ().stringValue ();
 
-                    if (res == null) {
-                        callback.onSuccess ( false );
-                    } else if ("".equals ( res.trim () )) {
-                        callback.onSuccess ( false );
-                    } else if (permission == FacebookApi.Permission.valueOf ( res )) {
-                        callback.onSuccess ( true );
-                    } else {
-                        callback.onSuccess ( false );
-                    }
+            public void onSuccess(JavaScriptObject j) {
+                String res = j.toString ();
+                if (res == null) {
+                    callback.onSuccess ( false );
+                } else if ("".equals ( res.trim () )) {
+                    callback.onSuccess ( false );
+                } else if (permission == FacebookApi.Permission.valueOf ( res )) {
+                    callback.onSuccess ( true );
+                } else {
+                    callback.onSuccess ( false );
                 }
+
             }
         };
 
         showPermissionDialogNative ( permission.toString (), permissionCallback );
     }
 
-    static native void showPermissionDialogNative(final String permission, final AsyncCallback<JSONValue> callback)/*-{
+    static native void showPermissionDialogNative(final String permission, final AsyncCallback<JavaScriptObject> callback)/*-{
         $wnd.FB.Connect.showPermissionDialog( permission, 
         	function(x)
         	{ 
@@ -283,6 +280,7 @@ public class FacebookConnect {
                 // TODO: Better error handling here.
                 Window.alert ( FacebookConnect.class + ": requireSession failed " + t );
             }
+
             public void onSuccess(JavaScriptObject jv) {
                 callback.onSuccess ( true );
             }
@@ -297,22 +295,22 @@ public class FacebookConnect {
         }, false );
     }-*/;
 
-    
     /**
      * Call init with default xd receiver and no callback
+     * 
      * @param apiKey
      */
-    public static void init ( String apiKey ) {
+    public static void init(String apiKey) {
         init ( apiKey, "/xd_receiver.htm", null );
     }
 
-
     /**
      * Call init with apiKey and xdReceiver without callback
+     * 
      * @param apiKey
      * @param xdReceiver
      */
-    public static void init ( String apiKey, String xdReceiver ) {
+    public static void init(String apiKey, String xdReceiver) {
         init ( apiKey, xdReceiver, null );
     }
 
@@ -380,11 +378,11 @@ public class FacebookConnect {
      * Called when a user successfully logs in.
      */
     public static void onLoginProxy(LoginCallback callback) {
-        if ( callback != null ) {
+        if (callback != null) {
             callback.onLogin ();
         }
     }
-    
+
     /*
      * Callback
      */
@@ -392,10 +390,9 @@ public class FacebookConnect {
         ErrorResponse er = jso.cast ();
         callback.onFailure ( new FacebookException ( er ) );
     }
-    
+
     static void callbackSuccess(AsyncCallback<JavaScriptObject> callback, JavaScriptObject obj) {
         callback.onSuccess ( obj );
     }
-
 
 }

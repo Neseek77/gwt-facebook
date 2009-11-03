@@ -52,17 +52,17 @@ public class Stream_publish extends Showcase {
     /**
      * When user clicks publish stream button
      */
-    private class PublishStreamClick implements ClickHandler {
+    private class PublishStreamClickHandler implements ClickHandler {
 
         private Panel addTo;
         private boolean showDialog;
         
-        public PublishStreamClick ( Panel addTo, boolean showDialog ) {
+        public PublishStreamClickHandler ( Panel addTo, boolean showDialog ) {
             this.addTo = addTo;
             this.showDialog = showDialog;
         }
-
         public void onClick(ClickEvent event) {
+            
             List<ActionLink> links = new ArrayList<ActionLink> ();
             links.add ( ActionLink.newInstance ( "Go to Gwittit", "http://gwittit.appspot.com" ) ); 
             links.add ( ActionLink.newInstance ( "Go to GWT", "http://code.google.com/webtoolkit/" ) );
@@ -84,15 +84,7 @@ public class Stream_publish extends Showcase {
      * New Showcase
      */
     public Stream_publish () {
-        super ( "stream.publish" );
-    }
-    
-    
-    /**
-     * Create ui
-     */
-    public Widget createWidget() {
-        
+      
         final VerticalPanel vPanel = new VerticalPanel();
         vPanel.setStyleName ( "gwittit-Stream_publish" );
         
@@ -112,7 +104,7 @@ public class Stream_publish extends Showcase {
         innerPanel.add ( publishButton );
         innerPanel.add ( helpText );
         vPanel.add ( innerPanel );
-        publishButton.addClickHandler  ( new PublishStreamClick ( innerPanel, true ) );
+        publishButton.addClickHandler  ( new PublishStreamClickHandler ( innerPanel, true ) );
 
         innerPanel = new VerticalPanel ();
         innerPanel.setSpacing ( 10);
@@ -121,7 +113,7 @@ public class Stream_publish extends Showcase {
         innerPanel.add ( publishButton2 );
         innerPanel.add ( helpText2 );
         vPanel.add ( innerPanel );
-        publishButton2.addClickHandler ( new PublishStreamClick ( innerPanel, false ) );
+        publishButton2.addClickHandler ( new PublishStreamClickHandler ( innerPanel, false ) );
 
         
         innerPanel = new VerticalPanel ();
@@ -132,6 +124,6 @@ public class Stream_publish extends Showcase {
         innerPanel.setSpacing ( 10 );
         vPanel.add ( innerPanel );
         publishButton3.addClickHandler ( new PublishStreamSimpleHandler () );
-        return vPanel;
+        initWidget ( vPanel );
     }
 }

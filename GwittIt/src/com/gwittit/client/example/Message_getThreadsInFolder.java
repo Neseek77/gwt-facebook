@@ -31,45 +31,37 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  *
  */
 public class Message_getThreadsInFolder extends Showcase {
-
-    public Message_getThreadsInFolder() {
-        super ( "message.getThreadsInFolder" );
-    }
     
-    /**
-     * Create Widget
-     */
-    @Override
-    public Widget createWidget () {
-     
+    final HorizontalPanel mailFolders = new HorizontalPanel ();
+    final VerticalPanel folderContent = new VerticalPanel ();
+    
+    public Message_getThreadsInFolder() {
+ 
         final VerticalPanel outer = new VerticalPanel ();
         outer.addStyleName ( "gwittit-Message_getThreadsInFolder" );
     
         // List mail folders.
-        final HorizontalPanel mailFolders = new HorizontalPanel ();
         mailFolders.addStyleName ( "mailFolders" );
         
         // Add mail folder content here
-        final VerticalPanel folderContent = new VerticalPanel ();
         
-        // Disable button until we know that the user granted us read_mailbox permission
-        final PermissionDialog permissionDialog = new PermissionDialog ();
-        
-        permissionDialog.addPermissionHandler ( new PermissionHandler() {
-            public void onPermissionChange(Boolean granted) {
-                renderMailboxFolders( mailFolders, folderContent );
-            }
-            
-        });
-
-        outer.add ( permissionDialog );
         outer.add ( mailFolders );
         outer.add ( folderContent );
+
         // Check if user can read mailbox
-        permissionDialog.checkPermission ( Permission.read_mailbox );
-        return outer;
+        initWidget ( outer ) ;
     }
     
+    @Override
+    public void permissionGranted () {
+        renderMailboxFolders ( mailFolders, folderContent );
+    }
+    
+    
+    @Override
+    public Permission getNeedPermission () {
+        return Permission.read_mailbox;
+    }
     /**
      * Print a list with users mail folders
      */

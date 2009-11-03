@@ -23,12 +23,7 @@ public class Photos_getAlbums extends Showcase {
 	static final String method  = "photos.getAlbums";
 	
 	public Photos_getAlbums () {
-		super ( method );
-	}
-		
-	@Override
-	public Widget createWidget () {
-		
+	
 		final VerticalPanel outer = new VerticalPanel ();
 
 		outer.add( getLoader () );
@@ -57,6 +52,6 @@ public class Photos_getAlbums extends Showcase {
 			
 		});
 		
-		return outer;
+		initWidget ( outer ) ;
 	}
 }

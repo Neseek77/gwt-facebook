@@ -21,12 +21,7 @@ public class Notifications_getList extends Showcase {
 
 	
 	public Notifications_getList () {
-		super ( "notifications.getList");
-	}
-	
-	@Override
-	public Widget createWidget () {
-		final VerticalPanel outer = new VerticalPanel ();
+	final VerticalPanel outer = new VerticalPanel ();
 		addLoader ( outer );
 		// Get facebook data
 		apiClient.notificationsGetList( null, null, new AsyncCallback<List<Notification>> () {
@@ -62,7 +57,7 @@ public class Notifications_getList extends Showcase {
 			}
 			
 		});
-		return outer;
+		initWidget ( outer ) ;
 	}
 	
 	/**

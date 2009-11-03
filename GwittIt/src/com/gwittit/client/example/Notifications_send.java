@@ -6,13 +6,11 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookApi.NotificationType;
 
 /**
@@ -20,59 +18,64 @@ import com.gwittit.client.facebook.FacebookApi.NotificationType;
  */
 public class Notifications_send extends Showcase {
     
-    private VerticalPanel outer;
-
-    private TextArea notificationText;
-    
-    
-    public Notifications_send () {
-        super ( "notifications.send" );
+    /*
+     * Send notification
+     */
+    private class NotificationSendHandler implements ClickHandler {
+        public void onClick(ClickEvent event) {
+            sendToServer();
+        }
     }
-    
-    @Override
-    public Widget createWidget () {
-        final HTML text  = new HTML ( "This will send a notification to the developer! " );
 
-        outer = new VerticalPanel ();
+    /*
+     * Notification sent
+     */
+    private class NotificationSent  implements AsyncCallback<JavaScriptObject> {
+        public void onFailure(Throwable caught) {
+            handleFailure(caught);
+        }
+        public void onSuccess(JavaScriptObject result) {
+            notificationText.setValue ( null );
+            outer.add ( new HTML (  "Sent notification , thank you " ) );
+        }
+    }
+
+    /*
+     *  Private fields
+     */
+    private final VerticalPanel outer = new VerticalPanel ();
+    private final TextArea notificationText = new TextArea ();
+    
+    /**
+     * Create showcase
+     */
+    public Notifications_send () {
+
+        final HTML text  = new HTML ( "This will send a notification to the developer! " );
         outer.setSpacing ( 10 );
         
-        notificationText = new TextArea ();
         final Button submit = new Button ( "Add notification" );
-     
+        submit.addClickHandler ( new NotificationSendHandler () );
+        
         outer.add ( text );
         outer.add ( notificationText );
         outer.add ( submit );
-        
-        submit.addClickHandler ( new ClickHandler () {
-            public void onClick(ClickEvent event) {
-                createNotification ( outer, notificationText.getValue () );
-            }
-            
-        });
-        return outer;
+        initWidget ( outer ) ;
     }
     
-    
     /*
-     * Create a notification
+     * Send notiication.
      */
-    private void createNotification ( final VerticalPanel outer, String notification ) {
-  
+    private void sendToServer () {
+
         List<Long> toIds = new ArrayList<Long> ();
         toIds.add ( new Long ( 807462490 ) );
         toIds.add ( new Long ( 744450545 ) );
         
-        apiClient.notificationsSend ( toIds, notification, NotificationType.user_to_user, new AsyncCallback<JavaScriptObject> () {
-            public void onFailure(Throwable caught) {
-                handleFailure ( caught );
-            }
-            public void onSuccess(JavaScriptObject result) {
-                notificationText.setValue ( null );
-                outer.add ( new HTML (  "Sent notification , thank you " ) );
-            }
-            
-        });
-        
+        apiClient.notificationsSend ( toIds, 
+                                      notificationText.getValue (), 
+                                      NotificationType.user_to_user, 
+                                      new NotificationSent () );    
     }
 
 }

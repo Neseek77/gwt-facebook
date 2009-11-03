@@ -21,12 +21,7 @@ import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 public class Groups_get extends Showcase {
 
     public Groups_get () {
-        super ( "groups.get, groups.getMembers" );
-    }
     
-    @Override
-    public Widget createWidget () {
-        
         
         final VerticalPanel outer = new VerticalPanel ();
         outer.addStyleName ( "gwittit-Showcase-Groups_get" );
@@ -58,7 +53,7 @@ public class Groups_get extends Showcase {
                 }
             }
         });
-        return outer;
+        initWidget ( outer ) ;
     }
 
     /**

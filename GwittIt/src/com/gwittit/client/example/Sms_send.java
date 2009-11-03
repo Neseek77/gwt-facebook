@@ -26,17 +26,12 @@ public class Sms_send extends Showcase {
     private VerticalPanel outer;
     
     public Sms_send () {
-        super ( "sms.send" );
-    }
-    
-    
-    public Widget createWidget () {
         outer = new VerticalPanel ();
         outer.add ( new HTML ( "test" ) );
 
         apiClient.smsCanSend ( null, new SmsCanSendCallback() );
         
-        return outer;
+        initWidget ( outer ) ;
     }
     
     private void displaySendSms () {

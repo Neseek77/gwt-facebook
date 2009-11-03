@@ -18,13 +18,7 @@ public class Friends_getLists extends Showcase {
 	private final static String method = "friends.getLists";
 	
 	public Friends_getLists () {
-		super ( method );
-		
-	}
 	
-	@Override
-	public Widget createWidget () {
-		
 		final VerticalPanel outer = new VerticalPanel ();
 		outer.getElement().setId(  method );
 
@@ -46,7 +40,7 @@ public class Friends_getLists extends Showcase {
 			
 		});
 		
-		return outer;
+		initWidget ( outer ) ;
 		
 	}
 

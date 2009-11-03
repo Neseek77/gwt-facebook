@@ -20,13 +20,7 @@ public class Friends_getMutualFriends extends Showcase {
 	static String method = "friends.getMutualFriends";
 	
 	public Friends_getMutualFriends () {
-		super ( method );
-	}
-
 	
-	@Override
-	public Widget createWidget () {
-		
 		final VerticalPanel outer = new VerticalPanel ();
 		final VerticalPanel mutualFriends = new VerticalPanel ();
 		mutualFriends.getElement().setId( "Friends_getMutualFriends-mutualFriends");
@@ -63,7 +57,7 @@ public class Friends_getMutualFriends extends Showcase {
 		outer.add ( fs );
 		outer.add ( mutualFriends );
 
-		return outer;
+		initWidget ( outer ) ;
 		
 	}
 }

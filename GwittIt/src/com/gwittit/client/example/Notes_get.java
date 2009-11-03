@@ -11,45 +11,41 @@ import com.gwittit.client.facebook.entities.Note;
 
 public class Notes_get extends Showcase {
 
-    public Notes_get () {
-        super ( "notes.get" );
-    }
-    
-    public Widget createWidget () {
+    public Notes_get() {
         final VerticalPanel outer = new VerticalPanel ();
         final VerticalPanel notesHolder = new VerticalPanel ();
-        final FriendSelector friendSelector = new FriendSelector();
-   
+        final FriendSelector friendSelector = new FriendSelector ();
+
         outer.add ( friendSelector );
         outer.add ( notesHolder );
-        
-        
+
         // Let user select a friend and show notes
-        friendSelector.addFriendSelectionHandler ( new FriendSelectionHandler() {
+        friendSelector.addFriendSelectionHandler ( new FriendSelectionHandler () {
             public void onSelected(Long uid) {
                 notesHolder.clear ();
-                addLoader ( notesHolder  );
+                addLoader ( notesHolder );
                 apiClient.notesGet ( uid, new AsyncCallback<List<Note>> () {
                     public void onFailure(Throwable caught) {
-                       Notes_get.this.handleFailure ( caught ); 
+                        handleFailure ( caught );
                     }
+
                     public void onSuccess(List<Note> result) {
                         removeLoader ( notesHolder );
-                        
-                        if ( result.size () == 0 ) {
-                            notesHolder.add ( new HTML ( "User has not created any notes ") ) ;
+
+                        if (result.size () == 0) {
+                            notesHolder.add ( new HTML ( "User has not created any notes " ) );
                         }
-                        for ( Note n : result ) {
+                        for (Note n : result) {
                             notesHolder.add ( new HTML ( "Note Title : " + n.getTitle () ) );
                         }
-                        
+
                     }
-                    
-                });
+
+                } );
             }
-            
-        });
-        
-        return outer;
+
+        } );
+
+        initWidget ( outer );
     }
 }

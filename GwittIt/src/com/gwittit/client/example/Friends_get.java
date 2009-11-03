@@ -20,11 +20,6 @@ public class Friends_get extends Showcase  {
 	static String method = "friends.get";
 	
 	public Friends_get () {
-		super ( method );
-	}
-
-	@Override
-	public Widget createWidget () {
 		final VerticalPanel outer = new VerticalPanel ();
 
 		outer.add(getLoader () );
@@ -46,7 +41,7 @@ public class Friends_get extends Showcase  {
 			}
 			
 		});
-		return  outer ;
+		initWidget ( outer );
 	}
 
 }

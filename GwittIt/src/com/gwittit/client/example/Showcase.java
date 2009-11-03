@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookException;
+import com.gwittit.client.facebook.FacebookApi.Permission;
 import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
 /**
@@ -17,18 +18,10 @@ import com.gwittit.client.facebook.ui.ErrorResponseUI;
  */
 public  class Showcase extends Composite {
 	
-	private Image loader = new Image ( "/loader.gif" );
+	private static Image loader = new Image ( "/loader.gif" );
 	
-	private VerticalPanel outer = new VerticalPanel ();
 	
 	protected FacebookApi apiClient = ApiFactory.getInstance();
-	
-	/**
-	 * Create new object
-	 */
-	public Showcase () {
-		this ( null );
-	}
 	
 	/**
 	 * Get description about the showcase
@@ -56,7 +49,7 @@ public  class Showcase extends Composite {
 	 * Get animated gif to display on asynchrounus call
 	 * @return animated gif
 	 */
-	public Image getLoader () {
+	public static Image getLoader () {
 		return loader;
 	}
 	
@@ -64,7 +57,7 @@ public  class Showcase extends Composite {
 	 * Add animated loader to the panel
 	 * @param p to add loader symbol to
 	 */
-	public void addLoader ( Panel p ) {
+	public static void addLoader ( Panel p ) {
 		p.add( getLoader () );
 	}
 	
@@ -72,7 +65,7 @@ public  class Showcase extends Composite {
 	 * Remove animated loader
 	 * @param p panel to remove loader from
 	 */
-	public void removeLoader ( Panel p ) {
+	public static void removeLoader ( Panel p ) {
 		p.remove( getLoader () );
 	}
 	
@@ -80,7 +73,7 @@ public  class Showcase extends Composite {
 	 * Handle failure
 	 * @param t original exception
 	 */
-	public void handleFailure ( Throwable t ) {
+	public static void handleFailure ( Throwable t ) {
 	    
 	    if ( t instanceof FacebookException ) {
 	        FacebookException e = (FacebookException)t;
@@ -94,19 +87,15 @@ public  class Showcase extends Composite {
 	    }
 	}
 	
+	public Permission getNeedPermission () {
+	    return null;
+	}
+	
+	public void permissionGranted () {
+	    throw new RuntimeException ( "You must override this method if getNeedPermission is overrided" );
+	}
 	private String method;
 	
 
-	public Showcase ( String method ) {
-		this.method = method;
-		outer.add ( createWidget () );
-		initWidget(outer);
-		
-	}
-	
-	public Widget createWidget () {
-		return new SimplePanel ();
-	}
-
-
 }
+

@@ -14,26 +14,18 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 public class XFBMLShowcase extends Showcase {
 
     public XFBMLShowcase () {
-        super ( "Various XFBML tags" );
-    }
-  
-    /**
-     * Create widget
-     */
-    public Widget createWidget () {
-        
+   
         final VerticalPanel outer = new VerticalPanel ();
         outer.getElement ().setId ( "WidgetShowcase" );
         outer.add ( new HTML ( "<h3>FbPromptPermission</h3>" ) );
   
         FbPromptPermission promptPerm  = 
-            new FbPromptPermission ( "Click to see permission dialog", 
+            new FbPromptPermission ( "Click to see create_event, create_note and publish_stream permission dialog", 
                         Permission.create_event, 
                         Permission.create_note, 
                         Permission.publish_stream );
         outer.add ( promptPerm );
         Xfbml.parse ( outer );
-        
-        return outer;
+        initWidget ( outer ) ;
     }
 }

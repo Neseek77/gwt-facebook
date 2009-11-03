@@ -23,13 +23,7 @@ public class Data_setCookie extends Showcase {
     
   
     public Data_setCookie () {
-        super ( "data.setCookie" );
-    }
-    
-    
-    @Override
-    public Widget createWidget () {
-        
+      
         final VerticalPanel outer = new VerticalPanel ();
         final HorizontalPanel inputPanel = new HorizontalPanel ();
         final TextBox nameText = new TextBox ();
@@ -51,7 +45,7 @@ public class Data_setCookie extends Showcase {
             } 
         }) ;
         
-        return outer;
+        initWidget ( outer );
         
     }
 
