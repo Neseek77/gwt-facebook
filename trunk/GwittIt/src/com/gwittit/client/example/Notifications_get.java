@@ -22,12 +22,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
 public class Notifications_get extends Showcase {
 	
 	public Notifications_get(){
-		super("notifications.get");
-	}
-	
-	@Override
-	public Widget createWidget () {
-	
+
 		final VerticalPanel outer = new VerticalPanel ();
 		final HorizontalPanel friendRequestWrapper = new HorizontalPanel ();
 		friendRequestWrapper.getElement().setId( "friendRequestWrapper" );
@@ -95,6 +90,6 @@ public class Notifications_get extends Showcase {
 				}
 			}
 		});
-		return outer;
+		initWidget ( outer ) ;
 	}
 }

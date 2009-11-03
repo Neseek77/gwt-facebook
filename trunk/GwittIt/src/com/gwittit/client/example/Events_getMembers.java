@@ -1,71 +1,61 @@
 package com.gwittit.client.example;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.example.EventSelector.EventSelectorHandler;
 import com.gwittit.client.facebook.entities.EventMembers;
 import com.gwittit.client.facebook.ui.ProfilePicsPanel;
 
+/**
+ * Showcase for method <code>events.getMembers</code>
+ * @author olamar72
+ */
 public class Events_getMembers extends Showcase {
 
-    
-    public Events_getMembers () {
-        super ( "events.getMembers" );
+    final VerticalPanel outer = new VerticalPanel ();
+    final VerticalPanel inner = new VerticalPanel();
+
+    /*
+     * User selects event
+     */
+    private class EventSelectorImpl implements EventSelectorHandler {
+        public void onSelect(Long eid) {
+            addLoader ( inner );
+            apiClient.eventsGetMembers ( eid, new EventsGetMembersCallback () );
+        }
+    }
+
+    /*
+     * Display members
+     */
+    private class EventsGetMembersCallback implements AsyncCallback<EventMembers> {
+        public void onFailure(Throwable caught) {
+            handleFailure ( caught );
+        }
+        public void onSuccess(EventMembers result) {
+            removeLoader ( inner );
+            displayMembers ( inner, "Attending", result.getAttending () );
+            displayMembers ( inner, "Unsure", result.getUnsure () );
+            displayMembers ( inner, "Not Replied", result.getNotReplied () );
+        }
     }
     
-    @Override
-    public Widget createWidget () {
-        final VerticalPanel outer = new VerticalPanel ();
-        
-        final VerticalPanel inner = new VerticalPanel();
-        
-        
+    /**
+     * Create new showcase
+     */
+    public Events_getMembers () {
         final EventSelector eventSelector = new EventSelector();
-        
-        eventSelector.addSelectHandler ( new EventSelectorHandler () {
-
-            public void onSelect(Long eid) {
-
-                inner.clear ();
-                
-                
-                addLoader ( inner );
-                // Get event members for selected event
-                apiClient.eventsGetMembers ( eid, new AsyncCallback<EventMembers> () {
-
-                    public void onFailure(Throwable caught) {
-                        removeLoader ( inner );
-                        handleFailure ( caught );
-                    }
-
-                    public void onSuccess(EventMembers result) {
-                        removeLoader ( inner );
-                        addMembers ( inner, "Attending", result.getAttending () );
-                        addMembers ( inner, "Unsure", result.getUnsure () );
-                        addMembers ( inner, "Not Replied", result.getNotReplied () );
-                    }
-                    
-                });
-                
-            }
-            
-        });
+        eventSelector.addSelectHandler ( new EventSelectorImpl () );
         
         outer.add ( eventSelector );
         outer.add ( inner );
-        return outer;
+        initWidget( outer);
     }
     
-    private void addMembers ( final VerticalPanel inner, final String header, final List<Long> uids ) {
+    private void displayMembers ( final VerticalPanel inner, final String header, final List<Long> uids ) {
         inner.add ( new HTML ( "<h3>" + header + "</h3>" ) );
         inner.add ( new HTML ( "" + uids.size () ) ); 
         

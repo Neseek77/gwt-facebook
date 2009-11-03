@@ -28,11 +28,6 @@ public class Photos_get extends Showcase {
 	private VerticalPanel paramsResultWrapper;
 	
 	public Photos_get () {
-		super( method );
-	}
-	
-	@Override
-	public Widget createWidget () {
 		paramsWrapper = new HorizontalPanel ();
 		resultWrapper = new VerticalPanel ();
 		paramsResultWrapper = new VerticalPanel ();
@@ -50,7 +45,7 @@ public class Photos_get extends Showcase {
 			
 		});
 		paramsWrapper.add ( fs );
-		return paramsResultWrapper;
+		initWidget( paramsResultWrapper );
 	}
 	
 	

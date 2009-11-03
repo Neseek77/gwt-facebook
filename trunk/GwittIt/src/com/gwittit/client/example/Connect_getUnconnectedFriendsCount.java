@@ -11,10 +11,6 @@ import com.google.gwt.user.client.ui.Widget;
 public class Connect_getUnconnectedFriendsCount extends Showcase {
 
     public Connect_getUnconnectedFriendsCount () {
-        super ( "connect.getUnconnectedFriendsCount" );
-    }
-    
-    public Widget createWidget () {
         final VerticalPanel outer = new VerticalPanel ();
         addLoader ( outer );
 
@@ -35,6 +31,6 @@ public class Connect_getUnconnectedFriendsCount extends Showcase {
             
         });
         
-        return outer;
+        initWidget ( outer );
     }
 }

@@ -15,17 +15,7 @@ public class Users_getLoggedInUser extends Showcase {
      * Create new Showcase
      */
     public Users_getLoggedInUser(){
-        super ( "users.getLoggedInUsers");
-    }
-    
-    /**
-     * Create ui
-     * @return widget ui
-     */
-    @Override
-    public Widget createWidget () {
-    
-        final VerticalPanel outer = new VerticalPanel ();
+    final VerticalPanel outer = new VerticalPanel ();
         
         addLoader ( outer );
         
@@ -44,6 +34,6 @@ public class Users_getLoggedInUser extends Showcase {
         });
         
  
-        return outer;
+        initWidget ( outer ) ;
     }
 }

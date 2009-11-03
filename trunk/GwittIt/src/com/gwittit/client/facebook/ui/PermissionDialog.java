@@ -2,6 +2,7 @@ package com.gwittit.client.facebook.ui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
@@ -67,7 +68,7 @@ public class PermissionDialog extends Composite {
     private Widget createShowPermissionUI ( final Permission permission ) {
         
         Anchor a = new Anchor ();
-        a.setHTML ("<h3>Grant this application " + permission.toString () + " permission</h3>" );
+        a.setHTML ("<h3>Grant  " + permission.toString () + " permission</h3>" );
         a.addStyleName ( "clickable" );
         
         a.addClickHandler ( new ClickHandler () {

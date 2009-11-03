@@ -17,11 +17,6 @@ public class Friends_getAppUsers extends Showcase {
 
 	
 	public Friends_getAppUsers () {
-		super ( "friends.getAppUsers" );
-	}
-	
-	@Override
-	public Widget createWidget () {
 
 		final VerticalPanel outer = new VerticalPanel ();
 		outer.getElement().setId( "Friends_getAppUsers" );
@@ -39,7 +34,7 @@ public class Friends_getAppUsers extends Showcase {
 			
 		});
 		
-		return outer;
+		initWidget ( outer ) ;
 		
 	}
 	

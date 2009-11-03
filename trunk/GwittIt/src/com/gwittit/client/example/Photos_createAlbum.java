@@ -29,6 +29,7 @@ public class Photos_createAlbum extends Showcase {
 
     
     private Image sampleUpload = new Image ( "/sample");
+    
     /*
      * User clicks create album
      */
@@ -85,12 +86,7 @@ public class Photos_createAlbum extends Showcase {
 	private SimplePanel response;
 	
 	public Photos_createAlbum () {
-		super("photos.createAlbum, photos.upload" );
-	}
-	
-	@Override
-	public Widget createWidget() {
-	    
+    
 		outer = new VerticalPanel ();
 		response = new SimplePanel ();
 		
@@ -119,7 +115,7 @@ public class Photos_createAlbum extends Showcase {
 		outer.add ( response );
 		
 	//	outer.add ( createUploadPhotoUI () );
-		return outer;
+		initWidget ( outer ) ;
 	}
 	
 	private Widget createUploadPhotoUI () {

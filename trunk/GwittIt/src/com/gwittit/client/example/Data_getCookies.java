@@ -16,12 +16,7 @@ import com.gwittit.client.facebook.entities.Cookie;
 public class Data_getCookies extends Showcase {
 
     public Data_getCookies () {
-        super ( "data.getCookies" );
-    }
-
-    @Override
-    public Widget createWidget () {
-        final VerticalPanel outer = new VerticalPanel ();
+       final VerticalPanel outer = new VerticalPanel ();
         addLoader ( outer );
         
         apiClient.dataGetCookies ( null, new AsyncCallback<List<Cookie>> () {
@@ -46,6 +41,6 @@ public class Data_getCookies extends Showcase {
             }
         });
         
-        return outer;
+        initWidget ( outer );
     }
 }
