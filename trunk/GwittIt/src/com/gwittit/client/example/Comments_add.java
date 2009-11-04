@@ -30,6 +30,7 @@ public class Comments_add extends Showcase  {
             removeLoader ( outer );
             text.setValue(null);
             responseWrapper.add( new HTML (" Thanks :-)" ) );
+            displayComments ();
         }
     }
 
@@ -47,6 +48,8 @@ public class Comments_add extends Showcase  {
     final VerticalPanel outer = new VerticalPanel ();
     final VerticalPanel inputWrapper = new VerticalPanel ();
     final SimplePanel responseWrapper = new SimplePanel ();
+    final VerticalPanel commentsListPanel = new VerticalPanel ();
+    
     final TextArea text = new TextArea();
     final Button submitButton = new Button ( "Add Comment ");
 
@@ -59,16 +62,25 @@ public class Comments_add extends Showcase  {
 		outer.setSpacing(10);
 		
 
-		inputWrapper.add ( new HTML ( "Type any comment " ) );
+		inputWrapper.add ( new HTML ( "Say it!" ) );
 		inputWrapper.add ( text );
 		inputWrapper.add ( submitButton );
 		
 		outer.add ( inputWrapper );
 		outer.add ( responseWrapper );
-
+		outer.add ( commentsListPanel );
+		displayComments ();
 		submitButton.addClickHandler ( new AddCommentClickHandler () );
 		
 		initWidget( outer );
+	}
+	
+	public void displayComments () {
+	    
+	    commentsListPanel.clear ();
+	    Comments_get comments = new Comments_get ();
+	    commentsListPanel.add ( comments );
+	    
 	}
 
 }
