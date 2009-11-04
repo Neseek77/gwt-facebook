@@ -22,6 +22,9 @@ import com.gwittit.client.facebook.entities.Cookie;
  */
 public class Data_setCookie extends Showcase {
    
+    /*
+     * Handle click
+     */
     private class SetCookieClickHandler implements ClickHandler {
         public void onClick(ClickEvent event) {
             sendToServer ( nameText.getValue () , valueText.getValue () );
