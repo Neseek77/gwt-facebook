@@ -8,8 +8,12 @@ import com.gwittit.client.facebook.ui.EventEditor;
  * Showcase for method <code>events.create</code>
  */
 public class Events_create extends Showcase {
+    
     final VerticalPanel outer = new VerticalPanel ();
     
+    /**
+     * Create showcase
+     */
     public Events_create () {
         initWidget( outer );
     }

@@ -14,22 +14,46 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwittit.client.facebook.Json;
 import com.gwittit.client.facebook.entities.Cookie;
 
 /**
  * Showcase of method <code>data.setCookie</code>
  */
 public class Data_setCookie extends Showcase {
+   
+    private class SetCookieClickHandler implements ClickHandler {
+        public void onClick(ClickEvent event) {
+            sendToServer ( nameText.getValue () , valueText.getValue () );
+        }
+        
+    }
     
-  
-    public Data_setCookie () {
-      
-        final VerticalPanel outer = new VerticalPanel ();
-        final HorizontalPanel inputPanel = new HorizontalPanel ();
-        final TextBox nameText = new TextBox ();
-        final TextBox valueText = new TextBox ();
-        final Button addButton = new Button ( "Set Cookie" );
+    /*
+     * Render response
+     */
+    private class ResponseCallback implements AsyncCallback<Boolean> {
+        public void onFailure(Throwable caught) {
+            handleFailure ( caught );
+        }
+        public void onSuccess(Boolean result) {
+            removeLoader ( outer );
+            renderResponse ( result );
+        }
+    }
+    
+    final VerticalPanel outer = new VerticalPanel ();
+    final HorizontalPanel inputPanel = new HorizontalPanel ();
+    final TextBox nameText = new TextBox ();
+    final TextBox valueText = new TextBox ();
+    final Button addButton = new Button ( "Set Cookie" );
 
+
+    /**
+     * Create showcase
+     */
+    public Data_setCookie () {
+ 
         inputPanel.setSpacing ( 10 );
         inputPanel.add ( new HTML ( "Name: " ) );
         inputPanel.add ( nameText );
@@ -39,50 +63,35 @@ public class Data_setCookie extends Showcase {
         
         outer.add ( inputPanel  );
         
-        addButton.addClickHandler ( new ClickHandler () {
-            public void onClick(ClickEvent event) {
-                saveCookie (outer, nameText.getValue (), valueText.getValue () );
-            } 
-        }) ;
+        addButton.addClickHandler ( new SetCookieClickHandler () );
         
         initWidget ( outer );
         
     }
 
-    /**
+    /*
      * Save Cookie 
-     * @param parentPanel
-     * @param name
-     * @param value
      */
-    public void saveCookie ( final VerticalPanel parentPanel, 
-                            final String name, 
-                            final String value ) {
+    private void sendToServer (final String name, final String value ) {
         
-        addLoader ( parentPanel );
+        addLoader ( outer );
         
-        JSONObject o = new JSONObject ();
-        o.put ( "name", new JSONString ( name ) );
-        o.put ( "value", new JSONString ( value ) );
+        Json j = new Json ().put ( "name", name ).put ( "value", value );
         
-        Cookie cookie = Cookie.fromJson ( o.toString () );
-        
-        apiClient.dataSetCookie ( cookie, new AsyncCallback<Boolean> () {
+        Cookie cookie = Cookie.fromJson ( j.toString () );
+        apiClient.dataSetCookie ( cookie, new ResponseCallback () );
 
-            public void onFailure(Throwable caught) {
-                handleFailure ( caught );
-            }
+    }
 
-            public void onSuccess(Boolean added) {
-                removeLoader ( parentPanel );
-                if ( added ) {
-                    parentPanel.add (  new HTML ( "Cookie added successfully" ) );
-                } else {
-                    parentPanel.add ( new HTML ( "Could not set cookie" ) );
-                }
-            }
-            
-        });
-        
+    /*
+     * Render response
+     */
+    private void renderResponse ( Boolean added ) {
+        if ( added ) {
+            outer.add (  new HTML ( "Cookie added successfully" ) );
+        } else {
+            outer.add ( new HTML ( "Could not set cookie" ) );
+        }
+     
     }
 }
