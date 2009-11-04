@@ -1,21 +1,53 @@
 /** Add css rules here for your application. */
 
 
+
 * {margin: 0px; padding: 0px; text-decoration: none }
 
-body {
-	background-image:url(bg.png);
-	background-repeat:repeat-x;
-	margin-left: 20px;
+.fbColorLight {
+  background: #ECEFF5;	
 }
+
+.addSpace {
+	margin: 10px;
+}
+
+.rounded {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+
+/* Bluish #1b7bdd; */
+a, a:visited, a:hover  {
+	color: #1b7bdd;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+body {
+    background-image:url(/bg.png);
+    background-repeat:repeat-x;
+    margin-left: 20px;
+	
+}
+
+#TopMenu{
+	width: 900px;
+    padding-left: 5px;
+    height: 70px;
+    background-image: url(/gwittit-bg.png);
+    background-repeat: no-repeat;
+}
+
 
 .clickable {
 	cursor: pointer;
 }
 
-.deleted {
-	display: none;
-}
+
 #GwittIt {
 	/*margin-left: 150px;*/
 	width: 950px;
@@ -34,29 +66,72 @@ h2 {
 	margin-bottom: 5px;
 }
 
-.debugLink {
-	color: #f7f7f7;
+h3 {
+	margin-top: 8px;
+	margin-bottom: 3px;
 }
 
+/* ----------------------------------- SHOWCASE --------------------------------- */
 
-/* --------------------- Top Menu ------------------------------ */
-#TopMenu{
-	width: 900px;
+/* =Events_get */
+.gwittit-Events_get .event {
+	margin: 10px;
+	padding: 10px;
 }
 
-.whatIsGwittit {
-	margin-top: 20px;	
+.gwittit-Events_get .eventItemHolder {
+	width: 500px;
+	margin: 10px;
+	border-bottom: 1px solid #1b7bdd;
+}
+
+.gwittit-Showcase-Groups_get .membersWrapper {
+	padding: 20px;
+}
+
+/* gwittit-Message_getThreadsInFolder */
+
+.gwittit-Message_getThreadsInFolder .gwt-Button {
+	padding: 5px;
+}
+
+.gwittit-Message_getThreadsInFolder .mailFolders { 
+	margin-top: 20px;
+	font-size: 120%;
 	font-weight: bold;
-	margin-left: 50px;
 }
 
-#TopMenu{
-	padding-left: 5px;
-	height: 100px;
-	
-	background-image: url(/gwittit-bg.png);
-	background-repeat: no-repeat;
+.gwittit-Stream_publish, .gwittit-Stream_publish .innerPanel {
+	width: 100%;
 }
+
+.gwittit-Stream_publish .innerPanel {
+	margin: 10px;
+	padding: 10px;
+	border: 1px solid #cccccc;
+}
+
+.gwittit-Events_get .eventInfo {
+	margin-bottom: 10px;
+}
+
+.mailFolders a {
+	margin: 10px;
+}
+.messageThread {
+	margin: 10px;
+	width: 100%;
+	border-bottom: 1px solid #1b7bdd;
+}
+
+.messages {
+	border-left: 4px solid #BEC7CC;
+	padding-left: 10px;
+	margin: 10px;
+}
+
+/* Demo App */
+/* --------------------- Top Menu ------------------------------ */
 
 #TopMenu .loginInfo {
 	color: white;
@@ -81,236 +156,14 @@ h2 {
 }
 
 
-/* -------------------- Frontpage / set status ------------------ */
-#Frontpage .inputTextArea {
-	font-size: 14px;
-	padding: 10px;	
-}
-
-/* Textarea */
-.waitingForInput {
-	color: #808080;
-}
-
-.selected:hover {
-	color: white;
-}
-.selected {
-	color: white;
-	background: #6D84B4;
-	padding: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-}
-
 /* -------------------------- Login ----------------------- */
 #LoginBox {
 	margin: 50px;
 }
 
-#LoginBox, .statusBoxPnl {
-	background: #DDEEF6;
-	border: 1px solid #5599BB;
-	padding: 20px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-}
-
-/* --------------------------- Stream Menu ------------------------ */
-.streamFilterMenu {
-	width: 200px;
-	margin-right: 20px;
-	margin-top: 10px;
-	padding: 0px;
-}
-
-.menuItem:hover {
-	color: white;
-	background: #6D84B4;	
-}
-.menuItem:hover * {
-	color: white;
-}
-
-.menuItem {
-	width: 100%;
-	padding: 3px;
-	border-bottom: 1px solid #dcd9de;
-}
-.menu a {
-	color: #808080;
-	font-size: 14px;
-}
-
-/* -------------------------- MenuBar ( horizontal ) ------------------------- */
-
-.menuBarWrapper {
-	width: 100%;
-	padding: 10px;
-}
-
-.menuBar {
-	margin-bottom: 10px;
-	width: 100%;
-}
-
-.menuBar a {
-	margin: 5px;
-	float:left;
-}
-
-.menuBar a:hover {
-	color: white;
-	background: #6D84B4;	
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-}
-
-/* -------------------------------- Stream ------------------------- */
-
-#FacebookStream {
-	width: 100%;
-}
-
-.streamFilter {
-	margin-top: 10px;
-	background: #ECEFF5;
-	width: 100%;
-}
-
-#FacebookStream .streamFilter img {
-	margin: 10px;
-	border: 1px solid #f7f7f7;
-}
-
-.streamMainContent {
-	width: 450px;
-}
-
-.gwittit-StreamUI {
-	padding-bottom: 5px;
-	margin: 4px;
-	margin-bottom: 15px;
-	border-bottom: 1px solid #eeeeee;
-}
-
-.gwittit-StreamUI .gwittit-FbProfilePic {
-	margin-right: 5px;
-	border: 1px solid #f7f7f7;
-}
 
 
-.streamListing {
-	padding: 10px;
-}
-
-.streamInfo {
-	margin: 5px;
-	padding: 4px;
-	color: #cccccc;
-}
-
-.streamInfo * {
-	float: left;
-	margin-left: 5px;
-}
-
-.streamInfo img {
-	margin-right: 5px;
-}
-
-.streamAttachment {
-	color: #808080;
-	padding: 3px;
-}
-
-.streamAttachment .gwt-HTML {
-	color: #808080;
-}	
-
-.streamMedia img {
-	border: 1px solid #f7f7f7;
-	padding: 5px;
-	margin: 5px;
-}
-
-/* ----------------------- Comments ------------------------------- */
-.gwittit-CommentBoxUI .textArea {
-	margin: 3px; 
-}
-
-.collapsed {
-	width: 440px;
-	color: #cccccc;	
-}
-
-.expanded {
-	width: 380px;
-}
-
-.gwittit-CommentBoxUI .gwt-Button {
-	float: right;
-}
-
-.commentList {
-	padding: 3px;
-}
-
-.gwittit-CommentUI-inner {
-	padding: 4px;
-
-}
-
-.gwittit-LikesUI,
-.gwittit-CommentUI,
-.gwittit-CommentBoxUI,
-.commentList {
-	width: 100%;
-}
-
-.gwittit-LikesUI,
-.gwittit-CommentUI,
-.gwittit-CommentBoxUI {
-	background: #ECEFF5;
-	
-}
-
-.gwittit-CommentUI-inner .gwt-HTML {
-	overflow: auto;
-}
-
-.gwittit-CommentUI {
-	margin-bottom: 3px;
-}
-
-.gwittit-LikesUI {
-	border: 1px solid #dcd9de;
-}
-.gwittit-CommentBoxUI {
-	padding: 4px;
-	border-bottom: 1px solid #dcd9de;
-}
-
-.gwittit-CommentBoxUI {
-	margin-top: 3px;
-}
-
-/* ------------------------ Displayed when user has not granted permission ------------------- */
-.needStreamPermission {
-	width: 550px;
-	padding: 30px;
-	border: 1px solid #F7F7F7;
-}
-
-.needStreamPermission img {
-	margin: 10px;
-}
-
-.actions {
-	padding-left: 75px;
-}
-
-/* --------------------------------- TestClient ---------------------------- */
+/* --------------------------------- ShowCase ---------------------------- */
 
 #ShowcaseClient .showcaseWrapper  {
 	width: 500px;
@@ -347,26 +200,36 @@ h2 {
 	margin: 10px;
 }
 
-/* ---------------------------------- PhotosGetAlbumsExample ----------- */
-
-#PhotosGetAlbumsExample .albumsPanel {
-	padding: 20px;
+.postContent {
+	width: 500px;
+	margin-left: 10px;
 }
 
-.album {
-	float: left;
-	height: 150px;
-	width: 150px;
+.profiles {
 	padding: 10px;
-	margin: 10px;
-	border: 1px solid #5599bb;	
 }
 
-#TestClient hr {
-	margin: 20px;
+.attachment, likes, .comments, .profiles {
+	width: 500px;
 }
 
-/* ---------------------------------------------------------------------- */
+.gwittit-Stream_get .post {
+	padding: 10px;
+	border-bottom: 1px solid #f7f7f7;
+}
+
+.streamMenu * {
+	font-weight: bold;
+}
+
+
+.post h4 {
+	width: 100%;
+	padding: 3px;
+}
+
+/* --------------- */
+
 .gwt-TabPanel {
 	margin-left: 10px;
 	width: 99%;
@@ -379,7 +242,6 @@ h2 {
 .gwt-TabBar .gwt-TabBarFirst {
         width: 10px;
 }
-
 .gwt-TabBar .gwt-TabBarItem {
         margin-top: 5px;
         padding: 5px;
