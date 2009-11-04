@@ -24,7 +24,7 @@ public class Events_getMembers extends Showcase {
     private class EventSelectorImpl implements EventSelectorHandler {
         public void onSelect(Long eid) {
             addLoader ( inner );
-            apiClient.eventsGetMembers ( eid, new EventsGetMembersCallback () );
+            doGetMembers ( eid );
         }
     }
 
@@ -35,6 +35,7 @@ public class Events_getMembers extends Showcase {
         public void onFailure(Throwable caught) {
             handleFailure ( caught );
         }
+        
         public void onSuccess(EventMembers result) {
             removeLoader ( inner );
             displayMembers ( inner, "Attending", result.getAttending () );
@@ -47,19 +48,33 @@ public class Events_getMembers extends Showcase {
      * Create new showcase
      */
     public Events_getMembers () {
-        final EventSelector eventSelector = new EventSelector();
-        eventSelector.addSelectHandler ( new EventSelectorImpl () );
+        this ( null );
+    }
+    
+    public Events_getMembers ( Long eid ) {
         
-        outer.add ( eventSelector );
+        if ( eid == null ) {
+            final EventSelector eventSelector = new EventSelector();
+            eventSelector.addSelectHandler ( new EventSelectorImpl () );
+            outer.add ( eventSelector );
+        } else {
+            doGetMembers ( eid );
+        }
+        
         outer.add ( inner );
         initWidget( outer);
+        
     }
     
     private void displayMembers ( final VerticalPanel inner, final String header, final List<Long> uids ) {
-        inner.add ( new HTML ( "<h3>" + header + "</h3>" ) );
-        inner.add ( new HTML ( "" + uids.size () ) ); 
+        inner.add ( new HTML ( "<h5>" + header + " " + uids.size () + "</h5>" ) );
         
         ProfilePicsPanel ppp = new ProfilePicsPanel ( uids );
         inner.add ( ppp );
+    }
+    
+    private void doGetMembers ( Long eid ) {
+        addLoader ( inner );
+        apiClient.eventsGetMembers ( eid, new EventsGetMembersCallback () );
     }
 }
