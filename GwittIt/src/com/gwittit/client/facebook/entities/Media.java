@@ -1,6 +1,7 @@
 package com.gwittit.client.facebook.entities;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.gwittit.client.facebook.Json;
 
 
 /**
@@ -15,7 +16,8 @@ public class Media extends JavaScriptObject {
         
     }
     
-    public enum Type {photo,link,video,flash,mp3};
+    public enum Type {image,hoto,link,video,flash,mp3};
+    
     public final Type getTypeEnum () {
         return Type.valueOf ( getType() );
     }
@@ -60,4 +62,19 @@ public class Media extends JavaScriptObject {
         return "Type:"  + getType();
     }
 	
+    /**
+     * Create new Media 
+     * @param src
+     * @param href
+     * @return
+     */
+    public static final Media newInstance ( Type type, String src, String href ) {
+        Json j = new Json ();
+        j.put ( "type", type.toString () );
+        j.put ( "href", href ).put ( "src", src );
+        return j.getJavaScriptObject ().cast ();
+    }
+
+    public static native Media fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
+
 }

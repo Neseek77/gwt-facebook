@@ -7,10 +7,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.facebook.entities.Comment;
+import com.gwittit.client.facebook.xfbml.FbProfilePic;
+import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
 /**
  * Showcase for method call <code>comments.add</code>
@@ -49,7 +53,6 @@ public class Comments_add extends Showcase  {
     final VerticalPanel inputWrapper = new VerticalPanel ();
     final SimplePanel responseWrapper = new SimplePanel ();
     final VerticalPanel commentsListPanel = new VerticalPanel ();
-    
     final TextArea text = new TextArea();
     final Button submitButton = new Button ( "Add Comment ");
 
@@ -63,8 +66,8 @@ public class Comments_add extends Showcase  {
 		
 
 		inputWrapper.add ( new HTML ( "Say it!" ) );
-		inputWrapper.add ( text );
-		inputWrapper.add ( submitButton );
+
+		inputWrapper.add ( createInputUi() );
 		
 		outer.add ( inputWrapper );
 		outer.add ( responseWrapper );
@@ -73,6 +76,14 @@ public class Comments_add extends Showcase  {
 		submitButton.addClickHandler ( new AddCommentClickHandler () );
 		
 		initWidget( outer );
+	}
+	
+	
+	private Panel createInputUi () {
+	    HorizontalPanel p = new HorizontalPanel ();
+	    p.add ( new FbProfilePic ( apiClient.getLoggedInUser (), FbProfilePic.Size.thumb ) );
+	    p.add ( text );
+	    return p;
 	}
 	
 	public void displayComments () {

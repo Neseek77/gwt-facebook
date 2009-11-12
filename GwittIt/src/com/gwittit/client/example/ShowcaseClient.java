@@ -1,3 +1,4 @@
+
 package com.gwittit.client.example;
 
 import com.google.gwt.core.client.GWT;
@@ -55,7 +56,7 @@ public class ShowcaseClient extends Composite {
     final String profileMethods = "XProfile:profile_getFBML,profile_getInfo,profile_getInfoOptions,profile_setFBML,profile_setInfo,profile_setInfoOptions";
     final String smsMethods = "XSMS:Xsms_canSend,sms_send";
     final String statusMethods = "XStatus:status_get,status_set";
-    final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,stream_publish,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
+    final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,stream_publish,stream_publishAttachment,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
     final String userMethods = "Users:Xusers_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
     final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
     final String xfbml = " XFBML:various";
@@ -80,6 +81,7 @@ public class ShowcaseClient extends Composite {
     public ShowcaseClient() {
 
         outer.getElement ().setId ( "ShowcaseClient" );
+      
         showcaseWrapper.getElement ().setId ( "ShowcaseWrapper" );
         inner.setSpacing ( 10 );
         showcaseWrapper.setWidth ( "700px" );
@@ -91,10 +93,14 @@ public class ShowcaseClient extends Composite {
         name.setLinked ( false );
 
         // Welcome user in a nice way by showing a picture
-        HorizontalPanel welcomePnl = new HorizontalPanel ();
+        VerticalPanel welcomePnl = new VerticalPanel ();
         welcomePnl.setSpacing ( 10 );
-        welcomePnl.add ( new HTML ( "<h4>Welcome, " + name + "</h4> To start, click the menu on the left " ) );
+        welcomePnl.add ( new HTML ( "<h4>Welcome, " + name + "</h4> " ) );
         welcomePnl.add ( new FbProfilePic ( apiClient.getLoggedInUser (), Size.thumb ) );
+    
+        welcomePnl.add ( new Stream_publishAttachment () );
+        
+        
         showcaseWrapper.add ( welcomePnl );
 
         VerticalPanel treeMenuWrapper = new VerticalPanel ();
@@ -104,6 +110,7 @@ public class ShowcaseClient extends Composite {
 
         // Add left + right column
         inner.add ( treeMenuWrapper );
+        
         inner.add ( decorate ( showcaseWrapper ) );
 
         outer.add ( inner );
@@ -377,6 +384,8 @@ public class ShowcaseClient extends Composite {
             // example = new Stream_getComments();
         } else if ("stream_getFilters".equals ( m )) {
             // example = new Stream_getFilters();
+        } else if ("stream_publishAttachment".equals ( m )) {
+            showcase = new Stream_publishAttachment ();
         } else if ("stream_publish".equals ( m )) {
             showcase = new Stream_publish ();
         } else if ("stream_remove".equals ( m )) {

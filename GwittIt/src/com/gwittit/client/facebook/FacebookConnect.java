@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -59,6 +60,16 @@ public class FacebookConnect {
         callback.onSuccess ( connectState );
     }
 
+    public static native void streamPublishTest ( Attachment attachment ) /*-{
+    
+    //    var attachment = {'media': [{'type':'image',
+    //                         'src':'http://gwittit.appspot.com/imgsamples/with.jpg',
+    //                         'href':'http://bit.ly/hifZk'}]};
+        $wnd.FB.Connect.streamPublish('', attachment);
+    
+    }-*/;
+
+    
     /**
      * Prompt user to update his or her status
      */
@@ -162,7 +173,6 @@ public class FacebookConnect {
                                      Boolean autoPublish,
                                      String actorId,
                                      AsyncCallback<JavaScriptObject> callback) {
-
         Json j = new Json ();
         j.put ( "user_message", userMessage );
         j.put ( "attachment", attachment );
@@ -171,7 +181,6 @@ public class FacebookConnect {
         j.put ( "user_message_prompt", userMessagePrompt );
         j.put ( "auto_publish", autoPublish );
         j.put ( "actor_id", actorId );
-
         streamPublishNative ( j.getJavaScriptObject (), callback );
     }
 
@@ -180,13 +189,13 @@ public class FacebookConnect {
      */
     private static native void streamPublishNative(JavaScriptObject params, AsyncCallback<JavaScriptObject> callback) /*-{
         var userMessage = params["user_message"];
-        var attachment = params["attachment"];
+        var attachment = params['attachment'];
         var actionLinks = params["action_links"];
         var targetId = params["target_id"];
         var userMessagePrompt = params["user_message_prompt"];
         var autoPublish = params["auto_publish"];
         var actorId = params["actor_id"];
-
+        
         $wnd.FB.Connect.streamPublish ( userMessage, attachment, actionLinks, targetId, userMessagePrompt, 
         function (postId, exception){
             if ( typeof ( postId ) == 'string' && postId != "null" ) {
