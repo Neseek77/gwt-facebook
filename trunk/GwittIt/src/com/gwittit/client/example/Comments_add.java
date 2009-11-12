@@ -66,10 +66,10 @@ public class Comments_add extends Showcase  {
 		
 
 		inputWrapper.add ( new HTML ( "Say it!" ) );
-
 		inputWrapper.add ( createInputUi() );
 		
 		outer.add ( inputWrapper );
+		outer.add ( submitButton );
 		outer.add ( responseWrapper );
 		outer.add ( commentsListPanel );
 		displayComments ();
@@ -81,6 +81,7 @@ public class Comments_add extends Showcase  {
 	
 	private Panel createInputUi () {
 	    HorizontalPanel p = new HorizontalPanel ();
+	    p.setSpacing ( 10 );
 	    p.add ( new FbProfilePic ( apiClient.getLoggedInUser (), FbProfilePic.Size.thumb ) );
 	    p.add ( text );
 	    return p;

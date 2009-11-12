@@ -25,7 +25,6 @@ import com.gwittit.client.facebook.entities.Post;
 import com.gwittit.client.facebook.entities.Profile;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.Media.Type;
-import com.gwittit.client.facebook.ui.PermissionDialog;
 import com.gwittit.client.facebook.xfbml.FbName;
 import com.gwittit.client.facebook.xfbml.FbPhoto;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
@@ -221,10 +220,8 @@ public class Stream_get extends Showcase {
         HorizontalPanel thumbs = new HorizontalPanel ();
         thumbs.setSpacing ( 10 );
 
-        JavaScriptObject jso = attachment.getMedia ();
-
         for (Media m : Util.iterate ( attachment.getMedia () )) {
-            p.add ( new HTML ( "<b>MediaContent:</b> " + m.stringify () ) );
+            p.add ( new HTML ( "<b>MediaContent:</b> " + m.getType () ) );
 
             if (m.getSrc () != null) {
                 thumbs.add ( new Image ( m.getSrc () ) );

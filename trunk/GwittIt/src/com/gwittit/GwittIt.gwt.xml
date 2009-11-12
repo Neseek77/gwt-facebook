@@ -23,7 +23,8 @@
   <inherits name="com.google.gwt.user.Debug"/>
   <inherits name="org.zenika.widget.DatePickerModule"/>
 
-  <stylesheet src="../GwittIt.css"/>
   <stylesheet src="../GwtFacebook.css"/>
+
+  <stylesheet src="../GwittIt.css"/>
  
  </module>
