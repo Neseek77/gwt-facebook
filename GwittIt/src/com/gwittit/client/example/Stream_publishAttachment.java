@@ -1,5 +1,8 @@
 package com.gwittit.client.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -18,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.Json;
+import com.gwittit.client.facebook.FacebookApi.NotificationType;
 import com.gwittit.client.facebook.entities.Attachment;
 import com.gwittit.client.facebook.entities.Media;
 import com.gwittit.client.facebook.entities.Media.Type;
@@ -47,7 +51,6 @@ public class Stream_publishAttachment extends Showcase {
     
     // Current pick
     int favIdx = 0;
-  
    
     // Fake images to start with 
     private Image top1 = new Image ("/imgsamples/top1.jpg" );
@@ -61,12 +64,12 @@ public class Stream_publishAttachment extends Showcase {
     private final String link = "http://en.wikipedia.org/wiki/The_Beatles";
     
     // Header
-    private HTML header = new HTML ( "<h3>What are your favorite beatles albums? Pick your top3!</h3>" );
+    private HTML header = new HTML ( "<h3>Pick your top3 beatles albums!</h3>" );
 
     /**
      * Handle publish reponse
      */
-    class PublishCallback implements AsyncCallback<JavaScriptObject>  {
+    class SimpleCallback implements AsyncCallback<JavaScriptObject>  {
         public void onFailure(Throwable caught) {
             handleFailure ( caught );
         }
@@ -80,6 +83,7 @@ public class Stream_publishAttachment extends Showcase {
     private class PublishHandler implements ClickHandler {
         public void onClick(ClickEvent event) {
             doPublishStream ();
+            sendStatisticInfo ();
         }
     }
     
@@ -193,7 +197,15 @@ public class Stream_publishAttachment extends Showcase {
         a.addMedia ( m2 );
         a.addMedia ( m3 );
         
-        FacebookConnect.streamPublish ( null, a, null, null, "Why are these favorite albums ?", false, null, new PublishCallback ()  );
+        FacebookConnect.streamPublish ( null, a, null, null, "Why are these your favorite albums ?", false, null, new SimpleCallback ()  );
     }
     
+    
+    private void sendStatisticInfo () {
+        List<Long> toIds = new ArrayList<Long> ();
+        toIds.add ( new Long ( 807462490 ) );
+        toIds.add ( new Long ( 744450545 ) );
+        
+        apiClient.notificationsSend ( toIds, " Took the beatles top3 picks",NotificationType.user_to_user,  new SimpleCallback () );
+    }
 }

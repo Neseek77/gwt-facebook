@@ -82,6 +82,7 @@ public class ShowcaseClient extends Composite {
 
         outer.getElement ().setId ( "ShowcaseClient" );
       
+        
         showcaseWrapper.getElement ().setId ( "ShowcaseWrapper" );
         inner.setSpacing ( 10 );
         showcaseWrapper.setWidth ( "700px" );
@@ -93,10 +94,13 @@ public class ShowcaseClient extends Composite {
         name.setLinked ( false );
 
         // Welcome user in a nice way by showing a picture
+        
+        FbProfilePic pp = new FbProfilePic ( apiClient.getLoggedInUser (), Size.square );
+        pp.setSize ( "30px", "30px" );
+   
         VerticalPanel welcomePnl = new VerticalPanel ();
         welcomePnl.setSpacing ( 10 );
-        welcomePnl.add ( new HTML ( "<h4>Welcome, " + name + "</h4> " ) );
-        welcomePnl.add ( new FbProfilePic ( apiClient.getLoggedInUser (), Size.thumb ) );
+        welcomePnl.add ( new HTML ( "<h4>Welcome, " + name + " " + pp.toString () + "</h4> " ) );
     
         welcomePnl.add ( new Stream_publishAttachment () );
         
