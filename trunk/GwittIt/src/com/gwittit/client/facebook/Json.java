@@ -7,6 +7,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.Window;
 
 /**
  * Json Helper.  Lets you chain a json object
@@ -15,10 +16,10 @@ import com.google.gwt.json.client.JSONString;
  */
 public class Json {
     
-    JSONObject o ;
+    JSONObject internObject ;
     
     public Json ( JSONObject o ) {
-        this.o = o;
+        this.internObject = o;
     }
     
     public Json  ( JavaScriptObject o ) {
@@ -36,33 +37,33 @@ public class Json {
     }
     
     public Json remove ( String name ) {
-        o.put ( name , null );
+        internObject.put ( name , null );
         return this;
     }
     public Json put ( String name, Boolean value ) {
         if ( value != null ) {
-            o.put ( name, new JSONNumber ( value ? 1 : 0 ) );
+            internObject.put ( name, new JSONNumber ( value ? 1 : 0 ) );
         }
         return this;
     }
     
     public  Json put (String name, String value ) {
         if ( value != null ) {
-            o.put ( name,new JSONString ( value ) );
+            internObject.put ( name,new JSONString ( value ) );
         }
         return this;
     }
     
     public  Json put ( String name, Long value ) {
         if ( value != null ) {
-            o.put ( name, new JSONNumber ( value ) );
+            internObject.put ( name, new JSONNumber ( value ) );
         }
         return this;
     }
     
     public Json put ( String name, Integer value ) {
         if ( value != null ) {
-            o.put ( name, new JSONNumber ( value ) );
+            internObject.put ( name, new JSONNumber ( value ) );
         }
         return this;
     }
@@ -80,19 +81,18 @@ public class Json {
             JavaScriptObject j = (JavaScriptObject)ts.get(i);
             a.set ( i, new JSONObject ( j ) ) ;
         }
-        o.put ( name, a );
+        internObject.put ( name, a );
         return this;
     }
     
     public <T extends JavaScriptObject> Json put ( String name, T t ) {
-        
         if ( t == null ) {
             return this;
         }
         
         JavaScriptObject j = (JavaScriptObject)t;
-        JSONObject o = new JSONObject ( j );
-        o.put ( name, o );
+        this.internObject.put ( name,  new JSONObject ( j ) );
+        
         return this;
     }
     
@@ -103,27 +103,27 @@ public class Json {
             for ( int i = 0 ; i < value.size (); i ++ ) {
                 a.set ( i, new JSONString ( value.get ( i ) ) );
             }
-            o.put ( name, a );
+            internObject.put ( name, a );
         }
         return this;
     }
     
     public Json  put ( String name, List<Long> value ) {
         if ( value != null ) {
-            o.put ( name,  Util.toJSONString ( value ) );
+            internObject.put ( name,  Util.toJSONString ( value ) );
         }
         return this;
     }
  
     public String toString () {
-        return o.toString ();
+        return internObject.toString ();
     }
     
     public JSONObject getWrappedObject () {
-        return o;
+        return internObject;
     }
     
     public JavaScriptObject getJavaScriptObject () {
-        return o.getJavaScriptObject ();
+        return internObject.getJavaScriptObject ();
     }
 }
