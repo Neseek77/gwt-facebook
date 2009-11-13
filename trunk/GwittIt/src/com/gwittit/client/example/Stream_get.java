@@ -182,29 +182,34 @@ public class Stream_get extends Showcase {
 
         for (Post post : Util.iterate ( posts )) {
 
-            GWT.log ( "Render: " + new JSONObject ( post ).toString (), null );
-            final VerticalPanel postContentPnl = new VerticalPanel ();
-            postContentPnl.addStyleName ( "postContent" );
-            postContentPnl.add ( new HTML ( new FbName ( post.getActorId () ) + " " + post.getMessage () ) );
-
-            if (post.getAttachment ().getName () != null) {
-                postContentPnl.add ( createAttachmentUI ( post.getAttachment () ) );
+            try {
+                
+                GWT.log ( "Render: " + new JSONObject ( post ).toString (), null );
+                final VerticalPanel postContentPnl = new VerticalPanel ();
+                postContentPnl.addStyleName ( "postContent" );
+                postContentPnl.add ( new HTML ( new FbName ( post.getActorId () ) + " " + post.getMessage () ) );
+    
+                if (post.getAttachment ().getName () != null) {
+                    postContentPnl.add ( createAttachmentUI ( post.getAttachment () ) );
+                }
+                if (post.getLikes ().getCount () > 0) {
+                    postContentPnl.add ( createLikesUI ( post.getLikes () ) );
+                }
+                if (post.getComments ().getCount () > 0) {
+                    postContentPnl.add ( createCommentsUI ( post.getComments () ) );
+                }
+                // Add profilepic on the left, postcontent on the right
+                HorizontalPanel p = new HorizontalPanel ();
+                p.addStyleName ( "post" );
+    
+                p.add ( new FbProfilePic ( post.getActorId () ) );
+                p.add ( postContentPnl );
+    
+                // postPnl.add ( asJson ( "LikesAsJson: ", post.getLikes () ));
+                addContentToPnl.add ( p );
+            } catch ( Exception e ) {
+                GWT.log ( "Unkown exception ", e );
             }
-            if (post.getLikes ().getCount () > 0) {
-                postContentPnl.add ( createLikesUI ( post.getLikes () ) );
-            }
-            if (post.getComments ().getCount () > 0) {
-                postContentPnl.add ( createCommentsUI ( post.getComments () ) );
-            }
-            // Add profilepic on the left, postcontent on the right
-            HorizontalPanel p = new HorizontalPanel ();
-            p.addStyleName ( "post" );
-
-            p.add ( new FbProfilePic ( post.getActorId () ) );
-            p.add ( postContentPnl );
-
-            // postPnl.add ( asJson ( "LikesAsJson: ", post.getLikes () ));
-            addContentToPnl.add ( p );
         }
     }
 
