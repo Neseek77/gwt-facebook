@@ -116,7 +116,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
 
 
         String token = Window.Location.getHash ();
-        if ( token == null ) {
+        if ( token == null || "".equals ( token ) ) {
             showcaseWrapper.add ( createDefaultFrontpage () );
         } else {
             doDisplayShowcase ( token );
