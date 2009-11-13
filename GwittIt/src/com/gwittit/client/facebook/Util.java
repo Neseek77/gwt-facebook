@@ -11,6 +11,7 @@ import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 
 
@@ -33,7 +34,7 @@ public class Util {
                 result.add ( l );
             }
         } catch ( Exception e ) {
-            GWT.log ( "Failed to convert String array", e);
+            GWT.log ( "Failed to convert String array: ArrayLength: " + jsArray.length () + ":"  + new JSONObject ( jsArray ).toString () , e);
         }
         return result;
 

@@ -107,6 +107,10 @@ public class Attachment extends JavaScriptObject {
      * in your post.
      */
     public final native JsArray<Media> getMedia() /*-{
+        
+        if ( typeof ( this.media ) == 'undefined' ) {
+            return null; 
+        } 
         return this.media;
     }-*/;
 

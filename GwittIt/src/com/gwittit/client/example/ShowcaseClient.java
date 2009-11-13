@@ -4,6 +4,9 @@ package com.gwittit.client.example;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
@@ -15,6 +18,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.gwittit.client.facebook.ApiFactory;
 import com.gwittit.client.facebook.FacebookApi;
 import com.gwittit.client.facebook.FacebookConnect;
@@ -29,12 +33,31 @@ import com.gwittit.client.facebook.xfbml.FbProfilePic.Size;
  * This class wraps showcases and adds a treemenu for navigation.
  * 
  */
-public class ShowcaseClient extends Composite {
+public class ShowcaseClient extends Composite implements ValueChangeHandler<String> {
 
+    private class ShowcaseHandler implements SelectionHandler<TreeItem> {
+        public void onSelection(SelectionEvent<TreeItem> event) {
+            TreeItem clickedLink = (TreeItem) event.getSelectedItem ();
+            if (clickedLink.getChildCount () == 0) {
+                if (!apiClient.isSessionValid ()) {
+                    Window.alert ( "Your session has expired" );
+                    showcaseWrapper.clear ();
+                } else {
+                    History.newItem ( clickedLink.getText () );
+                }            
+            }
+        }
+    }
+    
+    // GUI
     private VerticalPanel outer = new VerticalPanel ();
-    private HorizontalPanel inner = new HorizontalPanel ();
+    
+    // Split Panel  
+    private HorizontalPanel horizontalSplit = new HorizontalPanel ();
 
+    // --------------------------------------------------------------------------------
     // All methods, methods prefixed with X is ignored when creating the menu.
+    // --------------------------------------------------------------------------------
     final String authMethods = "XAuth:auth_createToken,auth_expireSession,auth_getSession,auth_promoteSession,auth_revokeAuthorization,auth_revokeExtendedPermission";
     final String batchMethods = "XBatch:batch_run";
     final String commentMethods = "Comments:comments_add,comments_get,Xcomments_remove";
@@ -64,6 +87,7 @@ public class ShowcaseClient extends Composite {
             fqlMethods, friendMethods, groupMethods, intlMethods, linkMethods, messageMethods, noteMethods, notificationMethods, pageMethods,
             photoMethods, profileMethods, smsMethods, statusMethods, streamMethods, userMethods, videoMethods, xfbml };
 
+    // Wrap showcase
     final VerticalPanel showcaseWrapper = new VerticalPanel ();
 
     // Animated loader
@@ -80,111 +104,139 @@ public class ShowcaseClient extends Composite {
      */
     public ShowcaseClient() {
 
+        History.addValueChangeHandler ( this );
+        
         outer.getElement ().setId ( "ShowcaseClient" );
-      
         
         showcaseWrapper.getElement ().setId ( "ShowcaseWrapper" );
-        inner.setSpacing ( 10 );
+        horizontalSplit.setSpacing ( 10 );
         showcaseWrapper.setWidth ( "700px" );
         showcaseWrapper.addStyleName ( "showcaseWrapper" );
         treeMenu.addStyleName ( "treeMenu" );
 
-        FbName name = new FbName ( apiClient.getLoggedInUser () );
-        name.setUseyou ( false );
-        name.setLinked ( false );
 
-        // Welcome user in a nice way by showing a picture
-        
-        FbProfilePic pp = new FbProfilePic ( apiClient.getLoggedInUser (), Size.square );
-        pp.setSize ( "30px", "30px" );
-   
-        VerticalPanel welcomePnl = new VerticalPanel ();
-        welcomePnl.setSpacing ( 10 );
-        welcomePnl.add ( new HTML ( "<h4>Welcome, " + name + " " + pp.toString () + "</h4> " ) );
+        String token = Window.Location.getHash ();
+        if ( token == null ) {
+            showcaseWrapper.add ( createDefaultFrontpage () );
+        } else {
+            doDisplayShowcase ( token );
+        }
     
-        welcomePnl.add ( new Stream_publishAttachment () );
-        
-        
-        showcaseWrapper.add ( welcomePnl );
-
         VerticalPanel treeMenuWrapper = new VerticalPanel ();
         treeMenuWrapper.addStyleName ( "treeMenuWrapper" );
         treeMenuWrapper.add ( new HTML ( "<h4>Methods: </h4>" ) );
         treeMenuWrapper.add ( treeMenu );
 
         // Add left + right column
-        inner.add ( treeMenuWrapper );
+        horizontalSplit.add ( treeMenuWrapper );
         
-        inner.add ( decorate ( showcaseWrapper ) );
+        horizontalSplit.add ( decorate ( showcaseWrapper ) );
 
-        outer.add ( inner );
+        outer.add ( horizontalSplit );
         Xfbml.parse ( outer );
 
         initWidget ( outer );
 
     }
 
+    private Widget createDefaultFrontpage () {
+        FbProfilePic pp = new FbProfilePic ( apiClient.getLoggedInUser (), Size.square );
+        pp.setSize ( "30px", "30px" );
+
+        FbName name = new FbName ( apiClient.getLoggedInUser () );
+        name.setUseyou ( false );
+        name.setLinked ( false );
+
+        VerticalPanel welcomePnl = new VerticalPanel ();
+        welcomePnl.setSpacing ( 10 );
+        welcomePnl.add ( new HTML ( "<h4>Welcome, " + name + " " + pp.toString () + "</h4> " ) );
+        welcomePnl.add ( new Stream_publishAttachment () );
+        
+        return welcomePnl;
+    }
+    
     /*
      * Create menu
      */
     private Tree createMenu() {
 
-        // TODO: Clean up
-        
+
         Tree treeMenu = new Tree ();
 
+        // Create vertical left menu
         for (String m : menu) {
-
             String[] labelMethods = m.split ( ":" );
-
             if (!labelMethods[0].startsWith ( "X" )) {
                 TreeItem treeItem = treeMenu.addItem ( labelMethods[0] );
                 addSections ( treeItem, labelMethods[1].split ( "," ) );
             }
         }
-
-        treeMenu.addSelectionHandler ( new SelectionHandler<TreeItem> () {
-            public void onSelection(SelectionEvent<TreeItem> event) {
-
-                TreeItem clickedLink = (TreeItem) event.getSelectedItem ();
-
-                if (clickedLink.getChildCount () == 0) {
-
-                    if (!apiClient.isSessionValid ()) {
-                        Window.alert ( "Your session has expired" );
-                        showcaseWrapper.clear ();
-                    } else {
-                            showcaseWrapper.clear ();
-                        final Showcase example = createExample ( clickedLink.getText () );
-
-                        if ( example.getNeedPermission () == null ) {
-                            showit ( example );
-                        } else {
-                            PermissionDialog pd = new PermissionDialog ();
-                            pd.addPermissionHandler ( new PermissionHandler () {
-                                public void onPermissionChange(Boolean granted) {
-                                    if (granted) {
-                                        example.permissionGranted ();
-                                        showit ( example );
-                                     } else {
-                                        showcaseWrapper.add ( new HTML ( "Need " + example.getNeedPermission () + " to show this demo, hit reload" ) );
-                                    }
-                                }
-                            } );
-                            pd.checkPermission ( example.getNeedPermission () );
-                            showcaseWrapper.add ( pd );
-                           
-                        }
-
-                    }
-                }
-            }
-
-        } );
+        // Add selection handler ( user clicks )
+        treeMenu.addSelectionHandler ( new ShowcaseHandler () );
         return treeMenu;
     }
+    
+    /*
+     * Create sections left vertical menu
+     */
+    private void addSections(TreeItem parent, String[] methods) {
+        boolean parentOpen = false;
+        for (String method : methods) {
+            if (!method.startsWith ( "X" )) {
+               
+                String token = Window.Location.getHash ();
+                if ( token != null ) {
+                    token = token.replace ( "#", "" );
+                }
+                TreeItem item = new TreeItem ( method );
+                
+                if ( method.equals ( token  ) ) {
+                    parentOpen = true;
+                    //item.setSelected ( true );
+                }
+                parent.addItem ( item );
+            }
+        }
+        if ( parentOpen ) {
+            parent.setState ( true );
+        }
+    }
+    
+    /*
+     * Display showcase
+     */
+    private void doDisplayShowcase ( String token ) {
+        showcaseWrapper.clear ();
 
-    private void showit ( Showcase example ) {
+        token = token.replace ( "#","" );
+        
+        final Showcase example = createExample ( token );
+        if ( example.getNeedPermission () == null ) {
+            createShowcasePanel ( example );
+        } else {
+            
+            PermissionDialog pd = new PermissionDialog ();
+            pd.addPermissionHandler ( new PermissionHandler () {
+                public void onPermissionChange(Boolean granted) {
+                    if (granted) {
+                        example.permissionGranted ();
+                        createShowcasePanel ( example );
+                     } else {
+                        showcaseWrapper.add ( new HTML ( "Need " + example.getNeedPermission () + " to show this demo, hit reload" ) );
+                    }
+                }
+            } );
+            pd.checkPermission ( example.getNeedPermission () );
+            showcaseWrapper.add ( pd );
+           
+        }
+        
+    }
+    
+    /*
+     * Create showcase with source link on top.
+     */
+    private void createShowcasePanel ( Showcase example ) {
         showcaseWrapper.clear ();
 
         Anchor sourceLink = new Anchor ();
@@ -198,27 +250,15 @@ public class ShowcaseClient extends Composite {
         sourceLink.setTarget ( "_blank" );
 
         showcaseWrapper.add ( sourceLink );
-
-        /*
-         * showcaseWrapper.add( new HTML (
-         * "<h2> Method: " + example.getHeader
-         * () + "</h2>" ) );
-         * showcaseWrapper.add( new HTML (
-         * "<h3>" + example.getDescription() +
-         * "</h3>" ) ) ;
-         */
         showcaseWrapper.add ( new HTML ( "<hr/>" ) );
         showcaseWrapper.add ( example );
 
     }
-    private void addSections(TreeItem parent, String[] methods) {
-        for (String method : methods) {
-            if (!method.startsWith ( "X" )) {
-                parent.addItem ( method );
-            }
-        }
-    }
 
+
+    /*
+     * Add panel
+     */
     private DecoratorPanel decorate(Panel p) {
         DecoratorPanel dp = new DecoratorPanel ();
         dp.setWidget ( p );
@@ -226,10 +266,9 @@ public class ShowcaseClient extends Composite {
     }
 
     private Showcase createExample(String m) {
-
         GWT.log ( "Create example " + m, null );
         Showcase showcase = null;
-
+       
         if ("admin_banUsers".equals ( m )) {
             // example = new Admin_banUsers();
         } else if ("batch_run".equals ( m )) {
@@ -422,5 +461,9 @@ public class ShowcaseClient extends Composite {
             showcase = new XFBMLShowcase ();
         }
         return showcase;
+    }
+
+    public void onValueChange(ValueChangeEvent<String> event) {
+        doDisplayShowcase ( event.getValue () );
     }
 }

@@ -64,7 +64,7 @@ public class Stream_publishAttachment extends Showcase {
     private final String link = "http://en.wikipedia.org/wiki/The_Beatles";
     
     // Header
-    private HTML header = new HTML ( "<h3>Pick your top3 beatles albums!</h3>" );
+    private HTML header = new HTML ( "<h3>Pick your top3 beatles albums!(DEMO)</h3>" );
 
     /**
      * Handle publish reponse
