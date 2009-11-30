@@ -31,10 +31,15 @@ import com.gwittit.client.facebook.xfbml.FbProfilePic.Size;
 
 /**
  * This class wraps showcases and adds a treemenu for navigation.
+ * TODO: Needs a cleanup.
  * 
  */
 public class ShowcaseClient extends Composite implements ValueChangeHandler<String> {
 
+    private final String wText = "gwt-facebook is a library for writing facebook apps using GWT." +
+                                 "Click the menu on the left to browse showcases and see source code.";
+    
+    
     private class ShowcaseHandler implements SelectionHandler<TreeItem> {
         public void onSelection(SelectionEvent<TreeItem> event) {
             TreeItem clickedLink = (TreeItem) event.getSelectedItem ();
@@ -117,7 +122,8 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
 
         String token = Window.Location.getHash ();
         if ( token == null || "".equals ( token ) ) {
-            showcaseWrapper.add ( createDefaultFrontpage () );
+            doDisplayShowcase ( "#stream_get" );
+            showcaseWrapper.insert ( createDefaultFrontpage (), 0 );
         } else {
             doDisplayShowcase ( token );
         }
@@ -150,8 +156,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
         VerticalPanel welcomePnl = new VerticalPanel ();
         welcomePnl.setSpacing ( 10 );
         welcomePnl.add ( new HTML ( "<h4>Welcome, " + name + " " + pp.toString () + "</h4> " ) );
-        welcomePnl.add ( new Stream_publishAttachment () );
-        
+        welcomePnl.add ( new HTML ( wText ) );
         return welcomePnl;
     }
     
@@ -215,7 +220,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
             createShowcasePanel ( example );
         } else {
             
-            PermissionDialog pd = new PermissionDialog ();
+            PermissionDialog pd = new PermissionDialog ( example.getMessage () );
             pd.addPermissionHandler ( new PermissionHandler () {
                 public void onPermissionChange(Boolean granted) {
                     if (granted) {
