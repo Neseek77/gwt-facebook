@@ -40,6 +40,7 @@ public class Stream_get extends Showcase {
     static String method = "stream.get";
     
     private final VerticalPanel outer = new VerticalPanel ();
+  
     private Stream stream;
     
     public Stream_get() {
@@ -62,11 +63,17 @@ public class Stream_get extends Showcase {
         renderMainContent ( outer );
     }   
     
+    @Override
+    public String getMessage () {
+        return "Click to access your NewsFeed";
+    }
+    
     /**
      * Render when user granted us permission to read stream
      */
     void renderMainContent(final VerticalPanel addContentToPnl) {
         final VerticalPanel streamBody = new VerticalPanel ();
+        streamBody.getElement ().setId (  "streamBody" );
         final HorizontalPanel menu = new HorizontalPanel ();
 
         menu.addStyleName ( "streamMenu" );
@@ -86,6 +93,7 @@ public class Stream_get extends Showcase {
         postsLink.addClickHandler ( new ClickHandler () {
             public void onClick(ClickEvent event) {
                 renderPosts ( streamBody, stream.getPosts () );
+                Xfbml.parse ( streamBody );
             }
         } );
 

@@ -31,6 +31,7 @@ public class PermissionDialog extends Composite {
     
     private HTML loader = new HTML ( "Checking permission");
  
+    private String message;
     
     /**
      * Create a new PermissionDialog
@@ -40,39 +41,22 @@ public class PermissionDialog extends Composite {
         initWidget ( outer );
     }
     
-    
-    public void checkPermission ( final Permission permission ) {
-        outer.clear ();
-        loader.setHTML ( "Checking " + permission.toString () + " permission " );
-        outer.add ( loader );
-        
-        // Check if user has the right permission. If not show permission dialog
-        // and return if user granted us given permission.
-        apiClient.usersHasAppPermission ( permission, new AsyncCallback<Boolean> () {
-            
-            public void onFailure(Throwable caught) {
-                new ErrorResponseUI ( caught ).center ();
-            }
-            public void onSuccess(Boolean hasPermission) {
-                outer.remove ( loader );
-                if ( hasPermission ) {
-                    handler.onPermissionChange ( true );
-                } else {
-                    outer.add ( createShowPermissionUI ( permission ) );
-                }
-            }
-            
-        });
+    public PermissionDialog ( String message ) {
+        initWidget ( outer );
+        this.message = message;
     }
+
 
     private Widget createShowPermissionUI ( final Permission permission ) {
         
         Anchor a = new Anchor ();
-        a.setHTML ("<h3>Grant  " + permission.toString () + " permission</h3>" );
+        if ( message != null ) {
+            a.setHTML ( "<h3>" + message + "</h3>" );
+        } else {
+            a.setHTML ("<h3>Grant  " + permission.toString () + " permission</h3>" );
+        }
         a.addStyleName ( "clickable" );
-        
         a.addClickHandler ( new ClickHandler () {
-
             public void onClick(ClickEvent event) {
                 FacebookConnect.showPermissionDialog ( permission, new AsyncCallback<Boolean> () {
                   public void onFailure(Throwable caught) {
@@ -92,6 +76,31 @@ public class PermissionDialog extends Composite {
         return a;
     }
     
+    public void checkPermission ( final Permission permission ) {
+        outer.clear ();
+        loader.setHTML ( "Checking " + permission.toString () + " permission " );
+        outer.add ( loader );
+        
+        // Check if user has the right permission. If not show permission dialog
+        // and return if user granted us given permission.
+        apiClient.usersHasAppPermission ( permission, new AsyncCallback<Boolean> () {
+            
+            public void onFailure(Throwable caught) {
+                new ErrorResponseUI ( caught ).center ();
+            }
+
+            public void onSuccess(Boolean hasPermission) {
+                outer.remove ( loader );
+                if ( hasPermission ) {
+                    handler.onPermissionChange ( true );
+                } else {
+                    outer.add ( createShowPermissionUI ( permission ) );
+                }
+            }
+            
+        });
+    }
+
     public void addPermissionHandler ( PermissionHandler handler ) {
         this.handler = handler;
     }
