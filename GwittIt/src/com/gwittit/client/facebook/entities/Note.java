@@ -55,7 +55,8 @@ public class Note extends JavaScriptObject {
      * @return note
      */
     public final static Note createNote(String title, String content) {
-        Json j = Json.newInstance ().put ( "title", title ).put ( "content", content );
+        Json j = new Json ();
+        j.put ( "title", title ).put ( "content", content );
         return fromJson ( j.toString () );
     }
 

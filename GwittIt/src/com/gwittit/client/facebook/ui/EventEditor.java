@@ -96,8 +96,8 @@ public class EventEditor extends Composite {
      * Save event to facebook
      */
     private void saveOrUpdate () {
-
-        Json jEvent = Json.newInstance ();
+        
+        Json jEvent = new Json();
         
         jEvent.put ( "name", nameText.getValue () );
         jEvent.put ( "host", hostText.getValue () ); 

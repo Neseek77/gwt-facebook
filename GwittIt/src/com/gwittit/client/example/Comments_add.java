@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.facebook.entities.Comment;
 import com.gwittit.client.facebook.xfbml.FbProfilePic;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 import com.gwittit.client.facebook.xfbml.FbPhoto.Size;
 
 /**
@@ -61,29 +62,54 @@ public class Comments_add extends Showcase  {
      */
 	public Comments_add() {
 		
+	    
 	    inputWrapper.setSpacing(10);
 		outer.setSpacing(10);
-		
 
-		inputWrapper.add ( new HTML ( "Say it!" ) );
+		// ID's
+	    inputWrapper.getElement ().setId ( "CommentsAdd-Input");
+
+        // Styles
+        submitButton.getElement ().getStyle ().setProperty ( "float", "right" );
+        submitButton.getElement ().getStyle ().setProperty ( "marginTop", "10px" );
+
+		inputWrapper.add ( new HTML ( "A comment would be great! Thanks." ) );
 		inputWrapper.add ( createInputUi() );
 		
 		outer.add ( inputWrapper );
-		outer.add ( submitButton );
+	
+		// Thank you
 		outer.add ( responseWrapper );
+		
+		// Show list of comments
 		outer.add ( commentsListPanel );
 		displayComments ();
+		
 		submitButton.addClickHandler ( new AddCommentClickHandler () );
 		
+		Xfbml.parse ( inputWrapper );
 		initWidget( outer );
 	}
 	
-	
+
+	/**
+	 * Create input text area and submit button.
+	 */
 	private Panel createInputUi () {
+	    VerticalPanel vp = new VerticalPanel ();
 	    HorizontalPanel p = new HorizontalPanel ();
+	    
 	    p.setSpacing ( 10 );
-	    p.add ( new FbProfilePic ( apiClient.getLoggedInUser (), FbProfilePic.Size.thumb ) );
-	    p.add ( text );
+	    p.add ( new FbProfilePic ( apiClient.getLoggedInUser (), FbProfilePic.Size.square ) );
+	    
+	    text.setHeight ( "100px" );
+	    text.setWidth ( "400px" );
+	    
+	    vp.add ( text );
+	    vp.add ( submitButton );
+	    
+	    p.add ( vp );
+	    
 	    return p;
 	}
 	

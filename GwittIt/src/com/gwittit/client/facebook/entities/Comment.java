@@ -89,7 +89,8 @@ public class Comment extends JavaScriptObject {
      * @return Comment object
      */
     public final static Comment createComment(String xid, String comment) {
-        Json j = Json.newInstance ();
+        Json j = new Json ();
+        
         j.put ( "xid", xid ).put ( "text", comment );
         return fromJson ( j.toString () );
     }
