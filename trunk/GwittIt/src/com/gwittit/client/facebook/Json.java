@@ -12,7 +12,7 @@ import com.google.gwt.user.client.Window;
 /**
  * Json Helper.  Lets you chain a json object
  * 
- * Like this: JavaScriptObject o = Json.newInstance().put("name", "value").put("name2", "value2).getJavaScriptObject();
+ * Like this: JavaScriptObject o = new Json().put("name", "value").put("name2", "value2).getJavaScriptObject();
  */
 public class Json {
     
@@ -30,12 +30,7 @@ public class Json {
     public Json () {
         this ( new JSONObject () );
     }
-    
-    public static Json newInstance () {
-        Json j = new Json ( new JSONObject () );
-        return j;
-    }
-    
+      
     public Json remove ( String name ) {
         internObject.put ( name , null );
         return this;

@@ -122,7 +122,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
 
         String token = Window.Location.getHash ();
         if ( token == null || "".equals ( token ) ) {
-            doDisplayShowcase ( "#stream_get" );
+            doDisplayShowcase ( "#comments_add" );
             showcaseWrapper.insert ( createDefaultFrontpage (), 0 );
         } else {
             doDisplayShowcase ( token );

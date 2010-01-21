@@ -155,8 +155,7 @@ public class EventInfo extends JavaScriptObject {
      * @return events that can be used as filter
      */
     public final static EventInfo createEventInfo ( Long uid, List<Long> eids, Long startTime, Long endTime , RsvpStatus status  ) {
-    
-        Json j = Json.newInstance ();
+        Json j = new Json ();
         j.put ( "uid", uid ).put ( "eids", eids ).put ( "start_time", startTime ).put ( "end_time", endTime );
         j.put ( "rsvp_status", status != null ? status.toString () : null );
         return fromJson ( j.toString () );
@@ -167,7 +166,8 @@ public class EventInfo extends JavaScriptObject {
      * @return
      */
     public final static EventInfo createFilterEmpty () {
-        Json j = Json.newInstance ();
+        Json j = new Json ();
+        
         return fromJson ( j.toString () );
     }
     
