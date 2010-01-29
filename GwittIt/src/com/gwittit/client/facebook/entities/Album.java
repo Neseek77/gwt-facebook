@@ -72,7 +72,9 @@ public class Album extends JavaScriptObject {
 	 * @return
 	 */
 	public final static Album createAlbum ( String name, String location, String description, Visibility v  ) {
+	    
 	    Json j = new Json ();
+	    
 	    j.put ("name", name ).
 	      put ( "location", location ).
 	      put ( "description", description ).

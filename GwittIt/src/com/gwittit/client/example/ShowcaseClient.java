@@ -85,7 +85,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
     final String smsMethods = "XSMS:Xsms_canSend,sms_send";
     final String statusMethods = "XStatus:status_get,status_set";
     final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,stream_publish,stream_publishAttachment,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
-    final String userMethods = "Users:Xusers_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
+    final String userMethods = "Users:users_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
     final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
     final String xfbml = " XFBML:various";
     final String[] menu = { authMethods, batchMethods, commentMethods, connectMethods, dataMethods, eventMethods, fbmlMethods, feedMethods,
@@ -445,7 +445,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
         } else if ("toString".equals ( m )) {
             // example = new ToString();
         } else if ("users_getInfo".equals ( m )) {
-            // example = new Users_getInfo();
+           showcase = new Users_getInfo();
         } else if ("users_getLoggedInUser".equals ( m )) {
             showcase = new Users_getLoggedInUser ();
         } else if ("users_getStandardInfo".equals ( m )) {

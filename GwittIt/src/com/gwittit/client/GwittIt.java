@@ -21,7 +21,7 @@ import com.gwittit.client.facebook.LoginCallback;
 public class GwittIt implements EntryPoint {
 
     /**
-     * Runs on every localhost
+     * Runs on every localhost port 8080
      */
     public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
