@@ -19,6 +19,16 @@ import com.google.gwt.json.client.JSONString;
  * Generic util class
  */
 public class Util {
+    
+    public static String getCommaSepString(List objs) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : objs) {
+           sb.append(o);
+           sb.append(",");
+        }
+        return sb.length()==0 ? "" :  sb.substring(0, sb.length()-1);
+     }
+
 
     /**
      * Convert JsArrayNumber to List<Long>

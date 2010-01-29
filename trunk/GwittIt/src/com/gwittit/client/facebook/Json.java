@@ -103,6 +103,16 @@ public class Json {
         return this;
     }
     
+    /**
+     * Put any string as commaseparated value
+     */
+    public Json putAsCommaSep ( String name, List value ) {
+        if ( value != null ) {
+            internObject.put ( name, new JSONString ( Util.getCommaSepString ( value ) ) );
+        }
+        return this;
+    }
+    
     public Json  put ( String name, List<Long> value ) {
         if ( value != null ) {
             internObject.put ( name,  Util.toJSONString ( value ) );
@@ -121,4 +131,5 @@ public class Json {
     public JavaScriptObject getJavaScriptObject () {
         return internObject.getJavaScriptObject ();
     }
+    
 }

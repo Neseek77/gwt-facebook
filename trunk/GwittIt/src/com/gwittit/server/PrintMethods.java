@@ -10,27 +10,12 @@ import com.google.gwt.core.client.JsArrayNumber;
 import com.gwittit.client.facebook.entities.*;
 
 public class PrintMethods {
-    
-    static void printsampleupload () throws Exception {
-        
-        File file = new File ("/Users/ola/Documents/Source/GwittIt/war/sampleupload.jpg");
-        
-        
-        FileInputStream is = new FileInputStream ( file );
-        
-        byte[] b = new byte[is.available ()];
-        
-        is.read ( b );
-        
-        System.out.println ( new String ( b ) );
-        
-    }
+
     
 	public static void main ( String[] args ) throws Exception {
 		
-	    printsampleupload ();
 	    
-	    Class c = ActionLink.class;
+	    Class c = UserInfo.class;
 		
 		Field fields[] = c.getFields ();
 		
