@@ -3,6 +3,8 @@ package com.gwittit.client.example;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -61,6 +63,7 @@ public class Users_getInfo extends Showcase {
         fields.add ( "profile_url" );
         fields.add ( "proxied_email" );
         fields.add ( "relationship_status" );
+        fields.add ( "status");
         
         apiClient.usersGetInfo ( uids, fields, new UserInfoCallback () );
     }
@@ -71,12 +74,16 @@ public class Users_getInfo extends Showcase {
     private void showUserInfo ( List<UserInfo> userInfo ) {
         UserInfo ui = userInfo.get(0);
         
+       
         String info = "Pic: " + ui.getPic () + "<br/>" + 
                       "Political: " + ui.getPolitical () + "<br/>" +
                       "ProfileUrl: " + ui.getProfileUrl () + "<br/>" + 
                       "ProxiedEmail: " + ui.getProxiedEmail () + "<br/>" +
                       "RelationshipStatus: " + ui.getRelationshipStatus () + "<br/>" + 
-                      "Pic(Field): " + ui.getField ( "pic" ) + "<br/>";
+                      "Pic(Field): " + ui.getField ( "pic" ) + "<br/>" + 
+                      "Status: " + new JSONObject ( ui.getFieldAsObject ( "status" ) ) + "<br/>";
+        
+        
         
         outer.add ( new HTML ( info ) );
     }
