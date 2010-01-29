@@ -98,9 +98,30 @@ public class UserInfo extends UserStandardInfo {
 
     protected UserInfo () {}
 
+    /** Pics */
     public final native String getPic() /*-{ return this.pic; }-*/;
     public final native String getPicWithLogo() /*-{ return this.pic_with_logo; }-*/;
-    public final native String getPicSmall() /*-{ return this.pic_small; }-*/;
     
-    // public static native UserInfo fromJson(String jsonString) /*-{ return eval('(' + jsonString + ')');}-*/;
+    public final native String getPicBig() /*-{ return this.pic_big; }-*/;
+    public final native String getPicBigWithLogo() /*-{ return this.pic_big_with_logo; }-*/;
+    
+    public final native String getPicSmall() /*-{ return this.pic_small; }-*/;
+    public final native String getPicSmallWithLogo() /*-{ return this.pic_small_with_logo; }-*/;
+    
+    public final native String getPicSquare() /*-{ return this.pic_square; }-*/;
+    public final native String getPicSquareWithLogo() /*-{ return this.pic_square_with_logo; }-*/; 
+    
+    /** Profile */
+    public final native String getPolitical() /*-{ return this.political; }-*/;
+    public final native String getProfileBlurb() /*-{ return this.profile_blurb; }-*/;
+    
+    public final native String getProfileUpdateTimeString() /*-{ return this.profile_update_time + ""; }-*/;
+    public final java.lang.Long getProfileUpdateTime() { return new Long ( getProfileUpdateTimeString() ); }
+    
+    public final native String getField ( String fieldName ) /*-{
+        return this[fieldName];
+    }-*/;
+    
+    public final native String getRelationshipStatus() /*-{ return this.relationship_status; }-*/;
+
 }
