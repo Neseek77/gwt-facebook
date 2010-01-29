@@ -11,17 +11,20 @@ import com.gwittit.client.facebook.entities.UserInfo;
 
 /**
  * Showcase for <code>users.getInfo</code>
- * @author ola
+ * @author olamar72
  *
  */
 public class Users_getInfo extends Showcase {
     
     /*
-     * Store UI
+     * Panels
      */
     private VerticalPanel outer = new VerticalPanel ();
     private FriendSelector friendSelector = new FriendSelector();
     
+    /*
+     * Let user select a friend to get userinfo from.
+     */
     private class FriendSelectorImpl implements FriendSelectionHandler {
 
         public void onSelected(Long uid) {
@@ -44,7 +47,7 @@ public class Users_getInfo extends Showcase {
         
     };
 
-    /**
+    /*
      * Get user info from server
      */
     private void doGetUserInfo ( Long uid ) {
@@ -54,24 +57,37 @@ public class Users_getInfo extends Showcase {
         // Add fields that should be returned
         List<String> fields = new ArrayList<String>();
         fields.add ( "pic" );
+        fields.add ( "political" );
+        fields.add ( "profile_url" );
+        fields.add ( "proxied_email" );
+        fields.add ( "relationship_status" );
         
         apiClient.usersGetInfo ( uids, fields, new UserInfoCallback () );
     }
     
-    /**
+    /*
      * Display extended user info
-     * @param userInfo
      */
     private void showUserInfo ( List<UserInfo> userInfo ) {
-        outer.add ( new HTML ( "Pic: " + userInfo.get ( 0 ).getPic () ) );
+        UserInfo ui = userInfo.get(0);
+        
+        String info = "Pic: " + ui.getPic () + "<br/>" + 
+                      "Political: " + ui.getPolitical () + "<br/>" +
+                      "ProfileUrl: " + ui.getProfileUrl () + "<br/>" + 
+                      "ProxiedEmail: " + ui.getProxiedEmail () + "<br/>" +
+                      "RelationshipStatus: " + ui.getRelationshipStatus () + "<br/>" + 
+                      "Pic(Field): " + ui.getField ( "pic" ) + "<br/>";
+        
+        outer.add ( new HTML ( info ) );
     }
     
-    
+    /**
+     * Create user interface, init widget.
+     */
     public Users_getInfo () {
         friendSelector.addFriendSelectionHandler ( new FriendSelectorImpl() );
         outer.add ( new HTML ( "Users_getInfo" ) );
         outer.add ( friendSelector );
-        
         initWidget ( outer );
     }
 }
