@@ -1,5 +1,7 @@
 package com.gwittit.client.facebook.entities;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 /**
  * Object returned from the call users_getInfo
  *
@@ -118,10 +120,20 @@ public class UserInfo extends UserStandardInfo {
     public final native String getProfileUpdateTimeString() /*-{ return this.profile_update_time + ""; }-*/;
     public final java.lang.Long getProfileUpdateTime() { return new Long ( getProfileUpdateTimeString() ); }
     
+    public final native String getRelationshipStatus() /*-{ return this.relationship_status; }-*/;
+
+    /**
+     * Get field as string. Use only when the field is actually a string.
+     */
     public final native String getField ( String fieldName ) /*-{
         return this[fieldName];
     }-*/;
     
-    public final native String getRelationshipStatus() /*-{ return this.relationship_status; }-*/;
+    /**
+     * Get field as object,  "status" etc.
+     */
+    public final native JavaScriptObject getFieldAsObject ( String fieldName ) /*-{
+        return this[fieldName];
+    }-*/;
 
 }
