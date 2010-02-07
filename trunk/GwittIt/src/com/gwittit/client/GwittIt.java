@@ -23,9 +23,14 @@ public class GwittIt implements EntryPoint {
     /**
      * Runs on every localhost port 8080
      */
-    public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
+     //public static String API_KEY = "707cee0b003b01d52b2b6a707fa1202b";
 
     
+     /**
+      * Runs on every localhost port 8888
+      */
+     public static String API_KEY = "1d81c942b38e2e6b3fc35a147d371ab3";
+     
     /**
      * Change this if you setup your own app
      */
@@ -114,6 +119,8 @@ public class GwittIt implements EntryPoint {
      */
     public void onModuleLoad() {
 
+        
+        
         loginCallback = new MyLoginCallback();
         topMenu = new TopMenu();
 

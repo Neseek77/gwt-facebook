@@ -1469,9 +1469,15 @@ public class FacebookApi {
                           final AsyncCallback<Stream> callback) {
 
         Json j = new Json ();
-        j.put ( "viewer_id", viewerId ).put ( "source_ids", sourceIds ).put ( "start_time", startTime );
-        j.put ( "end_time", endTime ).put ( "filter_key", filterKey ).puts ( "metadata", metadata );
+        j.put ( "viewer_id", viewerId ).
+          put ( "source_ids", sourceIds ).
+          put ( "start_time", startTime ).
+          put ( "end_time", endTime ).
+          put ( "filter_key", filterKey ).
+          puts ( "metadata", metadata );
+        
         callMethodRetObject ( "stream.get", j.getJavaScriptObject (), Stream.class, callback );
+        
     }
 
     /**
@@ -1481,6 +1487,7 @@ public class FacebookApi {
      *      AsyncCallback)
      */
     public void streamGet(final AsyncCallback<Stream> callback) {
+        
         callMethodRetObject ( "stream.get", getDefaultParams ().getJavaScriptObject (), Stream.class, callback );
     }
 
@@ -1554,7 +1561,6 @@ public class FacebookApi {
      */
     public void statusGet(Long uid, Integer limit, AsyncCallback<JavaScriptObject> callback) {
         if (uid == null) {
-            Window.alert ( "Error: status_get called without uid" );
             throw new IllegalArgumentException ( "status_get called without uid" );
         }
 
@@ -2135,7 +2141,13 @@ public class FacebookApi {
         		function(result, exception){
         		    var jso=null;        		    
         		    if ( result == undefined ) {
-        		        app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,exception);
+        		        var tmp=null;
+        		        if ( typeof ( exception ) == 'object' ) {
+        		            tmp=exception;
+        		        } else {
+                             tmp = new String ( exception );
+        		        } 
+                        app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,tmp);
         		    } else {
             		    if ( typeof ( result ) == 'object' ) {
             		        jso = result;

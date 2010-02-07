@@ -4,15 +4,12 @@ import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwittit.client.facebook.entities.ActionLink;
 import com.gwittit.client.facebook.entities.Attachment;
 import com.gwittit.client.facebook.entities.ErrorResponse;
 import com.gwittit.client.facebook.xfbml.FbPromptPermission;
-import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Class that wraps the facebook conncet API. Here you will find the javascripts
@@ -36,7 +33,6 @@ public class FacebookConnect {
         var cs;
         $wnd.FB.ensureInit(function() { 
             $wnd.FB.Connect.get_status().waitUntilReady( function( status ) { 
-
                 switch ( status ) {
                     case $wnd.FB.ConnectState.appNotAuthorized: 
                         cs=@com.gwittit.client.facebook.ConnectState::appNotAuthorized;
@@ -60,16 +56,13 @@ public class FacebookConnect {
         callback.onSuccess ( connectState );
     }
 
-    public static native void streamPublishTest ( Attachment attachment ) /*-{
-    
-    //    var attachment = {'media': [{'type':'image',
-    //                         'src':'http://gwittit.appspot.com/imgsamples/with.jpg',
-    //                         'href':'http://bit.ly/hifZk'}]};
-        $wnd.FB.Connect.streamPublish('', attachment);
-    
+    public static native void streamPublishTest(Attachment attachment) /*-{
+        //    var attachment = {'media': [{'type':'image',
+        //                         'src':'http://gwittit.appspot.com/imgsamples/with.jpg',
+        //                         'href':'http://bit.ly/hifZk'}]};
+            $wnd.FB.Connect.streamPublish('', attachment);
     }-*/;
 
-    
     /**
      * Prompt user to update his or her status
      */
@@ -195,7 +188,7 @@ public class FacebookConnect {
         var userMessagePrompt = params["user_message_prompt"];
         var autoPublish = params["auto_publish"];
         var actorId = params["actor_id"];
-        
+
         $wnd.FB.Connect.streamPublish ( userMessage, attachment, actionLinks, targetId, userMessagePrompt, 
         function (postId, exception){
             if ( typeof ( postId ) == 'string' && postId != "null" ) {
@@ -279,10 +272,14 @@ public class FacebookConnect {
      * Call this function when you want to enforce that the current user is
      * logged into Facebook.
      * 
-     * @see http://wiki.developers.facebook.com/index.php/JS_API_M_FB.Connect.
-     *      RequireSession
+     * @params callback to execute
+     * @params isUserActionHint provide hint on whether the call is made from
+     *         user action (onclick, onkeydown, etc.) This hint is generally
+     *         necessary unless the function is initialized from a Flash object.
+     *         
+     * @see http://wiki.developers.facebook.com/index.php/JS_API_M_FB.Connect.RequireSession
      */
-    public static void requireSession(final AsyncCallback<Boolean> callback) {
+    public static void requireSession(final AsyncCallback<Boolean> callback, boolean isUserActionHint) {
 
         AsyncCallback<JavaScriptObject> nativeCallback = new AsyncCallback<JavaScriptObject> () {
             public void onFailure(Throwable t) {
@@ -291,17 +288,48 @@ public class FacebookConnect {
             }
 
             public void onSuccess(JavaScriptObject jv) {
-                callback.onSuccess ( true );
+                callback.onSuccess ( new Boolean ( jv.toString () ) );
             }
         };
-        requireSessionNative ( nativeCallback );
+        requireSessionNative ( nativeCallback, isUserActionHint );
     }
 
-    public static native void requireSessionNative(final AsyncCallback<JavaScriptObject> callback)/*-{
-        $wnd.FB.Connect.requireSession( function(x,y) {
-            var result = new Boolean(true);
-        	@com.gwittit.client.facebook.FacebookConnect::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
-        }, false );
+    /**
+     * Call this function when you want to enforce that the current user is
+     * logged into Facebook.
+     * 
+     * @params callback to execute
+     * 
+     * @see http://wiki.developers.facebook.com/index.php/JS_API_M_FB.Connect.RequireSession
+     */
+    public static void requireSession(final AsyncCallback<Boolean> callback) {
+
+        AsyncCallback<JavaScriptObject> nativeCallback = new AsyncCallback<JavaScriptObject> () {
+            public void onFailure(Throwable t) {
+                // TODO: Better error handling here.
+                Window.alert ( FacebookConnect.class + ": requireSession failed " + t );
+            }
+            public void onSuccess(JavaScriptObject jv) {
+                callback.onSuccess ( new Boolean ( jv.toString () ) );
+            }
+        };
+        requireSessionNative ( nativeCallback, true );
+    }
+
+    public static native void requireSessionNative(final AsyncCallback<JavaScriptObject> callback, boolean isUserActionHint)/*-{
+        $wnd.FB.Connect.requireSession( 
+            /// Called when user logs in
+            function() {
+                var result = new Boolean(true);
+        	     @com.gwittit.client.facebook.FacebookConnect::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
+            }, 
+            // Called when user cancels operation
+            function() {
+                var result = new Boolean(false);
+                 @com.gwittit.client.facebook.FacebookConnect::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
+            }, 
+            isUserActionHint
+            );
     }-*/;
 
     /**
