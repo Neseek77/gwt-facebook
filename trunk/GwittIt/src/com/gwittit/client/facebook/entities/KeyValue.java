@@ -20,7 +20,7 @@ public class KeyValue extends JavaScriptObject {
         return this.value;
     }-*/;
 
-    public final KeyValue newInstance ( String key, String value ) {
+    public static final KeyValue newInstance ( String key, String value ) {
         Json j = new Json().put( key, value);
         return fromJson ( j.toString () );
     }
