@@ -17,7 +17,7 @@ public class Media extends JavaScriptObject {
     }
 
     public enum Type {
-        image, hoto, link, video, flash, mp3
+        image, photo, link, video, flash, mp3
     };
 
     public final Type getTypeEnum() {

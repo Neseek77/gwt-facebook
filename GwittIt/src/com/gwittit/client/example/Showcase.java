@@ -83,7 +83,7 @@ public  class Showcase extends Composite {
 	        ui.show ();
 	        
 	    } else {
-	        Window.alert ( t + "" );
+	        Window.alert ( "Showcase: Unknown exception :"  + t + "" );
 	    }
 	}
 	

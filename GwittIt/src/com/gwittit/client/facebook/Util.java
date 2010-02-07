@@ -100,7 +100,7 @@ public class Util {
             }
                 
         } catch ( Exception e ) {
-            GWT.log (" Failed to iterate JsArray"  + array, e );
+            GWT.log (" Failed to iterate JsArray, maybe empty array?"  + array, e );
         }
         return iterateList;
     }

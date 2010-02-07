@@ -11,9 +11,7 @@ public class Callback<T> implements AsyncCallback<T> {
 
     private AsyncCallback callback;
     
-    
     public Callback () {
-        
     }
     
     public Callback ( AsyncCallback callback  ) {
@@ -22,16 +20,17 @@ public class Callback<T> implements AsyncCallback<T> {
     
     public void onFailure(Throwable caught) {
         
+        
         if ( caught instanceof FacebookException ) {
             FacebookException e = (FacebookException)caught;
+            Window.alert ( "Callback: Method failed: " + e.getMessage () );
             // Do something here
         }
         
         if ( callback != null ) {
             callback.onFailure ( caught );
         } else {
-            
-          
+            Window.alert ( "Callback: Unknown error" );
             GWT.log ( "" + caught, null );
         }
     }

@@ -1,6 +1,7 @@
 package com.gwittit.client;
 
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -44,9 +45,10 @@ public class LoginBox extends Composite {
 			public void onClick(ClickEvent event) {
 				FacebookConnect.requireSession( new AsyncCallback<Boolean> () {
 					public void onFailure(Throwable caught) {
+					    GWT.log ( "Require session failed: " + caught  );
 					}
-					public void onSuccess(Boolean result) {
-					    if ( loginCallback != null ) {
+					public void onSuccess(Boolean isLoggedIn) {
+					    if ( loginCallback != null && isLoggedIn ) {
 					        loginCallback.onLogin ();
 					    }
 					}
