@@ -23,6 +23,7 @@ import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.Json;
 import com.gwittit.client.facebook.FacebookApi.NotificationType;
 import com.gwittit.client.facebook.entities.Attachment;
+import com.gwittit.client.facebook.entities.KeyValue;
 import com.gwittit.client.facebook.entities.Media;
 import com.gwittit.client.facebook.entities.Media.Type;
 
@@ -41,22 +42,18 @@ public class Stream_publishAttachment extends Showcase {
     private final HorizontalPanel favPanel = new HorizontalPanel ();
     
     // Publish 
-    private Button publishButton = new Button ( "Publish to Facebook Wall");
+    private Button publishButton = new Button ( "Stream Publish");
     
     // Image array
     private Image[] images = new Image[12];
     
-    // Store top3 albums so we can publish stream with cover arts.
-    private Image[] top3albums = new Image[3];
     
     // Current pick
     int favIdx = 0;
    
     // Fake images to start with 
     private Image top1 = new Image ("/imgsamples/top1.jpg" );
-    private Image top2 = new Image  ("/imgsamples/top2.jpg" );
-    private Image top3 = new Image ( "/imgsamples/top3.jpg" );
-    
+  
     // Attachment Caption
     private final String caption = "The Beatles were an English rock band formed in Liverpool in 1960, who became one of the most commercially successful and critically acclaimed acts in the history of popular music.[1] During their years of international stardom, the group consisted of John Lennon (rhythm guitar, vocals), Paul McCartney (bass guitar, vocals), George Harrison (lead guitar, vocals) and Ringo Starr (drums, vocals). ";
 
@@ -64,7 +61,7 @@ public class Stream_publishAttachment extends Showcase {
     private final String link = "http://en.wikipedia.org/wiki/The_Beatles";
     
     // Header
-    private HTML header = new HTML ( "<h3>Pick your top3 beatles albums!(DEMO)</h3>" );
+    private HTML header = new HTML ( "<h3>Pick your top beatles album!</h3>" );
 
     /**
      * Handle publish reponse
@@ -92,22 +89,18 @@ public class Stream_publishAttachment extends Showcase {
      */
     private class SelectFavoriteHandler implements ClickHandler {
         int selected;
+        
         public SelectFavoriteHandler ( int selected ) {
             this.selected = selected;
         }
+        
         public void onClick(ClickEvent event) {
             Image image = new Image ( images[selected].getUrl () );
             image.setWidth ( "80px" );
-            top3albums[favIdx] = image;
-            
-            favPanel.remove ( favIdx );
-            favPanel.insert (image, favIdx );
-            favIdx++;
-            
-            if ( favIdx == 3 ) {
-                publishButton.setEnabled ( true );
-                favIdx = 0;
-            }
+            top1 = image;
+            favPanel.clear ();
+            favPanel.add ( image );
+        
         }
     };
  
@@ -117,9 +110,8 @@ public class Stream_publishAttachment extends Showcase {
         VerticalPanel wrapper = new VerticalPanel ();
         wrapper.addStyleName ( "favPanel" );
         favPanel.setSpacing ( 10 );
-        favPanel.add ( top3albums[0] );
-        favPanel.add ( top3albums[1] );
-        favPanel.add ( top3albums[2] );
+        favPanel.add ( top1 );
+
         
         wrapper.add ( favPanel );
         wrapper.add ( publishButton );
@@ -132,11 +124,7 @@ public class Stream_publishAttachment extends Showcase {
         outer.addStyleName ( "gwittit-Stream_publishAttachment" );
         
         publishButton.addClickHandler ( new PublishHandler () );
-        publishButton.setEnabled ( false );
-        
-        top3albums[0] = top1;
-        top3albums[1] = top2;
-        top3albums[2] = top3;
+
         
         images[0] = new Image ( baseUrl + "/imgsamples/please.jpg" );
         images[1] = new Image ( baseUrl + "/imgsamples/with.jpg");
@@ -172,9 +160,7 @@ public class Stream_publishAttachment extends Showcase {
 
         outer.add (header );
         outer.add ( grid );
-
         outer.add ( createFavoriteWidget () );
-        
         initWidget ( outer );
     }
 
@@ -188,16 +174,17 @@ public class Stream_publishAttachment extends Showcase {
         a.setName ( "My Top3 Beatles picks!" );
         a.setCaption ( caption );
         a.setHref ( link );
+        a.addProperty ( "The Beatles", "1960-1970" );
+        a.addProperty ( "See more beatles stuff", "Visit Beatles.com", "http://beatles.com" );
+        //KeyValue kv = KeyValue.newInstance ( "Visit Beatles.com", "http://beatles.com" );
+        //a.addProperty ( "Visit Beatles.com" , kv );
         
-        Media m1 = Media.newInstance ( Type.image, top3albums[0].getUrl (), link );
-        Media m2 = Media.newInstance ( Type.image, top3albums[1].getUrl (), link );
-        Media m3 = Media.newInstance ( Type.image, top3albums[2].getUrl (), link );
-         
+        Media m1 = Media.newInstance ( Type.image, top1.getUrl (), link );
         a.addMedia ( m1 );
-        a.addMedia ( m2 );
-        a.addMedia ( m3 );
         
-        FacebookConnect.streamPublish ( null, a, null, null, "Why are these your favorite albums ?", false, null, new SimpleCallback ()  );
+        Window.alert ( "" + new JSONObject ( a ) );
+        
+        FacebookConnect.streamPublish ( null, a, null, null, "Why is this your favorite album ?", false, null, new SimpleCallback ()  );
     }
     
     

@@ -16,8 +16,10 @@ import com.gwittit.client.facebook.Json;
  */
 public class Attachment extends JavaScriptObject {
 
+    
     protected Attachment() {
     }
+    
 
     /**
      * Set title of post.
@@ -87,6 +89,34 @@ public class Attachment extends JavaScriptObject {
         return this.description;
     }-*/;
 
+ 
+    /**
+     * A dictionary of key/value pairs that provide more information about the post
+     * @param label
+     * @param text
+     * @param href
+     */
+    public final native void addProperty ( String label, String linkText, String href ) /*-{
+        if ( typeof ( this.properties ) == 'undefined' ) {
+            this.properties = new Array();
+        }
+        this.properties[label] = { "text": linkText, "href": href}  ;     
+      }-*/;
+ 
+
+    /**
+     * A dictionary of key/value pairs that provide more information about the post
+     * @param description of the property
+     * @param text
+     */
+    public final native void addProperty ( String label, String value ) /*-{
+        
+        if ( typeof ( this.properties ) == 'undefined' ) {
+            this.properties = new Array();
+        }
+        this.properties[label] = value;
+    }-*/;
+    
     /**
      * Add media
      * 

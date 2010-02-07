@@ -1992,7 +1992,7 @@ public class FacebookApi {
      * "not implemented" ); }
      * 
      * public void videoUpload(Map<String, String> params,
-     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
+     * AsyncCallback<JavaScriptObject> callback) { Ft (
      * "not implemented" ); }
      */
     /*
