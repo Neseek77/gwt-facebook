@@ -124,7 +124,7 @@ public class Attachment extends JavaScriptObject {
      *            object
      */
     public final native void addMedia(Media m) /*-{
-        if ( typeof(this.media) == 'undefined' ) {
+        if ( typeof ( this.media ) == 'undefined' ) {
             this.media = new Array();
         }
         this.media[this.media.length] = m;
