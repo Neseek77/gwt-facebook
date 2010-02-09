@@ -68,9 +68,9 @@ public class FbProfilePic extends Widget {
 	public FbProfilePic(Long uid) {
 		this();
 		
-		if ( uid == null ) {
-			Window.alert( "Cannot create profile pic with null id ");
-		}
+//		if ( uid == null ) {
+//			// Window.alert( "Cannot create profile pic with null id ");
+//		}
 		getElement().setAttribute("uid", "" + uid);
 	}
 
