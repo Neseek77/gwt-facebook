@@ -2140,13 +2140,14 @@ public class FacebookApi {
         	$wnd.FB.Facebook.apiClient.callMethod( method, params, 
         		function(result, exception){
         		    var jso=null;        		    
-        		    if ( result == undefined ) {
+                    
+        		    if ( result == undefined || result == null ) {
         		        var tmp=null;
         		        if ( typeof ( exception ) == 'object' ) {
         		            tmp=exception;
-        		        } else {
-                             tmp = new String ( exception );
-        		        } 
+        		         } else {
+                             tmp = { "message": exception };
+        		         } 
                         app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,tmp);
         		    } else {
             		    if ( typeof ( result ) == 'object' ) {

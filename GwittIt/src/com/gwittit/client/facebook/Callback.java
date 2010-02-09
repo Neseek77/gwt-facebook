@@ -23,11 +23,11 @@ public class Callback<T> implements AsyncCallback<T> {
         
         if ( caught instanceof FacebookException ) {
             FacebookException e = (FacebookException)caught;
-            Window.alert ( "Callback: Method failed: " + e.getMessage () );
+            callback.onFailure (  e );
             // Do something here
         }
         
-        if ( callback != null ) {
+        else if ( callback != null ) {
             callback.onFailure ( caught );
         } else {
             Window.alert ( "Callback: Unknown error" );

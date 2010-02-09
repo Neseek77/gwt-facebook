@@ -182,8 +182,6 @@ public class Stream_publishAttachment extends Showcase {
         Media m1 = Media.newInstance ( Type.image, top1.getUrl (), link );
         a.addMedia ( m1 );
         
-        Window.alert ( "" + new JSONObject ( a ) );
-        
         FacebookConnect.streamPublish ( null, a, null, null, "Why is this your favorite album ?", false, null, new SimpleCallback ()  );
     }
     
