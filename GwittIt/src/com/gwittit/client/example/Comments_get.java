@@ -26,6 +26,7 @@ public class Comments_get extends Showcase {
 
     public static final String XID = "comments_test";
 
+   
     /*
      * Display comments
      */
@@ -53,6 +54,24 @@ public class Comments_get extends Showcase {
         }
 
     }
+    
+    /*
+     * User clicks remove link
+     */
+    private class CommentsRemoveClickHandler implements ClickHandler {
+
+        private String commentId;
+        
+        public CommentsRemoveClickHandler ( String commentId ) {
+            this.commentId = commentId;
+        }
+       
+        public void onClick(ClickEvent event) {
+
+            apiClient.commentsRemove ( XID, commentId, new CommentsRemoveCallback () );
+        }
+        
+    }
 
     // ---------- Private Fields
     private final VerticalPanel outer = new VerticalPanel ();
@@ -79,7 +98,7 @@ public class Comments_get extends Showcase {
 
         for (final Comment comment : comments) {
             
-            SimplePanel box = new SimplePanel ();
+            VerticalPanel box = new VerticalPanel ();
             box.addStyleName ( "commentBox" );
             
             HorizontalPanel p = new HorizontalPanel ();
@@ -88,7 +107,12 @@ public class Comments_get extends Showcase {
             p.add ( new FbProfilePic ( comment.getFromId (), Size.square ) );
             p.add ( new HTML ( comment.getText () + " from " + new FbName ( comment.getFromId () ) ) );
 
-            box.setWidget ( p );
+            box.add ( p );
+                
+            Anchor removeLink = new Anchor ( "Remove");
+            removeLink.addClickHandler ( new CommentsRemoveClickHandler ( comment.getId () ) );
+ 
+            box.add ( removeLink );
             outer.add ( box );
         }
 
