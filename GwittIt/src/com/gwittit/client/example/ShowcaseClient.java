@@ -40,6 +40,8 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
                                  "Click the menu on the left to browse showcases and see source code.";
     
     
+    private static String DEFAULT_SHOW = "#comments_xfbml";
+    
     private class ShowcaseHandler implements SelectionHandler<TreeItem> {
         public void onSelection(SelectionEvent<TreeItem> event) {
             TreeItem clickedLink = (TreeItem) event.getSelectedItem ();
@@ -65,7 +67,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
     // --------------------------------------------------------------------------------
     final String authMethods = "XAuth:auth_createToken,auth_expireSession,auth_getSession,auth_promoteSession,auth_revokeAuthorization,auth_revokeExtendedPermission";
     final String batchMethods = "XBatch:batch_run";
-    final String commentMethods = "Comments:comments_add,comments_get,Xcomments_remove";
+    final String commentMethods = "Comments:comments_xfbml,comments_add,comments_get,Xcomments_remove";
     final String connectMethods = "Connect:connect_getUnconnect...,Xconnect_registerUsers,Xconnect_unregisterUsers";
     final String dataMethods = "Data:data_getCookies,data_setCookie";
     final String eventMethods = "Events:Xevents_cancel,events_create,Xevents_edit,events_get,events_getMembers,Xevents_rsvp";
@@ -122,7 +124,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
 
         String token = Window.Location.getHash ();
         if ( token == null || "".equals ( token ) ) {
-            doDisplayShowcase ( "#comments_add" );
+            doDisplayShowcase ( DEFAULT_SHOW );
             showcaseWrapper.insert ( createDefaultFrontpage (), 0 );
         } else {
             doDisplayShowcase ( token );
@@ -278,10 +280,13 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
             // example = new Admin_banUsers();
         } else if ("batch_run".equals ( m )) {
             // example = new Batch_run();
+        } else if ("comments_xfbml".equals ( m )) {
+            showcase = new Comments_xfbml ();
         } else if ("comments_add".equals ( m )) {
             showcase = new Comments_add ();
         } else if ("comments_get".equals ( m )) {
             showcase = new Comments_get ();
+            
         } else if ("comments_remove".equals ( m )) {
             // example = new Comments_remove();
         } else if ("connect_getUnconnect...".equals ( m )) {
