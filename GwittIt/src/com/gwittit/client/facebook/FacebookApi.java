@@ -965,6 +965,7 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/JS_API_M_FB.ApiClient.Notifications_get">Notifications_get</a>
      */
+    @Deprecated
     public void notificationsGet(final AsyncCallback<List<NotificationRequest>> callback) {
         JSONObject p = getDefaultParams ();
         final NotificationRequest.NotificationType[] types = NotificationRequest.NotificationType.values ();
@@ -1005,6 +1006,7 @@ public class FacebookApi {
      *            already been read. By default, notifications a user has read
      *            are not included.
      */
+    @Deprecated
     public void notificationsGetList(Long startTime, Boolean includeRead, final AsyncCallback<List<Notification>> callback) {
 
         Json j = new Json ().put ( "start_time", startTime ).put ( "include_read", includeRead );
@@ -1035,6 +1037,7 @@ public class FacebookApi {
      * 
      * @see #notificationsMarkRead(List, AsyncCallback)
      */
+    @Deprecated
     public void notificationsMarkRead(Long notificationId, final AsyncCallback<Boolean> callback) {
         List<Long> ids = new ArrayList<Long> ();
         ids.add ( notificationId );
@@ -1060,16 +1063,18 @@ public class FacebookApi {
      *            http://wiki.developers.facebook.com/index.php/Notifications
      *            .markRead
      */
+    @Deprecated
     public void notificationsMarkRead(List<Long> notificationIds, final AsyncCallback<Boolean> callback) {
         Json j = new Json ().put ( "notification_ids", notificationIds );
         callMethodRetBoolean ( "notifications.markRead", j.getJavaScriptObject (), callback );
     }
 
     /**
-     * Wraps the same method but less parameters
+     * Wraps the same method but less parameters. 
      * 
      * @see #notificationsSend(List, String, NotificationType, AsyncCallback)
      */
+    @Deprecated
     public void notificationsSend(Long uid, String notification, AsyncCallback<JavaScriptObject> callback) {
         List<Long> uids = new ArrayList<Long> ();
         uids.add ( uid );
@@ -1079,6 +1084,7 @@ public class FacebookApi {
     /**
      * Valid notificationTypes
      */
+    @Deprecated
     public static enum NotificationType {
         user_to_user, app_to_user
     }
@@ -1126,6 +1132,7 @@ public class FacebookApi {
      * @see <a
      *      href="http://wiki.developers.facebook.com/index.php/Notifications.send">Notifications.send</a>
      */
+    @Deprecated
     public void notificationsSend(List<Long> toIds, String notification, NotificationType type, AsyncCallback<JavaScriptObject> callback) {
         Json j = new Json ().put ( "to_ids", toIds );
         j.put ( "notification", notification );
@@ -1133,7 +1140,7 @@ public class FacebookApi {
         callMethod ( "notifications.send", j.getJavaScriptObject (), callback );
 
     }
-
+    
     public void notificationsSendEmail(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
         // TODO Auto-generated method stub
 
