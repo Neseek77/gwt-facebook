@@ -21,6 +21,7 @@ import com.gwittit.client.facebook.xfbml.Xfbml;
  */
 public class Notifications_get extends Showcase {
 	
+   
 	public Notifications_get(){
 
 		final VerticalPanel outer = new VerticalPanel ();
