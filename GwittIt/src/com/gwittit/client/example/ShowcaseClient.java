@@ -89,7 +89,8 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
     final String streamMethods = "Stream:Xstream_addComment,Xstream_addLike,stream_get,Xstream_getComments,Xstream_getFilters,stream_publish,stream_publishAttachment,Xstream_remove,Xstream_removeComment,Xstream_removeLike";
     final String userMethods = "Users:users_getInfo,users_getLoggedInUser,Xusers_getStandardInfo,Xusers_hasAppPermission,Xusers_isAppUser,Xusers_isVerified,Xusers_setStatus";
     final String videoMethods = "XVideo:video_getUploadLimits,video_upload";
-    final String xfbml = " XFBML:various";
+    final String xfbml = "FBML:various,serverFbml";
+    
     final String[] menu = { authMethods, batchMethods, commentMethods, connectMethods, dataMethods, eventMethods, fbmlMethods, feedMethods,
             fqlMethods, friendMethods, groupMethods, intlMethods, linkMethods, messageMethods, noteMethods, notificationMethods, pageMethods,
             photoMethods, profileMethods, smsMethods, statusMethods, streamMethods, userMethods, videoMethods, xfbml };
@@ -218,6 +219,10 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
         token = token.replace ( "#","" );
         
         final Showcase example = createExample ( token );
+        if ( example == null ) {
+            Window.alert ( "Failed to create example: null" );
+        }
+        
         if ( example.getNeedPermission () == null ) {
             createShowcasePanel ( example );
         } else {
@@ -349,9 +354,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
             showcase = new Friends_getLists ();
         } else if ("friends_getMutualFriends".equals ( m )) {
             showcase = new Friends_getMutualFriends ();
-        }
-
-        else if ("groups_get".equals ( m )) {
+        } else if ("groups_get".equals ( m )) {
             showcase = new Groups_get ();
         } else if ("groups_getMembers".equals ( m )) {
             // example = new Groups_getMembers();
@@ -469,6 +472,8 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
             // example = new Video_upload();
         } else if ("various".equals ( m )) {
             showcase = new XFBMLShowcase ();
+        } else if ( "serverFbml".equals ( m ) ) {
+            showcase = new XFBML_serverFbml ();
         }
         return showcase;
     }
