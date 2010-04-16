@@ -34,7 +34,7 @@ public class GwittIt implements EntryPoint {
     /**
      * Change this if you setup your own app
      */
-     // public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
+     //public static String API_KEY = "aebf2e22b6bcb3bbd95c180bb68b6df4";
 
     
     /*

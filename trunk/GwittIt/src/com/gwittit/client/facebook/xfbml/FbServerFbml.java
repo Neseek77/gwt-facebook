@@ -2,7 +2,6 @@ package com.gwittit.client.facebook.xfbml;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ComplexPanel;
-
 /**
  * Renders the FBML on a Facebook server inside an iframe. You must use this tag
  * to render elements on Facebook like fb:request-form and fb:connect-form (for

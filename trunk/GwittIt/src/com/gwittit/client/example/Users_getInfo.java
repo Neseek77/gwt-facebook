@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.gwittit.client.example.FriendSelector.FriendSelectionHandler;
+import com.gwittit.client.facebook.FacebookException;
 import com.gwittit.client.facebook.entities.UserInfo;
+import com.gwittit.client.facebook.entities.UserStandardInfo;
+import com.gwittit.client.facebook.ui.ErrorResponseUI;
 
 /**
  * Showcase for <code>users.getInfo</code>
@@ -63,7 +67,6 @@ public class Users_getInfo extends Showcase {
         fields.add ( "proxied_email" );
         fields.add ( "relationship_status" );
         fields.add ( "status");
-        
         apiClient.usersGetInfo ( uids, fields, new UserInfoCallback () );
     }
     
