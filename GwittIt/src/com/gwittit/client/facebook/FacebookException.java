@@ -18,5 +18,13 @@ public class FacebookException extends Throwable {
         return errorMessage;
     }
     
+    @Override
+    public String getMessage () {
+        
+        if ( errorMessage != null ) {
+            return errorMessage.getMessage ();
+        }
+        return null;
+    }
 
 }
