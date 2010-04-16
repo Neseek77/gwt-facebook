@@ -51,7 +51,6 @@ import com.gwittit.client.facebook.entities.Note;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
 import com.gwittit.client.facebook.entities.Photo;
-import com.gwittit.client.facebook.entities.Session;
 import com.gwittit.client.facebook.entities.SessionRecord;
 import com.gwittit.client.facebook.entities.Stream;
 import com.gwittit.client.facebook.entities.StreamFilter;
@@ -1949,59 +1948,7 @@ public class FacebookApi {
         callMethodRetLong ( "users.getLoggedInUser", p, callback );
     }
 
-    /**
-     * Returns an array of user-specific information...
-     * 
-     * @see #usersGetStandardInfo(List, AsyncCallback)
-     * 
-     * @param callback
-     *            result
-     */
-    public void usersGetStandardInfo(AsyncCallback<UserStandardInfo> callback) {
-        usersGetStandardInfo ( null, callback );
-    }
-
-    /**
-     * Returns an array of user-specific information for use by the application
-     * itself. Make this call on behalf of your application when you need
-     * analytic information only. Don't display this information to any users.
-     * If you need to display information to other users, call users.getInfo.
-     * 
-     * @{link 
-     *        http://wiki.developers.facebook.com/index.php/Users.getStandardInfo
-     *        }
-     * 
-     * @param params
-     *            userFilter to limit fields returned. Default is all.
-     * @param callback
-     *            result
-     */
-    public void usersGetStandardInfo(List<String> filter, AsyncCallback<UserStandardInfo> callback) {
-        Json j = new Json ().puts ( "filter", filter );
-        callMethodRetObject ( "users.getStandardInfo", j.getJavaScriptObject (), UserStandardInfo.class, callback );
-    }
-
-    /*
-     * public void usersIsAppUser(Map<String, String> params,
-     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
-     * "not implemented" ); }
-     * 
-     * public void usersIsVerified(Map<String, String> params,
-     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
-     * "not implemented" ); }
-     * 
-     * public void usersSetStatus(Map<String, String> params,
-     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
-     * "not implemented" ); }
-     * 
-     * public void videoGetUploadLimits(Map<String, String> params,
-     * AsyncCallback<JavaScriptObject> callback) { Window.alert (
-     * "not implemented" ); }
-     * 
-     * public void videoUpload(Map<String, String> params,
-     * AsyncCallback<JavaScriptObject> callback) { Ft (
-     * "not implemented" ); }
-     */
+    // -------------- PRIVATE METHODS -----------------------------------------------------------
     /*
      * Another wrapper. Use this to get all parameters in one line.
      */
