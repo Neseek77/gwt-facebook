@@ -80,7 +80,7 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
     final String linkMethods = "XLinks:links_get,links_post";
     final String messageMethods = "Message:XliveMessage_send,message_getThreadsInFolder";
     final String noteMethods = "Notes:notes_create,Xnotes_delete,Xnotes_edit,notes_get";
-    final String notificationMethods = "Notification:notifications_get,notifications_getList,Xnotifications_markRead,notifications_send,Xnotifications_sendEmail";
+    final String notificationMethods = "Notification:notifications_get,notifications_getList,Xnotifications_markRead,notifications_sendEmail,Xnotifications_sendEmail";
     final String pageMethods = "XPages:pages_getInfo,pages_isAdmin,pages_isAppAdded,pages_isFan";
     final String photoMethods = "Photos:Xphotos_addTag,photos_createAlbum,photos_get,photos_getAlbums,Xphotos_getTags,Xphotos_upload";
     final String profileMethods = "XProfile:profile_getFBML,profile_getInfo,profile_getInfoOptions,profile_setFBML,profile_setInfo,profile_setInfoOptions";
@@ -386,10 +386,8 @@ public class ShowcaseClient extends Composite implements ValueChangeHandler<Stri
             showcase = new Notifications_getList ();
         } else if ("notifications_markRead".equals ( m )) {
             // example = new Notifications_markRead();
-        } else if ("notifications_send".equals ( m )) {
-            showcase = new Notifications_send ();
         } else if ("notifications_sendEmail".equals ( m )) {
-            // example = new Notifications_sendEmail();
+            showcase = new Notifications_send ();
         } else if ("pages_getInfo".equals ( m )) {
             // example = new Pages_getInfo();
         } else if ("pages_isAdmin".equals ( m )) {

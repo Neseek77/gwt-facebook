@@ -538,48 +538,42 @@ public class FacebookApi {
      * TODO: Implement
      */
     public void fbmlDeleteCustomTags(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "Method not implemented" );
     }
 
     /**
      * TODO: Implement
      */
     public void fbmlGetCustomTags(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "Method not implemented" );
     }
 
     /**
      * TODO: Implement
      */
     public void fbmlRefreshImgSrc(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "Method not implemented" );
     }
 
     /**
      * TODO: Implement
      */
     public void fbmlRefreshRefUrl(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "Method not implemented" );
     }
 
     /**
      * TODO: Implement
      */
     public void fbmlRegisterCustomTags(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "Method not implemented" );
     }
 
     /**
      * TODO: Implement
      */
     public void fbmlSetRefHandle(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
-
+        Window.alert ( "Method not implemented" );
     }
 
     /**
@@ -1069,7 +1063,7 @@ public class FacebookApi {
     }
 
     /**
-     * Wraps the same method but less parameters. 
+     * Wraps the same method but less parameters.
      * 
      * @see #notificationsSend(List, String, NotificationType, AsyncCallback)
      */
@@ -1139,10 +1133,47 @@ public class FacebookApi {
         callMethod ( "notifications.send", j.getJavaScriptObject (), callback );
 
     }
-    
-    public void notificationsSendEmail(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
 
+    /**
+     * Sends an email to the specified users, who have both authorized your
+     * application and granted it the email extended permission. For users who
+     * granted your application the email permission prior to the introduction
+     * of the new profile in September, 2008, you have a limit as to how many
+     * email messages you may send to them per day (check for the limit through
+     * admin.getAllocation; see the note below for more details). You can send
+     * an email message to up to 100 users each time you call this method.
+     *
+     * http://developers.facebook.com/docs/reference/rest/notifications.sendEmail
+     * 
+     * @param params
+     * @param callback returns list of uids that received email.
+     */
+    public void notificationsSendEmail ( List<Long> recepients, 
+                                           String subject, 
+                                           String text,
+                                           String fbml, 
+                                           final AsyncCallback<List<Long>> callback) {
+
+        Json j = new Json().put ( "recipients",recepients );
+        j.put ( "subject", subject );
+        j.put ( "text", text );
+        j.put ( "fbml", fbml );
+        
+        AsyncCallback<StringResult> internCallback = new AsyncCallback<StringResult> () {
+
+            public void onFailure(Throwable caught) {
+                callback.onFailure ( caught );
+            }
+
+            public void onSuccess(StringResult sr) {
+                List<Long> uids = new ArrayList<Long> ();
+                for ( String s : sr.getResult ().split ( "," )) {
+                    uids.add ( new Long ( s ) );
+                }
+                callback.onSuccess ( uids );
+            }
+        };
+        callMethodRetObject ( "notifications.sendEmail", j.getJavaScriptObject (), StringResult.class, internCallback );
     }
 
     public void pagesGetInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -1475,15 +1506,11 @@ public class FacebookApi {
                           final AsyncCallback<Stream> callback) {
 
         Json j = new Json ();
-        j.put ( "viewer_id", viewerId ).
-          put ( "source_ids", sourceIds ).
-          put ( "start_time", startTime ).
-          put ( "end_time", endTime ).
-          put ( "filter_key", filterKey ).
-          puts ( "metadata", metadata );
-        
+        j.put ( "viewer_id", viewerId ).put ( "source_ids", sourceIds ).put ( "start_time", startTime ).put ( "end_time", endTime ).put (
+                "filter_key", filterKey ).puts ( "metadata", metadata );
+
         callMethodRetObject ( "stream.get", j.getJavaScriptObject (), Stream.class, callback );
-        
+
     }
 
     /**
@@ -1493,7 +1520,7 @@ public class FacebookApi {
      *      AsyncCallback)
      */
     public void streamGet(final AsyncCallback<Stream> callback) {
-        
+
         callMethodRetObject ( "stream.get", getDefaultParams ().getJavaScriptObject (), Stream.class, callback );
     }
 
@@ -1922,13 +1949,14 @@ public class FacebookApi {
      * turned off access to Facebook Platform.
      * 
      * @params uids List of user IDs.
-     * @param fields List of desired fields in return.
+     * @param fields
+     *            List of desired fields in return.
      * @param callback
      */
     public void usersGetInfo(List<Long> uids, List<String> fields, AsyncCallback<List<UserInfo>> callback) {
-        
+
         Json j = new Json ();
-        j.putAsCommaSep (  "uids",uids );
+        j.putAsCommaSep ( "uids", uids );
         j.putAsCommaSep ( "fields", fields );
         callMethodRetList ( "users.getInfo", j.getJavaScriptObject (), UserInfo.class, callback );
     }
@@ -1948,7 +1976,8 @@ public class FacebookApi {
         callMethodRetLong ( "users.getLoggedInUser", p, callback );
     }
 
-    // -------------- PRIVATE METHODS -----------------------------------------------------------
+    // -------------- PRIVATE METHODS
+    // -----------------------------------------------------------
     /*
      * Another wrapper. Use this to get all parameters in one line.
      */
@@ -2093,6 +2122,23 @@ public class FacebookApi {
         $wnd.FB_RequireFeatures(["Api"], function(){			
         	$wnd.FB.Facebook.apiClient.callMethod( method, params, 
         		function(result, exception){
+        		    
+   
+        		    // Apply fix for events.getMembers method. When an array is empty, facebook returns
+        		    // "{}" instead of "[]" wich causes javascript casting to fail.
+        		    if ( method == "events.getMembers" ) {
+        		        if(typeof(result.attending.length) == "undefined" ) {
+        		            result.attending=[];
+        		        }
+        		        if(typeof(result.not_replied.length) == "undefined" ) {
+        		            result.not_replied=[];
+        		        }
+        		        if(typeof(result.unsure.length) == "undefined" ) {
+        		            result.unsure=[];
+        		        }
+        		    }
+        		    
+        		    
         		    var jso=null;        		    
                     
         		    if ( result == undefined || result == null ) {
@@ -2104,19 +2150,28 @@ public class FacebookApi {
         		         } 
                         app.@com.gwittit.client.facebook.FacebookApi::callbackError(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,tmp);
         		    } else {
+        		        
             		    if ( typeof ( result ) == 'object' ) {
             		        jso = result;
             		    } else if ( typeof ( result ) == 'string' ) {
-            		        jso = new String ( result );
+            		        jso = {result:result};
             		    } else if ( typeof ( result ) == 'number' ) {
             		        jso = new Number ( result );
             		    } 
-                        app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,jso);
+            		    try {
+                            app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,jso);
+            		    } catch ( err ) {
+            		         alert ( "Failed to execute callback :  " + err  + " TypeOf result is "  + typeof(result)); 
+            		    }
         		    }
         		}
         	);
         });
     }-*/;
+    
+    protected void toJson ( JavaScriptObject obj ) {
+        Window.alert ( "" + new JSONObject ( obj ) );
+    }
 
     /*
      * Callback
@@ -2133,5 +2188,6 @@ public class FacebookApi {
         GWT.log ( "FacebookApi: callbackSuccess " + new JSONObject ( obj ), null );
         callback.onSuccess ( obj );
     }
+    
 
 }

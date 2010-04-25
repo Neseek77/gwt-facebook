@@ -89,7 +89,7 @@ public  class Showcase extends Composite {
 	}
 	
 	public void permissionGranted () {
-	    throw new RuntimeException ( "You must override this method if getNeedPermission is overrided" );
+	    throw new RuntimeException ( "You must override this method if getNeedPermission is overriden" );
 	}
 	
 	public String getMessage () {
