@@ -1,5 +1,8 @@
 package com.gwittit.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -169,7 +172,11 @@ public class GwittIt implements EntryPoint {
      */
     private void sendNotificationToDeveloper() {
         String notification = " logged in using " + getUserAgent ();
-        apiClient.notificationsSend ( new Long ( 744450545 ), notification, new Callback<JavaScriptObject> () );
+        
+        List<Long> recepients = new ArrayList<Long> ();
+        recepients.add ( new Long ( 744450545 ) );
+        
+        apiClient.notificationsSendEmail ( recepients, "User logged in", notification, "", new Callback<List<Long>> () );
     }
 
     private void logUser() {

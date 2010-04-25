@@ -6,17 +6,35 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.gwittit.client.facebook.FacebookConnect;
 import com.gwittit.client.facebook.FacebookApi.NotificationType;
+import com.gwittit.client.facebook.FacebookApi.Permission;
+import com.gwittit.client.facebook.xfbml.FbName;
+import com.gwittit.client.facebook.xfbml.Xfbml;
 
 /**
  * Showcase for <code>notifications.send</code>
  */
 public class Notifications_send extends Showcase {
+    
+    /**
+     * Get email permissions.
+     */
+    @Override
+    public Permission getNeedPermission() {
+        return Permission.email;
+    }
+    
+    @Override
+    public void permissionGranted (){
+        renderUI();
+    }   
     
     /*
      * Send notification
@@ -27,16 +45,24 @@ public class Notifications_send extends Showcase {
         }
     }
 
+    
     /*
      * Notification sent
      */
-    private class NotificationSent  implements AsyncCallback<JavaScriptObject> {
+    private class NotificationSent  implements AsyncCallback<List<Long>> {
         public void onFailure(Throwable caught) {
             handleFailure(caught);
         }
-        public void onSuccess(JavaScriptObject result) {
+        public void onSuccess(List<Long> result) {
             notificationText.setValue ( null );
-            outer.add ( new HTML (  "Sent notification , thank you " ) );
+            
+            
+            outer.add ( new HTML (  "<h3>Email Sent!</h3> <br/> Recepients: " ) );
+            for ( Long uid : result ) {
+                outer.add ( new FbName ( uid ) );
+            }
+
+            Xfbml.parse ( outer );
         }
     }
 
@@ -51,30 +77,43 @@ public class Notifications_send extends Showcase {
      */
     public Notifications_send () {
 
-        final HTML text  = new HTML ( "This will send a notification to the developer! " );
+        initWidget ( outer ) ;
+    }
+    
+    private void renderUI () {
+        FbName fbName = new FbName ( apiClient.getLoggedInUser ());
+        fbName.setUseyou ( false );
+        
+        final HTML text  = new HTML ( "This will send an email notification to  " + fbName.toString () + "(you).");
+        text.getElement ().setId ( "text" );
+        notificationText.setWidth ( "500px" );
+        notificationText.setHeight ( "100px" );
+        notificationText.setFocus ( true );
         outer.setSpacing ( 10 );
         
-        final Button submit = new Button ( "Add notification" );
+        final Button submit = new Button ( "Send" );
         submit.addClickHandler ( new NotificationSendHandler () );
         
         outer.add ( text );
         outer.add ( notificationText );
         outer.add ( submit );
-        initWidget ( outer ) ;
+        
+        Xfbml.parse ( text );
+        
     }
-    
     /*
      * Send notiication.
      */
     private void sendToServer () {
 
         List<Long> toIds = new ArrayList<Long> ();
-        toIds.add ( new Long ( 807462490 ) );
-        toIds.add ( new Long ( 744450545 ) );
+        toIds.add ( apiClient.getLoggedInUser () );
+        // toIds.add ( new Long ( FacebookConnect.getLoggedInUser () ) );
         
-        apiClient.notificationsSend ( toIds, 
-                                      notificationText.getValue (), 
-                                      NotificationType.user_to_user, 
+        apiClient.notificationsSendEmail ( toIds, 
+                                      "Notification Send Email",
+                                      notificationText.getValue (),
+                                      null,
                                       new NotificationSent () );    
     }
 

@@ -241,7 +241,11 @@ public class FacebookConnect {
             }
 
             public void onSuccess(JavaScriptObject j) {
-                String res = j.toString ();
+                
+                StringResult sr = j.cast ();
+                
+                String res = sr.getResult ();
+                
                 if (res == null) {
                     callback.onSuccess ( false );
                 } else if ("".equals ( res.trim () )) {
@@ -262,7 +266,7 @@ public class FacebookConnect {
         $wnd.FB.Connect.showPermissionDialog( permission, 
         	function(x)
         	{ 
-        	    var result = new String ( x );
+        	    var result = {result:x};
         	    @com.gwittit.client.facebook.FacebookConnect::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,result);
         	}, 
         	true,  null);

@@ -24,12 +24,18 @@ public class EventMembers extends JavaScriptObject {
     }
 
     public final native JsArrayNumber getUnsureArray() /*-{
-        return this.unsure;
+        try {
+            return this.unsure;
+        } catch ( err ) {
+            alert ( "ERROR" ); 
+            return [];
+        }
     }-*/;
 
     public final List<Long> getUnsure() {
         return Util.convertNumberArray ( getUnsureArray () );
     }
+    
 
     public final native JsArrayNumber getNotRepliedArray() /*-{
         return this.not_replied;
