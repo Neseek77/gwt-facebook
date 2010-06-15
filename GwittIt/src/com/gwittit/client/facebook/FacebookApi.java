@@ -50,6 +50,7 @@ import com.gwittit.client.facebook.entities.MessageThread;
 import com.gwittit.client.facebook.entities.Note;
 import com.gwittit.client.facebook.entities.Notification;
 import com.gwittit.client.facebook.entities.NotificationRequest;
+import com.gwittit.client.facebook.entities.Page;
 import com.gwittit.client.facebook.entities.Photo;
 import com.gwittit.client.facebook.entities.SessionRecord;
 import com.gwittit.client.facebook.entities.Stream;
@@ -136,6 +137,20 @@ public class FacebookApi {
             return sr.getUid ();
         }
         return null;
+    }
+    
+    /**
+     * Revoke current user
+     * 
+     * @Author Youen Chéné
+     * 
+     * @return uid of user
+     */
+    public void revokeAuthorization(AsyncCallback<Boolean> callback)
+    {
+    	Json j = new Json ();
+    	j.put ( "uid", getLoggedInUser() );
+        callMethodRetBoolean("auth.revokeAuthorization", j.getJavaScriptObject (),  callback );
     }
 
     /**
@@ -1174,16 +1189,73 @@ public class FacebookApi {
             }
         };
         callMethodRetObject ( "notifications.sendEmail", j.getJavaScriptObject (), StringResult.class, internCallback );
+    }   
+    
+    public void pagesGetInfo(AsyncCallback<List<Page>> callback) {
+    	pagesGetInfoList(null,callback);
     }
 
-    public void pagesGetInfo(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
+    /**
+     * @Author Youen Chéné
+     * 
+     * @param pagesid
+     * @param callback
+     */
+    public void pagesGetInfo(String pagesid, AsyncCallback<List<Page>> callback) {
+    	Json j = new Json ();
+    	j.put ("page_ids", pagesid );
+    	j.put("fields","page_id,name,page_url");
+        callMethodRetList ( "pages.getInfo", j.getJavaScriptObject (), Page.class, callback );
 
     }
+    
+    /**
+     * @Author Youen Chéné
+     * 
+     * @param pagesid
+     * @param callback
+     */
+    public void pagesGetAllInfo(String pagesid, AsyncCallback<List<Page>> callback) {
+    	Json j = new Json ();
+    	j.put ("page_ids", pagesid );
+    	j.put("fields","page_id,name,page_url,pic_small,pic_square,pic_big,pic_large,pic,type,website,fan_count");
+        callMethodRetList ( "pages.getInfo", j.getJavaScriptObject (), Page.class, callback );
 
-    public void pagesIsAdmin(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
-        // TODO Auto-generated method stub
+    }
+    
+    /**
+     * @Author Youen Chéné
+     * 
+     * @param callback
+     */
+    public void pagesGetInfoList(AsyncCallback<List<Page>> callback) {
+    	pagesGetInfoList(null,callback);
+    }
 
+    /**
+     * @Author Youen Chéné
+     * 
+     * @param params
+     * @param callback
+     */
+    public void pagesGetInfoList(Map<String, String> params, AsyncCallback<List<Page>> callback) {
+    	Json j = new Json ();
+    	j.put ( "uid", getLoggedInUser() );
+    	j.put("fields", "page_id");
+        callMethodRetList ( "pages.getInfo", j.getJavaScriptObject (), Page.class, callback );
+    }
+    
+    
+    /**
+     * @Author Youen Chéné
+     * 
+     * @param page_id
+     * @param callback
+     */
+    public void pagesIsAdmin(String page_id, AsyncCallback<Boolean> callback) {
+    	Json j = new Json ();
+    	j.put ( "page_id", page_id );
+        callMethodRetBoolean("pages.isAdmin", j.getJavaScriptObject (),  callback );
     }
 
     public void pagesIsAppAdded(Map<String, String> params, AsyncCallback<JavaScriptObject> callback) {
@@ -2065,7 +2137,7 @@ public class FacebookApi {
 
                 // Hackarond facebook bug, data.setCookie returns an empty
                 // object, should return 0 or 1.
-                if (new JSONObject ( response ).toString ().equals ( "{}" )) {
+                if (response.toString ().equals ( "{}" )) {
                     callback.onSuccess ( true );
                     return;
                 }
@@ -2109,7 +2181,8 @@ public class FacebookApi {
         }
         return result;
     }
-
+    
+    
     /*
      * Call Facebook method and execute callback method. This methods needs to
      * check the response from facebook. Sometimes facebook returns object,
@@ -2157,7 +2230,9 @@ public class FacebookApi {
             		        jso = {result:result};
             		    } else if ( typeof ( result ) == 'number' ) {
             		        jso = new Number ( result );
-            		    } 
+            		    } else if ( typeof ( result ) == 'boolean' ) {
+            		        jso = new Boolean ( result );
+            		    }
             		    try {
                             app.@com.gwittit.client.facebook.FacebookApi::callbackSuccess(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;)(callback,jso);
             		    } catch ( err ) {
